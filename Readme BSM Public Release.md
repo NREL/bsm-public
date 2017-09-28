@@ -63,7 +63,7 @@ Located within [this](https://github.com/NREL/bsm-public/models) folder is the c
 ##### User guidance:
 1. [BSM Analysis Questions](https://openei.org/wiki/File:BSM_Analysis_Questions.pdf)
 2. [Quick Start Guide](http://en.openei.org/wiki/File:Quick_Start_Guide.pdf) 
-3. [Frequently Asked Questions](https://openei.org/wiki/File:Frequently Asked Questions.pdf)
+3. [Frequently Asked Questions](https://openei.org/wiki/File:Frequently_Asked_Questions.pdf)
 4. [Modifying the BSM](https://openei.org/wiki/File:Modifying_BSM.pdf)
 3. [Video screencast with Development Team commentary](http://github.com/NREL/bsm-public/guidance/screencasts) 
 4. [Caveats](http://www.nrel.gov/docs/fy17osti/68438.pdf) 
@@ -72,9 +72,9 @@ Located within [this](https://github.com/NREL/bsm-public/models) folder is the c
 ##### Overviews:
 1. [BSM Website](http://www.nrel.gov/analysis/bsm/) 
 2. [2-pager BSM handout](http://www.nrel.gov/docs/fy16osti/64956.pdf) 
-3. [BSM Analysis Questions] (https://openei.org/wiki/File:BSM_Analysis_Questions.pdf) 
-3. [Data documentation](http://www.nrel.gov/docs/fy13osti/57831.pdf):  Based on an older version of the model.  
-4. [An Overview of the Biomass Scenario Model](http://www.nrel.gov/docs/fy15osti/60172.pdf) Based on an older version of the model
+3. [BSM Analysis Questions](https://openei.org/wiki/File:BSM_Analysis_Questions.pdf) 
+4. [Data documentation](http://www.nrel.gov/docs/fy13osti/57831.pdf):  Based on an older version of the model.  
+5. [An Overview of the Biomass Scenario Model](http://www.nrel.gov/docs/fy15osti/60172.pdf) Based on an older version of the model
 
 ##### Results:
 [Scenario Results Library]( https://bsm-viewer.nrel.gov/): a web-based browser of analytic results 
