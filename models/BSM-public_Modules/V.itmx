@@ -13,15 +13,15 @@
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
+		<dim name="Car_v_Truck">
+			<elem name="Car"/>
+			<elem name="Truck"/>
+		</dim>
 		<dim name="CohortSlot">
 			<elem name="a"/>
 			<elem name="b"/>
 			<elem name="c"/>
 			<elem name="d"/>
-		</dim>
-		<dim name="Car_v_Truck">
-			<elem name="Car"/>
-			<elem name="Truck"/>
 		</dim>
 		<dim name="VehicleTech">
 			<elem name="Gas"/>
@@ -3767,7 +3767,6 @@ COMMENTS: </doc>
 					<dim name="VehicleTech"/>
 				</dimensions>
 				<eqn>AEO_AVE_schedule * USE_AEO_Vehicles +
-ADOPT_AVE_schedule * Use_ADOPT_vehicles +
 User_AVE_Schedule * Use_User_Defined_Vehicles</eqn>
 				<units>MPG</units>
 			</aux>
@@ -4023,7 +4022,6 @@ COMMENTS: </doc>
 					<dim name="VehicleTech"/>
 				</dimensions>
 				<eqn>AEO_vehicle_Inflow * USE_AEO_Vehicles + 
-ADOPT_vehicle_inflow * Use_ADOPT_vehicles +
 User_vehicle_inflow * Use_User_Defined_Vehicles</eqn>
 				<units>Vehicles/Years</units>
 			</aux>
@@ -4080,17 +4078,6 @@ COMMENTS: </doc>
 					<dim name="Region"/>
 				</dimensions>
 				<eqn>hi_blend_coeff_from_PIM[Region] *  regional_vehicle_distribution[Region]</eqn>
-				<units>Unitless</units>
-			</aux>
-			<aux name="Use ADOPT vehicles">
-				<doc>DEFINITION: 
-
-UNITS: Unitless
-
-TYPE: array | constant
-
-COMMENTS: </doc>
-				<eqn>0</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="ADOPT vehicle inflow">
@@ -4514,7 +4501,7 @@ UNITS: Unitless
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>IF (USE_AEO_Vehicles+Use_ADOPT_vehicles+Use_User_Defined_Vehicles) &lt;&gt; 1 THEN 0 ELSE 1</eqn>
+				<eqn>IF (USE_AEO_Vehicles+Use_User_Defined_Vehicles) &lt;&gt; 1 THEN 0 ELSE 1</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="one billion">
@@ -4682,7 +4669,6 @@ COMMENTS: </doc>
 				<entity name="pct_chg_vehicle_mortality_from_NEMS"/>
 				<entity name="Scenario_vehicle_mortality"/>
 				<entity name="Scenario_Annual_Chg_VMT"/>
-				<entity name="Use_ADOPT_vehicles"/>
 				<entity name="AEO_2017_VMT"/>
 				<entity name="AEO_2017_Vehicle_Stock"/>
 				<entity name="USE_AEO_Vehicles"/>
@@ -5512,12 +5498,10 @@ COMMENTS: </doc>
 					<in>AVE_5</in>
 				</var>
 				<var name="influx_AVE">
-					<in>Use_ADOPT_vehicles</in>
 					<in>Use_User_Defined_Vehicles</in>
 					<in>AEO_AVE_schedule</in>
 					<in>USE_AEO_Vehicles</in>
 					<in>User_AVE_Schedule</in>
-					<in>ADOPT_AVE_schedule</in>
 				</var>
 				<var name="vehicle_mortality_factor">
 					<in>pct_chg_vehicle_mortality_from_NEMS</in>
@@ -5529,8 +5513,6 @@ COMMENTS: </doc>
 				</var>
 				<var name="vehicle_influx_logic">
 					<in>User_vehicle_inflow</in>
-					<in>Use_ADOPT_vehicles</in>
-					<in>ADOPT_vehicle_inflow</in>
 					<in>USE_AEO_Vehicles</in>
 					<in>Use_User_Defined_Vehicles</in>
 					<in>AEO_vehicle_Inflow</in>
@@ -5557,7 +5539,6 @@ COMMENTS: </doc>
 					<in>regional_vehicle_distribution</in>
 				</var>
 				<var name="vehicle_scenario_check">
-					<in>Use_ADOPT_vehicles</in>
 					<in>Use_User_Defined_Vehicles</in>
 					<in>USE_AEO_Vehicles</in>
 				</var>
@@ -5612,7 +5593,7 @@ COMMENTS: </doc>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="5" isee:page_rows="5" isee:scroll_x="1746.67" isee:scroll_y="382.5" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="5" isee:page_rows="5" isee:scroll_x="790" isee:scroll_y="1740" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
@@ -5718,1145 +5699,1117 @@ COMMENTS: </doc>
 					</from>
 					<to>VMT_1</to>
 				</connector>
-				<connector uid="7250" angle="198.435">
-					<from>
-						<alias uid="7251"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7252" angle="124.548">
+				<connector uid="7250" angle="124.548">
 					<from>V_4_distribution</from>
 					<to>V_4_to_5</to>
 				</connector>
-				<connector uid="7253" angle="90">
+				<connector uid="7251" angle="90">
 					<from>TVE_1</from>
 					<to>AVE_1</to>
 				</connector>
-				<connector uid="7254" angle="240.255">
+				<connector uid="7252" angle="240.255">
 					<from>Annual_Chg_VMT</from>
 					<to>VMT_Ramp_Logic</to>
 				</connector>
-				<connector uid="7255" angle="0">
+				<connector uid="7253" angle="0">
 					<from>
-						<alias uid="7256"/>
+						<alias uid="7254"/>
 					</from>
 					<to>Rollup_VMT_1</to>
 				</connector>
-				<connector uid="7257" color="white" angle="0">
-					<from>
-						<alias uid="7258"/>
-					</from>
-					<to>Total_VMT_5</to>
-				</connector>
-				<connector uid="7259" angle="317.514">
-					<from>AVE_4</from>
-					<to>TVE_M_4</to>
-				</connector>
-				<connector uid="7260" color="white" angle="220.601">
-					<from>
-						<alias uid="7261"/>
-					</from>
-					<to>VMT_by_car_truck_by_tech</to>
-				</connector>
-				<connector uid="7262" color="white" angle="353.66">
-					<from>
-						<alias uid="7263"/>
-					</from>
-					<to>v_5_wtd_mort_rate</to>
-				</connector>
-				<connector uid="7264" angle="270.26">
-					<from>VM_4</from>
-					<to>TVE_M_4</to>
-				</connector>
-				<connector uid="7265" angle="0">
-					<from>Total_VMT_1</from>
-					<to>fuel_use_V_1</to>
-				</connector>
-				<connector uid="7266" angle="322.306">
-					<from>V_2</from>
-					<to>VM_2</to>
-				</connector>
-				<connector uid="7267" angle="302.005">
-					<from>vehicle_mortality_factor</from>
-					<to>survive_rate_4</to>
-				</connector>
-				<connector uid="7268" angle="26.5651">
-					<from>
-						<alias uid="7269"/>
-					</from>
-					<to>Total_Outflow</to>
-				</connector>
-				<connector uid="7270" color="white" angle="282.529">
-					<from>
-						<alias uid="7271"/>
-					</from>
-					<to>E85_Volumetric_Offset</to>
-				</connector>
-				<connector uid="7272" color="white" angle="353.66">
-					<from>
-						<alias uid="7273"/>
-					</from>
-					<to>Annual_Chg_VMT</to>
-				</connector>
-				<connector uid="7274" angle="0">
-					<from>
-						<alias uid="7275"/>
-					</from>
-					<to>On_Road_AVE_3</to>
-				</connector>
-				<connector uid="7276" angle="270">
-					<from>
-						<alias uid="7277"/>
-					</from>
-					<to>max_gasoline_consn</to>
-				</connector>
-				<connector uid="7278" angle="90">
-					<from>TVE_5</from>
-					<to>AVE_5</to>
-				</connector>
-				<connector uid="7279" angle="32.0054">
-					<from>On_Road_AVE_2</from>
-					<to>fuel_use_V_2</to>
-				</connector>
-				<connector uid="7280" angle="270">
-					<from>V_2</from>
-					<to>AVE_2</to>
-				</connector>
-				<connector uid="7281" angle="30.5792">
-					<from>
-						<alias uid="7282"/>
-					</from>
-					<to>TVE_rollup</to>
-				</connector>
-				<connector uid="7283" color="#C8C8C8" angle="251.565">
-					<from>regional_vehicle_distribution</from>
-					<to>regionally_weighted_hi_blend_coeff</to>
-				</connector>
-				<connector uid="7284" angle="206.565">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>AVE_by_Tech</to>
-				</connector>
-				<connector uid="7285" angle="128.608">
-					<from>V_3_distn</from>
-					<to>V_3_to_4</to>
-				</connector>
-				<connector uid="7286" angle="270">
-					<from>V_5</from>
-					<to>AVE_5</to>
-				</connector>
-				<connector uid="7287" angle="263.66">
-					<from>
-						<alias uid="7288"/>
-					</from>
-					<to>On_Road_AVE_5</to>
-				</connector>
-				<connector uid="7289" angle="324.462">
-					<from>fuel_use_V_2</from>
-					<to>fuel_use_by_tech_and_efficiency</to>
-				</connector>
-				<connector uid="7290" angle="243.435">
-					<from>V_4_distribution</from>
-					<to>V_4_wtd_mort_rate</to>
-				</connector>
-				<connector uid="7291" color="white" angle="83.6598">
-					<from>
-						<alias uid="7292"/>
-					</from>
-					<to>VMT_Ramp_Logic</to>
-				</connector>
-				<connector uid="7293" color="white" angle="180">
-					<from>
-						<alias uid="7294"/>
-					</from>
-					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
-				</connector>
-				<connector uid="7295" color="white" angle="357.397">
-					<from>
-						<alias uid="7296"/>
-					</from>
-					<to>TVE_rollup</to>
-				</connector>
-				<connector uid="7297" angle="342.35">
-					<from>V_4</from>
-					<to>VM_4</to>
-				</connector>
-				<connector uid="7298" angle="220.601">
-					<from>V_by_tech</from>
-					<to>V_share_by_tech</to>
-				</connector>
-				<connector uid="7299" angle="35.5377">
-					<from>On_Road_AVE_1</from>
-					<to>fuel_use_V_1</to>
-				</connector>
-				<connector uid="7300" angle="313.249">
-					<from>AVE_3</from>
-					<to>TVE_M_3</to>
-				</connector>
-				<connector uid="7301" angle="270">
-					<from>lo_blend_volumetric_Offset</from>
-					<to>max_FFV_lo_blend_consn</to>
-				</connector>
-				<connector uid="7302" angle="301.43">
-					<from>V_1_to_2</from>
-					<to>TVE_1_to_2</to>
-				</connector>
-				<connector uid="7303" angle="341.565">
-					<from>V_5_distribution</from>
-					<to>v_5_wtd_mort_rate</to>
-				</connector>
-				<connector uid="7304" angle="69.444">
-					<from>V_1_distn</from>
-					<to>V_1_to_2</to>
-				</connector>
-				<connector uid="7305" angle="32.0054">
-					<from>VMT_3</from>
-					<to>Total_VMT_3</to>
-				</connector>
-				<connector uid="7306" angle="180">
-					<from>
-						<alias uid="7307"/>
-					</from>
-					<to>survive_rate_4</to>
-				</connector>
-				<connector uid="7308" angle="90">
-					<from>TVE_3</from>
-					<to>AVE_3</to>
-				</connector>
-				<connector uid="7309" color="#C8C8C8" angle="102.529">
-					<from>one_year</from>
-					<to>V_1_to_2</to>
-				</connector>
-				<connector uid="7310" color="white" angle="6.34019">
-					<from>
-						<alias uid="7311"/>
-					</from>
-					<to>VMT_5</to>
-				</connector>
-				<connector uid="7312" angle="206.565">
-					<from>
-						<alias uid="7313"/>
-					</from>
-					<to>V_1_wtd_mort_rate</to>
-				</connector>
-				<connector uid="7314" color="#C8C8C8" angle="181.163">
-					<from>one_year</from>
-					<to>VM_1</to>
-				</connector>
-				<connector uid="7315" angle="296.565">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>V_by_tech</to>
-				</connector>
-				<connector uid="7316" color="white" angle="153.435">
-					<from>
-						<alias uid="7317"/>
-					</from>
-					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
-				</connector>
-				<connector uid="7318" angle="35.5377">
-					<from>
-						<alias uid="7319"/>
-					</from>
-					<to>vehicle_mortality_factor</to>
-				</connector>
-				<connector uid="7320" angle="0">
-					<from>total_potential_lo_blend_consn_non_FFV</from>
-					<to>regional_potential_lo_blend_consn_non_FFV</to>
-				</connector>
-				<connector uid="7321" angle="0">
-					<from>max_FFV_lo_blend_consn</from>
-					<to>total_potential_lo_blend_consn_FFV</to>
-				</connector>
-				<connector uid="7322" angle="142.306">
-					<from>
-						<alias uid="7323"/>
-					</from>
-					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
-				</connector>
-				<connector uid="7324" angle="20.556">
-					<from>
-						<alias uid="7325"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7326" color="#C8C8C8" angle="32.0054">
-					<from>regional_vehicle_distribution</from>
-					<to>regional_potential_lo_blend_consn_non_FFV</to>
-				</connector>
-				<connector uid="7327" angle="90">
-					<from>
-						<alias uid="7288"/>
-					</from>
-					<to>On_Road_AVE_3</to>
-				</connector>
-				<connector uid="7328" angle="324.462">
-					<from>VMT_Ramp_Logic</from>
-					<to>VMT_4</to>
-				</connector>
-				<connector uid="7329" angle="270">
-					<from>regionally_weighted_hi_blend_coeff</from>
-					<to>hi_blend_Coefficient</to>
-				</connector>
-				<connector uid="7330" angle="310.601">
-					<from>fuel_use_V_1</from>
-					<to>fuel_use_by_tech_and_efficiency</to>
-				</connector>
-				<connector uid="7331" angle="0">
-					<from>
-						<alias uid="7332"/>
-					</from>
-					<to>regionally_weighted_hi_blend_coeff</to>
-				</connector>
-				<connector uid="7333" angle="229.399">
-					<from>
-						<alias uid="7334"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7335" angle="180">
-					<from>V_2_wtd_mort_rate</from>
-					<to>VM_2</to>
-				</connector>
-				<connector uid="7336" angle="296.565">
-					<from>TVE_rollup</from>
-					<to>AVE_total</to>
-				</connector>
-				<connector uid="7337" angle="161.565">
-					<from>
-						<alias uid="7251"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7338" angle="0">
-					<from>
-						<alias uid="7339"/>
-					</from>
-					<to>VMT_4</to>
-				</connector>
-				<connector uid="7340" angle="35.5377">
-					<from>VMT_2</from>
-					<to>Total_VMT_2</to>
-				</connector>
-				<connector uid="7341" angle="243.435">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>V_total</to>
-				</connector>
-				<connector uid="7342" angle="116.565">
-					<from>
-						<alias uid="7271"/>
-					</from>
-					<to>lo_blend_volumetric_Offset</to>
-				</connector>
-				<connector uid="7343" angle="0">
-					<from>
-						<alias uid="7344"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7345" angle="305.838">
-					<from>V_2_to_3</from>
-					<to>TVE_2_to_3</to>
-				</connector>
-				<connector uid="7346" color="white" angle="12.5288">
-					<from>
-						<alias uid="7347"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7348" angle="0">
-					<from>max_gasoline_consn</from>
-					<to>total_potential_fuel_consn_gasoline</to>
-				</connector>
-				<connector uid="7349" angle="0">
-					<from>potential_lo_blend_consn_non_FF</from>
-					<to>total_potential_lo_blend_consn_non_FFV</to>
-				</connector>
-				<connector uid="7350" angle="6.34019">
-					<from>vehicle_mortality_factor</from>
-					<to>survive_rate_1</to>
-				</connector>
-				<connector uid="7351" angle="333.435">
-					<from>V_total</from>
-					<to>V_share_by_tech</to>
-				</connector>
-				<connector uid="7352" color="white" angle="95.7106">
-					<from>
-						<alias uid="7353"/>
-					</from>
-					<to>V_3_to_4</to>
-				</connector>
-				<connector uid="7354" angle="0">
-					<from>Total_VMT_2</from>
-					<to>fuel_use_V_2</to>
-				</connector>
-				<connector uid="7355" angle="49.3987">
-					<from>VMT_Ramp_Logic</from>
-					<to>VMT_1</to>
-				</connector>
-				<connector uid="7356" angle="0">
-					<from>potential_hi_blend_consn</from>
-					<to>total_potential_hi_blend_consn</to>
-				</connector>
-				<connector uid="7357" color="white" angle="357.397">
-					<from>
-						<alias uid="7358"/>
-					</from>
-					<to>Total_VMT_3</to>
-				</connector>
-				<connector uid="7359" angle="333.435">
-					<from>
-						<alias uid="7360"/>
-					</from>
-					<to>Total_Outflow</to>
-				</connector>
-				<connector uid="7361" angle="0">
-					<from>Lo_blend_coefficient</from>
-					<to>max_EtOH_consn_Lo_Blend</to>
-				</connector>
-				<connector uid="7362" angle="90">
-					<from>TVE_2</from>
-					<to>AVE_2</to>
-				</connector>
-				<connector uid="7363" angle="276.34">
-					<from>AVE_3</from>
-					<to>TVE_3_to_4</to>
-				</connector>
-				<connector uid="7364" color="white" angle="52.5946">
-					<from>
-						<alias uid="7365"/>
-					</from>
-					<to>TVE_rollup</to>
-				</connector>
-				<connector uid="7366" color="white" angle="0">
-					<from>
-						<alias uid="7367"/>
-					</from>
-					<to>VMT_2</to>
-				</connector>
-				<connector uid="7368" color="white" angle="10.3048">
-					<from>
-						<alias uid="7294"/>
-					</from>
-					<to>Total_V_2</to>
-				</connector>
-				<connector uid="7369" angle="270">
-					<from>
-						<alias uid="7370"/>
-					</from>
-					<to>Annual_Chg_VMT</to>
-				</connector>
-				<connector uid="7371" color="white" angle="10.3048">
-					<from>
-						<alias uid="7372"/>
-					</from>
-					<to>Total_V_1</to>
-				</connector>
-				<connector uid="7373" color="white" angle="12.5288">
-					<from>
-						<alias uid="7374"/>
-					</from>
-					<to>Rollup_VMT_3</to>
-				</connector>
-				<connector uid="7375" color="white" angle="147.995">
-					<from>
-						<alias uid="7376"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7377" color="white" angle="0">
-					<from>
-						<alias uid="7378"/>
-					</from>
-					<to>Total_VMT_1</to>
-				</connector>
-				<connector uid="7379" angle="54.4623">
-					<from>fuel_use_V_5</from>
-					<to>fuel_use_by_tech_and_efficiency</to>
-				</connector>
-				<connector uid="7380" angle="0">
-					<from>Total_VMT_4</from>
-					<to>fuel_use_V_4</to>
-				</connector>
-				<connector uid="7381" color="white" angle="90">
-					<from>
-						<alias uid="7382"/>
-					</from>
-					<to>V_4_to_5</to>
-				</connector>
-				<connector uid="7383" angle="305.538">
-					<from>VMT_Ramp_Logic</from>
-					<to>VMT_5</to>
-				</connector>
-				<connector uid="7384" angle="270">
-					<from>AVE_1</from>
-					<to>TVE_1_to_2</to>
-				</connector>
-				<connector uid="7385" color="white" angle="270">
-					<from>
-						<alias uid="7386"/>
-					</from>
-					<to>E85_Volumetric_Offset</to>
-				</connector>
-				<connector uid="7387" angle="0">
-					<from>Total_Outflow</from>
-					<to>total_V_mortality</to>
-				</connector>
-				<connector uid="7388" color="white" angle="206.565">
-					<from>
-						<alias uid="7376"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7389" angle="339.444">
-					<from>VMT_Ramp_Logic</from>
-					<to>VMT_3</to>
-				</connector>
-				<connector uid="7390" color="white" angle="353.66">
-					<from>
-						<alias uid="7391"/>
-					</from>
-					<to>On_Road_AVE_2</to>
-				</connector>
-				<connector uid="7392" angle="270">
-					<from>V_3</from>
-					<to>AVE_3</to>
-				</connector>
-				<connector uid="7393" color="#C8C8C8" angle="180">
-					<from>regional_vehicle_distribution</from>
-					<to>regionally_weighted_lo_blend_coeff</to>
-				</connector>
-				<connector uid="7394" color="white" angle="130.601">
-					<from>
-						<alias uid="7382"/>
-					</from>
-					<to>V_4_distribution</to>
-				</connector>
-				<connector uid="7395" angle="180">
-					<from>
-						<alias uid="7396"/>
-					</from>
-					<to>survive_rate_3</to>
-				</connector>
-				<connector uid="7397" angle="0">
-					<from>
-						<alias uid="7398"/>
-					</from>
-					<to>Total_V_3</to>
-				</connector>
-				<connector uid="7399" angle="45">
-					<from>Total_Outflow</from>
-					<to>Mortality_by_car_truck</to>
-				</connector>
-				<connector uid="7400" angle="180">
-					<from>VMT_by_car_truck_by_tech</from>
-					<to>VMT_total</to>
-				</connector>
-				<connector uid="7401" angle="0">
-					<from>fuel_use_V_3</from>
-					<to>fuel_use_by_tech_and_efficiency</to>
-				</connector>
-				<connector uid="7402" angle="327.995">
-					<from>VMT_4</from>
-					<to>Total_VMT_4</to>
-				</connector>
-				<connector uid="7403" angle="296.565">
-					<from>fuel_use_by_tech_and_efficiency</from>
-					<to>potential_hi_blend_consn</to>
-				</connector>
-				<connector uid="7404" angle="333.435">
-					<from>hi_blend_Coefficient</from>
-					<to>rollup_max_EtOH_consn_Hi_Blend</to>
-				</connector>
-				<connector uid="7405" angle="206.565">
-					<from>E85_Volumetric_Offset</from>
-					<to>potential_hi_blend_consn</to>
-				</connector>
-				<connector uid="7406" angle="0">
-					<from>
-						<alias uid="7407"/>
-					</from>
-					<to>On_Road_AVE_5</to>
-				</connector>
-				<connector uid="7408" color="white" angle="57.0948">
-					<from>
-						<alias uid="7409"/>
-					</from>
-					<to>TVE_rollup</to>
-				</connector>
-				<connector uid="7410" color="white" angle="6.34019">
-					<from>
-						<alias uid="7411"/>
-					</from>
-					<to>regional_V_share_by_tech</to>
-				</connector>
-				<connector uid="7412" color="white" angle="33.385">
-					<from>
-						<alias uid="7413"/>
-					</from>
-					<to>in_TVE_1</to>
-				</connector>
-				<connector uid="7414" color="white" angle="151.39">
-					<from>
-						<alias uid="7398"/>
-					</from>
-					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
-				</connector>
-				<connector uid="7415" angle="180">
-					<from>
-						<alias uid="7416"/>
-					</from>
-					<to>survive_rate_1</to>
-				</connector>
-				<connector uid="7417" angle="180">
-					<from>
-						<alias uid="7418"/>
-					</from>
-					<to>survive_rate_5</to>
-				</connector>
-				<connector uid="7419" angle="286.699">
-					<from>AVE_4</from>
-					<to>TVE_4_to_5</to>
-				</connector>
-				<connector uid="7420" angle="180">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>AVE_by_car_truck_by_tech</to>
-				</connector>
-				<connector uid="7421" angle="341.565">
-					<from>Total_VMT_5</from>
-					<to>fuel_use_V_5</to>
-				</connector>
-				<connector uid="7422" angle="270">
-					<from>regionally_weighted_lo_blend_coeff</from>
-					<to>Lo_blend_coefficient</to>
-				</connector>
-				<connector uid="7423" angle="18.4349">
-					<from>On_Road_AVE_3</from>
-					<to>fuel_use_V_3</to>
-				</connector>
-				<connector uid="7424" angle="270.224">
-					<from>VM_3</from>
-					<to>TVE_M_3</to>
-				</connector>
-				<connector uid="7425" angle="0">
-					<from>
-						<alias uid="7426"/>
-					</from>
-					<to>Total_Outflow</to>
-				</connector>
-				<connector uid="7427" color="white" angle="259.114">
-					<from>
-						<alias uid="7428"/>
-					</from>
-					<to>VM_5</to>
-				</connector>
-				<connector uid="7429" angle="229.399">
+				<connector uid="7255" color="white" angle="0">
 					<from>
 						<alias uid="7256"/>
 					</from>
-					<to>VMT_by_car_truck_by_tech</to>
+					<to>Total_VMT_5</to>
 				</connector>
-				<connector uid="7430" angle="282.529">
-					<from>V_3_distn</from>
-					<to>V_3_wtd_mort_rate</to>
+				<connector uid="7257" angle="317.514">
+					<from>AVE_4</from>
+					<to>TVE_M_4</to>
 				</connector>
-				<connector uid="7431" angle="180">
-					<from>V_1_wtd_mort_rate</from>
-					<to>VM_1</to>
-				</connector>
-				<connector uid="7432" color="white" angle="180">
+				<connector uid="7258" color="white" angle="220.601">
 					<from>
-						<alias uid="7374"/>
+						<alias uid="7259"/>
 					</from>
 					<to>VMT_by_car_truck_by_tech</to>
 				</connector>
-				<connector uid="7433" angle="130.601">
-					<from>
-						<alias uid="7334"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7434" angle="310.601">
-					<from>TVE_rollup</from>
-					<to>AVE_car_truck</to>
-				</connector>
-				<connector uid="7435" angle="0">
+				<connector uid="7260" color="white" angle="353.66">
 					<from>
 						<alias uid="7261"/>
 					</from>
-					<to>Rollup_VMT_2</to>
+					<to>v_5_wtd_mort_rate</to>
 				</connector>
-				<connector uid="7436" angle="90">
-					<from>VMT_by_car_truck_by_tech</from>
-					<to>VMT_car_truck</to>
+				<connector uid="7262" angle="270.26">
+					<from>VM_4</from>
+					<to>TVE_M_4</to>
 				</connector>
-				<connector uid="7437" angle="315">
-					<from>AVE_2</from>
-					<to>TVE_M_2</to>
+				<connector uid="7263" angle="0">
+					<from>Total_VMT_1</from>
+					<to>fuel_use_V_1</to>
 				</connector>
-				<connector uid="7438" angle="296.565">
-					<from>vehicle_mortality_factor</from>
-					<to>survive_rate_5</to>
-				</connector>
-				<connector uid="7439" angle="268.482">
-					<from>vehicle_influx</from>
-					<to>in_TVE_1</to>
-				</connector>
-				<connector uid="7440" angle="0">
-					<from>rollup_max_EtOH_consn_Hi_Blend</from>
-					<to>regional_potential_hi_blend_consn_FFV</to>
-				</connector>
-				<connector uid="7441" angle="276.34">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>V_by_car_truck</to>
-				</connector>
-				<connector uid="7442" color="#C8C8C8" angle="296.565">
-					<from>regional_vehicle_distribution</from>
-					<to>regional_potential_hi_blend_consn_FFV</to>
-				</connector>
-				<connector uid="7443" color="white" angle="20.556">
-					<from>
-						<alias uid="7444"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7445" angle="30.5792">
+				<connector uid="7264" angle="322.306">
 					<from>V_2</from>
-					<to>V_2_to_3</to>
+					<to>VM_2</to>
 				</connector>
-				<connector uid="7446" angle="324.462">
-					<from>TVE_rollup</from>
-					<to>AVE_by_Tech</to>
+				<connector uid="7265" angle="302.005">
+					<from>vehicle_mortality_factor</from>
+					<to>survive_rate_4</to>
 				</connector>
-				<connector uid="7447" color="white" angle="6.34019">
+				<connector uid="7266" angle="26.5651">
 					<from>
-						<alias uid="7448"/>
+						<alias uid="7267"/>
 					</from>
-					<to>regionally_weighted_lo_blend_coeff</to>
+					<to>Total_Outflow</to>
 				</connector>
-				<connector uid="7449" color="white" angle="180">
+				<connector uid="7268" color="white" angle="282.529">
 					<from>
-						<alias uid="7353"/>
+						<alias uid="7269"/>
 					</from>
-					<to>V_3_wtd_mort_rate</to>
+					<to>E85_Volumetric_Offset</to>
 				</connector>
-				<connector uid="7450" color="white" angle="223.647">
+				<connector uid="7270" color="white" angle="353.66">
 					<from>
-						<alias uid="7451"/>
+						<alias uid="7271"/>
 					</from>
-					<to>VM_4</to>
+					<to>Annual_Chg_VMT</to>
 				</connector>
-				<connector uid="7452" color="white" angle="310.601">
+				<connector uid="7272" angle="0">
 					<from>
-						<alias uid="7453"/>
+						<alias uid="7273"/>
 					</from>
-					<to>potential_hi_blend_consn</to>
+					<to>On_Road_AVE_3</to>
 				</connector>
-				<connector uid="7454" color="white" angle="35.5377">
+				<connector uid="7274" angle="270">
 					<from>
-						<alias uid="7451"/>
+						<alias uid="7275"/>
 					</from>
-					<to>V_4_to_5</to>
+					<to>max_gasoline_consn</to>
 				</connector>
-				<connector uid="7455" angle="324.462">
-					<from>On_Road_AVE_4</from>
-					<to>fuel_use_V_4</to>
+				<connector uid="7276" angle="90">
+					<from>TVE_5</from>
+					<to>AVE_5</to>
 				</connector>
-				<connector uid="7456" angle="36.0274">
-					<from>V_1</from>
-					<to>V_1_to_2</to>
+				<connector uid="7277" angle="32.0054">
+					<from>On_Road_AVE_2</from>
+					<to>fuel_use_V_2</to>
 				</connector>
-				<connector uid="7457" angle="298.848">
-					<from>V_1</from>
-					<to>VM_1</to>
+				<connector uid="7278" angle="270">
+					<from>V_2</from>
+					<to>AVE_2</to>
 				</connector>
-				<connector uid="7458" color="#C8C8C8" angle="310.601">
-					<from>regional_vehicle_distribution</from>
-					<to>regional_potential_lo_blend_consn_FFV</to>
-				</connector>
-				<connector uid="7459" angle="0">
-					<from>Total_VMT_3</from>
-					<to>fuel_use_V_3</to>
-				</connector>
-				<connector uid="7460" color="white" angle="353.66">
+				<connector uid="7279" angle="30.5792">
 					<from>
-						<alias uid="7461"/>
-					</from>
-					<to>vehicle_mortality_factor</to>
-				</connector>
-				<connector uid="7462" angle="167.471">
-					<from>
-						<alias uid="7463"/>
-					</from>
-					<to>VMT_by_car_truck_by_tech</to>
-				</connector>
-				<connector uid="7464" angle="299.554">
-					<from>V_3</from>
-					<to>VM_3</to>
-				</connector>
-				<connector uid="7465" angle="0">
-					<from>
-						<alias uid="7323"/>
-					</from>
-					<to>total_V_5</to>
-				</connector>
-				<connector uid="7466" angle="180">
-					<from>Lo_blend_coefficient</from>
-					<to>lo_blend_volumetric_Offset</to>
-				</connector>
-				<connector uid="7467" angle="180">
-					<from>
-						<alias uid="7468"/>
-					</from>
-					<to>regional_vehicle_distribution</to>
-				</connector>
-				<connector uid="7469" angle="276.34">
-					<from>VM_2</from>
-					<to>TVE_M_2</to>
-				</connector>
-				<connector uid="7470" angle="180">
-					<from>
-						<alias uid="7471"/>
-					</from>
-					<to>survive_rate_2</to>
-				</connector>
-				<connector uid="7472" color="white" angle="0">
-					<from>
-						<alias uid="7473"/>
-					</from>
-					<to>vehicle_influx_logic</to>
-				</connector>
-				<connector uid="7474" angle="0">
-					<from>Use_ADOPT_vehicles</from>
-					<to>vehicle_scenario_check</to>
-				</connector>
-				<connector uid="7475" angle="220.601">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>AVE_car_truck</to>
-				</connector>
-				<connector uid="7476" angle="302.005">
-					<from>AVE_1</from>
-					<to>TVE_M_1</to>
-				</connector>
-				<connector uid="7477" angle="67.6199">
-					<from>
-						<alias uid="7478"/>
+						<alias uid="7280"/>
 					</from>
 					<to>TVE_rollup</to>
 				</connector>
-				<connector uid="7479" color="white" angle="353.66">
+				<connector uid="7281" color="#C8C8C8" angle="251.565">
+					<from>regional_vehicle_distribution</from>
+					<to>regionally_weighted_hi_blend_coeff</to>
+				</connector>
+				<connector uid="7282" angle="206.565">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>AVE_by_Tech</to>
+				</connector>
+				<connector uid="7283" angle="128.608">
+					<from>V_3_distn</from>
+					<to>V_3_to_4</to>
+				</connector>
+				<connector uid="7284" angle="270">
+					<from>V_5</from>
+					<to>AVE_5</to>
+				</connector>
+				<connector uid="7285" angle="263.66">
+					<from>
+						<alias uid="7286"/>
+					</from>
+					<to>On_Road_AVE_5</to>
+				</connector>
+				<connector uid="7287" angle="324.462">
+					<from>fuel_use_V_2</from>
+					<to>fuel_use_by_tech_and_efficiency</to>
+				</connector>
+				<connector uid="7288" angle="243.435">
+					<from>V_4_distribution</from>
+					<to>V_4_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7289" color="white" angle="83.6598">
+					<from>
+						<alias uid="7290"/>
+					</from>
+					<to>VMT_Ramp_Logic</to>
+				</connector>
+				<connector uid="7291" color="white" angle="180">
+					<from>
+						<alias uid="7292"/>
+					</from>
+					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
+				</connector>
+				<connector uid="7293" color="white" angle="357.397">
+					<from>
+						<alias uid="7294"/>
+					</from>
+					<to>TVE_rollup</to>
+				</connector>
+				<connector uid="7295" angle="342.35">
+					<from>V_4</from>
+					<to>VM_4</to>
+				</connector>
+				<connector uid="7296" angle="220.601">
+					<from>V_by_tech</from>
+					<to>V_share_by_tech</to>
+				</connector>
+				<connector uid="7297" angle="35.5377">
+					<from>On_Road_AVE_1</from>
+					<to>fuel_use_V_1</to>
+				</connector>
+				<connector uid="7298" angle="313.249">
+					<from>AVE_3</from>
+					<to>TVE_M_3</to>
+				</connector>
+				<connector uid="7299" angle="270">
+					<from>lo_blend_volumetric_Offset</from>
+					<to>max_FFV_lo_blend_consn</to>
+				</connector>
+				<connector uid="7300" angle="301.43">
+					<from>V_1_to_2</from>
+					<to>TVE_1_to_2</to>
+				</connector>
+				<connector uid="7301" angle="341.565">
+					<from>V_5_distribution</from>
+					<to>v_5_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7302" angle="69.444">
+					<from>V_1_distn</from>
+					<to>V_1_to_2</to>
+				</connector>
+				<connector uid="7303" angle="32.0054">
+					<from>VMT_3</from>
+					<to>Total_VMT_3</to>
+				</connector>
+				<connector uid="7304" angle="180">
+					<from>
+						<alias uid="7305"/>
+					</from>
+					<to>survive_rate_4</to>
+				</connector>
+				<connector uid="7306" angle="90">
+					<from>TVE_3</from>
+					<to>AVE_3</to>
+				</connector>
+				<connector uid="7307" color="#C8C8C8" angle="102.529">
+					<from>one_year</from>
+					<to>V_1_to_2</to>
+				</connector>
+				<connector uid="7308" color="white" angle="6.34019">
+					<from>
+						<alias uid="7309"/>
+					</from>
+					<to>VMT_5</to>
+				</connector>
+				<connector uid="7310" angle="206.565">
+					<from>
+						<alias uid="7311"/>
+					</from>
+					<to>V_1_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7312" color="#C8C8C8" angle="181.163">
+					<from>one_year</from>
+					<to>VM_1</to>
+				</connector>
+				<connector uid="7313" angle="296.565">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>V_by_tech</to>
+				</connector>
+				<connector uid="7314" color="white" angle="153.435">
+					<from>
+						<alias uid="7315"/>
+					</from>
+					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
+				</connector>
+				<connector uid="7316" angle="35.5377">
+					<from>
+						<alias uid="7317"/>
+					</from>
+					<to>vehicle_mortality_factor</to>
+				</connector>
+				<connector uid="7318" angle="0">
+					<from>total_potential_lo_blend_consn_non_FFV</from>
+					<to>regional_potential_lo_blend_consn_non_FFV</to>
+				</connector>
+				<connector uid="7319" angle="0">
+					<from>max_FFV_lo_blend_consn</from>
+					<to>total_potential_lo_blend_consn_FFV</to>
+				</connector>
+				<connector uid="7320" angle="142.306">
+					<from>
+						<alias uid="7321"/>
+					</from>
+					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
+				</connector>
+				<connector uid="7322" angle="20.556">
+					<from>
+						<alias uid="7323"/>
+					</from>
+					<to>vehicle_influx_logic</to>
+				</connector>
+				<connector uid="7324" color="#C8C8C8" angle="32.0054">
+					<from>regional_vehicle_distribution</from>
+					<to>regional_potential_lo_blend_consn_non_FFV</to>
+				</connector>
+				<connector uid="7325" angle="90">
+					<from>
+						<alias uid="7286"/>
+					</from>
+					<to>On_Road_AVE_3</to>
+				</connector>
+				<connector uid="7326" angle="324.462">
+					<from>VMT_Ramp_Logic</from>
+					<to>VMT_4</to>
+				</connector>
+				<connector uid="7327" angle="270">
+					<from>regionally_weighted_hi_blend_coeff</from>
+					<to>hi_blend_Coefficient</to>
+				</connector>
+				<connector uid="7328" angle="310.601">
+					<from>fuel_use_V_1</from>
+					<to>fuel_use_by_tech_and_efficiency</to>
+				</connector>
+				<connector uid="7329" angle="0">
+					<from>
+						<alias uid="7330"/>
+					</from>
+					<to>regionally_weighted_hi_blend_coeff</to>
+				</connector>
+				<connector uid="7331" angle="229.399">
+					<from>
+						<alias uid="7332"/>
+					</from>
+					<to>influx_AVE</to>
+				</connector>
+				<connector uid="7333" angle="180">
+					<from>V_2_wtd_mort_rate</from>
+					<to>VM_2</to>
+				</connector>
+				<connector uid="7334" angle="296.565">
+					<from>TVE_rollup</from>
+					<to>AVE_total</to>
+				</connector>
+				<connector uid="7335" angle="0">
+					<from>
+						<alias uid="7336"/>
+					</from>
+					<to>VMT_4</to>
+				</connector>
+				<connector uid="7337" angle="35.5377">
+					<from>VMT_2</from>
+					<to>Total_VMT_2</to>
+				</connector>
+				<connector uid="7338" angle="243.435">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>V_total</to>
+				</connector>
+				<connector uid="7339" angle="116.565">
+					<from>
+						<alias uid="7269"/>
+					</from>
+					<to>lo_blend_volumetric_Offset</to>
+				</connector>
+				<connector uid="7340" angle="0">
+					<from>
+						<alias uid="7341"/>
+					</from>
+					<to>influx_AVE</to>
+				</connector>
+				<connector uid="7342" angle="305.838">
+					<from>V_2_to_3</from>
+					<to>TVE_2_to_3</to>
+				</connector>
+				<connector uid="7343" angle="0">
+					<from>max_gasoline_consn</from>
+					<to>total_potential_fuel_consn_gasoline</to>
+				</connector>
+				<connector uid="7344" angle="0">
+					<from>potential_lo_blend_consn_non_FF</from>
+					<to>total_potential_lo_blend_consn_non_FFV</to>
+				</connector>
+				<connector uid="7345" angle="6.34019">
+					<from>vehicle_mortality_factor</from>
+					<to>survive_rate_1</to>
+				</connector>
+				<connector uid="7346" angle="333.435">
+					<from>V_total</from>
+					<to>V_share_by_tech</to>
+				</connector>
+				<connector uid="7347" color="white" angle="95.7106">
+					<from>
+						<alias uid="7348"/>
+					</from>
+					<to>V_3_to_4</to>
+				</connector>
+				<connector uid="7349" angle="0">
+					<from>Total_VMT_2</from>
+					<to>fuel_use_V_2</to>
+				</connector>
+				<connector uid="7350" angle="49.3987">
+					<from>VMT_Ramp_Logic</from>
+					<to>VMT_1</to>
+				</connector>
+				<connector uid="7351" angle="0">
+					<from>potential_hi_blend_consn</from>
+					<to>total_potential_hi_blend_consn</to>
+				</connector>
+				<connector uid="7352" color="white" angle="357.397">
+					<from>
+						<alias uid="7353"/>
+					</from>
+					<to>Total_VMT_3</to>
+				</connector>
+				<connector uid="7354" angle="333.435">
+					<from>
+						<alias uid="7355"/>
+					</from>
+					<to>Total_Outflow</to>
+				</connector>
+				<connector uid="7356" angle="0">
+					<from>Lo_blend_coefficient</from>
+					<to>max_EtOH_consn_Lo_Blend</to>
+				</connector>
+				<connector uid="7357" angle="90">
+					<from>TVE_2</from>
+					<to>AVE_2</to>
+				</connector>
+				<connector uid="7358" angle="276.34">
+					<from>AVE_3</from>
+					<to>TVE_3_to_4</to>
+				</connector>
+				<connector uid="7359" color="white" angle="52.5946">
+					<from>
+						<alias uid="7360"/>
+					</from>
+					<to>TVE_rollup</to>
+				</connector>
+				<connector uid="7361" color="white" angle="0">
+					<from>
+						<alias uid="7362"/>
+					</from>
+					<to>VMT_2</to>
+				</connector>
+				<connector uid="7363" color="white" angle="10.3048">
+					<from>
+						<alias uid="7292"/>
+					</from>
+					<to>Total_V_2</to>
+				</connector>
+				<connector uid="7364" angle="270">
+					<from>
+						<alias uid="7365"/>
+					</from>
+					<to>Annual_Chg_VMT</to>
+				</connector>
+				<connector uid="7366" color="white" angle="10.3048">
+					<from>
+						<alias uid="7367"/>
+					</from>
+					<to>Total_V_1</to>
+				</connector>
+				<connector uid="7368" color="white" angle="12.5288">
+					<from>
+						<alias uid="7369"/>
+					</from>
+					<to>Rollup_VMT_3</to>
+				</connector>
+				<connector uid="7370" color="white" angle="147.995">
+					<from>
+						<alias uid="7371"/>
+					</from>
+					<to>vehicle_influx_logic</to>
+				</connector>
+				<connector uid="7372" color="white" angle="0">
+					<from>
+						<alias uid="7373"/>
+					</from>
+					<to>Total_VMT_1</to>
+				</connector>
+				<connector uid="7374" angle="54.4623">
+					<from>fuel_use_V_5</from>
+					<to>fuel_use_by_tech_and_efficiency</to>
+				</connector>
+				<connector uid="7375" angle="0">
+					<from>Total_VMT_4</from>
+					<to>fuel_use_V_4</to>
+				</connector>
+				<connector uid="7376" color="white" angle="90">
+					<from>
+						<alias uid="7377"/>
+					</from>
+					<to>V_4_to_5</to>
+				</connector>
+				<connector uid="7378" angle="305.538">
+					<from>VMT_Ramp_Logic</from>
+					<to>VMT_5</to>
+				</connector>
+				<connector uid="7379" angle="270">
+					<from>AVE_1</from>
+					<to>TVE_1_to_2</to>
+				</connector>
+				<connector uid="7380" color="white" angle="270">
+					<from>
+						<alias uid="7381"/>
+					</from>
+					<to>E85_Volumetric_Offset</to>
+				</connector>
+				<connector uid="7382" angle="0">
+					<from>Total_Outflow</from>
+					<to>total_V_mortality</to>
+				</connector>
+				<connector uid="7383" color="white" angle="206.565">
+					<from>
+						<alias uid="7371"/>
+					</from>
+					<to>influx_AVE</to>
+				</connector>
+				<connector uid="7384" angle="339.444">
+					<from>VMT_Ramp_Logic</from>
+					<to>VMT_3</to>
+				</connector>
+				<connector uid="7385" color="white" angle="353.66">
+					<from>
+						<alias uid="7386"/>
+					</from>
+					<to>On_Road_AVE_2</to>
+				</connector>
+				<connector uid="7387" angle="270">
+					<from>V_3</from>
+					<to>AVE_3</to>
+				</connector>
+				<connector uid="7388" color="#C8C8C8" angle="180">
+					<from>regional_vehicle_distribution</from>
+					<to>regionally_weighted_lo_blend_coeff</to>
+				</connector>
+				<connector uid="7389" color="white" angle="130.601">
+					<from>
+						<alias uid="7377"/>
+					</from>
+					<to>V_4_distribution</to>
+				</connector>
+				<connector uid="7390" angle="180">
+					<from>
+						<alias uid="7391"/>
+					</from>
+					<to>survive_rate_3</to>
+				</connector>
+				<connector uid="7392" angle="0">
+					<from>
+						<alias uid="7393"/>
+					</from>
+					<to>Total_V_3</to>
+				</connector>
+				<connector uid="7394" angle="45">
+					<from>Total_Outflow</from>
+					<to>Mortality_by_car_truck</to>
+				</connector>
+				<connector uid="7395" angle="180">
+					<from>VMT_by_car_truck_by_tech</from>
+					<to>VMT_total</to>
+				</connector>
+				<connector uid="7396" angle="0">
+					<from>fuel_use_V_3</from>
+					<to>fuel_use_by_tech_and_efficiency</to>
+				</connector>
+				<connector uid="7397" angle="327.995">
+					<from>VMT_4</from>
+					<to>Total_VMT_4</to>
+				</connector>
+				<connector uid="7398" angle="296.565">
+					<from>fuel_use_by_tech_and_efficiency</from>
+					<to>potential_hi_blend_consn</to>
+				</connector>
+				<connector uid="7399" angle="333.435">
+					<from>hi_blend_Coefficient</from>
+					<to>rollup_max_EtOH_consn_Hi_Blend</to>
+				</connector>
+				<connector uid="7400" angle="206.565">
+					<from>E85_Volumetric_Offset</from>
+					<to>potential_hi_blend_consn</to>
+				</connector>
+				<connector uid="7401" angle="0">
+					<from>
+						<alias uid="7402"/>
+					</from>
+					<to>On_Road_AVE_5</to>
+				</connector>
+				<connector uid="7403" color="white" angle="57.0948">
+					<from>
+						<alias uid="7404"/>
+					</from>
+					<to>TVE_rollup</to>
+				</connector>
+				<connector uid="7405" color="white" angle="6.34019">
+					<from>
+						<alias uid="7406"/>
+					</from>
+					<to>regional_V_share_by_tech</to>
+				</connector>
+				<connector uid="7407" color="white" angle="33.385">
+					<from>
+						<alias uid="7408"/>
+					</from>
+					<to>in_TVE_1</to>
+				</connector>
+				<connector uid="7409" color="white" angle="151.39">
+					<from>
+						<alias uid="7393"/>
+					</from>
+					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
+				</connector>
+				<connector uid="7410" angle="180">
+					<from>
+						<alias uid="7411"/>
+					</from>
+					<to>survive_rate_1</to>
+				</connector>
+				<connector uid="7412" angle="180">
+					<from>
+						<alias uid="7413"/>
+					</from>
+					<to>survive_rate_5</to>
+				</connector>
+				<connector uid="7414" angle="286.699">
+					<from>AVE_4</from>
+					<to>TVE_4_to_5</to>
+				</connector>
+				<connector uid="7415" angle="180">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>AVE_by_car_truck_by_tech</to>
+				</connector>
+				<connector uid="7416" angle="341.565">
+					<from>Total_VMT_5</from>
+					<to>fuel_use_V_5</to>
+				</connector>
+				<connector uid="7417" angle="270">
+					<from>regionally_weighted_lo_blend_coeff</from>
+					<to>Lo_blend_coefficient</to>
+				</connector>
+				<connector uid="7418" angle="18.4349">
+					<from>On_Road_AVE_3</from>
+					<to>fuel_use_V_3</to>
+				</connector>
+				<connector uid="7419" angle="270.224">
+					<from>VM_3</from>
+					<to>TVE_M_3</to>
+				</connector>
+				<connector uid="7420" angle="0">
+					<from>
+						<alias uid="7421"/>
+					</from>
+					<to>Total_Outflow</to>
+				</connector>
+				<connector uid="7422" color="white" angle="259.114">
+					<from>
+						<alias uid="7423"/>
+					</from>
+					<to>VM_5</to>
+				</connector>
+				<connector uid="7424" angle="229.399">
+					<from>
+						<alias uid="7254"/>
+					</from>
+					<to>VMT_by_car_truck_by_tech</to>
+				</connector>
+				<connector uid="7425" angle="282.529">
+					<from>V_3_distn</from>
+					<to>V_3_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7426" angle="180">
+					<from>V_1_wtd_mort_rate</from>
+					<to>VM_1</to>
+				</connector>
+				<connector uid="7427" color="white" angle="180">
+					<from>
+						<alias uid="7369"/>
+					</from>
+					<to>VMT_by_car_truck_by_tech</to>
+				</connector>
+				<connector uid="7428" angle="130.601">
+					<from>
+						<alias uid="7332"/>
+					</from>
+					<to>vehicle_influx_logic</to>
+				</connector>
+				<connector uid="7429" angle="310.601">
+					<from>TVE_rollup</from>
+					<to>AVE_car_truck</to>
+				</connector>
+				<connector uid="7430" angle="0">
+					<from>
+						<alias uid="7259"/>
+					</from>
+					<to>Rollup_VMT_2</to>
+				</connector>
+				<connector uid="7431" angle="90">
+					<from>VMT_by_car_truck_by_tech</from>
+					<to>VMT_car_truck</to>
+				</connector>
+				<connector uid="7432" angle="315">
+					<from>AVE_2</from>
+					<to>TVE_M_2</to>
+				</connector>
+				<connector uid="7433" angle="296.565">
+					<from>vehicle_mortality_factor</from>
+					<to>survive_rate_5</to>
+				</connector>
+				<connector uid="7434" angle="268.482">
+					<from>vehicle_influx</from>
+					<to>in_TVE_1</to>
+				</connector>
+				<connector uid="7435" angle="0">
+					<from>rollup_max_EtOH_consn_Hi_Blend</from>
+					<to>regional_potential_hi_blend_consn_FFV</to>
+				</connector>
+				<connector uid="7436" angle="276.34">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>V_by_car_truck</to>
+				</connector>
+				<connector uid="7437" color="#C8C8C8" angle="296.565">
+					<from>regional_vehicle_distribution</from>
+					<to>regional_potential_hi_blend_consn_FFV</to>
+				</connector>
+				<connector uid="7438" color="white" angle="20.556">
+					<from>
+						<alias uid="7439"/>
+					</from>
+					<to>influx_AVE</to>
+				</connector>
+				<connector uid="7440" angle="30.5792">
+					<from>V_2</from>
+					<to>V_2_to_3</to>
+				</connector>
+				<connector uid="7441" angle="324.462">
+					<from>TVE_rollup</from>
+					<to>AVE_by_Tech</to>
+				</connector>
+				<connector uid="7442" color="white" angle="6.34019">
+					<from>
+						<alias uid="7443"/>
+					</from>
+					<to>regionally_weighted_lo_blend_coeff</to>
+				</connector>
+				<connector uid="7444" color="white" angle="180">
+					<from>
+						<alias uid="7348"/>
+					</from>
+					<to>V_3_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7445" color="white" angle="223.647">
+					<from>
+						<alias uid="7446"/>
+					</from>
+					<to>VM_4</to>
+				</connector>
+				<connector uid="7447" color="white" angle="310.601">
+					<from>
+						<alias uid="7448"/>
+					</from>
+					<to>potential_hi_blend_consn</to>
+				</connector>
+				<connector uid="7449" color="white" angle="35.5377">
+					<from>
+						<alias uid="7446"/>
+					</from>
+					<to>V_4_to_5</to>
+				</connector>
+				<connector uid="7450" angle="324.462">
+					<from>On_Road_AVE_4</from>
+					<to>fuel_use_V_4</to>
+				</connector>
+				<connector uid="7451" angle="36.0274">
+					<from>V_1</from>
+					<to>V_1_to_2</to>
+				</connector>
+				<connector uid="7452" angle="298.848">
+					<from>V_1</from>
+					<to>VM_1</to>
+				</connector>
+				<connector uid="7453" color="#C8C8C8" angle="310.601">
+					<from>regional_vehicle_distribution</from>
+					<to>regional_potential_lo_blend_consn_FFV</to>
+				</connector>
+				<connector uid="7454" angle="0">
+					<from>Total_VMT_3</from>
+					<to>fuel_use_V_3</to>
+				</connector>
+				<connector uid="7455" color="white" angle="353.66">
+					<from>
+						<alias uid="7456"/>
+					</from>
+					<to>vehicle_mortality_factor</to>
+				</connector>
+				<connector uid="7457" angle="167.471">
+					<from>
+						<alias uid="7458"/>
+					</from>
+					<to>VMT_by_car_truck_by_tech</to>
+				</connector>
+				<connector uid="7459" angle="299.554">
+					<from>V_3</from>
+					<to>VM_3</to>
+				</connector>
+				<connector uid="7460" angle="0">
+					<from>
+						<alias uid="7321"/>
+					</from>
+					<to>total_V_5</to>
+				</connector>
+				<connector uid="7461" angle="180">
+					<from>Lo_blend_coefficient</from>
+					<to>lo_blend_volumetric_Offset</to>
+				</connector>
+				<connector uid="7462" angle="180">
+					<from>
+						<alias uid="7463"/>
+					</from>
+					<to>regional_vehicle_distribution</to>
+				</connector>
+				<connector uid="7464" angle="276.34">
+					<from>VM_2</from>
+					<to>TVE_M_2</to>
+				</connector>
+				<connector uid="7465" angle="180">
+					<from>
+						<alias uid="7466"/>
+					</from>
+					<to>survive_rate_2</to>
+				</connector>
+				<connector uid="7467" color="white" angle="0">
+					<from>
+						<alias uid="7468"/>
+					</from>
+					<to>vehicle_influx_logic</to>
+				</connector>
+				<connector uid="7469" angle="220.601">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>AVE_car_truck</to>
+				</connector>
+				<connector uid="7470" angle="302.005">
+					<from>AVE_1</from>
+					<to>TVE_M_1</to>
+				</connector>
+				<connector uid="7471" angle="67.6199">
+					<from>
+						<alias uid="7472"/>
+					</from>
+					<to>TVE_rollup</to>
+				</connector>
+				<connector uid="7473" color="white" angle="353.66">
 					<from>
 						<alias uid="7242"/>
 					</from>
 					<to>Rollup_VMT_5</to>
 				</connector>
-				<connector uid="7480" angle="130.601">
+				<connector uid="7474" angle="130.601">
 					<from>total_potential_lo_blend_consn_FFV</from>
 					<to>max_EtOH_consn_Lo_Blend</to>
 				</connector>
-				<connector uid="7481" angle="310.601">
+				<connector uid="7475" angle="310.601">
 					<from>On_Road_AVE_5</from>
 					<to>fuel_use_V_5</to>
 				</connector>
-				<connector uid="7482" color="white" angle="206.565">
+				<connector uid="7476" color="white" angle="206.565">
 					<from>
-						<alias uid="7483"/>
+						<alias uid="7477"/>
 					</from>
 					<to>V_2_wtd_mort_rate</to>
 				</connector>
-				<connector uid="7484" angle="0">
+				<connector uid="7478" angle="0">
 					<from>total_potential_hi_blend_consn</from>
 					<to>rollup_max_EtOH_consn_Hi_Blend</to>
 				</connector>
-				<connector uid="7485" color="white" angle="77.4712">
+				<connector uid="7479" color="white" angle="77.4712">
 					<from>
-						<alias uid="7483"/>
+						<alias uid="7477"/>
 					</from>
 					<to>V_2_to_3</to>
 				</connector>
-				<connector uid="7486" angle="263.66">
+				<connector uid="7480" angle="263.66">
 					<from>
-						<alias uid="7288"/>
+						<alias uid="7286"/>
 					</from>
 					<to>On_Road_AVE_4</to>
 				</connector>
-				<connector uid="7487" angle="12.5288">
+				<connector uid="7481" angle="144.462">
 					<from>
-						<alias uid="7488"/>
-					</from>
-					<to>influx_AVE</to>
-				</connector>
-				<connector uid="7489" angle="144.462">
-					<from>
-						<alias uid="7386"/>
+						<alias uid="7381"/>
 					</from>
 					<to>lo_blend_volumetric_Offset</to>
 				</connector>
-				<connector uid="7490" color="white" angle="353.66">
+				<connector uid="7482" color="white" angle="353.66">
 					<from>
-						<alias uid="7491"/>
+						<alias uid="7483"/>
 					</from>
 					<to>On_Road_AVE_1</to>
 				</connector>
-				<connector uid="7492" angle="315">
+				<connector uid="7484" angle="315">
 					<from>AVE_5</from>
 					<to>TVE_M_5</to>
 				</connector>
-				<connector uid="7493" angle="305.538">
+				<connector uid="7485" angle="305.538">
 					<from>V_1_distn</from>
 					<to>V_1_wtd_mort_rate</to>
 				</connector>
-				<connector uid="7494" angle="319.124">
+				<connector uid="7486" angle="319.124">
 					<from>
-						<alias uid="7495"/>
+						<alias uid="7487"/>
 					</from>
 					<to>vehicle_influx</to>
 				</connector>
-				<connector uid="7496" angle="96.3402">
+				<connector uid="7488" angle="96.3402">
 					<from>
-						<alias uid="7313"/>
+						<alias uid="7311"/>
 					</from>
 					<to>V_1_distn</to>
 				</connector>
-				<connector uid="7497" color="white" angle="55.008">
+				<connector uid="7489" color="white" angle="55.008">
 					<from>
 						<alias uid="7238"/>
 					</from>
 					<to>V_3_to_4</to>
 				</connector>
-				<connector uid="7498" color="white" angle="324.462">
+				<connector uid="7490" color="white" angle="324.462">
 					<from>
-						<alias uid="7499"/>
+						<alias uid="7491"/>
 					</from>
 					<to>Total_Outflow</to>
 				</connector>
-				<connector uid="7500" angle="0">
+				<connector uid="7492" angle="0">
 					<from>
-						<alias uid="7463"/>
+						<alias uid="7458"/>
 					</from>
 					<to>Rollup_VMT_4</to>
 				</connector>
-				<connector uid="7501" angle="180">
+				<connector uid="7493" angle="180">
 					<from>
-						<alias uid="7372"/>
+						<alias uid="7367"/>
 					</from>
 					<to>Total_LDV_Stock_by_Tech_and_Efficiency</to>
 				</connector>
-				<connector uid="7502" color="white" angle="10.3048">
+				<connector uid="7494" color="white" angle="10.3048">
 					<from>
-						<alias uid="7317"/>
+						<alias uid="7315"/>
 					</from>
 					<to>Total_V_4</to>
 				</connector>
-				<connector uid="7503" color="white" angle="2.60256">
+				<connector uid="7495" color="white" angle="2.60256">
 					<from>
-						<alias uid="7504"/>
+						<alias uid="7496"/>
 					</from>
 					<to>Total_VMT_2</to>
 				</connector>
-				<connector uid="7505" angle="96.3402">
+				<connector uid="7497" angle="96.3402">
 					<from>
-						<alias uid="7288"/>
+						<alias uid="7286"/>
 					</from>
 					<to>On_Road_AVE_1</to>
 				</connector>
-				<connector uid="7506" angle="26.5651">
+				<connector uid="7498" angle="26.5651">
 					<from>VMT_Ramp_Logic</from>
 					<to>VMT_2</to>
 				</connector>
-				<connector uid="7507" angle="333.435">
+				<connector uid="7499" angle="333.435">
 					<from>v_5_wtd_mort_rate</from>
 					<to>VM_5</to>
 				</connector>
-				<connector uid="7508" angle="270">
+				<connector uid="7500" angle="270">
 					<from>
-						<alias uid="7509"/>
+						<alias uid="7501"/>
 					</from>
 					<to>potential_lo_blend_consn_non_FF</to>
 				</connector>
-				<connector uid="7510" angle="26.5651">
+				<connector uid="7502" angle="26.5651">
 					<from>VMT_1</from>
 					<to>Total_VMT_1</to>
 				</connector>
-				<connector uid="7511" color="#C8C8C8" angle="70.062">
+				<connector uid="7503" color="#C8C8C8" angle="70.062">
 					<from>
-						<alias uid="7512"/>
+						<alias uid="7504"/>
 					</from>
 					<to>V_2_to_3</to>
 				</connector>
-				<connector uid="7513" angle="0">
+				<connector uid="7505" angle="0">
 					<from>
-						<alias uid="7514"/>
+						<alias uid="7506"/>
 					</from>
 					<to>VMT_3</to>
 				</connector>
-				<connector uid="7515" angle="36.0274">
+				<connector uid="7507" angle="36.0274">
 					<from>V_4</from>
 					<to>V_4_to_5</to>
 				</connector>
-				<connector uid="7516" angle="333.435">
+				<connector uid="7508" angle="333.435">
 					<from>vehicle_mortality_factor</from>
 					<to>survive_rate_2</to>
 				</connector>
-				<connector uid="7517" color="#C8C8C8" angle="205.084">
+				<connector uid="7509" color="#C8C8C8" angle="205.084">
 					<from>
-						<alias uid="7512"/>
+						<alias uid="7504"/>
 					</from>
 					<to>VM_2</to>
 				</connector>
-				<connector uid="7518" angle="324.462">
+				<connector uid="7510" angle="324.462">
 					<from>V_2_distn</from>
 					<to>V_2_wtd_mort_rate</to>
 				</connector>
-				<connector uid="7519" angle="90">
+				<connector uid="7511" angle="90">
 					<from>
-						<alias uid="7288"/>
+						<alias uid="7286"/>
 					</from>
 					<to>On_Road_AVE_2</to>
 				</connector>
-				<connector uid="7520" angle="288.347">
+				<connector uid="7512" angle="288.347">
 					<from>V_5</from>
 					<to>VM_5</to>
 				</connector>
-				<connector uid="7521" angle="180">
+				<connector uid="7513" angle="180">
 					<from>hi_blend_Coefficient</from>
 					<to>E85_Volumetric_Offset</to>
 				</connector>
-				<connector uid="7522" angle="307.875">
+				<connector uid="7514" angle="307.875">
 					<from>V_4_to_5</from>
 					<to>TVE_4_to_5</to>
+				</connector>
+				<connector uid="7515" angle="0">
+					<from>
+						<alias uid="7516"/>
+					</from>
+					<to>Total_VMT_4</to>
+				</connector>
+				<connector uid="7517" angle="270">
+					<from>V_4</from>
+					<to>AVE_4</to>
+				</connector>
+				<connector uid="7518" angle="229.399">
+					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
+					<to>AVE_total</to>
+				</connector>
+				<connector uid="7519" angle="167.471">
+					<from>
+						<alias uid="7377"/>
+					</from>
+					<to>V_4_wtd_mort_rate</to>
+				</connector>
+				<connector uid="7520" angle="45">
+					<from>fuel_use_V_4</from>
+					<to>fuel_use_by_tech_and_efficiency</to>
+				</connector>
+				<connector uid="7521" color="white" angle="90">
+					<from>
+						<alias uid="7501"/>
+					</from>
+					<to>max_gasoline_consn</to>
+				</connector>
+				<connector uid="7522" color="white" angle="69.444">
+					<from>
+						<alias uid="7448"/>
+					</from>
+					<to>potential_lo_blend_consn_non_FF</to>
 				</connector>
 				<connector uid="7523" angle="0">
 					<from>
 						<alias uid="7524"/>
 					</from>
-					<to>Total_VMT_4</to>
-				</connector>
-				<connector uid="7525" angle="270">
-					<from>V_4</from>
-					<to>AVE_4</to>
-				</connector>
-				<connector uid="7526" angle="229.399">
-					<from>Total_LDV_Stock_by_Tech_and_Efficiency</from>
-					<to>AVE_total</to>
-				</connector>
-				<connector uid="7527" angle="167.471">
-					<from>
-						<alias uid="7382"/>
-					</from>
-					<to>V_4_wtd_mort_rate</to>
-				</connector>
-				<connector uid="7528" angle="45">
-					<from>fuel_use_V_4</from>
-					<to>fuel_use_by_tech_and_efficiency</to>
-				</connector>
-				<connector uid="7529" color="white" angle="90">
-					<from>
-						<alias uid="7509"/>
-					</from>
-					<to>max_gasoline_consn</to>
-				</connector>
-				<connector uid="7530" color="white" angle="69.444">
-					<from>
-						<alias uid="7453"/>
-					</from>
-					<to>potential_lo_blend_consn_non_FF</to>
-				</connector>
-				<connector uid="7531" angle="0">
-					<from>
-						<alias uid="7532"/>
-					</from>
 					<to>On_Road_AVE_4</to>
 				</connector>
-				<connector uid="7533" angle="26.5651">
+				<connector uid="7525" angle="26.5651">
 					<from>fuel_use_by_tech_and_efficiency</from>
 					<to>max_gasoline_consn</to>
 				</connector>
-				<connector uid="7534" angle="270">
+				<connector uid="7526" angle="270">
 					<from>VMT_by_car_truck_by_tech</from>
 					<to>VMT_by_tech</to>
 				</connector>
-				<connector uid="7535" angle="26.5651">
+				<connector uid="7527" angle="26.5651">
 					<from>Total_Outflow</from>
 					<to>mortality_by_tech</to>
 				</connector>
-				<connector uid="7536" angle="0">
+				<connector uid="7528" angle="0">
 					<from>TVE_rollup</from>
 					<to>AVE_by_car_truck_by_tech</to>
 				</connector>
-				<connector uid="7537" angle="333.435">
+				<connector uid="7529" angle="333.435">
 					<from>VMT_5</from>
 					<to>Total_VMT_5</to>
 				</connector>
-				<connector uid="7538" angle="26.5651">
+				<connector uid="7530" angle="26.5651">
 					<from>Use_User_Defined_Vehicles</from>
 					<to>vehicle_scenario_check</to>
 				</connector>
-				<connector uid="7539" color="white" angle="243.435">
+				<connector uid="7531" color="white" angle="243.435">
 					<from>
-						<alias uid="7263"/>
+						<alias uid="7261"/>
 					</from>
 					<to>V_5_distribution</to>
 				</connector>
-				<connector uid="7540" angle="69.444">
+				<connector uid="7532" angle="69.444">
 					<from>
-						<alias uid="7313"/>
+						<alias uid="7311"/>
 					</from>
 					<to>V_1_to_2</to>
 				</connector>
-				<connector uid="7541" color="white" angle="0">
+				<connector uid="7533" color="white" angle="0">
 					<from>
-						<alias uid="7453"/>
+						<alias uid="7448"/>
 					</from>
 					<to>max_FFV_lo_blend_consn</to>
 				</connector>
-				<connector uid="7542" angle="270.182">
+				<connector uid="7534" angle="270.182">
 					<from>VM_1</from>
 					<to>TVE_M_1</to>
 				</connector>
-				<connector uid="7543" color="#C8C8C8" angle="45">
+				<connector uid="7535" color="#C8C8C8" angle="45">
 					<from>regional_vehicle_distribution</from>
 					<to>Regional_Potential_gasoline_consn</to>
 				</connector>
-				<connector uid="7544" angle="333.435">
+				<connector uid="7536" angle="333.435">
 					<from>USE_AEO_Vehicles</from>
 					<to>vehicle_scenario_check</to>
 				</connector>
-				<connector uid="7545" angle="0">
+				<connector uid="7537" angle="0">
 					<from>total_potential_lo_blend_consn_FFV</from>
 					<to>regional_potential_lo_blend_consn_FFV</to>
 				</connector>
-				<connector uid="7546" color="white" angle="116.565">
+				<connector uid="7538" color="white" angle="116.565">
 					<from>
-						<alias uid="7483"/>
+						<alias uid="7477"/>
 					</from>
 					<to>V_2_distn</to>
 				</connector>
-				<connector uid="7547" angle="69.444">
+				<connector uid="7539" angle="69.444">
 					<from>V_2_distn</from>
 					<to>V_2_to_3</to>
 				</connector>
-				<connector uid="7548" angle="305.838">
+				<connector uid="7540" angle="305.838">
 					<from>V_3_to_4</from>
 					<to>TVE_3_to_4</to>
 				</connector>
-				<connector uid="7549" color="white" angle="135">
+				<connector uid="7541" color="white" angle="135">
 					<from>
-						<alias uid="7353"/>
+						<alias uid="7348"/>
 					</from>
 					<to>V_3_distn</to>
 				</connector>
-				<connector uid="7550" angle="270">
+				<connector uid="7542" angle="270">
 					<from>total_potential_lo_blend_consn_non_FFV</from>
 					<to>max_EtOH_consn_Lo_Blend</to>
 				</connector>
-				<connector uid="7551" angle="0">
+				<connector uid="7543" angle="0">
 					<from>fuel_use_by_tech_and_efficiency</from>
 					<to>potential_lo_blend_consn_non_FF</to>
 				</connector>
-				<connector uid="7552" angle="90">
+				<connector uid="7544" angle="90">
 					<from>lo_blend_volumetric_Offset</from>
 					<to>potential_lo_blend_consn_non_FF</to>
 				</connector>
-				<stacked_container uid="7553" x="2669" y="501" width="475" height="270" minimized="true">
+				<stacked_container uid="7545" x="2669" y="501" width="475" height="270" minimized="true">
 					<table background="#E0E0E0" font_size="9pt" orientation="horizontal" column_width="59" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial" x="2669" y="501" width="475" height="270" title="Untitled Table">
 						<item type="time"/>
 						<item>
@@ -7261,7 +7214,6 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" x="918" y="821" name="Annual Chg VMT"/>
 				<aux color="black" font_color="black" label_angle="94.5279" x="2309" y="1118" name="regionally weighted lo blend coeff"/>
 				<aux color="black" font_color="black" label_angle="342.399" x="2437" y="1387" name="regionally weighted hi blend coeff"/>
-				<aux color="red" font_color="red" x="387" y="1291" name="Use ADOPT vehicles"/>
 				<aux color="red" font_color="red" x="222" y="860" name="ADOPT vehicle inflow"/>
 				<aux color="red" font_color="red" x="221" y="913" name="ADOPT AVE schedule"/>
 				<aux color="red" font_color="red" label_angle="75.284" x="465" y="1037" name="gasoline only efficiency factor"/>
@@ -7272,101 +7224,98 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="430" y="1122" name="one million"/>
 				<aux color="#65183E" font_color="#65183E" label_angle="83.8151" x="2501" y="1118" name="regional vehicle distribution"/>
 				<group locked="false" color="black" font_color="black" x="2330" y="37" width="707" height="521" name="Rollup Calculations">
-					<item uid="7478"/>
-					<item uid="7282"/>
+					<item uid="7472"/>
+					<item uid="7280"/>
+					<item uid="7355"/>
 					<item uid="7360"/>
-					<item uid="7365"/>
-					<item uid="7296"/>
-					<item uid="7409"/>
-					<item uid="7499"/>
-					<item uid="7323"/>
-					<item uid="7398"/>
-					<item uid="7372"/>
-					<item uid="7256"/>
 					<item uid="7294"/>
-					<item uid="7317"/>
-					<item uid="7261"/>
+					<item uid="7404"/>
+					<item uid="7491"/>
+					<item uid="7321"/>
+					<item uid="7393"/>
+					<item uid="7367"/>
+					<item uid="7254"/>
+					<item uid="7292"/>
+					<item uid="7315"/>
+					<item uid="7259"/>
 					<item uid="7246"/>
-					<item uid="7269"/>
-					<item uid="7426"/>
-					<item uid="7553"/>
-					<item uid="7374"/>
-					<item uid="7463"/>
+					<item uid="7267"/>
+					<item uid="7421"/>
+					<item uid="7545"/>
+					<item uid="7369"/>
+					<item uid="7458"/>
 					<item uid="7242"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="786" y="623" width="2028" height="913" name="VMT and Consumption and Regionalization">
-					<item uid="7378"/>
+					<item uid="7373"/>
 					<item uid="7233"/>
-					<item uid="7370"/>
+					<item uid="7365"/>
 					<item uid="7249"/>
-					<item uid="7273"/>
-					<item uid="7275"/>
-					<item uid="7504"/>
-					<item uid="7491"/>
-					<item uid="7391"/>
-					<item uid="7367"/>
-					<item uid="7358"/>
-					<item uid="7277"/>
-					<item uid="7509"/>
-					<item uid="7411"/>
-					<item uid="7292"/>
-					<item uid="7311"/>
-					<item uid="7288"/>
-					<item uid="7407"/>
-					<item uid="7532"/>
-					<item uid="7524"/>
-					<item uid="7514"/>
-					<item uid="7339"/>
 					<item uid="7271"/>
-					<item uid="7453"/>
+					<item uid="7273"/>
+					<item uid="7496"/>
+					<item uid="7483"/>
 					<item uid="7386"/>
+					<item uid="7362"/>
+					<item uid="7353"/>
+					<item uid="7275"/>
+					<item uid="7501"/>
+					<item uid="7406"/>
+					<item uid="7290"/>
+					<item uid="7309"/>
+					<item uid="7286"/>
+					<item uid="7402"/>
+					<item uid="7524"/>
+					<item uid="7516"/>
+					<item uid="7506"/>
+					<item uid="7336"/>
+					<item uid="7269"/>
 					<item uid="7448"/>
-					<item uid="7332"/>
-					<item uid="7468"/>
-					<item uid="7258"/>
+					<item uid="7381"/>
+					<item uid="7443"/>
+					<item uid="7330"/>
+					<item uid="7463"/>
+					<item uid="7256"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="27" y="990" width="710" height="162" name="Comparo inputs and physical constants"/>
 				<group locked="false" color="black" font_color="black" x="24" y="622" width="716" height="337" name="Vehicle inflow efficiency survival VMT Population"/>
 				<group locked="false" color="black" font_color="black" x="1" y="2043" width="759" height="294" name="Outputs to Other Modules">
-					<item uid="7554"/>
-					<item uid="7555"/>
-					<item uid="7556"/>
-					<item uid="7557"/>
-					<item uid="7558"/>
-					<item uid="7559"/>
-					<item uid="7560"/>
+					<item uid="7546"/>
+					<item uid="7547"/>
+					<item uid="7548"/>
+					<item uid="7549"/>
+					<item uid="7550"/>
+					<item uid="7551"/>
+					<item uid="7552"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="4" y="1209" width="741" height="231" name="User Interface Inputs"/>
 				<group locked="false" color="black" font_color="black" x="776" y="37" width="1517" height="524" name="Vehicles and Efficiency">
-					<item uid="7495"/>
-					<item uid="7512"/>
-					<item uid="7313"/>
-					<item uid="7483"/>
+					<item uid="7487"/>
+					<item uid="7504"/>
+					<item uid="7311"/>
+					<item uid="7477"/>
 					<item uid="7238"/>
-					<item uid="7382"/>
-					<item uid="7353"/>
-					<item uid="7451"/>
-					<item uid="7428"/>
-					<item uid="7263"/>
-					<item uid="7413"/>
+					<item uid="7377"/>
+					<item uid="7348"/>
+					<item uid="7446"/>
+					<item uid="7423"/>
+					<item uid="7261"/>
+					<item uid="7408"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="780" y="1799" width="1510" height="541" name="Influx and Outflux Logic">
-					<item uid="7473"/>
-					<item uid="7347"/>
-					<item uid="7325"/>
-					<item uid="7344"/>
-					<item uid="7488"/>
-					<item uid="7444"/>
-					<item uid="7334"/>
-					<item uid="7251"/>
-					<item uid="7376"/>
-					<item uid="7461"/>
-					<item uid="7319"/>
-					<item uid="7396"/>
-					<item uid="7471"/>
-					<item uid="7307"/>
-					<item uid="7416"/>
-					<item uid="7418"/>
+					<item uid="7468"/>
+					<item uid="7323"/>
+					<item uid="7341"/>
+					<item uid="7439"/>
+					<item uid="7332"/>
+					<item uid="7371"/>
+					<item uid="7456"/>
+					<item uid="7317"/>
+					<item uid="7391"/>
+					<item uid="7466"/>
+					<item uid="7305"/>
+					<item uid="7411"/>
+					<item uid="7413"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="10" y="1802" width="743" height="154" name="Inputs from Other Modules"/>
 				<aux color="red" font_color="red" x="77" y="1382" name="AEO 2017 VMT"/>
@@ -7374,284 +7323,275 @@ COMMENTS: </doc>
 				<aux color="#65183E" font_color="#65183E" label_angle="261.309" x="448.5" y="2193" name="estimated regional\nnon LDV gasoline consn 2015"/>
 				<aux color="red" font_color="red" x="236" y="2268" name="total gasoline consn all sources 2015"/>
 				<aux color="black" font_color="#00007F" label_side="top" x="325" y="2193" name="non LDV gasoline consn 2015"/>
-				<connector uid="7561" angle="359.433">
+				<connector uid="7553" angle="359.433">
 					<from>
-						<alias uid="7557"/>
+						<alias uid="7549"/>
 					</from>
 					<to>non_LDV_gasoline_consn_2015</to>
 				</connector>
-				<connector uid="7562" angle="40.1207">
+				<connector uid="7554" angle="40.1207">
 					<from>total_gasoline_consn_all_sources_2015</from>
 					<to>non_LDV_gasoline_consn_2015</to>
 				</connector>
-				<connector uid="7563" angle="0">
+				<connector uid="7555" angle="0">
 					<from>non_LDV_gasoline_consn_2015</from>
 					<to>estimated_regional_non_LDV_gasoline_consn_2015</to>
 				</connector>
-				<connector uid="7564" angle="90">
+				<connector uid="7556" angle="90">
 					<from>
-						<alias uid="7559"/>
+						<alias uid="7551"/>
 					</from>
 					<to>estimated_regional_non_LDV_gasoline_consn_2015</to>
 				</connector>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="7565" x="8" y="8.5" width="701" height="51">Biomass Scenario Vehicle Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="7566" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="7567" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="7568" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="7569" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="7570" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="7571" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
-				<connector uid="7572" angle="82.725">
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="7557" x="8" y="8.5" width="701" height="51">Biomass Scenario Vehicle Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="7558" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="7559" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="7560" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="7561" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="7562" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="7563" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<connector uid="7564" angle="82.725">
 					<from>regional_vehicle_distribution</from>
 					<to>regional_V_share_by_tech</to>
 				</connector>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7478" x="2380.5" y="235.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7472" x="2380.5" y="235.5" width="45" height="35">
 					<of>TVE_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7282" x="2380.5" y="114.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7280" x="2380.5" y="114.5" width="45" height="35">
 					<of>TVE_2</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7558" x="569" y="2138" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7550" x="569" y="2138" width="18" height="18">
 					<of>regional_potential_lo_blend_consn_FFV</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7374" x="2897" y="384" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7369" x="2897" y="384" width="18" height="18">
 					<of>Total_VMT_3</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="black" uid="7246" x="2380" y="488" width="18" height="18">
 					<of>VM_5</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7418" x="1990" y="2164" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7413" x="1990" y="2164" width="18" height="18">
 					<of>NEMS_survival_fraction_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7382" x="2106" y="276" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7377" x="2106" y="276" width="18" height="18">
 					<of>survive_rate_4</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7271" x="2080" y="1294" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7269" x="2080" y="1294" width="18" height="18">
 					<of>BTU_per_gal_ethanol</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7288" x="1389" y="1118" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7286" x="1389" y="1118" width="18" height="18">
 					<of>AVE_Degradation_factor</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7277" x="2029" y="831" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7275" x="2029" y="831" width="18" height="18">
 					<of>gasoline_only_efficiency_factor</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7413" x="813" y="480" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7408" x="813" y="480" width="18" height="18">
 					<of>influx_AVE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7396" x="1982" y="2032" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7391" x="1982" y="2032" width="18" height="18">
 					<of>NEMS_survival_fraction_3</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="201.668" uid="7509" x="2029" y="946" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="201.668" uid="7501" x="2029" y="946" width="18" height="18">
 					<of>Gasoline_engine</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" label_angle="83.8151" uid="7233" x="993" y="812" width="18" height="18">
 					<of>Scenario_Annual_Chg_VMT</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7407" x="1296" y="1333" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7402" x="1296" y="1333" width="18" height="18">
 					<of>AVE_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7360" x="2367" y="339" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7355" x="2367" y="339" width="18" height="18">
 					<of>VM_2</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7275" x="1274" y="1053" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7273" x="1274" y="1053" width="18" height="18">
 					<of>AVE_3</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7323" x="2855.5" y="234.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7321" x="2855.5" y="234.5" width="45" height="35">
 					<of>V_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7463" x="2897" y="435" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7458" x="2897" y="435" width="18" height="18">
 					<of>Total_VMT_4</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7532" x="1277" y="1183" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7524" x="1277" y="1183" width="18" height="18">
 					<of>AVE_4</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7504" x="1117.5" y="813.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7496" x="1117.5" y="813.5" width="45" height="35">
 					<of>V_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="276.585" uid="7468" x="2669" y="1109" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="276.585" uid="7463" x="2669" y="1109" width="18" height="18">
 					<of>Regional_Population_Distribution</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7471" x="1985" y="1955" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7466" x="1985" y="1955" width="18" height="18">
 					<of>NEMS_survival_fraction_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7334" x="1200" y="1899" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7332" x="1200" y="1899" width="18" height="18">
 					<of>Use_User_Defined_Vehicles</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7491" x="1270" y="730" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7483" x="1270" y="730" width="18" height="18">
 					<of>AVE_1</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7524" x="1155.5" y="1267.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7516" x="1155.5" y="1267.5" width="45" height="35">
 					<of>V_4</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7365" x="2381.5" y="155.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7360" x="2381.5" y="155.5" width="45" height="35">
 					<of>TVE_3</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7391" x="1289" y="904" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7386" x="1289" y="904" width="18" height="18">
 					<of>AVE_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="96.1849" uid="7370" x="909" y="746" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="96.1849" uid="7365" x="909" y="746" width="18" height="18">
 					<of>AEO_VMT_Slope</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="black" uid="7242" x="2894" y="481" width="18" height="18">
 					<of>Total_VMT_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7483" x="1490" y="255" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7477" x="1490" y="255" width="18" height="18">
 					<of>survive_rate_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7514" x="1073" y="1099" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7506" x="1073" y="1099" width="18" height="18">
 					<of>Base_VMT_3</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7398" x="2853.5" y="154.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7393" x="2853.5" y="154.5" width="45" height="35">
 					<of>V_3</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7269" x="2375" y="444" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7267" x="2375" y="444" width="18" height="18">
 					<of>VM_4</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7473" x="917" y="1822" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7468" x="917" y="1822" width="18" height="18">
 					<of>AEO_vehicle_Inflow</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="7448" x="2178" y="1109" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="7443" x="2178" y="1109" width="18" height="18">
 					<of>low_blend_coeff_from_PIM</of>
 				</alias>
-				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7512" x="1377" y="199" width="18" height="18">
+				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7504" x="1377" y="199" width="18" height="18">
 					<of>one_year</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7347" x="918" y="1864" width="18" height="18">
-					<of>ADOPT_vehicle_inflow</of>
-				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7372" x="2851.5" y="73.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7367" x="2851.5" y="73.5" width="45" height="35">
 					<of>V_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7453" x="1899" y="1351" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7448" x="1899" y="1351" width="18" height="18">
 					<of>FFV_engine</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7296" x="2380.5" y="73.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7294" x="2380.5" y="73.5" width="45" height="35">
 					<of>TVE_1</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7559" x="439.5" y="2282" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7551" x="439.5" y="2282" width="18" height="18">
 					<of>regional_vehicle_distribution</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="7332" x="2246" y="1378" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="7330" x="2246" y="1378" width="18" height="18">
 					<of>hi_blend_coeff_from_PIM</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7367" x="1091" y="880" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7362" x="1091" y="880" width="18" height="18">
 					<of>Base_VMT_2</of>
 				</alias>
 				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7238" x="1643" y="193" width="18" height="18">
 					<of>one_year</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7411" x="2340" y="764" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7406" x="2340" y="764" width="18" height="18">
 					<of>V_share_by_tech</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7325" x="918" y="1909" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7323" x="918" y="1909" width="18" height="18">
 					<of>User_vehicle_inflow</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7307" x="1985" y="2104" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7305" x="1985" y="2104" width="18" height="18">
 					<of>NEMS_survival_fraction_4</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7313" x="1205" y="260" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7311" x="1205" y="260" width="18" height="18">
 					<of>survive_rate_1</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7256" x="2870" y="285" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7254" x="2870" y="285" width="18" height="18">
 					<of>Total_VMT_1</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7554" x="118" y="2072" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7546" x="118" y="2072" width="18" height="18">
 					<of>regional_V_share_by_tech</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7560" x="573" y="2209" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7552" x="573" y="2209" width="18" height="18">
 					<of>regional_potential_hi_blend_consn_FFV</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="7258" x="1183.5" y="1433.5" width="45" height="35">
+				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="7256" x="1183.5" y="1433.5" width="45" height="35">
 					<of>V_5</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7294" x="2854.5" y="113.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7292" x="2854.5" y="113.5" width="45" height="35">
 					<of>V_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7292" x="914" y="1100" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7290" x="914" y="1100" width="18" height="18">
 					<of>Base_VMT_Year</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7251" x="1401" y="1900" width="18" height="18">
-					<of>Use_ADOPT_vehicles</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="92.7392" uid="7344" x="933" y="1989" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="92.7392" uid="7341" x="933" y="1989" width="18" height="18">
 					<of>AEO_AVE_schedule</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7461" x="1586" y="1882" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7456" x="1586" y="1882" width="18" height="18">
 					<of>Scenario_vehicle_mortality</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="7249" x="1042" y="711" width="18" height="18">
 					<of>Base_VMT_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7386" x="2129" y="1260" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7381" x="2129" y="1260" width="18" height="18">
 					<of>BTU_per_gal_gasoline</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_angle="313.281" uid="7353" x="1776" y="263" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_angle="313.281" uid="7348" x="1776" y="263" width="18" height="18">
 					<of>survive_rate_3</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7556" x="567" y="2072" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7548" x="567" y="2072" width="18" height="18">
 					<of>regional_potential_lo_blend_consn_non_FFV</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7378" x="1138.5" y="632.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7373" x="1138.5" y="632.5" width="45" height="35">
 					<of>V_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7416" x="1983" y="1882" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7411" x="1983" y="1882" width="18" height="18">
 					<of>NEMS_survival_fraction_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7376" x="1304" y="1898" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7371" x="1304" y="1898" width="18" height="18">
 					<of>USE_AEO_Vehicles</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7311" x="1053" y="1376" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7309" x="1053" y="1376" width="18" height="18">
 					<of>Base_VMT_5</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7319" x="1590" y="1950" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7317" x="1590" y="1950" width="18" height="18">
 					<of>pct_chg_vehicle_mortality_from_NEMS</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7488" x="929" y="2036" width="18" height="18">
-					<of>ADOPT_AVE_schedule</of>
-				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7409" x="2380.5" y="195.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7404" x="2380.5" y="195.5" width="45" height="35">
 					<of>TVE_4</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7273" x="831" y="812" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7271" x="831" y="812" width="18" height="18">
 					<of>Use_AEO_VMT</of>
 				</alias>
-				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7428" x="2197" y="185" width="18" height="18">
+				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7423" x="2197" y="185" width="18" height="18">
 					<of>one_year</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7317" x="2854.5" y="195.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7315" x="2854.5" y="195.5" width="45" height="35">
 					<of>V_4</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="7339" x="1091" y="1186" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="7336" x="1091" y="1186" width="18" height="18">
 					<of>Base_VMT_4</of>
 				</alias>
-				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7451" x="1946" y="192" width="18" height="18">
+				<alias color="#C8C8C8" font_style="italic" font_color="#C8C8C8" uid="7446" x="1946" y="192" width="18" height="18">
 					<of>one_year</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7499" x="2364" y="294" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7491" x="2364" y="294" width="18" height="18">
 					<of>VM_1</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7358" x="1137.5" y="997.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="center" uid="7353" x="1137.5" y="997.5" width="45" height="35">
 					<of>V_3</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" label_side="left" label_angle="135" uid="7495" x="843" y="117" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="left" label_angle="135" uid="7487" x="843" y="117" width="18" height="18">
 					<of>vehicle_influx_logic</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7261" x="2893" y="328" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7259" x="2893" y="328" width="18" height="18">
 					<of>Total_VMT_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="278.976" uid="7444" x="925" y="2090" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="278.976" uid="7439" x="925" y="2090" width="18" height="18">
 					<of>User_AVE_Schedule</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="7263" x="2122" y="50" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="7261" x="2122" y="50" width="18" height="18">
 					<of>survive_rate_5</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7555" x="317" y="2080" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="7547" x="317" y="2080" width="18" height="18">
 					<of>Regional_Potential_gasoline_consn</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="7426" x="2374" y="396" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="7421" x="2374" y="396" width="18" height="18">
 					<of>VM_3</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="7557" x="215" y="2183" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="7549" x="215" y="2183" width="18" height="18">
 					<of>total_potential_fuel_consn_gasoline</of>
 				</alias>
 			</view>
