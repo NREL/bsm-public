@@ -1,0 +1,3338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
+	<header>
+		<smile version="1.0" namespace="std, isee" uses_arrays="2"/>
+		<name>RA</name>
+		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
+		<vendor>isee systems, inc.</vendor>
+		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+	</header>
+	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
+		<start>1</start>
+		<stop>13</stop>
+		<dt reciprocal="true">4</dt>
+	</sim_specs>
+	<dimensions>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
+		<dim name="CtoRRTech">
+			<elem name="FP"/>
+			<elem name="FT"/>
+			<elem name="IDL"/>
+			<elem name="CP"/>
+			<elem name="F"/>
+			<elem name="APR"/>
+		</dim>
+		<dim name="OilCropTech">
+			<elem name="TransEster"/>
+			<elem name="HEFA"/>
+			<elem name="Catalytic"/>
+		</dim>
+		<dim name="AlgalTech">
+			<elem name="Pond"/>
+			<elem name="PBR"/>
+		</dim>
+	</dimensions>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<model_units>
+		<unit name="Dimensionless">
+			<eqn>1</eqn>
+			<alias>dmnl</alias>
+			<alias>unitless</alias>
+		</unit>
+		<unit name="Gallons">
+			<eqn/>
+			<alias>gal</alias>
+			<alias>gallon</alias>
+		</unit>
+		<unit name="US Dollars">
+			<eqn/>
+			<alias>USD</alias>
+			<alias>$</alias>
+		</unit>
+		<unit name="Years">
+			<eqn/>
+			<alias>yr</alias>
+			<alias>year</alias>
+		</unit>
+		<unit name="Per Year">
+			<eqn>1/Years</eqn>
+		</unit>
+		<unit name="MilesPerVehiclePerYr">
+			<eqn>mi/(vehicles*yr)</eqn>
+		</unit>
+		<unit name="GalPerTerminalPerYr">
+			<eqn>gal/(terminals*yr)</eqn>
+		</unit>
+		<unit name="PerLoadUSDPerMi">
+			<eqn>USD/(mi*Load)</eqn>
+		</unit>
+		<unit name="ProjectGalPerTon">
+			<eqn>Projects*(gal/ton)</eqn>
+		</unit>
+		<unit name="DaysPerYr">
+			<eqn>day/yr</eqn>
+		</unit>
+		<unit name="ProjectUSDPerYr">
+			<eqn>Projects*(USD/yr)</eqn>
+		</unit>
+		<unit name="ProjectTonPerDay">
+			<eqn>Projects*(ton/day)</eqn>
+		</unit>
+		<unit name="MillionBTUPerGal">
+			<eqn>MillionBTU/gal</eqn>
+		</unit>
+		<unit name="GramsPerMJ">
+			<eqn>g/MJ</eqn>
+		</unit>
+		<unit name="MillionBTUperMJ">
+			<eqn>MillionBTU/MJ</eqn>
+		</unit>
+		<unit name="TonnesPerGram">
+			<eqn>Tonnes/g</eqn>
+		</unit>
+		<unit name="HoursPerProjectPerYr">
+			<eqn>hr/(projects*yr)</eqn>
+		</unit>
+		<unit name="USDPerUnit">
+			<eqn>USD/units</eqn>
+		</unit>
+		<unit name="USDA to nominal">
+			<eqn>units/USDA</eqn>
+		</unit>
+		<unit name="TonsPerUnit">
+			<eqn>ton/units</eqn>
+		</unit>
+		<unit name="UnitsPerAcrePerYrPerYr">
+			<eqn>units/(acre-yr^2)</eqn>
+		</unit>
+		<unit name="acres per square mile">
+			<eqn>acre/mi^2</eqn>
+		</unit>
+		<unit name="barrels per gallon">
+			<eqn>bbl/gal</eqn>
+		</unit>
+		<unit name="billion GPY">
+			<eqn>billions-gal/yr</eqn>
+		</unit>
+		<unit name="BillionMilesPerYear">
+			<eqn>billions-mi/yr</eqn>
+		</unit>
+		<unit name="btu per gallon">
+			<eqn>btu/gallon</eqn>
+		</unit>
+		<unit name="days per year">
+			<eqn>day/year</eqn>
+		</unit>
+		<unit name="dollars per acre">
+			<eqn>usd/acres</eqn>
+		</unit>
+		<unit name="dollars per acre per yr">
+			<eqn>USD/(acre-yr)</eqn>
+		</unit>
+		<unit name="dollars per load">
+			<eqn>usd/load</eqn>
+		</unit>
+		<unit name="gal per ton">
+			<eqn>gal/ton</eqn>
+		</unit>
+		<unit name="gallons per barrel">
+			<eqn>gal/bbl</eqn>
+		</unit>
+		<unit name="gallons per dollar">
+			<eqn>gal/USD</eqn>
+		</unit>
+		<unit name="gallons per month">
+			<eqn>gal/mo</eqn>
+		</unit>
+		<unit name="gallons per visit">
+			<eqn>gal/Visit</eqn>
+		</unit>
+		<unit name="gallons per year">
+			<eqn>gal/yr</eqn>
+		</unit>
+		<unit name="GPD">
+			<eqn>gal/day</eqn>
+		</unit>
+		<unit name="million tons">
+			<eqn>million-ton</eqn>
+		</unit>
+		<unit name="million units">
+			<eqn>million-units</eqn>
+		</unit>
+		<unit name="million USD">
+			<eqn>USD-million</eqn>
+		</unit>
+		<unit name="million usda">
+			<eqn>million-usda</eqn>
+		</unit>
+		<unit name="months per year">
+			<eqn>mo/yr</eqn>
+		</unit>
+		<unit name="MPG">
+			<eqn>mi/gal</eqn>
+		</unit>
+		<unit name="per billion">
+			<eqn>1/billions</eqn>
+		</unit>
+		<unit name="per million">
+			<eqn>1/million</eqn>
+		</unit>
+		<unit name="per thousand">
+			<eqn>1/thousand</eqn>
+		</unit>
+		<unit name="Projects per Year">
+			<eqn>projects/yr</eqn>
+		</unit>
+		<unit name="thousand acres">
+			<eqn>thousand-acres</eqn>
+		</unit>
+		<unit name="thousand ton per yr">
+			<eqn>thousand-ton/yr</eqn>
+		</unit>
+		<unit name="ton per acre per yr">
+			<eqn>ton/(acre-yr)</eqn>
+		</unit>
+		<unit name="ton per day">
+			<eqn>ton/day</eqn>
+		</unit>
+		<unit name="ton per year">
+			<eqn>ton/yr</eqn>
+		</unit>
+		<unit name="tons per load">
+			<eqn>ton/load</eqn>
+		</unit>
+		<unit name="USD per barrel">
+			<eqn>USD/bbl</eqn>
+		</unit>
+		<unit name="USD per gallon">
+			<eqn>USD/gal</eqn>
+		</unit>
+		<unit name="USD per ton">
+			<eqn>USD/ton</eqn>
+		</unit>
+		<unit name="USD per visit">
+			<eqn>USD/Visit</eqn>
+		</unit>
+		<unit name="visits per month">
+			<eqn>Visit/mo</eqn>
+		</unit>
+		<unit name="Visits per year">
+			<eqn>Visit/yr</eqn>
+		</unit>
+		<unit name="VehiclesMPG">
+			<eqn>Vehicles*mi/gal</eqn>
+		</unit>
+	</model_units>
+	<model name="RA">
+		<variables>
+			<aux name="NPV rel to a million OTHER">
+				<doc>DEFINITION: NPV input for other uses of investment capacity, scaled to be commensurate with NPV input for conversion facilities (whose input is calculated as NPV of commercial scale project,  normalized by expected next plant output, which is expressed in million gallons per year. The calculation gives a measure of the net present value of the investment relative to expected annual production.)
+
+UNITS: US Dollars*Years/Gallons
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>5</eqn>
+				<units>US Dollars*Years/Gallons</units>
+			</aux>
+			<aux name="Platform Attr OTHER">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;other&quot; than conversion facilities
+
+UNITS: Unitless
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>region_scaling_factor * EXP(k_OTHER+invest_attractiveness_weighting*NPV_rel_to_a_million_OTHER)</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="k OTHER">
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness of other uses of plant construction capacity
+
+UNITS: Unitless
+
+TYPE: scalar | constant | module interface | scenario input
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT OTHER">
+				<doc>DEFINITION: Part of nested logit calculation. Calculates the attractiveness (related to the utility) of investment in &quot;other&quot; than conversion facilities
+
+UNITS: Unitless
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>Platform_Attr_OTHER/Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="invest attractiveness weighting" access="output">
+				<doc>DEFINITION: Weighting factor for investment attractiveness calculation.  Captures responsiveness of attractiveness calculation for each conversion option in response to changes in net present value input
+
+UNITS: Gallons/(US Dollars*Years)
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>.5</eqn>
+				<units>Gallons/(US Dollars*Years)</units>
+			</aux>
+			<aux name="S to EtOH Platform Attr" access="input">
+				<doc>DEFINITION: module interface to SE.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>attractiveness_C</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Total Attr" access="output">
+				<doc>DEFINITION:  part of nested logit calculation. sums &quot;platform&quot; attractiveness across all uses of plant construction capacity
+
+UNITS: Unitless
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>SUM(Algae_Platform_Attr_C) +
+C_toB_Platform_Attr_C + 
+SUM(C_to_EtOH_Platform_Attr_C) + 
+SUM(C_to_RR_Platform_Attr_C) + 
+SUM(OilCrop_Platform_Attr_C) + 
+Platform_Attr_OTHER + 
+S_to_EtOH_Platform_Attr + 
+S_to_J_platform_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to RR Platform Attr C" access="input">
+				<doc>DEFINITION: module interface to CHC.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>attractiveness_C</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Max Plant Construction Capacity">
+				<doc>DEFINITION: Provides rough measure of industry ability to initiate construct new plants each year
+
+UNITS: Projects per Year
+
+TYPE: scalar | graphical function | scenario input
+
+COMMENTS: </doc>
+				<eqn>TIME</eqn>
+				<gf>
+					<yscale min="0" max="100"/>
+					<xpts>2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2041,2042,2043,2044,2045,2046,2047,2048,2049,2050,2051</xpts>
+					<ypts>25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25</ypts>
+				</gf>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="RAT C to RR">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; cellulose to hydrocarbon commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>C_to_RR_Platform_Attr_C[CtoRRTech] / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des C to RR yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for cellulosic feedstock to hydrocarbon (AKA &quot;refinery ready&quot;) conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>Max_Plant_Construction_Capacity * RAT_C_to_RR[CtoRRTech]</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="Algae Platform Attr C" access="input">
+				<doc>DEFINITION: module interface to AHC.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AlgalTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT Algae">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; algae-to hydrocarbon commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AlgalTech"/>
+				</dimensions>
+				<eqn>Algae_Platform_Attr_C[AlgalTech] / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT S to EtOH">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; starch to ethanol commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<eqn>S_to_EtOH_Platform_Attr / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des A to RR yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for algae to hydrocarbon (AKA &quot;refinery ready&quot;) conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AlgalTech"/>
+				</dimensions>
+				<eqn>Max_Plant_Construction_Capacity * RAT_Algae[AlgalTech]</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="OilCrop Platform Attr C" access="input">
+				<doc>DEFINITION: module interface to OHC.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des S to EtOH yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for starch to ethanol conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<eqn>Max_Plant_Construction_Capacity * RAT_S_to_EtOH</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="region scaling factor" access="output">
+				<doc>DEFINITION: Scales platform attractiveness of &quot;other&quot; investment to be commensurate with conversion options that exist in multiple regions
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>10</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to EtOH Platform Attr C" access="input">
+				<doc>DEFINITION: module interface to CE.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT Oilcrop">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; oilcrop to hydrocarbon commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>OilCrop_Platform_Attr_C[OilCropTech] / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT C to EtOH">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; cellulose to ethanol commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>C_to_EtOH_Platform_Attr_C[CtoATech] / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des C to EtOH yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for cellulosic feedstock to ethanol conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>Max_Plant_Construction_Capacity * RAT_C_to_EtOH[CtoATech]</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="C toB Platform Attr C" access="input">
+				<doc>DEFINITION: module interface to CB.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des OC to RR yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for oilcrop to hydrocarbon (AKA &quot;refinery ready&quot;) conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>Max_Plant_Construction_Capacity * RAT_Oilcrop[OilCropTech]</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="S to EtOH cume subs" access="input">
+				<doc>DEFINITION: module interface to SE.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="C to EtOH cume subs" access="input">
+				<doc>DEFINITION: module interface to CE.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="C to B cume subs" access="input">
+				<doc>DEFINITION: module interface to CB.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="C to RR cume subs" access="input">
+				<doc>DEFINITION: module interface to CHC.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="OC to RR cume subs" access="input">
+				<doc>DEFINITION: module interface to OHC.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="A to RR cume subs" access="input">
+				<doc>DEFINITION: module interface to AHC.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="RAT C to B">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; cellulose to butanol commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>C_toB_Platform_Attr_C / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="system wide cume subsidy">
+				<doc>DEFINITION: sums cumulative conversion-related incentives over all conversion modules
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>A_to_RR_cume_subs + C_to_B_cume_subs + C_to_EtOH_cume_subs + C_to_RR_cume_subs + OC_to_RR_cume_subs + SJ_cume_subs</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="cume spend threshold">
+				<doc>DEFINITION: Assumed max amount of cumulative incentive before incentives are halted in conversion modules
+
+UNITS: US Dollars
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>1000000000000</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="C to EtOH cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from cellulose to ethanol module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the cellulose to ethanol module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + C_to_EtOH_cume_subs * (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="use system wide spending input">
+				<doc>DEFINITION: 0-1 switch to activate &quot;system wide&quot; incentive spending criterion for constraint to further spending in individual conversion modules
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>1</eqn>
+				<units>unitless</units>
+			</aux>
+			<aux name="C to B cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from cellulose to butanol module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the cellulose to butanol module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + C_to_B_cume_subs * (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="Des C to B yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for cellulosic feedstock to butanol conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<eqn>Max_Plant_Construction_Capacity * RAT_C_to_B</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="C to RR cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from cellulose to hydrocarbon module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the cellulose to hydrocarbon module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + C_to_RR_cume_subs * (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="OC to RR cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from oilcrop to hydrocarbon module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the oilcrop to hydrocarbon module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + OC_to_RR_cume_subs * (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="A to RR cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from algae module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the algae module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + 
+A_to_RR_cume_subs* (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="C to EtOH constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the cellulose to ethanol module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF C_to_EtOH_cume_spend_input &lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to B constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the cellulose to butanol module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF C_to_B_cume_spend_input &lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to RR constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the cellulose to hydrocarbon module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF C_to_RR_cume_spend_input&lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="OC to RR constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the oil crop to hydrocarbon module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF OC_to_RR_cume_spend_input &lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="A to RR constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the algae to hydrocarbon module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF A_to_RR_cume_spend_input &lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC Pilot Maturity" access="input">
+				<doc>DEFINITION: module interface to CHC.Pilot Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC PC Maturity" access="input">
+				<doc>DEFINITION: module interface to CHC.PC Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC Commercial Maturity" access="input">
+				<doc>DEFINITION: module interface to CHC.Commercial Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE Pilot Maturity" access="input">
+				<doc>DEFINITION: module interface to CE.Pilot Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE PC maturity" access="input">
+				<doc>DEFINITION: module interface to CE.PC Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE Commercial Maturity" access="input">
+				<doc>DEFINITION: module interface to CE.Commercial Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="OHC Pilot Maturity" access="input">
+				<doc>DEFINITION: module interface to OHC.Pilot Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="OHC PC Maturity" access="input">
+				<doc>DEFINITION: module interface to OHC.PC Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="OHC Commercial Maturity" access="input">
+				<doc>DEFINITION: module interface to OHC.Commercial Maturity
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE CHC pilot maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pilot scale between cellulose-ethanol and cellulose-hydrocarbon pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_Pilot_Maturity[CtoATech] - CHC_Pilot_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE CHC PC maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pre-commercial scale between cellulose-ethanol and cellulose-hydrocarbon pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_PC_maturity[CtoATech] - CHC_PC_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE CHC C maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at commercial scale between cellulose-ethanol and cellulose-hydrocarbon pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_Commercial_Maturity[CtoATech] - CHC_Commercial_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC OHC pilot maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pilot scale between cellulose-hydrocarbon and oilcrop-hydrocarbon pathways.  
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn> OHC_Pilot_Maturity[OilCropTech] - CHC_Pilot_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC OHC PC maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pre-commercial scale between cellulose-hydrocarbon and oilcrop-hydrocarbon pathways.  
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>OHC_PC_Maturity[OilCropTech] - CHC_PC_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC OHC C maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at commercial scale between cellulose-hydrocarbon and oilcrop-hydrocarbon pathways.  
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>OHC_Commercial_Maturity[OilCropTech] - CHC_Commercial_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE CHC learning rate input">
+				<doc>DEFINITION: user-defined learning rate from cellulose-ethanol to cellulose hydrocarbon pathways
+
+UNITS: per year
+
+TYPE: array | constant | scenario input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<element subscript="BC, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, APR">
+					<eqn>0</eqn>
+				</element>
+				<units>per year</units>
+			</aux>
+			<aux name="CE CHC pilot learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-ethanol pathways and cellulose-hydrocarbon pathways (at pilot scale) by applying learning rates to gaps in pilot maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_CHC_pilot_maturity_gap * CE_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot inputs CE to CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-ethanol pathways, to cellulose-hydrocarbon pathways (at pilot scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CE_CHC_pilot_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot inputs CHC to CE">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-ethanol pathways (at pilot scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CE_CHC_pilot_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="shared learning switch">
+				<doc>DEFINITION: 0-1 switch to activate shared learning logic.  
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CE CHC learning rates">
+				<doc>DEFINITION: when shared learning switch is set to 1, applies user-specified learning rates from cellulose-ethanol to cellulose-hydrocarbon pathways, to differences in maturity
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_CHC_learning_rate_input * shared_learning_switch</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CE CHC PC learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-ethanol pathways and cellulose-hydrocarbon pathways (at pre-commercial scale) by applying learning rates to gaps in pre-commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CE_CHC_PC_maturity_gap * CE_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC inputs CE to CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-ethanol pathways, to cellulose-hydrocarbon pathways (at pre-commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CE_CHC_PC_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC inputs CHC to CE">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-ethanol pathways (at pre-commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CE_CHC_PC_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CE CHC C learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-ethanol pathways and cellulose-hydrocarbon pathways (at commercial scale) by applying learning rates to gaps in commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn> CE_CHC_C_maturity_gap * CE_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C inputs CE to CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-ethanol pathways, to cellulose-hydrocarbon pathways (at commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CE_CHC_C_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C inputs CHC to CE">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-ethanol pathways (at commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CE_CHC_C_learning_inputs[CtoATech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC OHC pilot learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and oilcrop-hydrocarbon pathways (at pilot scale) by applying learning rates to gaps in pilot maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_OHC_pilot_maturity_gap * CHC_OHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot inputs OHC to CHC">
+				<doc>DEFINITION: Calculates spillover learning from oilcrop-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at pilot scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_OHC_pilot_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot inputs CHC to OHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to oilcrop-hydrocarbon pathways (at pilot scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CHC_OHC_pilot_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC OHC PC learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and oilcrop-hydrocarbon pathways (at pre-commercial scale) by applying learning rates to gaps in pre-commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_OHC_PC_maturity_gap * CHC_OHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC inputs OHC to CHC">
+				<doc>DEFINITION: Calculates spillover learning from oilcrop-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at pre-commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_OHC_PC_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC inputs CHC to OHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to oilcrop-hydrocarbon pathways (at pre-commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CHC_OHC_PC_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC OHC C learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and oilcrop-hydrocarbon pathways (at commercial scale) by applying learning rates to gaps in commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_OHC_C_maturity_gap * CHC_OHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C inputs OHC to CHC">
+				<doc>DEFINITION: Calculates spillover learning from oilcrop-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_OHC_C_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C inputs CHC to OHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to oilcrop-hydrocarbon pathways (at commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>(-1) *  MIN(0,CHC_OHC_C_learning_inputs[OilCropTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC OHC learning rate input">
+				<doc>DEFINITION: user-defined learning rate between oilcrop-hydrocarbon and cellulose-hydrocarbon pathways
+
+UNITS: per year
+
+TYPE: array | constant | scenario input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<element subscript="TransEster, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TransEster, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TransEster, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TransEster, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TransEster, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TransEster, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="HEFA, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Catalytic, APR">
+					<eqn>0</eqn>
+				</element>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC OHC learning rates">
+				<doc>DEFINITION: when shared learning switch is set to 1, applies user-specified learning rates between cellulose-hydrocarbon and oilcrop-hydrocarbon pathways, to differences in maturity
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_OHC_learning_rate_input * shared_learning_switch</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC CHC pilot learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and other cellulose-hydrocarbon pathways (at pilot scale) by applying learning rates to gaps in pilot maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_CHC_pilot_maturity_gap * CHC_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot inputs CHC CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at pilot scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_CHC_pilot_learning_inputs[CtoRRTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC CHC PC learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and other cellulose-hydrocarbon pathways (at pre-commercial scale) by applying learning rates to gaps in pre-commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_CHC_PC_maturity_gap * CHC_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC inputs CHC CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at pre-commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_CHC_PC_learning_inputs[CtoRRTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC CHC C learning inputs">
+				<doc>DEFINITION: Calculates spillover learning between cellulose-hydrocarbon pathways and other cellulose-hydrocarbon pathways (at commercial scale) by applying learning rates to gaps in commercial maturity.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_CHC_C_maturity_gap * CHC_CHC_learning_rates</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C inputs CHC CHC">
+				<doc>DEFINITION: Calculates spillover learning from cellulose-hydrocarbon pathways, to cellulose-hydrocarbon pathways (at commercial scale). Sets floor of 0 on spillover learning.
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>MAX(0,CHC_CHC_C_learning_inputs[CtoRRTech,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC CHC pilot maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pilot scale between cellulose-hydrocarbon and other cellulose-hydrocarbon pathways.  Use of @2 in sum operation facilitates transposition of matrix.
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_Pilot_Maturity[CtoRRTech]-SUM(CHC_Pilot_diag[*,@2])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC CHC PC maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at pre-commercial scale between cellulose-hydrocarbon and other cellulose-hydrocarbon pathways.  Use of @2 in sum operation facilitates transposition of matrix.
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_PC_Maturity[CtoRRTech]-SUM(CHC_PC_diag[*,@2])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC CHC C maturity gap">
+				<doc>DEFINITION: Calculates difference in maturity at commercial scale between cellulose-hydrocarbon and other cellulose-hydrocarbon pathways.  Use of @2 in sum operation facilitates transposition of matrix.
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_Commercial_Maturity[CtoRRTech]-SUM(CHC_C_diag[*,@2])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="identity matrix CHC">
+				<doc>DEFINITION: Identity matrix for cellulose to hydrocarbon pathways. Used to do matrix math associated with calculating maturity gaps
+
+UNITS: Unitless
+
+TYPE: array | constant
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<element subscript="FP, FP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="FP, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, FT">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="FT, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, IDL">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="IDL, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, CP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="CP, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, F">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="F, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, APR">
+					<eqn>1</eqn>
+				</element>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC Pilot diag">
+				<doc>DEFINITION: Populates diagonal of 2 dimensional matrix composed of cellulose to hydrocarbon pathways.  Used to calculate maturity gap among these pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>identity_matrix_CHC * CHC_Pilot_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC PC diag">
+				<doc>DEFINITION: Populates diagonal of 2 dimensional matrix composed of cellulose to hydrocarbon pathways.  Used to calculate maturity gap among these pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>identity_matrix_CHC * CHC_PC_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC C diag">
+				<doc>DEFINITION: Populates diagonal of 2 dimensional matrix composed of cellulose to hydrocarbon pathways.  Used to calculate maturity gap among these pathways
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>identity_matrix_CHC * CHC_Commercial_Maturity[CtoRRTech]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="CHC CHC learning rates input">
+				<doc>DEFINITION: user-defined learning rate from cellulose-hydrocarbon to other cellulose-hydrocarbon pathways
+
+UNITS: per year
+
+TYPE: array | constant | scenario input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<element subscript="FP, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FP, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="FT, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="IDL, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CP, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="F, APR">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, FP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, FT">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, IDL">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, CP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, F">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="APR, APR">
+					<eqn>0</eqn>
+				</element>
+				<units>per year</units>
+			</aux>
+			<aux name="CHC CHC learning rates">
+				<doc>DEFINITION: when shared learning switch is set to 1, applies user-specified learning rates from cellulose-hydrocarbon to other cellulose-hydrocarbon pathways, to differences in maturity
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>CHC_CHC_learning_rates_input * shared_learning_switch</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot learning inputs CHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-hydrocarbon pathways (at pilot scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>SUM(pilot_inputs_CHC_CHC[*,CtoRRTech]) +
+SUM (pilot_inputs_CE_to_CHC[*, CtoRRTech]) + SUM(pilot_inputs_OHC_to_CHC[*,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC learning inputs CHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-hydrocarbon pathways (at pre-commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>SUM(PC_inputs_CHC_CHC[*,CtoRRTech]) +
+SUM (PC_inputs_CE_to_CHC[*, CtoRRTech]) + SUM(PC_inputs_OHC_to_CHC[*,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C learning inputs CHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-hydrocarbon pathways (at commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+				</dimensions>
+				<eqn>SUM(C_inputs_CHC_CHC[*,CtoRRTech]) +
+SUM (C_inputs_CE_to_CHC[*, CtoRRTech]) + SUM(C_inputs_OHC_to_CHC[*,CtoRRTech])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot learning inputs OHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to oilcrop-hydrocarbon pathways (at pilot scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>SUM(pilot_inputs_CHC_to_OHC[OilCropTech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC learning inputs OHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to oilcrop-hydrocarbon pathways (at pre-commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>SUM(PC_inputs_CHC_to_OHC[OilCropTech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C learning inputs OHC" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to oilcrop-hydrocarbon pathways (at commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="OilCropTech"/>
+				</dimensions>
+				<eqn>SUM(C_inputs_CHC_to_OHC[OilCropTech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="pilot learning inputs CE" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-ethanol pathways (at pilot scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>SUM(pilot_inputs_CHC_to_CE[CtoATech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="PC learning inputs CE" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-ethanol pathways (at pre-commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>SUM(PC_inputs_CHC_to_CE[CtoATech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="C learning inputs CE" access="output">
+				<doc>DEFINITION: sums spillover learning from all pathways to cellulose-ethanol pathways (at commercial scale)
+
+UNITS: per year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+				</dimensions>
+				<eqn>SUM(C_inputs_CHC_to_CE[CtoATech, *])</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="S to J platform Attr" access="input">
+				<doc>DEFINITION: module interface to SJ.Platform attractiveness
+
+UNITS: unitless
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>attractiveness_C</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT S to J">
+				<doc>DEFINITION: Output of nested logit calculation, calculating the relative attractiveness (AKA share of construction capacity) of investment in &quot;next&quot; starch to jet fuel commercial-scale facility
+
+UNITS: Unitless
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>S_to_J_platform_Attr / Total_Attr</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Des SJ yrly starts" access="output">
+				<doc>DEFINITION: Applies pathway attractiveness and assumed maximum plant construction capacity to calculate desired commercial scale facility starts for starch to jet fuel conversion options
+
+UNITS: Projects per Year
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<eqn>Max_Plant_Construction_Capacity * RAT_S_to_J</eqn>
+				<units>Projects per Year</units>
+			</aux>
+			<aux name="SJ cume subs" access="input">
+				<doc>DEFINITION: module interface to SJ.rollup cumulative subsidies
+
+UNITS: US Dollars
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>10</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="SJ Cume spend input">
+				<doc>DEFINITION: Calculates cumulative spending--either from starch to jet module or from entire system, based on user input--that is compared to a threshold and then used as input to spending initiatives in the starch to jet module
+
+UNITS: US Dollars
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>system_wide_cume_subsidy * use_system_wide_spending_input + 
+SJ_cume_subs* (1-use_system_wide_spending_input)</eqn>
+				<units>US Dollars</units>
+			</aux>
+			<aux name="SJ constraint from cume spend" access="output">
+				<doc>DEFINITION: Conditional logic that enables/disables spending initiatives in the starch to jet module, based on whether cumulative spending threshold has been exceed
+
+UNITS: Unitless
+
+TYPE: scalar | Module Interface
+
+COMMENTS: </doc>
+				<eqn>IF SJ_Cume_spend_input &lt;= cume_spend_threshold THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<group name="Relative Attractiveness and Desired Starts" run="false">
+				<entity name="Des_C_to_B_yrly_starts"/>
+				<entity name="C_to_RR_Platform_Attr_C"/>
+				<entity name="RAT_C_to_RR"/>
+				<entity name="C_toB_Platform_Attr_C"/>
+				<entity name="Des_C_to_RR_yrly_starts"/>
+				<entity name="RAT_Oilcrop"/>
+				<entity name="Des_A_to_RR_yrly_starts"/>
+				<entity name="Max_Plant_Construction_Capacity"/>
+				<entity name="Des_OC_to_RR_yrly_starts"/>
+				<entity name="RAT_S_to_J"/>
+				<entity name="RAT_S_to_EtOH"/>
+				<entity name="C_to_EtOH_Platform_Attr_C"/>
+				<entity name="S_to_EtOH_Platform_Attr"/>
+				<entity name="Algae_Platform_Attr_C"/>
+				<entity name="Des_S_to_EtOH_yrly_starts"/>
+				<entity name="S_to_J_platform_Attr"/>
+				<entity name="Des_SJ_yrly_starts"/>
+				<entity name="Total_Attr"/>
+				<entity name="RAT_C_to_B"/>
+				<entity name="Des_C_to_EtOH_yrly_starts"/>
+				<entity name="RAT_Algae"/>
+				<entity name="OilCrop_Platform_Attr_C"/>
+				<entity name="RAT_C_to_EtOH"/>
+			</group>
+			<group name="Attractiveness of Other Investment Option" run="false">
+				<entity name="RAT_OTHER"/>
+				<entity name="NPV_rel_to_a_million_OTHER"/>
+				<entity name="invest_attractiveness_weighting"/>
+				<entity name="region_scaling_factor"/>
+				<entity name="k_OTHER"/>
+				<entity name="Platform_Attr_OTHER"/>
+			</group>
+			<group name="Cumulative Subsidy Constraints" run="false">
+				<entity name="use_system_wide_spending_input"/>
+				<entity name="S_to_EtOH_cume_subs"/>
+				<entity name="C_to_EtOH_cume_subs"/>
+				<entity name="C_to_B_cume_subs"/>
+				<entity name="C_to_RR_cume_subs"/>
+				<entity name="C_to_EtOH_cume_spend_input"/>
+				<entity name="C_to_B_cume_spend_input"/>
+				<entity name="C_to_RR_cume_spend_input"/>
+				<entity name="C_to_EtOH_constraint_from_cume_spend"/>
+				<entity name="C_to_B_constraint_from_cume_spend"/>
+				<entity name="C_to_RR_constraint_from_cume_spend"/>
+				<entity name="cume_spend_threshold"/>
+				<entity name="system_wide_cume_subsidy"/>
+				<entity name="OC_to_RR_cume_subs"/>
+				<entity name="A_to_RR_cume_subs"/>
+				<entity name="SJ_cume_subs"/>
+				<entity name="OC_to_RR_cume_spend_input"/>
+				<entity name="A_to_RR_cume_spend_input"/>
+				<entity name="OC_to_RR_constraint_from_cume_spend"/>
+				<entity name="A_to_RR_constraint_from_cume_spend"/>
+				<entity name="SJ_Cume_spend_input"/>
+				<entity name="SJ_constraint_from_cume_spend"/>
+			</group>
+			<isee:dependencies>
+				<var name="Platform_Attr_OTHER">
+					<in>invest_attractiveness_weighting</in>
+					<in>NPV_rel_to_a_million_OTHER</in>
+					<in>k_OTHER</in>
+					<in>region_scaling_factor</in>
+				</var>
+				<var name="RAT_OTHER">
+					<in>Platform_Attr_OTHER</in>
+					<in>Total_Attr</in>
+				</var>
+				<var name="Total_Attr">
+					<in>Algae_Platform_Attr_C</in>
+					<in>S_to_J_platform_Attr</in>
+					<in>C_toB_Platform_Attr_C</in>
+					<in>Platform_Attr_OTHER</in>
+					<in>S_to_EtOH_Platform_Attr</in>
+					<in>C_to_EtOH_Platform_Attr_C</in>
+					<in>OilCrop_Platform_Attr_C</in>
+					<in>C_to_RR_Platform_Attr_C</in>
+				</var>
+				<var name="RAT_C_to_RR">
+					<in>Total_Attr</in>
+					<in>C_to_RR_Platform_Attr_C</in>
+				</var>
+				<var name="Des_C_to_RR_yrly_starts">
+					<in>RAT_C_to_RR</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="RAT_Algae">
+					<in>Total_Attr</in>
+					<in>Algae_Platform_Attr_C</in>
+				</var>
+				<var name="RAT_S_to_EtOH">
+					<in>S_to_EtOH_Platform_Attr</in>
+					<in>Total_Attr</in>
+				</var>
+				<var name="Des_A_to_RR_yrly_starts">
+					<in>RAT_Algae</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="Des_S_to_EtOH_yrly_starts">
+					<in>RAT_S_to_EtOH</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="RAT_Oilcrop">
+					<in>Total_Attr</in>
+					<in>OilCrop_Platform_Attr_C</in>
+				</var>
+				<var name="RAT_C_to_EtOH">
+					<in>C_to_EtOH_Platform_Attr_C</in>
+					<in>Total_Attr</in>
+				</var>
+				<var name="Des_C_to_EtOH_yrly_starts">
+					<in>RAT_C_to_EtOH</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="Des_OC_to_RR_yrly_starts">
+					<in>RAT_Oilcrop</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="RAT_C_to_B">
+					<in>Total_Attr</in>
+					<in>C_toB_Platform_Attr_C</in>
+				</var>
+				<var name="system_wide_cume_subsidy">
+					<in>C_to_EtOH_cume_subs</in>
+					<in>C_to_RR_cume_subs</in>
+					<in>SJ_cume_subs</in>
+					<in>OC_to_RR_cume_subs</in>
+					<in>C_to_B_cume_subs</in>
+					<in>A_to_RR_cume_subs</in>
+				</var>
+				<var name="C_to_EtOH_cume_spend_input">
+					<in>C_to_EtOH_cume_subs</in>
+					<in>use_system_wide_spending_input</in>
+					<in>system_wide_cume_subsidy</in>
+				</var>
+				<var name="C_to_B_cume_spend_input">
+					<in>use_system_wide_spending_input</in>
+					<in>system_wide_cume_subsidy</in>
+					<in>C_to_B_cume_subs</in>
+				</var>
+				<var name="Des_C_to_B_yrly_starts">
+					<in>Max_Plant_Construction_Capacity</in>
+					<in>RAT_C_to_B</in>
+				</var>
+				<var name="C_to_RR_cume_spend_input">
+					<in>use_system_wide_spending_input</in>
+					<in>C_to_RR_cume_subs</in>
+					<in>system_wide_cume_subsidy</in>
+				</var>
+				<var name="OC_to_RR_cume_spend_input">
+					<in>OC_to_RR_cume_subs</in>
+					<in>use_system_wide_spending_input</in>
+					<in>system_wide_cume_subsidy</in>
+				</var>
+				<var name="A_to_RR_cume_spend_input">
+					<in>use_system_wide_spending_input</in>
+					<in>A_to_RR_cume_subs</in>
+					<in>system_wide_cume_subsidy</in>
+				</var>
+				<var name="C_to_EtOH_constraint_from_cume_spend">
+					<in>cume_spend_threshold</in>
+					<in>C_to_EtOH_cume_spend_input</in>
+				</var>
+				<var name="C_to_B_constraint_from_cume_spend">
+					<in>cume_spend_threshold</in>
+					<in>C_to_B_cume_spend_input</in>
+				</var>
+				<var name="C_to_RR_constraint_from_cume_spend">
+					<in>C_to_RR_cume_spend_input</in>
+					<in>cume_spend_threshold</in>
+				</var>
+				<var name="OC_to_RR_constraint_from_cume_spend">
+					<in>cume_spend_threshold</in>
+					<in>OC_to_RR_cume_spend_input</in>
+				</var>
+				<var name="A_to_RR_constraint_from_cume_spend">
+					<in>A_to_RR_cume_spend_input</in>
+					<in>cume_spend_threshold</in>
+				</var>
+				<var name="CE_CHC_pilot_maturity_gap">
+					<in>CE_Pilot_Maturity</in>
+					<in>CHC_Pilot_Maturity</in>
+				</var>
+				<var name="CE_CHC_PC_maturity_gap">
+					<in>CE_PC_maturity</in>
+					<in>CHC_PC_Maturity</in>
+				</var>
+				<var name="CE_CHC_C_maturity_gap">
+					<in>CE_Commercial_Maturity</in>
+					<in>CHC_Commercial_Maturity</in>
+				</var>
+				<var name="CHC_OHC_pilot_maturity_gap">
+					<in>CHC_Pilot_Maturity</in>
+					<in>OHC_Pilot_Maturity</in>
+				</var>
+				<var name="CHC_OHC_PC_maturity_gap">
+					<in>CHC_PC_Maturity</in>
+					<in>OHC_PC_Maturity</in>
+				</var>
+				<var name="CHC_OHC_C_maturity_gap">
+					<in>CHC_Commercial_Maturity</in>
+					<in>OHC_Commercial_Maturity</in>
+				</var>
+				<var name="CE_CHC_pilot_learning_inputs">
+					<in>CE_CHC_learning_rates</in>
+					<in>CE_CHC_pilot_maturity_gap</in>
+				</var>
+				<var name="pilot_inputs_CE_to_CHC">
+					<in>CE_CHC_pilot_learning_inputs</in>
+				</var>
+				<var name="pilot_inputs_CHC_to_CE">
+					<in>CE_CHC_pilot_learning_inputs</in>
+				</var>
+				<var name="CE_CHC_learning_rates">
+					<in>shared_learning_switch</in>
+					<in>CE_CHC_learning_rate_input</in>
+				</var>
+				<var name="CE_CHC_PC_learning_inputs">
+					<in>CE_CHC_PC_maturity_gap</in>
+					<in>CE_CHC_learning_rates</in>
+				</var>
+				<var name="PC_inputs_CE_to_CHC">
+					<in>CE_CHC_PC_learning_inputs</in>
+				</var>
+				<var name="PC_inputs_CHC_to_CE">
+					<in>CE_CHC_PC_learning_inputs</in>
+				</var>
+				<var name="CE_CHC_C_learning_inputs">
+					<in>CE_CHC_C_maturity_gap</in>
+					<in>CE_CHC_learning_rates</in>
+				</var>
+				<var name="C_inputs_CE_to_CHC">
+					<in>CE_CHC_C_learning_inputs</in>
+				</var>
+				<var name="C_inputs_CHC_to_CE">
+					<in>CE_CHC_C_learning_inputs</in>
+				</var>
+				<var name="CHC_OHC_pilot_learning_inputs">
+					<in>CHC_OHC_pilot_maturity_gap</in>
+					<in>CHC_OHC_learning_rates</in>
+				</var>
+				<var name="pilot_inputs_OHC_to_CHC">
+					<in>CHC_OHC_pilot_learning_inputs</in>
+				</var>
+				<var name="pilot_inputs_CHC_to_OHC">
+					<in>CHC_OHC_pilot_learning_inputs</in>
+				</var>
+				<var name="CHC_OHC_PC_learning_inputs">
+					<in>CHC_OHC_PC_maturity_gap</in>
+					<in>CHC_OHC_learning_rates</in>
+				</var>
+				<var name="PC_inputs_OHC_to_CHC">
+					<in>CHC_OHC_PC_learning_inputs</in>
+				</var>
+				<var name="PC_inputs_CHC_to_OHC">
+					<in>CHC_OHC_PC_learning_inputs</in>
+				</var>
+				<var name="CHC_OHC_C_learning_inputs">
+					<in>CHC_OHC_C_maturity_gap</in>
+					<in>CHC_OHC_learning_rates</in>
+				</var>
+				<var name="C_inputs_OHC_to_CHC">
+					<in>CHC_OHC_C_learning_inputs</in>
+				</var>
+				<var name="C_inputs_CHC_to_OHC">
+					<in>CHC_OHC_C_learning_inputs</in>
+				</var>
+				<var name="CHC_OHC_learning_rates">
+					<in>CHC_OHC_learning_rate_input</in>
+					<in>shared_learning_switch</in>
+				</var>
+				<var name="CHC_CHC_pilot_learning_inputs">
+					<in>CHC_CHC_learning_rates</in>
+					<in>CHC_CHC_pilot_maturity_gap</in>
+				</var>
+				<var name="pilot_inputs_CHC_CHC">
+					<in>CHC_CHC_pilot_learning_inputs</in>
+				</var>
+				<var name="CHC_CHC_PC_learning_inputs">
+					<in>CHC_CHC_PC_maturity_gap</in>
+					<in>CHC_CHC_learning_rates</in>
+				</var>
+				<var name="PC_inputs_CHC_CHC">
+					<in>CHC_CHC_PC_learning_inputs</in>
+				</var>
+				<var name="CHC_CHC_C_learning_inputs">
+					<in>CHC_CHC_C_maturity_gap</in>
+					<in>CHC_CHC_learning_rates</in>
+				</var>
+				<var name="C_inputs_CHC_CHC">
+					<in>CHC_CHC_C_learning_inputs</in>
+				</var>
+				<var name="CHC_CHC_pilot_maturity_gap">
+					<in>CHC_Pilot_diag</in>
+					<in>CHC_Pilot_Maturity</in>
+				</var>
+				<var name="CHC_CHC_PC_maturity_gap">
+					<in>CHC_PC_Maturity</in>
+					<in>CHC_PC_diag</in>
+				</var>
+				<var name="CHC_CHC_C_maturity_gap">
+					<in>CHC_Commercial_Maturity</in>
+					<in>CHC_C_diag</in>
+				</var>
+				<var name="CHC_Pilot_diag">
+					<in>CHC_Pilot_Maturity</in>
+					<in>identity_matrix_CHC</in>
+				</var>
+				<var name="CHC_PC_diag">
+					<in>identity_matrix_CHC</in>
+					<in>CHC_PC_Maturity</in>
+				</var>
+				<var name="CHC_C_diag">
+					<in>identity_matrix_CHC</in>
+					<in>CHC_Commercial_Maturity</in>
+				</var>
+				<var name="CHC_CHC_learning_rates">
+					<in>CHC_CHC_learning_rates_input</in>
+					<in>shared_learning_switch</in>
+				</var>
+				<var name="pilot_learning_inputs_CHC">
+					<in>pilot_inputs_CHC_CHC</in>
+					<in>pilot_inputs_OHC_to_CHC</in>
+					<in>pilot_inputs_CE_to_CHC</in>
+				</var>
+				<var name="PC_learning_inputs_CHC">
+					<in>PC_inputs_CHC_CHC</in>
+					<in>PC_inputs_OHC_to_CHC</in>
+					<in>PC_inputs_CE_to_CHC</in>
+				</var>
+				<var name="C_learning_inputs_CHC">
+					<in>C_inputs_OHC_to_CHC</in>
+					<in>C_inputs_CE_to_CHC</in>
+					<in>C_inputs_CHC_CHC</in>
+				</var>
+				<var name="pilot_learning_inputs_OHC">
+					<in>pilot_inputs_CHC_to_OHC</in>
+				</var>
+				<var name="PC_learning_inputs_OHC">
+					<in>PC_inputs_CHC_to_OHC</in>
+				</var>
+				<var name="C_learning_inputs_OHC">
+					<in>C_inputs_CHC_to_OHC</in>
+				</var>
+				<var name="pilot_learning_inputs_CE">
+					<in>pilot_inputs_CHC_to_CE</in>
+				</var>
+				<var name="PC_learning_inputs_CE">
+					<in>PC_inputs_CHC_to_CE</in>
+				</var>
+				<var name="C_learning_inputs_CE">
+					<in>C_inputs_CHC_to_CE</in>
+				</var>
+				<var name="RAT_S_to_J">
+					<in>S_to_J_platform_Attr</in>
+					<in>Total_Attr</in>
+				</var>
+				<var name="Des_SJ_yrly_starts">
+					<in>RAT_S_to_J</in>
+					<in>Max_Plant_Construction_Capacity</in>
+				</var>
+				<var name="SJ_Cume_spend_input">
+					<in>use_system_wide_spending_input</in>
+					<in>SJ_cume_subs</in>
+					<in>system_wide_cume_subsidy</in>
+				</var>
+				<var name="SJ_constraint_from_cume_spend">
+					<in>cume_spend_threshold</in>
+					<in>SJ_Cume_spend_input</in>
+				</var>
+			</isee:dependencies>
+		</variables>
+		<views>
+			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+				<isee:loop_indicator color="black" background="white"/>
+				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<isee:series_styles>
+						<isee:series_style color="blue" thickness="1"/>
+						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF7F00" thickness="1"/>
+						<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF007F" thickness="1"/>
+						<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#C8C8C8" thickness="1"/>
+					</isee:series_styles>
+				</graph>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
+				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
+				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<lamp color="black" background="white" font_size="9pt"/>
+				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
+				<isee:spatial_map color="black" background="white"/>
+				<isee:animation_object color="black" background="white"/>
+			</style>
+			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="3" isee:page_rows="5" zoom="40" isee:popup_graphs_are_comparative="true" type="stock_flow">
+				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="45" height="35"/>
+					</stock>
+					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="55" height="45"/>
+					</module>
+					<aux color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom">
+						<shape type="circle" radius="18"/>
+					</aux>
+					<group color="red" background="white" font_color="red" font_size="9pt"/>
+					<connector color="black" background="white" font_size="9pt" isee:thickness="1"/>
+					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+					<isee:loop_indicator color="black" background="white"/>
+					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+						<isee:series_styles>
+							<isee:series_style color="blue" thickness="1"/>
+							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF7F00" thickness="1"/>
+							<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF007F" thickness="1"/>
+							<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#C8C8C8" thickness="1"/>
+						</isee:series_styles>
+					</graph>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				</style>
+				<connector uid="5893" color="#2A2A2A" angle="0">
+					<from>RAT_Oilcrop</from>
+					<to>Des_OC_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="5894" color="#2A2A2A" angle="57.9946">
+					<from>Algae_Platform_Attr_C</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="5895" angle="26.5651">
+					<from>invest_attractiveness_weighting</from>
+					<to>Platform_Attr_OTHER</to>
+				</connector>
+				<connector uid="5896" angle="0">
+					<from>CE_CHC_PC_maturity_gap</from>
+					<to>CE_CHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="5897" angle="319.399">
+					<from>shared_learning_switch</from>
+					<to>CE_CHC_learning_rates</to>
+				</connector>
+				<connector uid="5898" angle="305.538">
+					<from>S_to_J_platform_Attr</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="5899" angle="353.66">
+					<from>OC_to_RR_cume_subs</from>
+					<to>OC_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5900" angle="20.556">
+					<from>CHC_Pilot_Maturity</from>
+					<to>CHC_Pilot_diag</to>
+				</connector>
+				<connector uid="5901" angle="0">
+					<from>CE_Commercial_Maturity</from>
+					<to>CE_CHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="5902" angle="0">
+					<from>C_to_EtOH_cume_subs</from>
+					<to>C_to_EtOH_cume_spend_input</to>
+				</connector>
+				<connector uid="5903" color="#C8C8C8" angle="319.399">
+					<from>use_system_wide_spending_input</from>
+					<to>C_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5904" color="white" angle="270">
+					<from>CHC_Pilot_diag</from>
+					<to>CHC_CHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="5905" angle="180">
+					<from>CHC_OHC_learning_rate_input</from>
+					<to>CHC_OHC_learning_rates</to>
+				</connector>
+				<connector uid="5906" angle="212.005">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_OC_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="5907" angle="0">
+					<from>CHC_OHC_pilot_maturity_gap</from>
+					<to>CHC_OHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="5908" angle="0">
+					<from>Platform_Attr_OTHER</from>
+					<to>RAT_OTHER</to>
+				</connector>
+				<connector uid="5909" color="#C8C8C8" angle="296.565">
+					<from>use_system_wide_spending_input</from>
+					<to>A_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5910" angle="302.005">
+					<from>CHC_Pilot_Maturity</from>
+					<to>CHC_OHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="5911" color="#2A2A2A" angle="0">
+					<from>RAT_Algae</from>
+					<to>Des_A_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="5912" angle="0">
+					<from>CE_CHC_C_maturity_gap</from>
+					<to>CE_CHC_C_learning_inputs</to>
+				</connector>
+				<connector uid="5913" color="#2A2A2A" angle="0">
+					<from>RAT_S_to_EtOH</from>
+					<to>Des_S_to_EtOH_yrly_starts</to>
+				</connector>
+				<connector uid="5914" angle="153.435">
+					<from>cume_spend_threshold</from>
+					<to>C_to_EtOH_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5915" angle="215.538">
+					<from>cume_spend_threshold</from>
+					<to>OC_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5916" angle="54.4623">
+					<from>
+						<alias uid="5917"/>
+					</from>
+					<to>CHC_CHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="5918" angle="353.66">
+					<from>A_to_RR_cume_subs</from>
+					<to>A_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5919" angle="302.005">
+					<from>CHC_Commercial_Maturity</from>
+					<to>CHC_OHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="5920" color="#C8C8C8" angle="102.529">
+					<from>identity_matrix_CHC</from>
+					<to>CHC_Pilot_diag</to>
+				</connector>
+				<connector uid="5921" angle="0">
+					<from>CHC_OHC_pilot_learning_inputs</from>
+					<to>pilot_inputs_CHC_to_OHC</to>
+				</connector>
+				<connector uid="5922" color="#2A2A2A" angle="0">
+					<from>RAT_C_to_RR</from>
+					<to>Des_C_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="5923" color="#7F00FF" angle="347.471">
+					<from>C_toB_Platform_Attr_C</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="5924" angle="0">
+					<from>CHC_CHC_C_maturity_gap</from>
+					<to>CHC_CHC_C_learning_inputs</to>
+				</connector>
+				<connector uid="5925" angle="0">
+					<from>CHC_CHC_PC_learning_inputs</from>
+					<to>PC_inputs_CHC_CHC</to>
+				</connector>
+				<connector uid="5926" angle="296.565">
+					<from>CHC_PC_Maturity</from>
+					<to>CHC_OHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="5927" color="#2A2A2A" angle="310.601">
+					<from>Total_Attr</from>
+					<to>RAT_Oilcrop</to>
+				</connector>
+				<connector uid="5928" color="#2A2A2A" angle="6.34019">
+					<from>Total_Attr</from>
+					<to>RAT_C_to_B</to>
+				</connector>
+				<connector uid="5929" angle="0">
+					<from>CE_Pilot_Maturity</from>
+					<to>CE_CHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="5930" color="#2A2A2A" angle="0">
+					<from>C_toB_Platform_Attr_C</from>
+					<to>RAT_C_to_B</to>
+				</connector>
+				<connector uid="5931" angle="0">
+					<from>CHC_PC_Maturity</from>
+					<to>CHC_CHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="5932" angle="0">
+					<from>CHC_Commercial_Maturity</from>
+					<to>CHC_CHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="5933" angle="0">
+					<from>CHC_CHC_pilot_maturity_gap</from>
+					<to>CHC_CHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="5934" angle="0">
+					<from>NPV_rel_to_a_million_OTHER</from>
+					<to>Platform_Attr_OTHER</to>
+				</connector>
+				<connector uid="5935" color="#C8C8C8" angle="139.399">
+					<from>identity_matrix_CHC</from>
+					<to>CHC_PC_diag</to>
+				</connector>
+				<connector uid="5936" angle="6.34019">
+					<from>
+						<alias uid="5937"/>
+					</from>
+					<to>CE_CHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="5938" angle="0">
+					<from>OHC_Commercial_Maturity</from>
+					<to>CHC_OHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="5939" angle="180">
+					<from>cume_spend_threshold</from>
+					<to>C_to_B_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5940" color="#2A2A2A" angle="0">
+					<from>S_to_EtOH_Platform_Attr</from>
+					<to>RAT_S_to_EtOH</to>
+				</connector>
+				<connector uid="5941" angle="0">
+					<from>RAT_S_to_J</from>
+					<to>Des_SJ_yrly_starts</to>
+				</connector>
+				<connector uid="5942" angle="347.471">
+					<from>CE_CHC_C_learning_inputs</from>
+					<to>C_inputs_CE_to_CHC</to>
+				</connector>
+				<connector uid="5943" angle="0">
+					<from>CHC_CHC_pilot_learning_inputs</from>
+					<to>pilot_inputs_CHC_CHC</to>
+				</connector>
+				<connector uid="5944" color="#2A2A2A" angle="0">
+					<from>RAT_C_to_EtOH</from>
+					<to>Des_C_to_EtOH_yrly_starts</to>
+				</connector>
+				<connector uid="5945" angle="26.5651">
+					<from>
+						<alias uid="5946"/>
+					</from>
+					<to>CHC_OHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="5947" angle="0">
+					<from>CE_PC_maturity</from>
+					<to>CE_CHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="5948" angle="0">
+					<from>CE_CHC_PC_learning_inputs</from>
+					<to>PC_inputs_CHC_to_CE</to>
+				</connector>
+				<connector uid="5949" angle="26.5651">
+					<from>CE_CHC_pilot_learning_inputs</from>
+					<to>pilot_inputs_CHC_to_CE</to>
+				</connector>
+				<connector uid="5950" angle="6.34019">
+					<from>CHC_OHC_C_learning_inputs</from>
+					<to>C_inputs_OHC_to_CHC</to>
+				</connector>
+				<connector uid="5951" angle="263.66">
+					<from>CHC_PC_diag</from>
+					<to>CHC_CHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="5952" color="#2A2A2A" angle="296.565">
+					<from>Total_Attr</from>
+					<to>RAT_Algae</to>
+				</connector>
+				<connector uid="5953" angle="0">
+					<from>C_to_EtOH_cume_spend_input</from>
+					<to>C_to_EtOH_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5954" angle="122.005">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_C_to_EtOH_yrly_starts</to>
+				</connector>
+				<connector uid="5955" angle="54.4623">
+					<from>CHC_PC_Maturity</from>
+					<to>CE_CHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="5956" color="#C8C8C8" angle="20.556">
+					<from>system_wide_cume_subsidy</from>
+					<to>A_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5957" angle="0">
+					<from>A_to_RR_cume_spend_input</from>
+					<to>A_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5958" color="#2A2A2A" angle="0">
+					<from>Algae_Platform_Attr_C</from>
+					<to>RAT_Algae</to>
+				</connector>
+				<connector uid="5959" angle="347.471">
+					<from>C_to_RR_cume_subs</from>
+					<to>C_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5960" angle="0">
+					<from>OC_to_RR_cume_spend_input</from>
+					<to>OC_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5961" angle="347.471">
+					<from>CHC_OHC_pilot_learning_inputs</from>
+					<to>pilot_inputs_OHC_to_CHC</to>
+				</connector>
+				<connector uid="5962" color="#C8C8C8" angle="54.4623">
+					<from>system_wide_cume_subsidy</from>
+					<to>C_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="5963" angle="161.565">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_C_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="5964" angle="324.462">
+					<from>k_OTHER</from>
+					<to>Platform_Attr_OTHER</to>
+				</connector>
+				<connector uid="5965" angle="0">
+					<from>C_inputs_CHC_to_CE</from>
+					<to>C_learning_inputs_CE</to>
+				</connector>
+				<connector uid="5966" angle="270">
+					<from>CHC_C_diag</from>
+					<to>CHC_CHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="5967" angle="153.435">
+					<from>region_scaling_factor</from>
+					<to>Platform_Attr_OTHER</to>
+				</connector>
+				<connector uid="5968" angle="353.66">
+					<from>CHC_OHC_PC_learning_inputs</from>
+					<to>PC_inputs_OHC_to_CHC</to>
+				</connector>
+				<connector uid="5969" angle="0">
+					<from>S_to_J_platform_Attr</from>
+					<to>RAT_S_to_J</to>
+				</connector>
+				<connector uid="5970" angle="220.601">
+					<from>cume_spend_threshold</from>
+					<to>SJ_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5971" angle="296.565">
+					<from>C_to_EtOH_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="5972" angle="296.565">
+					<from>use_system_wide_spending_input</from>
+					<to>SJ_Cume_spend_input</to>
+				</connector>
+				<connector uid="5973" angle="6.34019">
+					<from>pilot_inputs_CHC_CHC</from>
+					<to>pilot_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="5974" angle="347.471">
+					<from>CE_CHC_PC_learning_inputs</from>
+					<to>PC_inputs_CE_to_CHC</to>
+				</connector>
+				<connector uid="5975" color="#2A2A2A" angle="54.4623">
+					<from>Total_Attr</from>
+					<to>RAT_S_to_EtOH</to>
+				</connector>
+				<connector uid="5976" angle="77.4712">
+					<from>Platform_Attr_OTHER</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="5977" angle="180">
+					<from>CHC_CHC_learning_rates_input</from>
+					<to>CHC_CHC_learning_rates</to>
+				</connector>
+				<connector uid="5978" angle="0">
+					<from>CHC_OHC_PC_maturity_gap</from>
+					<to>CHC_OHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="5979" angle="0">
+					<from>CE_CHC_C_learning_inputs</from>
+					<to>C_inputs_CHC_to_CE</to>
+				</connector>
+				<connector uid="5980" angle="12.5288">
+					<from>CHC_PC_Maturity</from>
+					<to>CHC_PC_diag</to>
+				</connector>
+				<connector uid="5981" angle="353.66">
+					<from>SJ_cume_subs</from>
+					<to>SJ_Cume_spend_input</to>
+				</connector>
+				<connector uid="5982" angle="302.005">
+					<from>C_to_RR_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="5983" angle="0">
+					<from>system_wide_cume_subsidy</from>
+					<to>SJ_Cume_spend_input</to>
+				</connector>
+				<connector uid="5984" angle="0">
+					<from>C_to_RR_cume_spend_input</from>
+					<to>C_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="5985" angle="353.66">
+					<from>SJ_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="5986" angle="35.5377">
+					<from>
+						<alias uid="5937"/>
+					</from>
+					<to>CE_CHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="5987" angle="0">
+					<from>PC_inputs_CHC_to_OHC</from>
+					<to>PC_learning_inputs_OHC</to>
+				</connector>
+				<connector uid="5988" angle="40.6013">
+					<from>pilot_inputs_OHC_to_CHC</from>
+					<to>pilot_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="5989" angle="0">
+					<from>CHC_Pilot_Maturity</from>
+					<to>CHC_CHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="5990" angle="353.66">
+					<from>PC_inputs_CHC_CHC</from>
+					<to>PC_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="5991" angle="333.435">
+					<from>
+						<alias uid="5937"/>
+					</from>
+					<to>CE_CHC_C_learning_inputs</to>
+				</connector>
+				<connector uid="5992" color="#2A2A2A" angle="310.601">
+					<from>S_to_EtOH_Platform_Attr</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="5993" angle="139.399">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_C_to_B_yrly_starts</to>
+				</connector>
+				<connector uid="5994" angle="0">
+					<from>pilot_inputs_CHC_to_OHC</from>
+					<to>pilot_learning_inputs_OHC</to>
+				</connector>
+				<connector uid="5995" angle="0">
+					<from>CE_CHC_pilot_learning_inputs</from>
+					<to>pilot_inputs_CE_to_CHC</to>
+				</connector>
+				<connector uid="5996" angle="0">
+					<from>CHC_CHC_PC_maturity_gap</from>
+					<to>CHC_CHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="5997" color="#C8C8C8" angle="327.995">
+					<from>use_system_wide_spending_input</from>
+					<to>C_to_B_cume_spend_input</to>
+				</connector>
+				<connector uid="5998" color="#C8C8C8" angle="339.444">
+					<from>use_system_wide_spending_input</from>
+					<to>C_to_EtOH_cume_spend_input</to>
+				</connector>
+				<connector uid="5999" angle="116.565">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_S_to_EtOH_yrly_starts</to>
+				</connector>
+				<connector uid="6000" color="#2A2A2A" angle="0">
+					<from>RAT_C_to_B</from>
+					<to>Des_C_to_B_yrly_starts</to>
+				</connector>
+				<connector uid="6001" color="#C8C8C8" angle="206.565">
+					<from>identity_matrix_CHC</from>
+					<to>CHC_C_diag</to>
+				</connector>
+				<connector uid="6002" angle="35.5377">
+					<from>PC_inputs_OHC_to_CHC</from>
+					<to>PC_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6003" angle="0">
+					<from>CHC_OHC_C_maturity_gap</from>
+					<to>CHC_OHC_C_learning_inputs</to>
+				</connector>
+				<connector uid="6004" angle="35.5377">
+					<from>C_inputs_OHC_to_CHC</from>
+					<to>C_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6005" angle="0">
+					<from>pilot_inputs_CHC_to_CE</from>
+					<to>pilot_learning_inputs_CE</to>
+				</connector>
+				<connector uid="6006" angle="290.556">
+					<from>
+						<alias uid="5946"/>
+					</from>
+					<to>CHC_OHC_C_learning_inputs</to>
+				</connector>
+				<connector uid="6007" angle="32.0054">
+					<from>
+						<alias uid="5917"/>
+					</from>
+					<to>CHC_CHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="6008" angle="200.556">
+					<from>cume_spend_threshold</from>
+					<to>C_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="6009" angle="0">
+					<from>OHC_Pilot_Maturity</from>
+					<to>CHC_OHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="6010" angle="310.601">
+					<from>OC_to_RR_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="6011" angle="180">
+					<from>CE_CHC_learning_rate_input</from>
+					<to>CE_CHC_learning_rates</to>
+				</connector>
+				<connector uid="6012" angle="0">
+					<from>SJ_Cume_spend_input</from>
+					<to>SJ_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="6013" angle="319.399">
+					<from>C_inputs_CE_to_CHC</from>
+					<to>C_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6014" angle="229.399">
+					<from>cume_spend_threshold</from>
+					<to>A_to_RR_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="6015" angle="333.435">
+					<from>CHC_OHC_C_learning_inputs</from>
+					<to>C_inputs_CHC_to_OHC</to>
+				</connector>
+				<connector uid="6016" angle="296.565">
+					<from>C_to_B_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="6017" color="#2A2A2A" angle="0">
+					<from>C_to_EtOH_Platform_Attr_C</from>
+					<to>RAT_C_to_EtOH</to>
+				</connector>
+				<connector uid="6018" angle="0">
+					<from>CE_CHC_pilot_maturity_gap</from>
+					<to>CE_CHC_pilot_learning_inputs</to>
+				</connector>
+				<connector uid="6019" color="#2A2A2A" angle="327.995">
+					<from>C_to_EtOH_Platform_Attr_C</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="6020" angle="0">
+					<from>shared_learning_switch</from>
+					<to>CHC_CHC_learning_rates</to>
+				</connector>
+				<connector uid="6021" angle="324.462">
+					<from>PC_inputs_CE_to_CHC</from>
+					<to>PC_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6022" color="#2A2A2A" angle="35.5377">
+					<from>Total_Attr</from>
+					<to>RAT_C_to_EtOH</to>
+				</connector>
+				<connector uid="6023" angle="333.435">
+					<from>
+						<alias uid="5946"/>
+					</from>
+					<to>CHC_OHC_PC_learning_inputs</to>
+				</connector>
+				<connector uid="6024" angle="0">
+					<from>PC_inputs_CHC_to_CE</from>
+					<to>PC_learning_inputs_CE</to>
+				</connector>
+				<connector uid="6025" color="#2A2A2A" angle="270">
+					<from>Total_Attr</from>
+					<to>RAT_OTHER</to>
+				</connector>
+				<connector uid="6026" color="#C8C8C8" angle="63.4349">
+					<from>system_wide_cume_subsidy</from>
+					<to>C_to_EtOH_cume_spend_input</to>
+				</connector>
+				<connector uid="6027" angle="0">
+					<from>C_inputs_CHC_to_OHC</from>
+					<to>C_learning_inputs_OHC</to>
+				</connector>
+				<connector uid="6028" color="#C8C8C8" angle="63.4349">
+					<from>system_wide_cume_subsidy</from>
+					<to>C_to_B_cume_spend_input</to>
+				</connector>
+				<connector uid="6029" angle="90">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_SJ_yrly_starts</to>
+				</connector>
+				<connector uid="6030" color="#2A2A2A" angle="57.9946">
+					<from>OilCrop_Platform_Attr_C</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="6031" angle="0">
+					<from>C_to_B_cume_subs</from>
+					<to>C_to_B_cume_spend_input</to>
+				</connector>
+				<connector uid="6032" angle="257.471">
+					<from>Max_Plant_Construction_Capacity</from>
+					<to>Des_A_to_RR_yrly_starts</to>
+				</connector>
+				<connector uid="6033" color="#C8C8C8" angle="305.538">
+					<from>use_system_wide_spending_input</from>
+					<to>OC_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="6034" angle="327.995">
+					<from>A_to_RR_cume_subs</from>
+					<to>system_wide_cume_subsidy</to>
+				</connector>
+				<connector uid="6035" angle="0">
+					<from>CHC_OHC_PC_learning_inputs</from>
+					<to>PC_inputs_CHC_to_OHC</to>
+				</connector>
+				<connector uid="6036" angle="0">
+					<from>C_to_B_cume_spend_input</from>
+					<to>C_to_B_constraint_from_cume_spend</to>
+				</connector>
+				<connector uid="6037" color="#2A2A2A" angle="319.399">
+					<from>Total_Attr</from>
+					<to>RAT_C_to_RR</to>
+				</connector>
+				<connector uid="6038" angle="0">
+					<from>CHC_CHC_C_learning_inputs</from>
+					<to>C_inputs_CHC_CHC</to>
+				</connector>
+				<connector uid="6039" angle="71.5651">
+					<from>Total_Attr</from>
+					<to>RAT_S_to_J</to>
+				</connector>
+				<connector uid="6040" angle="0">
+					<from>C_inputs_CHC_CHC</from>
+					<to>C_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6041" angle="57.9946">
+					<from>CHC_Commercial_Maturity</from>
+					<to>CE_CHC_C_maturity_gap</to>
+				</connector>
+				<connector uid="6042" color="#C8C8C8" angle="40.6013">
+					<from>system_wide_cume_subsidy</from>
+					<to>OC_to_RR_cume_spend_input</to>
+				</connector>
+				<connector uid="6043" color="#2A2A2A" angle="26.5651">
+					<from>C_to_RR_Platform_Attr_C</from>
+					<to>Total_Attr</to>
+				</connector>
+				<connector uid="6044" angle="0">
+					<from>OHC_PC_Maturity</from>
+					<to>CHC_OHC_PC_maturity_gap</to>
+				</connector>
+				<connector uid="6045" angle="63.4349">
+					<from>CHC_Pilot_Maturity</from>
+					<to>CE_CHC_pilot_maturity_gap</to>
+				</connector>
+				<connector uid="6046" color="#2A2A2A" angle="0">
+					<from>C_to_RR_Platform_Attr_C</from>
+					<to>RAT_C_to_RR</to>
+				</connector>
+				<connector uid="6047" color="#2A2A2A" angle="0">
+					<from>OilCrop_Platform_Attr_C</from>
+					<to>RAT_Oilcrop</to>
+				</connector>
+				<connector uid="6048" angle="333.435">
+					<from>shared_learning_switch</from>
+					<to>CHC_OHC_learning_rates</to>
+				</connector>
+				<connector uid="6049" angle="327.995">
+					<from>pilot_inputs_CE_to_CHC</from>
+					<to>pilot_learning_inputs_CHC</to>
+				</connector>
+				<connector uid="6050" angle="12.5288">
+					<from>CHC_Commercial_Maturity</from>
+					<to>CHC_C_diag</to>
+				</connector>
+				<connector uid="6051" angle="319.399">
+					<from>
+						<alias uid="5917"/>
+					</from>
+					<to>CHC_CHC_C_learning_inputs</to>
+				</connector>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="6052" x="2210.5" y="605.5" width="573" height="231">This sector is used to provide feedback from cumulative spending on subsidies, back to spending on STARTUP subsidies.
+
++ Switch &quot;use system wide spending input&quot; takes on value of 1 or 0.  When 1,  conversion specific spending inputs are based on system-wide cumulative subsidy spending.  Whe 0, conversion-specific spending inputs are based on conversion-specific cumulative spending.
+
+Cume startup spend threshold sets the threshold of spending that, when exceeded, shuts off startup subsidies.  single value is set.  this is compared to either system wide spending or module specific spending.
+
+Starch is not included in this calculation, because of VEETC subsidy in the initial condition.</text_box>
+				<aux color="red" font_color="red" label_angle="298.127" x="1167.5" y="1038.5" name="NPV rel to a million OTHER"/>
+				<aux color="black" font_color="black" label_angle="37.8513" x="1307.5" y="1038.5" name="Platform Attr OTHER"/>
+				<aux color="red" font_color="red" x="1176.5" y="940.5" name="k OTHER"/>
+				<aux color="black" font_color="black" x="1421.5" y="1038.5" name="RAT OTHER"/>
+				<aux color="red" font_color="red" label_angle="244.401" x="1182.5" y="1104.5" name="invest attractiveness weighting"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1167.5" y="111.5" name="S to EtOH Platform Attr"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="344.035" x="1420.5" y="398.5" name="Total Attr"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="263.649" x="1118.5" y="534.5" name="C to RR Platform Attr C"/>
+				<aux color="red" font_color="red" label_angle="261.024" x="2001.5" y="581.5" name="Max Plant Construction Capacity"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="98.9764" x="1598.5" y="534.5" name="RAT C to RR"/>
+				<aux color="#651818" font_color="#651818" label_angle="98.9764" x="1778.5" y="534.5" name="Des C to RR yrly starts"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1140.5" y="855.5" name="Algae Platform Attr C"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="98.9764" x="1654.5" y="855.5" name="RAT Algae"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="194.417" x="1633.5" y="111.5" name="RAT S to EtOH"/>
+				<aux color="#651818" font_color="#651818" label_angle="98.9764" x="1781.5" y="855.5" name="Des A to RR yrly starts"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1136.5" y="690.5" name="OilCrop Platform Attr C"/>
+				<aux color="#651818" font_color="#651818" label_angle="197.65" x="1794.5" y="111.5" name="Des S to EtOH yrly starts"/>
+				<aux color="red" font_color="red" x="1419.5" y="1093.5" name="region scaling factor"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1166.5" y="241.5" name="C to EtOH Platform Attr C"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="98.9764" x="1659.5" y="690.5" name="RAT Oilcrop"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="98.9764" x="1632.5" y="241.5" name="RAT C to EtOH"/>
+				<aux color="#651818" font_color="#651818" label_angle="98.9764" x="1793.5" y="241.5" name="Des C to EtOH yrly starts"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1158.5" y="368.5" name="C toB Platform Attr C"/>
+				<aux color="#651818" font_color="#651818" label_angle="98.9764" x="1769.5" y="690.5" name="Des OC to RR yrly starts"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2223.5" y="136.5" name="S to EtOH cume subs"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2228.5" y="203.5" name="C to EtOH cume subs"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2228.5" y="266.5" name="C to B cume subs"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2232.5" y="323.5" name="C to RR cume subs"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2232.5" y="382.5" name="OC to RR cume subs"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2228.5" y="447.5" name="A to RR cume subs"/>
+				<aux color="#2A2A2A" font_color="#2A2A2A" label_angle="98.9764" x="1630.5" y="368.5" name="RAT C to B"/>
+				<aux color="black" font_color="black" label_angle="258.185" x="2383.5" y="536.5" name="system wide cume subsidy"/>
+				<aux color="red" font_color="red" label_angle="31.8149" x="2913.5" y="291.5" name="cume spend threshold"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2534.5" y="203.5" name="C to EtOH cume spend input"/>
+				<aux color="red" font_color="red" label_angle="92.7392" x="2302.5" y="90.5" name="use system wide spending input"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2530.5" y="266.5" name="C to B cume spend input"/>
+				<aux color="#651818" font_color="#651818" label_angle="98.9764" x="1791.5" y="368.5" name="Des C to B yrly starts"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2518.5" y="349.5" name="C to RR cume spend input"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2517.5" y="410.5" name="OC to RR cume spend input"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2524.5" y="479.5" name="A to RR cume spend input"/>
+				<aux color="#651818" font_color="#651818" label_side="left" label_angle="135" x="2719.5" y="203.5" name="C to EtOH constraint from cume spend"/>
+				<aux color="#651818" font_color="#651818" label_angle="83.4153" x="2710.5" y="266.5" name="C to B constraint from cume spend"/>
+				<aux color="#651818" font_color="#651818" label_angle="83.4153" x="2702.5" y="349.5" name="C to RR constraint from cume spend"/>
+				<aux color="#651818" font_color="#651818" label_angle="83.4153" x="2697.5" y="410.5" name="OC to RR constraint from cume spend"/>
+				<aux color="#651818" font_color="#651818" label_angle="83.4153" x="2704.5" y="479.5" name="A to RR constraint from cume spend"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1060.5" y="1535.5" name="CHC Pilot Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1063.5" y="1615.5" name="CHC PC Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1064.5" y="1745.5" name="CHC Commercial Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1063.5" y="1275.5" name="CE Pilot Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1062.5" y="1333.5" name="CE PC maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1060.5" y="1413.5" name="CE Commercial Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1051.5" y="1844.5" name="OHC Pilot Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1051.5" y="1937.5" name="OHC PC Maturity"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1054.5" y="2053.5" name="OHC Commercial Maturity"/>
+				<aux x="1267.5" y="1275.5" name="CE CHC pilot maturity gap"/>
+				<aux color="black" font_color="black" x="1260.5" y="1333.5" name="CE CHC PC maturity gap"/>
+				<aux color="black" font_color="black" x="1263.5" y="1413.5" name="CE CHC C maturity gap"/>
+				<aux color="black" font_color="black" x="1246.5" y="1844.5" name="CHC OHC pilot maturity gap"/>
+				<aux color="black" font_color="black" x="1246.5" y="1937.5" name="CHC OHC PC maturity gap"/>
+				<aux color="black" font_color="black" x="1259.5" y="2053.5" name="CHC OHC C maturity gap"/>
+				<aux color="red" font_color="red" label_angle="109.991" x="1390.5" y="2286.5" name="CE CHC learning rate input"/>
+				<aux x="1582.5" y="1275.5" name="CE CHC pilot learning inputs"/>
+				<aux color="blue" label_angle="356.361" x="1764.5" y="1275.5" name="pilot inputs CE to CHC"/>
+				<aux color="blue" label_angle="8.61171" x="1761.5" y="1197.5" name="pilot inputs CHC to CE"/>
+				<aux color="red" font_color="red" label_angle="107.695" x="1076.5" y="2159.5" name="shared learning switch"/>
+				<aux color="blue" label_angle="109.991" x="1230.5" y="2286.5" name="CE CHC learning rates"/>
+				<aux x="1576.5" y="1333.5" name="CE CHC PC learning inputs"/>
+				<aux x="1770.5" y="1374.5" name="PC inputs CE to CHC"/>
+				<aux x="1768.5" y="1333.5" name="PC inputs CHC to CE"/>
+				<aux x="1576.5" y="1413.5" name="CE CHC C learning inputs"/>
+				<aux x="1774.5" y="1463.5" name="C inputs CE to CHC"/>
+				<aux x="1771.5" y="1414.5" name="C inputs CHC to CE"/>
+				<aux x="1532.5" y="1844.5" name="CHC OHC pilot learning inputs"/>
+				<aux x="1716.5" y="1888.5" name="pilot inputs OHC to CHC"/>
+				<aux x="1711.5" y="1844.5" name="pilot inputs CHC to OHC"/>
+				<aux x="1539.5" y="1937.5" name="CHC OHC PC learning inputs"/>
+				<aux x="1721.5" y="1936.5" name="PC inputs OHC to CHC"/>
+				<aux x="1714.5" y="1976.5" name="PC inputs CHC to OHC"/>
+				<aux x="1512.5" y="2053.5" name="CHC OHC C learning inputs"/>
+				<aux x="1693.5" y="2053.5" name="C inputs OHC to CHC"/>
+				<aux x="1685.5" y="2108.5" name="C inputs CHC to OHC"/>
+				<aux color="red" font_color="red" label_angle="109.991" x="1408.5" y="2228.5" name="CHC OHC learning rate input"/>
+				<aux color="blue" label_angle="109.991" x="1235.5" y="2228.5" name="CHC OHC learning rates"/>
+				<aux x="1616.5" y="1535.5" name="CHC CHC pilot learning inputs"/>
+				<aux x="1842.5" y="1535.5" name="pilot inputs CHC CHC"/>
+				<aux x="1614.5" y="1615.5" name="CHC CHC PC learning inputs"/>
+				<aux x="1848.5" y="1615.5" name="PC inputs CHC CHC"/>
+				<aux x="1613.5" y="1745.5" name="CHC CHC C learning inputs"/>
+				<aux x="1815.5" y="1745.5" name="C inputs CHC CHC"/>
+				<aux color="black" font_color="black" x="1321.5" y="1535.5" name="CHC CHC pilot maturity gap"/>
+				<aux color="black" font_color="black" x="1313.5" y="1615.5" name="CHC CHC PC maturity gap"/>
+				<aux color="black" font_color="black" x="1309.5" y="1745.5" name="CHC CHC C maturity gap"/>
+				<aux color="red" font_color="red" x="1434.5" y="1663.5" name="identity matrix CHC"/>
+				<aux color="white" font_color="white" x="1321.5" y="1465.5" name="CHC Pilot diag"/>
+				<aux color="black" font_color="black" x="1317.5" y="1569.5" name="CHC PC diag"/>
+				<aux color="black" font_color="black" x="1309.5" y="1685.5" name="CHC C diag"/>
+				<aux color="red" font_color="red" label_angle="109.991" x="1409.5" y="2159.5" name="CHC CHC learning rates input"/>
+				<aux color="blue" label_angle="109.991" x="1215.5" y="2159.5" name="CHC CHC learning rates"/>
+				<aux color="#651818" font_color="#651818" x="2154.5" y="1504.5" name="pilot learning inputs CHC"/>
+				<aux color="#651818" font_color="#651818" x="2145.5" y="1638.5" name="PC learning inputs CHC"/>
+				<aux color="#651818" font_color="#651818" x="2145.5" y="1729.5" name="C learning inputs CHC"/>
+				<aux color="#651818" font_color="#651818" x="2156.5" y="1844.5" name="pilot learning inputs OHC"/>
+				<aux color="#651818" font_color="#651818" x="2148.5" y="1976.5" name="PC learning inputs OHC"/>
+				<aux color="#651818" font_color="#651818" x="2135.5" y="2106.5" name="C learning inputs OHC"/>
+				<aux color="#651818" font_color="#651818" label_angle="8.61171" x="2113.5" y="1197.5" name="pilot learning inputs CE"/>
+				<aux color="#651818" font_color="#651818" label_angle="10.3344" x="2114.5" y="1333.5" name="PC learning inputs CE"/>
+				<aux color="#651818" font_color="#651818" label_side="right" label_angle="45" x="2115.5" y="1414.5" name="C learning inputs CE"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1172.5" y="49.5" name="S to J platform Attr"/>
+				<aux color="black" font_color="black" label_angle="196.651" x="1549.5" y="49.5" name="RAT S to J"/>
+				<aux color="#653E18" font_color="#653E18" label_angle="357.918" x="1789.5" y="49.5" name="Des SJ yrly starts"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="2231.5" y="497.5" name="SJ cume subs"/>
+				<aux color="black" font_color="black" label_angle="81.0236" x="2518.5" y="536.5" name="SJ Cume spend input"/>
+				<aux color="#651818" font_color="#651818" label_angle="81.0236" x="2703.5" y="536.5" name="SJ constraint from cume spend"/>
+				<group locked="true" color="#2A2A2A" font_color="#2A2A2A" x="1062.5" y="27.5" width="1009" height="854" name="Relative Attractiveness and Desired Starts">
+					<item uid="5992"/>
+					<item uid="5923"/>
+					<item uid="6019"/>
+					<item uid="6029"/>
+					<item uid="5954"/>
+					<item uid="5927"/>
+					<item uid="5940"/>
+					<item uid="5999"/>
+					<item uid="5898"/>
+					<item uid="6043"/>
+					<item uid="5922"/>
+					<item uid="5894"/>
+					<item uid="5969"/>
+					<item uid="6022"/>
+					<item uid="5963"/>
+					<item uid="6047"/>
+					<item uid="5958"/>
+					<item uid="6025"/>
+					<item uid="6046"/>
+					<item uid="5928"/>
+					<item uid="5993"/>
+					<item uid="5906"/>
+					<item uid="6000"/>
+					<item uid="5930"/>
+					<item uid="5893"/>
+					<item uid="6030"/>
+					<item uid="6032"/>
+					<item uid="5952"/>
+					<item uid="5975"/>
+					<item uid="5913"/>
+					<item uid="5944"/>
+					<item uid="6039"/>
+					<item uid="6037"/>
+					<item uid="5911"/>
+					<item uid="6017"/>
+				</group>
+				<group locked="true" color="#2A2A2A" font_color="#2A2A2A" x="1063.5" y="907.5" width="459" height="243" name="Attractiveness of Other Investment Option">
+					<item uid="5895"/>
+					<item uid="5934"/>
+					<item uid="5976"/>
+					<item uid="5967"/>
+					<item uid="5964"/>
+					<item uid="5908"/>
+				</group>
+				<group locked="false" x="2097.5" y="26.5" width="959" height="853" name="Cumulative Subsidy Constraints">
+					<item uid="6052"/>
+				</group>
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="6053" x="8" y="18" width="701" height="51">Biomass Scenario Relative Attractiveness Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="6054" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="6055" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="6056" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="6057" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="6058" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="6059" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<text_box color="black" font_size="16pt" padding="5" appearance="transparent" uid="6060" x="11" y="411" width="701" height="51">Relative Attractiveness | Spillover learning | total industry subsidies  </text_box>
+				<alias color="blue" font_style="italic" uid="5946" x="1407.5" y="1868.5" width="18" height="18">
+					<of>CHC_OHC_learning_rates</of>
+				</alias>
+				<alias color="blue" font_style="italic" uid="5937" x="1450.5" y="1358.5" width="18" height="18">
+					<of>CE_CHC_learning_rates</of>
+				</alias>
+				<alias color="blue" font_style="italic" uid="5917" x="1517.5" y="1659.5" width="18" height="18">
+					<of>CHC_CHC_learning_rates</of>
+				</alias>
+			</view>
+			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+				<style/>
+			</view>
+			<isee:templates/>
+			<isee:stories/>
+		</views>
+	</model>
+</xmile>
+

@@ -1,0 +1,5486 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
+	<header>
+		<smile version="1.0" namespace="std, isee" uses_arrays="3"/>
+		<name>FL</name>
+		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
+		<vendor>isee systems, inc.</vendor>
+		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+	</header>
+	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
+		<start>1</start>
+		<stop>13</stop>
+		<dt reciprocal="true">4</dt>
+	</sim_specs>
+	<dimensions>
+		<dim name="AnnualCrop">
+			<elem name="Corn"/>
+			<elem name="Soy"/>
+			<elem name="Wheat"/>
+			<elem name="Other_Grains"/>
+			<elem name="Cotton"/>
+		</dim>
+		<dim name="ProdnYear" size="10"/>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
+		<dim name="CtoRRTech">
+			<elem name="FP"/>
+			<elem name="FT"/>
+			<elem name="IDL"/>
+			<elem name="CP"/>
+			<elem name="F"/>
+			<elem name="APR"/>
+		</dim>
+		<dim name="Region">
+			<elem name="NE"/>
+			<elem name="A"/>
+			<elem name="SE"/>
+			<elem name="DS"/>
+			<elem name="CB"/>
+			<elem name="LS"/>
+			<elem name="NP"/>
+			<elem name="SP"/>
+			<elem name="M"/>
+			<elem name="P"/>
+		</dim>
+		<dim name="PECrop">
+			<elem name="Herbaceous"/>
+			<elem name="Woody"/>
+		</dim>
+	</dimensions>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<model_units>
+		<unit name="Dimensionless">
+			<eqn>1</eqn>
+			<alias>dmnl</alias>
+			<alias>unitless</alias>
+		</unit>
+		<unit name="Acres">
+			<eqn/>
+			<alias>acre</alias>
+		</unit>
+		<unit name="Miles">
+			<eqn/>
+			<alias>mi</alias>
+			<alias>mile</alias>
+		</unit>
+		<unit name="Square Miles">
+			<eqn>Miles^2</eqn>
+			<alias>sq mi</alias>
+			<alias>square mile</alias>
+		</unit>
+		<unit name="US Dollars">
+			<eqn/>
+			<alias>USD</alias>
+			<alias>$</alias>
+		</unit>
+		<unit name="Years">
+			<eqn/>
+			<alias>yr</alias>
+			<alias>year</alias>
+		</unit>
+		<unit name="Per Year">
+			<eqn>1/Years</eqn>
+		</unit>
+		<unit name="MilesPerVehiclePerYr">
+			<eqn>mi/(vehicles*yr)</eqn>
+		</unit>
+		<unit name="GalPerTerminalPerYr">
+			<eqn>gal/(terminals*yr)</eqn>
+		</unit>
+		<unit name="PerLoadUSDPerMi">
+			<eqn>USD/(mi*Load)</eqn>
+		</unit>
+		<unit name="ProjectGalPerTon">
+			<eqn>Projects*(gal/ton)</eqn>
+		</unit>
+		<unit name="DaysPerYr">
+			<eqn>day/yr</eqn>
+		</unit>
+		<unit name="ProjectUSDPerYr">
+			<eqn>Projects*(USD/yr)</eqn>
+		</unit>
+		<unit name="ProjectTonPerDay">
+			<eqn>Projects*(ton/day)</eqn>
+		</unit>
+		<unit name="MillionBTUPerGal">
+			<eqn>MillionBTU/gal</eqn>
+		</unit>
+		<unit name="GramsPerMJ">
+			<eqn>g/MJ</eqn>
+		</unit>
+		<unit name="MillionBTUperMJ">
+			<eqn>MillionBTU/MJ</eqn>
+		</unit>
+		<unit name="TonnesPerGram">
+			<eqn>Tonnes/g</eqn>
+		</unit>
+		<unit name="HoursPerProjectPerYr">
+			<eqn>hr/(projects*yr)</eqn>
+		</unit>
+		<unit name="USDPerUnit">
+			<eqn>USD/units</eqn>
+		</unit>
+		<unit name="USDA to nominal">
+			<eqn>units/USDA</eqn>
+		</unit>
+		<unit name="TonsPerUnit">
+			<eqn>ton/units</eqn>
+		</unit>
+		<unit name="UnitsPerAcrePerYrPerYr">
+			<eqn>units/(acre-yr^2)</eqn>
+		</unit>
+		<unit name="acres per square mile">
+			<eqn>acre/mi^2</eqn>
+		</unit>
+		<unit name="barrels per gallon">
+			<eqn>bbl/gal</eqn>
+		</unit>
+		<unit name="billion GPY">
+			<eqn>billions-gal/yr</eqn>
+		</unit>
+		<unit name="BillionMilesPerYear">
+			<eqn>billions-mi/yr</eqn>
+		</unit>
+		<unit name="btu per gallon">
+			<eqn>btu/gallon</eqn>
+		</unit>
+		<unit name="days per year">
+			<eqn>day/year</eqn>
+		</unit>
+		<unit name="dollars per acre">
+			<eqn>usd/acres</eqn>
+		</unit>
+		<unit name="dollars per acre per yr">
+			<eqn>USD/(acre-yr)</eqn>
+		</unit>
+		<unit name="dollars per load">
+			<eqn>usd/load</eqn>
+		</unit>
+		<unit name="gal per ton">
+			<eqn>gal/ton</eqn>
+		</unit>
+		<unit name="gallons per barrel">
+			<eqn>gal/bbl</eqn>
+		</unit>
+		<unit name="gallons per dollar">
+			<eqn>gal/USD</eqn>
+		</unit>
+		<unit name="gallons per month">
+			<eqn>gal/mo</eqn>
+		</unit>
+		<unit name="gallons per visit">
+			<eqn>gal/Visit</eqn>
+		</unit>
+		<unit name="gallons per year">
+			<eqn>gal/yr</eqn>
+		</unit>
+		<unit name="GPD">
+			<eqn>gal/day</eqn>
+		</unit>
+		<unit name="million tons">
+			<eqn>million-ton</eqn>
+		</unit>
+		<unit name="million units">
+			<eqn>million-units</eqn>
+		</unit>
+		<unit name="million USD">
+			<eqn>USD-million</eqn>
+		</unit>
+		<unit name="million usda">
+			<eqn>million-usda</eqn>
+		</unit>
+		<unit name="months per year">
+			<eqn>mo/yr</eqn>
+		</unit>
+		<unit name="MPG">
+			<eqn>mi/gal</eqn>
+		</unit>
+		<unit name="per billion">
+			<eqn>1/billions</eqn>
+		</unit>
+		<unit name="per million">
+			<eqn>1/million</eqn>
+		</unit>
+		<unit name="per thousand">
+			<eqn>1/thousand</eqn>
+		</unit>
+		<unit name="Projects per Year">
+			<eqn>projects/yr</eqn>
+		</unit>
+		<unit name="thousand acres">
+			<eqn>thousand-acres</eqn>
+		</unit>
+		<unit name="thousand ton per yr">
+			<eqn>thousand-ton/yr</eqn>
+		</unit>
+		<unit name="ton per acre per yr">
+			<eqn>ton/(acre-yr)</eqn>
+		</unit>
+		<unit name="ton per day">
+			<eqn>ton/day</eqn>
+		</unit>
+		<unit name="ton per year">
+			<eqn>ton/yr</eqn>
+		</unit>
+		<unit name="tons per load">
+			<eqn>ton/load</eqn>
+		</unit>
+		<unit name="USD per barrel">
+			<eqn>USD/bbl</eqn>
+		</unit>
+		<unit name="USD per gallon">
+			<eqn>USD/gal</eqn>
+		</unit>
+		<unit name="USD per ton">
+			<eqn>USD/ton</eqn>
+		</unit>
+		<unit name="USD per visit">
+			<eqn>USD/Visit</eqn>
+		</unit>
+		<unit name="visits per month">
+			<eqn>Visit/mo</eqn>
+		</unit>
+		<unit name="Visits per year">
+			<eqn>Visit/yr</eqn>
+		</unit>
+		<unit name="VehiclesMPG">
+			<eqn>Vehicles*mi/gal</eqn>
+		</unit>
+	</model_units>
+	<model name="FL">
+		<variables>
+			<aux name="C to EtOH Conv Q H" access="output">
+				<doc>DEFINITION: queuing and handling cost for conventiaonal feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>4.48</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>4.48</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>4.5</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>4.45</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>4.43</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>4.43</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>4.45</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>4.55</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>4.45</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>4.39</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>1.93936</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>1.93936</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="HC HCCPA" access="output">
+				<doc>DEFINITION: calculates harvest and collection cost per acre for herbaceous cellulosic feedstocks
+
+UNITS: dollars per acre per yr
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * Advanced_HC_HCCPA[Region] + 
+(1-Fraction_Producers_Using_Advanced_FS[Region]) * Conventional_HC_HCCPA[Region]</eqn>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="residue harvest storage efficiency factor" access="output">
+				<doc>DEFINITION: calculates &quot;net yield&quot; factor for residues, considering both harvest efficiency and storage losses, for herbaceous cellulosic feedstocks
+
+UNITS: Unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>harvest_eff_residue_by_region[Region] * storage_loss_residue_by_region[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<stock name="Fraction Producers Using Advanced FS">
+				<doc>DEFINITION: Stock (part of bassish diffusion process) that represents the fraction of feedstock producers in the region who are using advanced feedstock harvest and collection methods
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<inflow>WOM_transition_to_adv_FS</inflow>
+				<inflow>conversion_push_transition_to_adv_FS</inflow>
+				<non_negative/>
+				<units>Unitless</units>
+			</stock>
+			<aux name="WC HCCPA" access="output">
+				<doc>DEFINITION: calculates harvest and collection cost per acre for woody cellulosic feedstocks
+
+UNITS: dollars per acre per yr
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * Advanced_WC_HCCPA[Region] +
+(1-Fraction_Producers_Using_Advanced_FS[Region]) * Conventional_WC_HCCPA[Region]</eqn>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<stock name="Fraction Producers using Conventional FS">
+				<doc>DEFINITION: Stock (part of bassish diffusion process) that represents the fraction of feedstock producers in the region who are using conventional feedstock harvest and collection methods
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>1</eqn>
+				<outflow>WOM_transition_to_adv_FS</outflow>
+				<outflow>conversion_push_transition_to_adv_FS</outflow>
+				<non_negative/>
+				<units>Unitless</units>
+			</stock>
+			<aux name="plant threshold for advanced logistics">
+				<doc>DEFINITION: threshold, beyond which facilities use advanced logistics
+
+UNITS: projects
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>1000</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="plants with conventional logistics">
+				<doc>DEFINITION: calculated number of facilities using conventional logistics systems
+
+UNITS: projects
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>total_cellulosic_plants[Region] - plants_with_advanced_logistics[Region]</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="HC harvest storage efficiency factor" access="output">
+				<doc>DEFINITION: calculates &quot;net yield&quot; factor for harvest, considering both harvest efficiency and storage losses, for herbaceous cellulosic feedstocks
+
+UNITS: Unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>harvest_eff_HC_by_region[Region] * storage_loss_HC_by_region[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="plants with advanced logistics">
+				<doc>DEFINITION: calculated number of facilities using advanced logistics systems
+
+UNITS: projects
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF  total_cellulosic_plants[Region] &gt; plant_threshold_for_advanced_logistics 
+THEN total_cellulosic_plants[Region] - plant_threshold_for_advanced_logistics 
+ELSE 0</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="WC harvest storage efficiency factor" access="output">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>harvest_eff_WC_by_region[Region] * storage_loss_WC_by_region[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<flow name="WOM transition to adv FS">
+				<doc>DEFINITION: flow of movement of producers, via &quot;imitation&quot; component of bassish diffusion, toward advanced feedstock logistics system
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * WOM_rate[Region]</eqn>
+				<non_negative/>
+				<units>per year</units>
+			</flow>
+			<aux name="conv harves efficiency HC">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for conventional harvest regime, for herbaceous cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.9</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="fraction Supply System advanced" access="output">
+				<doc>DEFINITION: calculates the protion of the feedstock supply system is advanced (i.e., using &quot;depot&quot; system)
+
+UNITS: Unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF Use_Dynamic_FS_Logistics_System = 1 THEN dynamic_frac_logistics_advanced[Region] 
+ELSE IF Use_Static_Advanced_System = 1 THEN 1 ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to RR PrePro cost">
+				<doc>DEFINITION: calculated preprocessing cost for feedstock associated with cellulose to hydrocarbon conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>C_to_RR_Adv_Prepro[CtoRRTech,Region]*fraction_Supply_System_advanced[Region] + (1 - fraction_Supply_System_advanced[Region]) * C_to_RR_Conv_Prepro[CtoRRTech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="total cellulosic plants">
+				<doc>DEFINITION: calculates total (estimated) cellulosic facilites in each region
+
+UNITS: projects
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>SUM(Est_Total_Cellulosic_Plants[*,Region])</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="Advanced HC HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for herbaceous cellulosic crops, for advanced harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>64.277136</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="Conventional HC HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for herbaceous cellulosic crops, for conventional harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>30.69</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>31.12</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>28.59</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>33.78</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>38.64</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>38.18</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>34.55</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>24.84</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>34.98</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>48.36</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="C to RR Q H cost">
+				<doc>DEFINITION: calculated queuing and handling cost for feedstock associated with cellulose to hydrocarbon conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>C_to_RR_Adv_Q_H[CtoRRTech,Region]*fraction_Supply_System_advanced[Region] +(1 - fraction_Supply_System_advanced[Region]) * C_to_RR_Conv_Q_H[CtoRRTech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR storage cost">
+				<doc>DEFINITION: calculated storage cost for feedstock associated with cellulose to hydrocarbon conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * C_to_RR_Adv_Storage[CtoRRTech,Region] +(1 - fraction_Supply_System_advanced[Region]) * C_to_RR_Conv_Storage[CtoRRTech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR PreProcess Cost" access="output">
+				<doc>DEFINITION: calculated total preprocessing cost for feedstock associated with cellulose to hydrocarbon conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array |module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>C_to_RR_PrePro_cost[CtoRRTech,Region] + C_to_RR_Q_H_cost[CtoRRTech,Region] + C_to_RR_storage_cost[CtoRRTech,Region] + Depot_to_Plant_trans_cost_input[Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Conv Q H" access="output">
+				<doc>DEFINITION: queuing and handling cost for conventiaonal feedstock system, for cellulose to hydrocarbon pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>0.96968</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Conv Storage">
+				<doc>DEFINITION: storage cost for conventional feedstock system, for cellulose to hydrocarbon pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>3.75224</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>3.69954</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>3.7417</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>3.72062</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>3.80494</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>3.91034</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>3.75224</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>3.69954</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>3.7417</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>3.72062</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>3.80494</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>3.91034</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>3.75224</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>3.69954</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>3.7417</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>3.72062</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>3.80494</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>3.91034</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>3.75224</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>3.69954</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>3.7417</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>3.72062</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>3.80494</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>3.91034</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>4.743</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>4.7957</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>4.62706</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>4.743</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>4.7957</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>4.62706</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Conv Prepro">
+				<doc>DEFINITION: preprocessing cost for conventional feedstock system, for cellulose to hydrocarbon pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>27.59372</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>10.60324</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>10.60324</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Adv Q H">
+				<doc>DEFINITION: queuing and handling cost for advanced feedstock system, for cellulose to hydrocarbon pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>0.96968</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Adv Storage">
+				<doc>DEFINITION: storage cost for advanced feedstock system, for cellulose to hydrocarbon pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>8.3793</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>8.432</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>8.24228</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>8.3793</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>8.432</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>8.24228</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to RR Adv Prepro">
+				<doc>DEFINITION: preprocessing cost for advanced feedstock system, for cellulose to hydrocarbon  pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoRRTech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="FP, NE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, A">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, SE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, DS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, CB">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, LS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, NP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, SP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, M">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FP, P">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, NE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, A">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, SE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, DS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, CB">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, LS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, NP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, SP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, M">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="FT, P">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, NE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, A">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, SE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, DS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, CB">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, LS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, NP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, SP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, M">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="IDL, P">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, NE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, A">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, SE">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, DS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, CB">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, LS">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, NP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, SP">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, M">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="CP, P">
+					<eqn>25.94948</eqn>
+				</element>
+				<element subscript="F, NE">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, A">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, SE">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, DS">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, CB">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, LS">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, NP">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, SP">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, M">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="F, P">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, NE">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, A">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, SE">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, DS">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, CB">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, LS">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, NP">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, SP">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, M">
+					<eqn>26.31838</eqn>
+				</element>
+				<element subscript="APR, P">
+					<eqn>26.31838</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="conv harvest efficiency WC">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for conventional harvest regime, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.9</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="conv storage loss factor residue">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for conventional harvest regime, for residues
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.92</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="conv storage loss factor HC">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for conventional harvest regime, for herbaceous cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.92</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="conv storage loss factor WC">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for conventional harvest regime, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.9</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv harvest efficiency HC">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for advanced harvest regime, for herbaceous cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.9</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="harvest eff residue by region">
+				<doc>DEFINITION: calculates efficiency of harvest of agricultural residues
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * adv_harv_efficiency_residue + (1-Fraction_Producers_Using_Advanced_FS[Region]) * conv_harv_efficiency_residue</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv storage loss factor residue">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for advanced harvest regime, for residues
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.92</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="storage loss residue by region">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for agricultural residues
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * adv_storage_loss_factor_residue +(1-fraction_Supply_System_advanced[Region]) * conv_storage_loss_factor_residue</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="conv harv efficiency residue">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for conventional harvest regime, for residues
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.43</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv harvest efficiency WC">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for advanced harvest regime, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.9</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv storage loss factor HC">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for advanced harvest regime, for herbaceous cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.92</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv storage loss factor WC">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for advanced harvest regime, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.95</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="harvest eff HC by region">
+				<doc>DEFINITION: calculates efficiency of harvest of herbaceous cellulosic feedstocks
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * adv_harvest_efficiency_HC +(1-Fraction_Producers_Using_Advanced_FS[Region]) * conv_harves_efficiency_HC</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="storage loss HC by region">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for herbaceous cellulosic crops
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * adv_storage_loss_factor_HC +(1-fraction_Supply_System_advanced[Region]) * conv_storage_loss_factor_HC</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Advanced WC HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for woody cellulosic crops, for advanced harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>361</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>202</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>335</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>483</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>229</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>396</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>74</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>139</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>139</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>24</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="Conventional WC HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for woody cellulosic crops, for conventional harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>361</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>202</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>335</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>483</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>229</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>396</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>74</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>139</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>139</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>24</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="C to EtOH Conv Storage">
+				<doc>DEFINITION: storage cost for conventional feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>4.72192</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>4.743</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>4.66922</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>4.7957</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>4.6903</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>4.62706</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>3.75224</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>3.73116</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>3.69954</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>3.7417</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>3.72062</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>3.80494</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>3.76278</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>3.91034</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Ag Res HCCPA" access="output">
+				<doc>DEFINITION: calculates per acre harvest and collection costs for herbaceous cellulosic crops
+
+UNITS: dollars per acre per yr
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AnnualCrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * Advanced_Ag_Res_HCCPA[AnnualCrop,Region] +
+(1-Fraction_Producers_Using_Advanced_FS[Region]) * Conventional_Ag_Res_HCCPA[AnnualCrop,Region]</eqn>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="Advanced Ag Res HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for crop residues, for advanced harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AnnualCrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="Corn, NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="Corn, A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="Corn, SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="Corn, DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="Corn, CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="Corn, LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="Corn, NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="Corn, SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="Corn, M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="Corn, P">
+					<eqn>64.277136</eqn>
+				</element>
+				<element subscript="Soy, NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="Soy, A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="Soy, SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="Soy, DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="Soy, CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="Soy, LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="Soy, NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="Soy, SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="Soy, M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="Soy, P">
+					<eqn>64.277136</eqn>
+				</element>
+				<element subscript="Wheat, NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="Wheat, A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="Wheat, SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="Wheat, DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="Wheat, CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="Wheat, LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="Wheat, NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="Wheat, SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="Wheat, M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="Wheat, P">
+					<eqn>64.277136</eqn>
+				</element>
+				<element subscript="Other_Grains, NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="Other_Grains, A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="Other_Grains, SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="Other_Grains, DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="Other_Grains, CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="Other_Grains, LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="Other_Grains, NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="Other_Grains, SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="Other_Grains, M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="Other_Grains, P">
+					<eqn>64.277136</eqn>
+				</element>
+				<element subscript="Cotton, NE">
+					<eqn>39.27204</eqn>
+				</element>
+				<element subscript="Cotton, A">
+					<eqn>39.8495266</eqn>
+				</element>
+				<element subscript="Cotton, SE">
+					<eqn>36.5419692</eqn>
+				</element>
+				<element subscript="Cotton, DS">
+					<eqn>43.3059088</eqn>
+				</element>
+				<element subscript="Cotton, CB">
+					<eqn>49.616523</eqn>
+				</element>
+				<element subscript="Cotton, LS">
+					<eqn>49.0409336</eqn>
+				</element>
+				<element subscript="Cotton, NP">
+					<eqn>44.312268</eqn>
+				</element>
+				<element subscript="Cotton, SP">
+					<eqn>31.6710136</eqn>
+				</element>
+				<element subscript="Cotton, M">
+					<eqn>44.8826928</eqn>
+				</element>
+				<element subscript="Cotton, P">
+					<eqn>64.277136</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="Conventional Ag Res HCCPA">
+				<doc>DEFINITION: sets harvest and collection costs for agricultural residues, for conventional harvest regime
+
+UNITS: dollars per acre per yr
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AnnualCrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="Corn, NE">
+					<eqn>32.34726</eqn>
+				</element>
+				<element subscript="Corn, A">
+					<eqn>32.8016394</eqn>
+				</element>
+				<element subscript="Corn, SE">
+					<eqn>30.1368112</eqn>
+				</element>
+				<element subscript="Corn, DS">
+					<eqn>35.599377</eqn>
+				</element>
+				<element subscript="Corn, CB">
+					<eqn>40.7262438</eqn>
+				</element>
+				<element subscript="Corn, LS">
+					<eqn>40.2395066</eqn>
+				</element>
+				<element subscript="Corn, NP">
+					<eqn>36.419916</eqn>
+				</element>
+				<element subscript="Corn, SP">
+					<eqn>26.1779872</eqn>
+				</element>
+				<element subscript="Corn, M">
+					<eqn>36.86892</eqn>
+				</element>
+				<element subscript="Corn, P">
+					<eqn>50.967224</eqn>
+				</element>
+				<element subscript="Soy, NE">
+					<eqn>32.34726</eqn>
+				</element>
+				<element subscript="Soy, A">
+					<eqn>32.8016394</eqn>
+				</element>
+				<element subscript="Soy, SE">
+					<eqn>30.1368112</eqn>
+				</element>
+				<element subscript="Soy, DS">
+					<eqn>35.599377</eqn>
+				</element>
+				<element subscript="Soy, CB">
+					<eqn>40.7262438</eqn>
+				</element>
+				<element subscript="Soy, LS">
+					<eqn>40.2395066</eqn>
+				</element>
+				<element subscript="Soy, NP">
+					<eqn>36.419916</eqn>
+				</element>
+				<element subscript="Soy, SP">
+					<eqn>26.1779872</eqn>
+				</element>
+				<element subscript="Soy, M">
+					<eqn>36.86892</eqn>
+				</element>
+				<element subscript="Soy, P">
+					<eqn>50.967224</eqn>
+				</element>
+				<element subscript="Wheat, NE">
+					<eqn>32.34726</eqn>
+				</element>
+				<element subscript="Wheat, A">
+					<eqn>32.8016394</eqn>
+				</element>
+				<element subscript="Wheat, SE">
+					<eqn>30.1368112</eqn>
+				</element>
+				<element subscript="Wheat, DS">
+					<eqn>35.599377</eqn>
+				</element>
+				<element subscript="Wheat, CB">
+					<eqn>40.7262438</eqn>
+				</element>
+				<element subscript="Wheat, LS">
+					<eqn>40.2395066</eqn>
+				</element>
+				<element subscript="Wheat, NP">
+					<eqn>36.419916</eqn>
+				</element>
+				<element subscript="Wheat, SP">
+					<eqn>26.1779872</eqn>
+				</element>
+				<element subscript="Wheat, M">
+					<eqn>36.86892</eqn>
+				</element>
+				<element subscript="Wheat, P">
+					<eqn>50.967224</eqn>
+				</element>
+				<element subscript="Other_Grains, NE">
+					<eqn>32.34726</eqn>
+				</element>
+				<element subscript="Other_Grains, A">
+					<eqn>32.8016394</eqn>
+				</element>
+				<element subscript="Other_Grains, SE">
+					<eqn>30.1368112</eqn>
+				</element>
+				<element subscript="Other_Grains, DS">
+					<eqn>35.599377</eqn>
+				</element>
+				<element subscript="Other_Grains, CB">
+					<eqn>40.7262438</eqn>
+				</element>
+				<element subscript="Other_Grains, LS">
+					<eqn>40.2395066</eqn>
+				</element>
+				<element subscript="Other_Grains, NP">
+					<eqn>36.419916</eqn>
+				</element>
+				<element subscript="Other_Grains, SP">
+					<eqn>26.1779872</eqn>
+				</element>
+				<element subscript="Other_Grains, M">
+					<eqn>36.86892</eqn>
+				</element>
+				<element subscript="Other_Grains, P">
+					<eqn>50.967224</eqn>
+				</element>
+				<element subscript="Cotton, NE">
+					<eqn>32.34726</eqn>
+				</element>
+				<element subscript="Cotton, A">
+					<eqn>32.8016394</eqn>
+				</element>
+				<element subscript="Cotton, SE">
+					<eqn>30.1368112</eqn>
+				</element>
+				<element subscript="Cotton, DS">
+					<eqn>35.599377</eqn>
+				</element>
+				<element subscript="Cotton, CB">
+					<eqn>40.7262438</eqn>
+				</element>
+				<element subscript="Cotton, LS">
+					<eqn>40.2395066</eqn>
+				</element>
+				<element subscript="Cotton, NP">
+					<eqn>36.419916</eqn>
+				</element>
+				<element subscript="Cotton, SP">
+					<eqn>26.1779872</eqn>
+				</element>
+				<element subscript="Cotton, M">
+					<eqn>36.86892</eqn>
+				</element>
+				<element subscript="Cotton, P">
+					<eqn>50.967224</eqn>
+				</element>
+				<units>dollars per acre per yr</units>
+			</aux>
+			<aux name="ForRes HCCPT" access="output">
+				<doc>DEFINITION: calculated forest residue harvest and collection cost
+
+UNITS: USD per ton
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * Advanced_ForRes_HCCPT[Region] + 
+(1-Fraction_Producers_Using_Advanced_FS[Region])* Conventional_ForRes_HCCPT[Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Advanced ForRes HCCPT">
+				<doc>DEFINITION: sets harvest and collection costs for forest residues, for advanced harvest regime
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Conventional ForRes HCCPT">
+				<doc>DEFINITION: sets harvest and collection costs for forest residues, for conventional harvest regime
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="UrbanRes HCCPT" access="output">
+				<doc>DEFINITION: calculated urban residues harvest and collection costs per ton
+
+UNITS: USD per ton
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * Advanced_UrbanRes_HCCPT[Region] + 
+(1-Fraction_Producers_Using_Advanced_FS[Region]) * Conventional_UrbanRes_HCCPT[Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Advanced UrbanRes HCCPT">
+				<doc>DEFINITION: sets harvest and collection costs for urban residues, for advanced harvest regime
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>100</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Conventional UrbanRes HCCPT">
+				<doc>DEFINITION: sets harvest and collection costs for urban residues, for conventional harvest regime
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>100</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to EtOH Conv Prepro">
+				<doc>DEFINITION: preprocessing cost for conventional feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>10.06</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>26.18</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>26.18</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to EtOH Adv Q H">
+				<doc>DEFINITION: queuing and handling cost for advanced feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>0.96968</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>2.0026</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>2.0026</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="base WOM producer adv FS">
+				<doc>DEFINITION: compounding factor for word of mount multiplier. Used to drive bassisnh diffusion of producers to use of advanced feedstock supply system
+
+UNITS: per year
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.25</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="WOM rate">
+				<doc>DEFINITION: calculates &quot;compounding rate&quot; for movement from conventional to advanced feedstock system producers
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>base_WOM_producer_adv_FS * conventional_producer_constraint[Region]</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="conventional producer constraint">
+				<doc>DEFINITION: Constrains movement toward use of advanced feedstock system as conventional feedstock producers go to 0
+
+UNITS: Unitless
+
+TYPE: array | graphical function | assumed values
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="A">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="DS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="CB">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="LS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="NP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="M">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="P">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<eqn>Fraction_Producers_using_Conventional_FS[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<flow name="conversion push transition to adv FS">
+				<doc>DEFINITION: flux capturing the &quot;innovation&quot; aspect of bassish diffusion of producers from conventional to advanced feedstock productin
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_using_Conventional_FS[Region] * push_rate[Region]</eqn>
+				<non_negative/>
+				<units>per year</units>
+			</flow>
+			<aux name="frac max push rate from supply system">
+				<doc>DEFINITION: translates degree of advanced supply system into rate of &quot;innovation&quot; toward advanced feedstock production system
+
+UNITS: Unitless
+
+TYPE: array | graphical function | assumed values
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="A">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="DS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="CB">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="LS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="NP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="M">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="P">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<eqn>fraction_Supply_System_advanced[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="max push rate producer adv fs">
+				<doc>DEFINITION: maximum rate of &quot;innovation&quot; from conventional feedstock producers to advanced feedstock producers
+
+UNITS: per year
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.05</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="push rate">
+				<doc>DEFINITION: calculated rate at which conventional producers become advanced feedstock producers
+
+UNITS: per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>max_push_rate_producer_adv_fs * frac_max_push_rate_from_supply_system[Region]</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="Depot to Plant trans cost input">
+				<doc>DEFINITION: calculated transportation cost, associated with advanced &quot;depot&quot; system, for transportation from depot to plant
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * Depot_to_Plant_trans_cost[Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Depot to Plant trans cost">
+				<doc>DEFINITION: transportation cost, associated with advanced &quot;depot&quot; system, for transportation from depot to plant
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Use Dynamic FS Logistics System">
+				<doc>DEFINITION: switch. When set to 1,  and &quot;use dynamic fs logistics system&quot; is set to 0, causes model to use static value of 1 for fraction of supply system advanced
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Use Static Advanced System">
+				<doc>DEFINITION: switch. When set to 1, causes model to use the dynamic fraction of logistics advanced logic (vs static value)
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="dynamic frac logistics advanced">
+				<doc>DEFINITION: calculation of fraction of feedstock logistics system is advanced
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF total_cellulosic_plants[Region] = 0THEN 0 ELSE plants_with_advanced_logistics[Region] / total_cellulosic_plants[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to EtOH Adv Storage">
+				<doc>DEFINITION: storage cost for advanced feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>8.34768</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>8.3793</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>8.28444</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>8.432</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>8.31606</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>8.24228</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>3.40442</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>3.40442</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to EtOH Adv Prepro">
+				<doc>DEFINITION: preprocessing cost for advanced feedstock system, for cellulose to ethanol pathways
+
+UNITS: USD per ton
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="BC, NE">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>24.97</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>24.62</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>24.62</eqn>
+				</element>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="harvest eff WC by region">
+				<doc>DEFINITION: calculates efficiency of harvest of woody cellulosic feedstocks
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Fraction_Producers_Using_Advanced_FS[Region] * adv_harvest_efficiency_WC + (1-Fraction_Producers_Using_Advanced_FS[Region]) * conv_harvest_efficiency_WC</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="storage loss WC by region">
+				<doc>DEFINITION: sets fraction of harvested yield that remains after considering losses in storage, for woody cellulosic crops
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * adv_storage_loss_factor_WC +(1-fraction_Supply_System_advanced[Region]) * conv_storage_loss_factor_WC</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="adv harv efficiency residue">
+				<doc>DEFINITION: sets fraction of yield actually removed via harvest, for advanced harvest regime, for residues
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>0.43</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="C to EtOH PreProcess Cost" access="output">
+				<doc>DEFINITION: calculated total preprocessing cost for feedstock associated with cellulose to ethanol conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array |module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>C_to_A_PrePro_cost[CtoATech,Region] + C_to_EtOH_Q_H_cost[CtoATech,Region] + C_to_EtOH_storage_cost[CtoATech,Region] + Depot_to_Plant_trans_cost_input[Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to A PrePro cost">
+				<doc>DEFINITION: calculated preprocessing cost for feedstock associated with cellulose to ethanol conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: rename? --C to EtOHÉ</doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * C_to_EtOH_Adv_Prepro[CtoATech,Region] + (1 - fraction_Supply_System_advanced[Region]) * C_to_EtOH_Conv_Prepro[CtoATech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to EtOH Q H cost">
+				<doc>DEFINITION: calculated queuing and handling cost for feedstock associated with cellulose to ethanol conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * C_to_EtOH_Adv_Q_H[CtoATech,Region] +(1 - fraction_Supply_System_advanced[Region]) * C_to_EtOH_Conv_Q_H[CtoATech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="C to EtOH storage cost">
+				<doc>DEFINITION: calculated storage cost for feedstock associated with cellulose to ethanol conversion pathways
+
+UNITS: USD per ton
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>fraction_Supply_System_advanced[Region] * C_to_EtOH_Adv_Storage[CtoATech,Region] +(1 - fraction_Supply_System_advanced[Region]) * C_to_EtOH_Conv_Storage[CtoATech,Region]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Total Ag Cellulose Producing Acres" access="input">
+				<doc>DEFINITION: module interface to GP.PCEC YPA by year
+
+UNITS: ton per acre per yr
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+					<dim name="ProdnYear"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="Forest Res Transport CPT">
+				<doc>DEFINITION: estimated transport cost for forest residues
+
+UNITS: USD per ton
+
+TYPE: scalar | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>5.08</eqn>
+				<scale min="0" max="80"/>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Expected Residue tons per load">
+				<doc>DEFINITION: estimate of load size for agricultural residue trucking
+
+UNITS: tons per load
+
+TYPE: scalar | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AnnualCrop"/>
+				</dimensions>
+				<element subscript="Corn">
+					<eqn>18.9</eqn>
+				</element>
+				<element subscript="Soy">
+					<eqn>17.28</eqn>
+				</element>
+				<element subscript="Wheat">
+					<eqn>17.28</eqn>
+				</element>
+				<element subscript="Other_Grains">
+					<eqn>17.28</eqn>
+				</element>
+				<element subscript="Cotton">
+					<eqn>17.28</eqn>
+				</element>
+				<units>tons per load</units>
+			</aux>
+			<aux name="Expected HC tons per load">
+				<doc>DEFINITION: estimate of load size for herbaceous cellulosic trucking
+
+UNITS: tons per load
+
+TYPE: scalar | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>18.9</eqn>
+				<units>tons per load</units>
+			</aux>
+			<aux name="Expected WC tons per load">
+				<doc>DEFINITION: estimate of load size for woody cellulosic trucking
+
+UNITS: tons per load
+
+TYPE: scalar | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>16.68</eqn>
+				<units>tons per load</units>
+			</aux>
+			<aux name="HC Transport CPT" access="output">
+				<doc>DEFINITION: calculates per-ton cost of transport from roadside to plant or depot, for herbaceous cellulosic feedstocks
+
+UNITS: USD per ton
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Transport_Total_cost_per_load[Herbaceous, Region]/Expected_HC_tons_per_load</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="WC Transport CPT" access="output">
+				<doc>DEFINITION: calculates per-ton cost of transport from roadside to plant or depot, for woody cellulosic feedstocks
+
+UNITS: USD per ton
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Transport_Total_cost_per_load[Woody, Region]/Expected_WC_tons_per_load</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Urban Res Transport CPT">
+				<doc>DEFINITION: estimate of urban residue transport cost
+
+UNITS: USD per ton
+
+TYPE: scalar | Constant |Techno Economic Input
+
+COMMENTS: remove?</doc>
+				<eqn>18.86</eqn>
+				<scale min="0" max="80"/>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Initial Transport vbl cost per mile">
+				<doc>DEFINITION: estimate, on a per-load basis, of the cost per mile of transport of feedstocks
+
+UNITS: PerLoadUSDPerMi
+
+TYPE: scalar | constant | assumed value | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>3.96</eqn>
+				<units>PerLoadUSDPerMi</units>
+			</aux>
+			<aux name="Transport cost multiplier">
+				<doc>DEFINITION: mulitplier used to scale transport variable cost per mile
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>1</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="expected collection area sq mi">
+				<doc>DEFINITION: calculates size of each feedstock-shed area within region
+
+UNITS: square miles
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>expected_collection_area_acres / acres_per_square_mile</eqn>
+				<units>square miles</units>
+			</aux>
+			<aux name="aggregate avg yield for collection area">
+				<doc>DEFINITION: calculates an estimate of the average yield associated with  entire &quot;feedstock-shed&quot;
+
+UNITS: ton per acre per yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>annualized_PCEC_YPA_input + FSM_residue_yield[Region] * fraction_of_land_supplying_plnt_residue</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="fraction of land supplying plant PCEC">
+				<doc>DEFINITION: Assumed fraction of land base within feestock shed that is producing perennial cellulosic energy crops
+
+UNITS: Unitless
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.05</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="radial distance from edge to plant">
+				<doc>DEFINITION: distance from edge of feedstock shed to centrally located facility
+
+UNITS: miles
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>SQRT(expected_collection_area_sq_mi[PECrop,Region]/PI)</eqn>
+				<units>miles</units>
+			</aux>
+			<aux name="avg radial distance from roadside to plant">
+				<doc>DEFINITION: calculates average distance &quot;as the crow flies&quot; from plant to roadsided feedstock
+
+UNITS: miles
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>avg_radial_weighting_factor*radial_distance_from_edge_to_plant</eqn>
+				<units>miles</units>
+			</aux>
+			<aux name="Avg travel distance to plant">
+				<doc>DEFINITION: calculated actual distance on the road from roadsided feedstock to plant
+
+UNITS: miles
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>avg_radial_distance_from_roadside_to_plant*road_windage_factor</eqn>
+				<units>miles</units>
+			</aux>
+			<aux name="avg radial weighting factor">
+				<doc>DEFINITION: weighting factor used to calculate average distrance from plant to roadsided feedstock
+
+UNITS: Unitless
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.666667</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="road windage factor">
+				<doc>DEFINITION: multiplier that captures difference between &quot;as the crow flies&quot; and &quot;as the truck drives&quot; distance from roadside to plant
+
+UNITS: Unitless
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>1.41421</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="acres per square mile">
+				<doc>DEFINITION: converts between acres and square miles
+
+UNITS: acres per square mile
+
+TYPE: scalar | constant | unit conversion
+
+COMMENTS: </doc>
+				<eqn>640</eqn>
+				<units>acres per square mile</units>
+			</aux>
+			<aux name="Residue Transport CPT" access="output">
+				<doc>DEFINITION: calculates per-ton cost of transport from roadside to plant or depot, for ag residue-based feedstocks
+
+UNITS: USD per ton
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="AnnualCrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Transport_Total_cost_per_load[Herbaceous, Region]/Expected_Residue_tons_per_load[AnnualCrop]</eqn>
+				<units>USD per ton</units>
+			</aux>
+			<aux name="Transport Fixed cost per load">
+				<doc>DEFINITION: estimate of fixed cost associated with feedstock transport, on a per-load basis
+
+UNITS: dollars per load
+
+TYPE: scalar | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<eqn>10.12</eqn>
+				<units>dollars per load</units>
+			</aux>
+			<aux name="Transport Variable cost per load">
+				<doc>DEFINITION: calculates variable cost per load for feedstock transport
+
+UNITS: dollars per load
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Avg_travel_distance_to_plant*Transport_vbl_cost_per_mile*two</eqn>
+				<units>dollars per load</units>
+			</aux>
+			<aux name="Transport Total cost per load">
+				<doc>DEFINITION: calculates total (fixed + variable) cost per load for feedstock transport
+
+UNITS: dollars per load
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Transport_Fixed_cost_per_load+Transport_Variable_cost_per_load</eqn>
+				<units>dollars per load</units>
+			</aux>
+			<aux name="Transport vbl cost per mile">
+				<doc>DEFINITION: calculates variable cost per mile for feedstock transport
+
+UNITS: PerLoadUSDPerMi
+
+TYPE: scalar | internal calculation
+
+COMMENTS: </doc>
+				<eqn>Initial_Transport_vbl_cost_per_mile*Transport_cost_multiplier</eqn>
+				<units>PerLoadUSDPerMi</units>
+			</aux>
+			<aux name="two">
+				<doc>DEFINITION: can be as sad as one, but the loneliest number is the number one--Ah.  --3 dog night
+
+UNITS: Unitless
+
+TYPE: scalar | constant
+
+COMMENTS: </doc>
+				<eqn>2</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="reqd annual feedstock supply tpy" access="input">
+				<doc>DEFINITION: module interface to FM.reqd annual feedstock supply tpy
+
+UNITS: ton per year
+
+TYPE: scalar | module interface
+
+COMMENTS: </doc>
+				<eqn>2205*365</eqn>
+				<units>ton per year</units>
+			</aux>
+			<aux name="Est Ag Cellulosic plants incl pipeline" access="input">
+				<doc>DEFINITION: module interface to FM.Est Ag Cellulosic plants incl pipeline
+
+UNITS: projects
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>1</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="one project">
+				<doc>DEFINITION: one project
+
+UNITS: projects
+
+TYPE: scalar | constant |unit conversion
+
+COMMENTS: </doc>
+				<eqn>1</eqn>
+				<units>Projects</units>
+			</aux>
+			<aux name="one thousand">
+				<doc>DEFINITION: 100 10s
+
+UNITS: per thousand
+
+TYPE: scalar | constant | unit conversion
+
+COMMENTS: </doc>
+				<eqn>1000</eqn>
+				<units>per thousand</units>
+			</aux>
+			<aux name="total Collection Area">
+				<doc>DEFINITION: calculates area in the aggregate conversion-shed defined by plants and collection area.
+
+UNITS: thousand acres
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>(Est_Ag_Cellulosic_plants_incl_pipeline/one_project * expected_collection_area_acres) /one_thousand</eqn>
+				<units>thousand acres</units>
+			</aux>
+			<aux name="total required cellulosic acres">
+				<doc>DEFINITION: calculates area in the aggregate conversion-shed, across all perennial cellulosic energy crops, as defined by plants and collection area.
+
+UNITS: thousand acres
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>SUM(total_Collection_Area[*,Region])</eqn>
+				<units>thousand acres</units>
+			</aux>
+			<aux name="expected collection area acres">
+				<doc>DEFINITION: calculates size of each feedstock-shed area within region
+
+UNITS: acres
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF aggregate_avg_yield_for_collection_area &gt; 0 
+THEN reqd_annual_feedstock_supply_tpy/aggregate_avg_yield_for_collection_area
+ELSE 0</eqn>
+				<units>acres</units>
+			</aux>
+			<aux name="FSM residue yield" access="input">
+				<doc>DEFINITION: module interface to FS.net residue YPA
+
+UNITS: ton per acre per yr
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="fraction of land supplying plnt residue">
+				<doc>DEFINITION: Assumed fraction of land base within feestock shed that is producing agricultural residues
+
+UNITS: Unitless
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.05</eqn>
+				<units>Unitless</units>
+			</aux>
+			<stock name="Est Total Cellulosic Plants">
+				<doc>DEFINITION: Stock providing estimat of total number of facilities using cellulosic feedstock, within the region
+
+UNITS: Projects
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>0</eqn>
+				<inflow>chg_est_total_cellulosic_plants</inflow>
+				<non_negative/>
+				<units>Projects</units>
+			</stock>
+			<flow name="chg est total cellulosic plants">
+				<doc>DEFINITION: change in estimated (average) number of cellulosic facilities
+
+UNITS: projects per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>(Est_Ag_Cellulosic_plants_incl_pipeline[PECrop, Region] - Est_Total_Cellulosic_Plants) / avg_time_for_est_plants</eqn>
+				<units>Projects per Year</units>
+			</flow>
+			<aux name="avg time for est plants">
+				<doc>DEFINITION: time constant used in stock adjustment process for averaging total number of cellulosic facilities in system
+
+UNITS: year
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>3</eqn>
+				<units>year</units>
+			</aux>
+			<aux name="annualized avg PCEC YPA">
+				<doc>DEFINITION: calculates an estimate of average annual yield associated with perennial cellulosic energy crops over the entire &quot;feedstock shed&quot;
+
+UNITS: ton per acre per yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>MEAN(Total_Ag_Cellulose_Producing_Acres[PECrop, Region, *])*fraction_of_land_supplying_plant_PCEC</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="Min PCEC YPA">
+				<doc>DEFINITION: arbitrary minimum value for perennial cellulosic energy crop yield, used to rpevent division by zero in calculation of expected collection area
+
+UNITS: ton per acre per yr
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>2</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="annualized PCEC YPA input">
+				<doc>DEFINITION: sets floor on average annual yield associated with perennial cellulosic energy crops over the entire &quot;feedstock shed&quot;
+
+UNITS: ton per acre per yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="PECrop"/>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF annualized_avg_PCEC_YPA = 0 THEN Min_PCEC_YPA ELSE annualized_avg_PCEC_YPA</eqn>
+				<units>ton per acre per yr</units>
+			</aux>
+			<aux name="urban residue transport storage efficiency factor" access="output">
+				<doc>DEFINITION: estimate of fraction of urban residues retained after storage and transport
+
+UNITS: unitless
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>0.95</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="forest residue transport storage efficiency factor" access="output">
+				<doc>DEFINITION: estimate of fraction of forest residues retained after storage and transport
+
+UNITS: unitless
+
+TYPE: array | constant | technoeconomic input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>0.95</eqn>
+				<units>Unitless</units>
+			</aux>
+			<group name="Outputs to Other Modules" run="false">
+				<entity name="urban_residue_transport_storage_efficiency_factor"/>
+				<entity name="forest_residue_transport_storage_efficiency_factor"/>
+			</group>
+			<group name="Feedstock logistics params" run="false">
+				<entity name="avg_radial_weighting_factor"/>
+				<entity name="C_to_RR_Adv_Storage"/>
+				<entity name="two"/>
+				<entity name="C_to_EtOH_Adv_Prepro"/>
+				<entity name="adv_storage_loss_factor_HC"/>
+				<entity name="C_to_RR_Adv_Prepro"/>
+				<entity name="Urban_Res_Transport_CPT"/>
+				<entity name="conv_storage_loss_factor_HC"/>
+				<entity name="Expected_Residue_tons_per_load"/>
+				<entity name="C_to_EtOH_Adv_Storage"/>
+				<entity name="C_to_EtOH_Conv_Storage"/>
+				<entity name="Advanced_ForRes_HCCPT"/>
+				<entity name="C_to_EtOH_Conv_Q_H"/>
+				<entity name="fraction_of_land_supplying_plnt_residue"/>
+				<entity name="Advanced_Ag_Res_HCCPA"/>
+				<entity name="Conventional_UrbanRes_HCCPT"/>
+				<entity name="C_to_EtOH_Conv_Prepro"/>
+				<entity name="C_to_RR_Conv_Storage"/>
+				<entity name="Forest_Res_Transport_CPT"/>
+				<entity name="Expected_WC_tons_per_load"/>
+				<entity name="Depot_to_Plant_trans_cost"/>
+				<entity name="Advanced_UrbanRes_HCCPT"/>
+				<entity name="conv_harv_efficiency_residue"/>
+				<entity name="Initial_Transport_vbl_cost_per_mile"/>
+				<entity name="acres_per_square_mile"/>
+				<entity name="adv_storage_loss_factor_residue"/>
+				<entity name="Transport_Fixed_cost_per_load"/>
+				<entity name="Conventional_HC_HCCPA"/>
+				<entity name="adv_harvest_efficiency_HC"/>
+				<entity name="fraction_of_land_supplying_plant_PCEC"/>
+				<entity name="C_to_RR_Conv_Q_H"/>
+				<entity name="Advanced_HC_HCCPA"/>
+				<entity name="conv_harves_efficiency_HC"/>
+				<entity name="C_to_RR_Adv_Q_H"/>
+				<entity name="road_windage_factor"/>
+				<entity name="adv_storage_loss_factor_WC"/>
+				<entity name="conv_harvest_efficiency_WC"/>
+				<entity name="Transport_cost_multiplier"/>
+				<entity name="Conventional_Ag_Res_HCCPA"/>
+				<entity name="conv_storage_loss_factor_residue"/>
+				<entity name="C_to_EtOH_Adv_Q_H"/>
+				<entity name="conv_storage_loss_factor_WC"/>
+				<entity name="adv_harvest_efficiency_WC"/>
+				<entity name="Conventional_WC_HCCPA"/>
+				<entity name="adv_harv_efficiency_residue"/>
+				<entity name="one_project"/>
+				<entity name="Advanced_WC_HCCPA"/>
+				<entity name="Conventional_ForRes_HCCPT"/>
+				<entity name="Expected_HC_tons_per_load"/>
+				<entity name="C_to_RR_Conv_Prepro"/>
+			</group>
+			<group name="Feedstock Logistics" run="false">
+				<entity name="plants_with_conventional_logistics"/>
+				<entity name="total_cellulosic_plants"/>
+				<entity name="Est_Total_Cellulosic_Plants"/>
+				<entity name="chg_est_total_cellulosic_plants"/>
+				<entity name="Fraction_Producers_using_Conventional_FS"/>
+				<entity name="plant_threshold_for_advanced_logistics"/>
+				<entity name="plants_with_advanced_logistics"/>
+				<entity name="dynamic_frac_logistics_advanced"/>
+				<entity name="Fraction_Producers_Using_Advanced_FS"/>
+				<entity name="WOM_transition_to_adv_FS"/>
+				<entity name="base_WOM_producer_adv_FS"/>
+				<entity name="WOM_rate"/>
+				<entity name="conventional_producer_constraint"/>
+				<entity name="conversion_push_transition_to_adv_FS"/>
+				<entity name="HC_HCCPA"/>
+				<entity name="Ag_Res_HCCPA"/>
+				<entity name="ForRes_HCCPT"/>
+				<entity name="UrbanRes_HCCPT"/>
+				<entity name="Use_Dynamic_FS_Logistics_System"/>
+				<entity name="Use_Static_Advanced_System"/>
+				<entity name="avg_time_for_est_plants"/>
+				<entity name="fraction_Supply_System_advanced"/>
+				<entity name="frac_max_push_rate_from_supply_system"/>
+				<entity name="C_to_RR_PrePro_cost"/>
+				<entity name="C_to_RR_Q_H_cost"/>
+				<entity name="C_to_RR_storage_cost"/>
+				<entity name="max_push_rate_producer_adv_fs"/>
+				<entity name="push_rate"/>
+				<entity name="harvest_eff_residue_by_region"/>
+				<entity name="harvest_eff_HC_by_region"/>
+				<entity name="harvest_eff_WC_by_region"/>
+				<entity name="WC_HCCPA"/>
+				<entity name="HC_harvest_storage_efficiency_factor"/>
+				<entity name="WC_harvest_storage_efficiency_factor"/>
+				<entity name="storage_loss_HC_by_region"/>
+				<entity name="residue_harvest_storage_efficiency_factor"/>
+				<entity name="storage_loss_residue_by_region"/>
+				<entity name="C_to_EtOH_Q_H_cost"/>
+				<entity name="C_to_A_PrePro_cost"/>
+				<entity name="C_to_EtOH_storage_cost"/>
+				<entity name="Depot_to_Plant_trans_cost_input"/>
+				<entity name="C_to_RR_PreProcess_Cost"/>
+				<entity name="C_to_EtOH_PreProcess_Cost"/>
+				<entity name="storage_loss_WC_by_region"/>
+				<entity name="expected_collection_area_sq_mi"/>
+				<entity name="radial_distance_from_edge_to_plant"/>
+				<entity name="avg_radial_distance_from_roadside_to_plant"/>
+				<entity name="Avg_travel_distance_to_plant"/>
+				<entity name="Transport_Variable_cost_per_load"/>
+				<entity name="Transport_vbl_cost_per_mile"/>
+				<entity name="Transport_Total_cost_per_load"/>
+				<entity name="HC_Transport_CPT"/>
+				<entity name="WC_Transport_CPT"/>
+				<entity name="Residue_Transport_CPT"/>
+				<entity name="aggregate_avg_yield_for_collection_area"/>
+				<entity name="annualized_avg_PCEC_YPA"/>
+				<entity name="annualized_PCEC_YPA_input"/>
+				<entity name="expected_collection_area_acres"/>
+				<entity name="one_thousand"/>
+				<entity name="total_Collection_Area"/>
+				<entity name="total_required_cellulosic_acres"/>
+				<entity name="Min_PCEC_YPA"/>
+			</group>
+			<group name="Inputs from other modules" run="false">
+				<entity name="Total_Ag_Cellulose_Producing_Acres"/>
+				<entity name="FSM_residue_yield"/>
+				<entity name="reqd_annual_feedstock_supply_tpy"/>
+				<entity name="Est_Ag_Cellulosic_plants_incl_pipeline"/>
+			</group>
+			<isee:dependencies>
+				<var name="HC_HCCPA">
+					<in>Advanced_HC_HCCPA</in>
+					<in>Conventional_HC_HCCPA</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+				</var>
+				<var name="residue_harvest_storage_efficiency_factor">
+					<in>storage_loss_residue_by_region</in>
+					<in>harvest_eff_residue_by_region</in>
+				</var>
+				<var name="WC_HCCPA">
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+					<in>Conventional_WC_HCCPA</in>
+					<in>Advanced_WC_HCCPA</in>
+				</var>
+				<var name="plants_with_conventional_logistics">
+					<in>plants_with_advanced_logistics</in>
+					<in>total_cellulosic_plants</in>
+				</var>
+				<var name="HC_harvest_storage_efficiency_factor">
+					<in>harvest_eff_HC_by_region</in>
+					<in>storage_loss_HC_by_region</in>
+				</var>
+				<var name="plants_with_advanced_logistics">
+					<in>plant_threshold_for_advanced_logistics</in>
+					<in>total_cellulosic_plants</in>
+				</var>
+				<var name="WC_harvest_storage_efficiency_factor">
+					<in>harvest_eff_WC_by_region</in>
+					<in>storage_loss_WC_by_region</in>
+				</var>
+				<var name="WOM_transition_to_adv_FS">
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+					<in>WOM_rate</in>
+				</var>
+				<var name="fraction_Supply_System_advanced">
+					<in>Use_Dynamic_FS_Logistics_System</in>
+					<in>Use_Static_Advanced_System</in>
+					<in>dynamic_frac_logistics_advanced</in>
+				</var>
+				<var name="C_to_RR_PrePro_cost">
+					<in>fraction_Supply_System_advanced</in>
+					<in>C_to_RR_Conv_Prepro</in>
+					<in>C_to_RR_Adv_Prepro</in>
+				</var>
+				<var name="total_cellulosic_plants">
+					<in>Est_Total_Cellulosic_Plants</in>
+				</var>
+				<var name="C_to_RR_Q_H_cost">
+					<in>C_to_RR_Adv_Q_H</in>
+					<in>C_to_RR_Conv_Q_H</in>
+					<in>fraction_Supply_System_advanced</in>
+				</var>
+				<var name="C_to_RR_storage_cost">
+					<in>fraction_Supply_System_advanced</in>
+					<in>C_to_RR_Conv_Storage</in>
+					<in>C_to_RR_Adv_Storage</in>
+				</var>
+				<var name="C_to_RR_PreProcess_Cost">
+					<in>C_to_RR_PrePro_cost</in>
+					<in>C_to_RR_storage_cost</in>
+					<in>Depot_to_Plant_trans_cost_input</in>
+					<in>C_to_RR_Q_H_cost</in>
+				</var>
+				<var name="harvest_eff_residue_by_region">
+					<in>conv_harv_efficiency_residue</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+					<in>adv_harv_efficiency_residue</in>
+				</var>
+				<var name="storage_loss_residue_by_region">
+					<in>fraction_Supply_System_advanced</in>
+					<in>conv_storage_loss_factor_residue</in>
+					<in>adv_storage_loss_factor_residue</in>
+				</var>
+				<var name="harvest_eff_HC_by_region">
+					<in>conv_harves_efficiency_HC</in>
+					<in>adv_harvest_efficiency_HC</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+				</var>
+				<var name="storage_loss_HC_by_region">
+					<in>adv_storage_loss_factor_HC</in>
+					<in>conv_storage_loss_factor_HC</in>
+					<in>fraction_Supply_System_advanced</in>
+				</var>
+				<var name="Ag_Res_HCCPA">
+					<in>Advanced_Ag_Res_HCCPA</in>
+					<in>Conventional_Ag_Res_HCCPA</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+				</var>
+				<var name="ForRes_HCCPT">
+					<in>Conventional_ForRes_HCCPT</in>
+					<in>Advanced_ForRes_HCCPT</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+				</var>
+				<var name="UrbanRes_HCCPT">
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+					<in>Advanced_UrbanRes_HCCPT</in>
+					<in>Conventional_UrbanRes_HCCPT</in>
+				</var>
+				<var name="WOM_rate">
+					<in>conventional_producer_constraint</in>
+					<in>base_WOM_producer_adv_FS</in>
+				</var>
+				<var name="conventional_producer_constraint">
+					<in>Fraction_Producers_using_Conventional_FS</in>
+				</var>
+				<var name="conversion_push_transition_to_adv_FS">
+					<in>Fraction_Producers_using_Conventional_FS</in>
+					<in>push_rate</in>
+				</var>
+				<var name="frac_max_push_rate_from_supply_system">
+					<in>fraction_Supply_System_advanced</in>
+				</var>
+				<var name="push_rate">
+					<in>frac_max_push_rate_from_supply_system</in>
+					<in>max_push_rate_producer_adv_fs</in>
+				</var>
+				<var name="Depot_to_Plant_trans_cost_input">
+					<in>fraction_Supply_System_advanced</in>
+					<in>Depot_to_Plant_trans_cost</in>
+				</var>
+				<var name="dynamic_frac_logistics_advanced">
+					<in>total_cellulosic_plants</in>
+					<in>plants_with_advanced_logistics</in>
+				</var>
+				<var name="harvest_eff_WC_by_region">
+					<in>adv_harvest_efficiency_WC</in>
+					<in>conv_harvest_efficiency_WC</in>
+					<in>Fraction_Producers_Using_Advanced_FS</in>
+				</var>
+				<var name="storage_loss_WC_by_region">
+					<in>adv_storage_loss_factor_WC</in>
+					<in>fraction_Supply_System_advanced</in>
+					<in>conv_storage_loss_factor_WC</in>
+				</var>
+				<var name="C_to_EtOH_PreProcess_Cost">
+					<in>Depot_to_Plant_trans_cost_input</in>
+					<in>C_to_A_PrePro_cost</in>
+					<in>C_to_EtOH_Q_H_cost</in>
+					<in>C_to_EtOH_storage_cost</in>
+				</var>
+				<var name="C_to_A_PrePro_cost">
+					<in>C_to_EtOH_Adv_Prepro</in>
+					<in>C_to_EtOH_Conv_Prepro</in>
+					<in>fraction_Supply_System_advanced</in>
+				</var>
+				<var name="C_to_EtOH_Q_H_cost">
+					<in>fraction_Supply_System_advanced</in>
+					<in>C_to_EtOH_Conv_Q_H</in>
+					<in>C_to_EtOH_Adv_Q_H</in>
+				</var>
+				<var name="C_to_EtOH_storage_cost">
+					<in>fraction_Supply_System_advanced</in>
+					<in>C_to_EtOH_Adv_Storage</in>
+					<in>C_to_EtOH_Conv_Storage</in>
+				</var>
+				<var name="HC_Transport_CPT">
+					<in>Expected_HC_tons_per_load</in>
+					<in>Transport_Total_cost_per_load</in>
+				</var>
+				<var name="WC_Transport_CPT">
+					<in>Expected_WC_tons_per_load</in>
+					<in>Transport_Total_cost_per_load</in>
+				</var>
+				<var name="expected_collection_area_sq_mi">
+					<in>acres_per_square_mile</in>
+					<in>expected_collection_area_acres</in>
+				</var>
+				<var name="aggregate_avg_yield_for_collection_area">
+					<in>fraction_of_land_supplying_plnt_residue</in>
+					<in>annualized_PCEC_YPA_input</in>
+					<in>FSM_residue_yield</in>
+				</var>
+				<var name="radial_distance_from_edge_to_plant">
+					<in>expected_collection_area_sq_mi</in>
+				</var>
+				<var name="avg_radial_distance_from_roadside_to_plant">
+					<in>radial_distance_from_edge_to_plant</in>
+					<in>avg_radial_weighting_factor</in>
+				</var>
+				<var name="Avg_travel_distance_to_plant">
+					<in>avg_radial_distance_from_roadside_to_plant</in>
+					<in>road_windage_factor</in>
+				</var>
+				<var name="Residue_Transport_CPT">
+					<in>Transport_Total_cost_per_load</in>
+					<in>Expected_Residue_tons_per_load</in>
+				</var>
+				<var name="Transport_Variable_cost_per_load">
+					<in>Transport_vbl_cost_per_mile</in>
+					<in>two</in>
+					<in>Avg_travel_distance_to_plant</in>
+				</var>
+				<var name="Transport_Total_cost_per_load">
+					<in>Transport_Variable_cost_per_load</in>
+					<in>Transport_Fixed_cost_per_load</in>
+				</var>
+				<var name="Transport_vbl_cost_per_mile">
+					<in>Transport_cost_multiplier</in>
+					<in>Initial_Transport_vbl_cost_per_mile</in>
+				</var>
+				<var name="total_Collection_Area">
+					<in>one_project</in>
+					<in>expected_collection_area_acres</in>
+					<in>one_thousand</in>
+					<in>Est_Ag_Cellulosic_plants_incl_pipeline</in>
+				</var>
+				<var name="total_required_cellulosic_acres">
+					<in>total_Collection_Area</in>
+				</var>
+				<var name="expected_collection_area_acres">
+					<in>reqd_annual_feedstock_supply_tpy</in>
+					<in>aggregate_avg_yield_for_collection_area</in>
+				</var>
+				<var name="chg_est_total_cellulosic_plants">
+					<in>Est_Total_Cellulosic_Plants</in>
+					<in>avg_time_for_est_plants</in>
+					<in>Est_Ag_Cellulosic_plants_incl_pipeline</in>
+				</var>
+				<var name="annualized_avg_PCEC_YPA">
+					<in>fraction_of_land_supplying_plant_PCEC</in>
+					<in>Total_Ag_Cellulose_Producing_Acres</in>
+				</var>
+				<var name="annualized_PCEC_YPA_input">
+					<in>annualized_avg_PCEC_YPA</in>
+					<in>Min_PCEC_YPA</in>
+				</var>
+			</isee:dependencies>
+		</variables>
+		<views>
+			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+				<isee:loop_indicator color="black" background="white"/>
+				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<isee:series_styles>
+						<isee:series_style color="blue" thickness="1"/>
+						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF7F00" thickness="1"/>
+						<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF007F" thickness="1"/>
+						<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#C8C8C8" thickness="1"/>
+					</isee:series_styles>
+				</graph>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
+				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
+				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<lamp color="black" background="white" font_size="9pt"/>
+				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
+				<isee:spatial_map color="black" background="white"/>
+				<isee:animation_object color="black" background="white"/>
+			</style>
+			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="4" isee:page_rows="5" isee:popup_graphs_are_comparative="true" type="stock_flow">
+				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="45" height="35"/>
+					</stock>
+					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="55" height="45"/>
+					</module>
+					<aux color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom">
+						<shape type="circle" radius="18"/>
+					</aux>
+					<group color="red" background="white" font_color="red" font_size="9pt"/>
+					<connector color="black" background="white" font_size="9pt" isee:thickness="1"/>
+					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+					<isee:loop_indicator color="black" background="white"/>
+					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+						<isee:series_styles>
+							<isee:series_style color="blue" thickness="1"/>
+							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF7F00" thickness="1"/>
+							<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF007F" thickness="1"/>
+							<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#C8C8C8" thickness="1"/>
+						</isee:series_styles>
+					</graph>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				</style>
+				<connector uid="2894" angle="159.444">
+					<from>
+						<alias uid="2895"/>
+					</from>
+					<to>storage_loss_HC_by_region</to>
+				</connector>
+				<connector uid="2896" angle="0">
+					<from>harvest_eff_WC_by_region</from>
+					<to>WC_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="2897" angle="0">
+					<from>Use_Dynamic_FS_Logistics_System</from>
+					<to>fraction_Supply_System_advanced</to>
+				</connector>
+				<connector uid="2898" angle="35.5377">
+					<from>
+						<alias uid="2899"/>
+					</from>
+					<to>storage_loss_HC_by_region</to>
+				</connector>
+				<connector uid="2900" angle="353.66">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_RR_PrePro_cost</to>
+				</connector>
+				<connector uid="2901" angle="147.995">
+					<from>
+						<alias uid="2902"/>
+					</from>
+					<to>aggregate_avg_yield_for_collection_area</to>
+				</connector>
+				<connector uid="2903" angle="6.34019">
+					<from>
+						<alias uid="2904"/>
+					</from>
+					<to>C_to_RR_PrePro_cost</to>
+				</connector>
+				<connector uid="2905" angle="45">
+					<from>
+						<alias uid="2906"/>
+					</from>
+					<to>total_Collection_Area</to>
+				</connector>
+				<connector uid="2907" color="#5E5E5E" angle="344.745">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>UrbanRes_HCCPT</to>
+				</connector>
+				<connector uid="2908" angle="96.3402">
+					<from>
+						<alias uid="2909"/>
+					</from>
+					<to>Ag_Res_HCCPA</to>
+				</connector>
+				<connector uid="2910" angle="324.462">
+					<from>
+						<alias uid="2911"/>
+					</from>
+					<to>C_to_A_PrePro_cost</to>
+				</connector>
+				<connector uid="2912" angle="0">
+					<from>
+						<alias uid="2913"/>
+					</from>
+					<to>WC_Transport_CPT</to>
+				</connector>
+				<connector uid="2914" angle="0">
+					<from>frac_max_push_rate_from_supply_system</from>
+					<to>push_rate</to>
+				</connector>
+				<connector uid="2915" angle="270">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_EtOH_storage_cost</to>
+				</connector>
+				<connector uid="2916" color="#5E5E5E" angle="335.556">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>WC_HCCPA</to>
+				</connector>
+				<connector uid="2917" angle="234.462">
+					<from>
+						<alias uid="2918"/>
+					</from>
+					<to>C_to_EtOH_storage_cost</to>
+				</connector>
+				<connector uid="2919" angle="234.462">
+					<from>
+						<alias uid="2920"/>
+					</from>
+					<to>C_to_RR_Q_H_cost</to>
+				</connector>
+				<connector uid="2921" angle="18.4349">
+					<from>
+						<alias uid="2922"/>
+					</from>
+					<to>storage_loss_WC_by_region</to>
+				</connector>
+				<connector uid="2923" angle="90">
+					<from>
+						<alias uid="2924"/>
+					</from>
+					<to>expected_collection_area_acres</to>
+				</connector>
+				<connector uid="2925" angle="302.005">
+					<from>fraction_Supply_System_advanced</from>
+					<to>Depot_to_Plant_trans_cost_input</to>
+				</connector>
+				<connector uid="2926" angle="0">
+					<from>
+						<alias uid="2927"/>
+					</from>
+					<to>UrbanRes_HCCPT</to>
+				</connector>
+				<connector uid="2928" angle="32.0054">
+					<from>
+						<alias uid="2929"/>
+					</from>
+					<to>storage_loss_residue_by_region</to>
+				</connector>
+				<connector uid="2930" angle="173.66">
+					<from>
+						<alias uid="2931"/>
+					</from>
+					<to>harvest_eff_HC_by_region</to>
+				</connector>
+				<connector uid="2932" angle="0">
+					<from>C_to_RR_PrePro_cost</from>
+					<to>C_to_RR_PreProcess_Cost</to>
+				</connector>
+				<connector uid="2933" angle="180">
+					<from>
+						<alias uid="2934"/>
+					</from>
+					<to>WC_HCCPA</to>
+				</connector>
+				<connector uid="2935" angle="0">
+					<from>harvest_eff_HC_by_region</from>
+					<to>HC_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="2936" angle="212.005">
+					<from>
+						<alias uid="2937"/>
+					</from>
+					<to>storage_loss_residue_by_region</to>
+				</connector>
+				<connector uid="2938" angle="208.61">
+					<from>Est_Total_Cellulosic_Plants</from>
+					<to>chg_est_total_cellulosic_plants</to>
+				</connector>
+				<connector uid="2939" angle="180">
+					<from>plant_threshold_for_advanced_logistics</from>
+					<to>plants_with_advanced_logistics</to>
+				</connector>
+				<connector uid="2940" angle="353.66">
+					<from>Depot_to_Plant_trans_cost_input</from>
+					<to>C_to_EtOH_PreProcess_Cost</to>
+				</connector>
+				<connector uid="2941" angle="327.995">
+					<from>C_to_RR_storage_cost</from>
+					<to>C_to_RR_PreProcess_Cost</to>
+				</connector>
+				<connector uid="2942" angle="341.565">
+					<from>Use_Static_Advanced_System</from>
+					<to>fraction_Supply_System_advanced</to>
+				</connector>
+				<connector uid="2943" angle="39.8056">
+					<from>Transport_Total_cost_per_load</from>
+					<to>Residue_Transport_CPT</to>
+				</connector>
+				<connector uid="2944" angle="180">
+					<from>
+						<alias uid="2945"/>
+					</from>
+					<to>UrbanRes_HCCPT</to>
+				</connector>
+				<connector uid="2946" angle="90">
+					<from>storage_loss_WC_by_region</from>
+					<to>WC_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="2947" angle="0">
+					<from>total_cellulosic_plants</from>
+					<to>plants_with_advanced_logistics</to>
+				</connector>
+				<connector uid="2948" angle="0">
+					<from>
+						<alias uid="2949"/>
+					</from>
+					<to>expected_collection_area_sq_mi</to>
+				</connector>
+				<connector uid="2950" angle="333.435">
+					<from>
+						<alias uid="2951"/>
+					</from>
+					<to>Depot_to_Plant_trans_cost_input</to>
+				</connector>
+				<connector uid="2952" angle="212.005">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_EtOH_Q_H_cost</to>
+				</connector>
+				<connector uid="2953" angle="0">
+					<from>Transport_Variable_cost_per_load</from>
+					<to>Transport_Total_cost_per_load</to>
+				</connector>
+				<connector uid="2954" angle="35.5377">
+					<from>Transport_vbl_cost_per_mile</from>
+					<to>Transport_Variable_cost_per_load</to>
+				</connector>
+				<connector uid="2955" angle="347.471">
+					<from>
+						<alias uid="2956"/>
+					</from>
+					<to>C_to_RR_Q_H_cost</to>
+				</connector>
+				<connector uid="2957" angle="153.435">
+					<from>
+						<alias uid="2958"/>
+					</from>
+					<to>harvest_eff_WC_by_region</to>
+				</connector>
+				<connector uid="2959" angle="153.435">
+					<from>
+						<alias uid="2960"/>
+					</from>
+					<to>harvest_eff_HC_by_region</to>
+				</connector>
+				<connector uid="2961" angle="300.466">
+					<from>Fraction_Producers_using_Conventional_FS</from>
+					<to>conventional_producer_constraint</to>
+				</connector>
+				<connector uid="2962" angle="0">
+					<from>
+						<alias uid="2963"/>
+					</from>
+					<to>C_to_A_PrePro_cost</to>
+				</connector>
+				<connector uid="2964" angle="0">
+					<from>Transport_Total_cost_per_load</from>
+					<to>WC_Transport_CPT</to>
+				</connector>
+				<connector uid="2965" angle="12.5288">
+					<from>Depot_to_Plant_trans_cost_input</from>
+					<to>C_to_RR_PreProcess_Cost</to>
+				</connector>
+				<connector uid="2966" angle="0">
+					<from>expected_collection_area_acres</from>
+					<to>total_Collection_Area</to>
+				</connector>
+				<connector uid="2967" angle="319.399">
+					<from>
+						<alias uid="2968"/>
+					</from>
+					<to>C_to_EtOH_Q_H_cost</to>
+				</connector>
+				<connector uid="2969" angle="0">
+					<from>avg_radial_distance_from_roadside_to_plant</from>
+					<to>Avg_travel_distance_to_plant</to>
+				</connector>
+				<connector uid="2970" angle="90">
+					<from>
+						<alias uid="2929"/>
+					</from>
+					<to>storage_loss_HC_by_region</to>
+				</connector>
+				<connector uid="2971" angle="186.34">
+					<from>
+						<alias uid="2972"/>
+					</from>
+					<to>ForRes_HCCPT</to>
+				</connector>
+				<connector uid="2973" angle="0">
+					<from>
+						<alias uid="2974"/>
+					</from>
+					<to>HC_Transport_CPT</to>
+				</connector>
+				<connector uid="2975" angle="220.601">
+					<from>
+						<alias uid="2929"/>
+					</from>
+					<to>storage_loss_WC_by_region</to>
+				</connector>
+				<connector uid="2976" angle="0">
+					<from>radial_distance_from_edge_to_plant</from>
+					<to>avg_radial_distance_from_roadside_to_plant</to>
+				</connector>
+				<connector uid="2977" angle="20.556">
+					<from>
+						<alias uid="2978"/>
+					</from>
+					<to>C_to_EtOH_Q_H_cost</to>
+				</connector>
+				<connector uid="2979" angle="90">
+					<from>storage_loss_HC_by_region</from>
+					<to>HC_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="2980" angle="234.782">
+					<from>Fraction_Producers_using_Conventional_FS</from>
+					<to>conversion_push_transition_to_adv_FS</to>
+				</connector>
+				<connector uid="2981" angle="212.005">
+					<from>
+						<alias uid="2982"/>
+					</from>
+					<to>C_to_RR_PrePro_cost</to>
+				</connector>
+				<connector uid="2983" angle="226.736">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>WOM_transition_to_adv_FS</to>
+				</connector>
+				<connector uid="2984" angle="90">
+					<from>
+						<alias uid="2985"/>
+					</from>
+					<to>HC_HCCPA</to>
+				</connector>
+				<connector uid="2986" angle="220.601">
+					<from>plants_with_advanced_logistics</from>
+					<to>plants_with_conventional_logistics</to>
+				</connector>
+				<connector uid="2987" angle="90">
+					<from>annualized_avg_PCEC_YPA</from>
+					<to>annualized_PCEC_YPA_input</to>
+				</connector>
+				<connector uid="2988" angle="20.556">
+					<from>
+						<alias uid="2989"/>
+					</from>
+					<to>annualized_PCEC_YPA_input</to>
+				</connector>
+				<connector uid="2990" angle="319.399">
+					<from>
+						<alias uid="2991"/>
+					</from>
+					<to>Avg_travel_distance_to_plant</to>
+				</connector>
+				<connector uid="2992" angle="270">
+					<from>one_thousand</from>
+					<to>total_Collection_Area</to>
+				</connector>
+				<connector uid="2993" angle="270">
+					<from>dynamic_frac_logistics_advanced</from>
+					<to>fraction_Supply_System_advanced</to>
+				</connector>
+				<connector uid="2994" angle="90">
+					<from>annualized_PCEC_YPA_input</from>
+					<to>aggregate_avg_yield_for_collection_area</to>
+				</connector>
+				<connector uid="2995" angle="106.39">
+					<from>Est_Total_Cellulosic_Plants</from>
+					<to>total_cellulosic_plants</to>
+				</connector>
+				<connector uid="2996" angle="93.9116">
+					<from>
+						<alias uid="2997"/>
+					</from>
+					<to>Transport_Total_cost_per_load</to>
+				</connector>
+				<connector uid="2998" angle="90">
+					<from>expected_collection_area_sq_mi</from>
+					<to>radial_distance_from_edge_to_plant</to>
+				</connector>
+				<connector uid="2999" angle="319.399">
+					<from>
+						<alias uid="3000"/>
+					</from>
+					<to>avg_radial_distance_from_roadside_to_plant</to>
+				</connector>
+				<connector uid="3001" angle="90">
+					<from>storage_loss_residue_by_region</from>
+					<to>residue_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="3002" angle="276.34">
+					<from>total_cellulosic_plants</from>
+					<to>dynamic_frac_logistics_advanced</to>
+				</connector>
+				<connector uid="3003" angle="173.66">
+					<from>
+						<alias uid="3004"/>
+					</from>
+					<to>harvest_eff_residue_by_region</to>
+				</connector>
+				<connector uid="3005" angle="220.601">
+					<from>
+						<alias uid="3006"/>
+					</from>
+					<to>storage_loss_residue_by_region</to>
+				</connector>
+				<connector uid="3007" angle="341.565">
+					<from>C_to_A_PrePro_cost</from>
+					<to>C_to_EtOH_PreProcess_Cost</to>
+				</connector>
+				<connector uid="3008" angle="180">
+					<from>max_push_rate_producer_adv_fs</from>
+					<to>push_rate</to>
+				</connector>
+				<connector uid="3009" angle="324.462">
+					<from>total_cellulosic_plants</from>
+					<to>plants_with_conventional_logistics</to>
+				</connector>
+				<connector uid="3010" angle="339.444">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_RR_Q_H_cost</to>
+				</connector>
+				<connector uid="3011" angle="333.435">
+					<from>
+						<alias uid="3012"/>
+					</from>
+					<to>Transport_Variable_cost_per_load</to>
+				</connector>
+				<connector uid="3013" angle="0">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_RR_storage_cost</to>
+				</connector>
+				<connector uid="3014" angle="17.1027">
+					<from>Transport_Total_cost_per_load</from>
+					<to>HC_Transport_CPT</to>
+				</connector>
+				<connector uid="3015" angle="0">
+					<from>aggregate_avg_yield_for_collection_area</from>
+					<to>expected_collection_area_acres</to>
+				</connector>
+				<connector uid="3016" angle="347.471">
+					<from>
+						<alias uid="3017"/>
+					</from>
+					<to>C_to_RR_storage_cost</to>
+				</connector>
+				<connector uid="3018" angle="35.5377">
+					<from>
+						<alias uid="3019"/>
+					</from>
+					<to>Transport_vbl_cost_per_mile</to>
+				</connector>
+				<connector uid="3020" angle="345.964">
+					<from>C_to_EtOH_Q_H_cost</from>
+					<to>C_to_EtOH_PreProcess_Cost</to>
+				</connector>
+				<connector uid="3021" angle="153.435">
+					<from>
+						<alias uid="3022"/>
+					</from>
+					<to>chg_est_total_cellulosic_plants</to>
+				</connector>
+				<connector uid="3023" angle="90">
+					<from>push_rate</from>
+					<to>conversion_push_transition_to_adv_FS</to>
+				</connector>
+				<connector uid="3024" angle="315">
+					<from>conventional_producer_constraint</from>
+					<to>WOM_rate</to>
+				</connector>
+				<connector uid="3025" angle="180">
+					<from>
+						<alias uid="3026"/>
+					</from>
+					<to>HC_HCCPA</to>
+				</connector>
+				<connector uid="3027" angle="0">
+					<from>
+						<alias uid="3028"/>
+					</from>
+					<to>Transport_vbl_cost_per_mile</to>
+				</connector>
+				<connector uid="3029" angle="147.995">
+					<from>
+						<alias uid="3030"/>
+					</from>
+					<to>annualized_avg_PCEC_YPA</to>
+				</connector>
+				<connector uid="3031" angle="90">
+					<from>expected_collection_area_acres</from>
+					<to>expected_collection_area_sq_mi</to>
+				</connector>
+				<connector uid="3032" angle="0">
+					<from>C_to_RR_Q_H_cost</from>
+					<to>C_to_RR_PreProcess_Cost</to>
+				</connector>
+				<connector uid="3033" angle="180">
+					<from>
+						<alias uid="3034"/>
+					</from>
+					<to>Ag_Res_HCCPA</to>
+				</connector>
+				<connector uid="3035" angle="9.46232">
+					<from>C_to_EtOH_storage_cost</from>
+					<to>C_to_EtOH_PreProcess_Cost</to>
+				</connector>
+				<connector uid="3036" angle="310.601">
+					<from>
+						<alias uid="3037"/>
+					</from>
+					<to>C_to_EtOH_storage_cost</to>
+				</connector>
+				<connector uid="3038" angle="0">
+					<from>harvest_eff_residue_by_region</from>
+					<to>residue_harvest_storage_efficiency_factor</to>
+				</connector>
+				<connector uid="3039" angle="325.713">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>harvest_eff_residue_by_region</to>
+				</connector>
+				<connector uid="3040" angle="18.4349">
+					<from>
+						<alias uid="3041"/>
+					</from>
+					<to>ForRes_HCCPT</to>
+				</connector>
+				<connector uid="3042" angle="0">
+					<from>Avg_travel_distance_to_plant</from>
+					<to>Transport_Variable_cost_per_load</to>
+				</connector>
+				<connector uid="3043" angle="122.005">
+					<from>
+						<alias uid="3044"/>
+					</from>
+					<to>chg_est_total_cellulosic_plants</to>
+				</connector>
+				<connector uid="3045" angle="90">
+					<from>
+						<alias uid="3046"/>
+					</from>
+					<to>annualized_avg_PCEC_YPA</to>
+				</connector>
+				<connector uid="3047" angle="311.424">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>harvest_eff_HC_by_region</to>
+				</connector>
+				<connector uid="3048" angle="90">
+					<from>
+						<alias uid="3049"/>
+					</from>
+					<to>total_Collection_Area</to>
+				</connector>
+				<connector uid="3050" angle="45">
+					<from>
+						<alias uid="3051"/>
+					</from>
+					<to>aggregate_avg_yield_for_collection_area</to>
+				</connector>
+				<connector uid="3052" angle="339.444">
+					<from>
+						<alias uid="3053"/>
+					</from>
+					<to>storage_loss_WC_by_region</to>
+				</connector>
+				<connector uid="3054" angle="71.5651">
+					<from>base_WOM_producer_adv_FS</from>
+					<to>WOM_rate</to>
+				</connector>
+				<connector uid="3055" angle="32.0054">
+					<from>fraction_Supply_System_advanced</from>
+					<to>frac_max_push_rate_from_supply_system</to>
+				</connector>
+				<connector uid="3056" angle="173.66">
+					<from>
+						<alias uid="3057"/>
+					</from>
+					<to>harvest_eff_residue_by_region</to>
+				</connector>
+				<connector uid="3058" angle="270">
+					<from>plants_with_advanced_logistics</from>
+					<to>dynamic_frac_logistics_advanced</to>
+				</connector>
+				<connector uid="3059" color="#5E5E5E" angle="354.806">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>ForRes_HCCPT</to>
+				</connector>
+				<connector uid="3060" color="#5E5E5E" angle="7.76517">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>HC_HCCPA</to>
+				</connector>
+				<connector uid="3061" angle="0">
+					<from>
+						<alias uid="3062"/>
+					</from>
+					<to>Residue_Transport_CPT</to>
+				</connector>
+				<connector uid="3063" angle="90">
+					<from>WOM_rate</from>
+					<to>WOM_transition_to_adv_FS</to>
+				</connector>
+				<connector uid="3064" color="#5E5E5E" angle="12.8043">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>Ag_Res_HCCPA</to>
+				</connector>
+				<connector uid="3065" angle="282.529">
+					<from>
+						<alias uid="3066"/>
+					</from>
+					<to>C_to_RR_storage_cost</to>
+				</connector>
+				<connector uid="3067" angle="0">
+					<from>
+						<alias uid="3068"/>
+					</from>
+					<to>WC_HCCPA</to>
+				</connector>
+				<connector uid="3069" angle="173.66">
+					<from>
+						<alias uid="3070"/>
+					</from>
+					<to>harvest_eff_WC_by_region</to>
+				</connector>
+				<connector uid="3071" angle="297.897">
+					<from>Fraction_Producers_Using_Advanced_FS</from>
+					<to>harvest_eff_WC_by_region</to>
+				</connector>
+				<connector uid="3072" angle="0">
+					<from>total_Collection_Area</from>
+					<to>total_required_cellulosic_acres</to>
+				</connector>
+				<connector uid="3073" angle="255.964">
+					<from>fraction_Supply_System_advanced</from>
+					<to>C_to_A_PrePro_cost</to>
+				</connector>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="3074" x="1485" y="1989" width="363" height="56">Conventional and AdvancedBLM-ish inputs for Storage, Q+H, Preprocessing cost.  Inputs to C to RR and C to EtOH</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="3075" x="1102" y="1973" width="360" height="52">Conventional and Advanced harvest and collection costs per acre</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="3076" x="1095" y="2220" width="360" height="36">Harvest efficiency and storage loss factors</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="3077" x="2277" y="1140" width="162" height="191">Transportation (Ag Products)  Farm to conventional plant or to depot</text_box>
+				<aux color="red" font_color="red" label_angle="1.87432" x="1503" y="2093" name="C to EtOH Conv Q H"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="35.6067" x="1992" y="145" name="HC HCCPA"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="27.6086" x="2588" y="488" name="residue harvest storage efficiency factor"/>
+				<stock color="black" font_color="black" label_angle="84.9098" x="1671" y="186" name="Fraction Producers Using Advanced FS"/>
+				<aux color="#65183E" font_color="#65183E" x="2180" y="405" name="WC HCCPA"/>
+				<stock color="black" font_color="black" label_angle="141.204" x="1453" y="189" name="Fraction Producers using Conventional FS"/>
+				<aux color="red" font_color="red" label_side="right" label_angle="315" x="1333" y="67" name="plant threshold for advanced logistics"/>
+				<aux color="black" font_color="black" label_angle="233.451" x="1078" y="140" name="plants with conventional logistics"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="33.0174" x="2448" y="575" name="HC harvest storage efficiency factor"/>
+				<aux color="black" font_color="black" label_angle="334.598" x="1161" y="67" name="plants with advanced logistics"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="45.5406" x="2358" y="683" name="WC harvest storage efficiency factor"/>
+				<flow color="black" font_color="black" label_angle="262.424" x="1556" y="184" name="WOM transition to adv FS">
+					<pts>
+						<pt x="1475.5" y="184"/>
+						<pt x="1648.5" y="184"/>
+					</pts>
+				</flow>
+				<aux color="red" font_color="red" label_angle="1.54128" x="1115" y="2311" name="conv harves efficiency HC"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="142.149" x="1161" y="541" name="fraction Supply System advanced"/>
+				<aux color="black" font_color="black" label_angle="140.988" x="1662" y="597" name="C to RR PrePro cost"/>
+				<aux color="black" font_color="black" label_angle="51.7939" x="964" y="67" name="total cellulosic plants"/>
+				<aux color="red" font_color="red" label_angle="359.097" x="1340" y="2076" name="Advanced HC HCCPA"/>
+				<aux color="red" font_color="red" label_angle="0.817302" x="1136" y="2076" name="Conventional HC HCCPA"/>
+				<aux color="black" font_color="black" label_angle="348.447" x="1429" y="648" name="C to RR Q H cost"/>
+				<aux color="black" font_color="black" label_angle="189.038" x="1839" y="541" name="C to RR storage cost"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="293.149" x="1962" y="715" name="C to RR PreProcess Cost"/>
+				<aux color="red" font_color="red" label_angle="2.02582" x="1504" y="2235" name="C to RR Conv Q H"/>
+				<aux color="red" font_color="red" label_angle="4.61417" x="1503" y="2192" name="C to RR Conv Storage"/>
+				<aux color="red" font_color="red" label_angle="0.925135" x="1508" y="2288" name="C to RR Conv Prepro"/>
+				<aux color="red" font_color="red" label_angle="358.934" x="1661" y="2231" name="C to RR Adv Q H"/>
+				<aux color="red" font_color="red" label_angle="359.067" x="1661" y="2182" name="C to RR Adv Storage"/>
+				<aux color="red" font_color="red" label_side="right" x="1663" y="2282" name="C to RR Adv Prepro"/>
+				<aux color="red" font_color="red" label_side="right" x="1113" y="2344" name="conv harvest efficiency WC"/>
+				<aux color="red" font_color="red" label_angle="4.3621" x="1114" y="2382" name="conv storage loss factor residue"/>
+				<aux color="red" font_color="red" label_angle="3.05864" x="1115" y="2414" name="conv storage loss factor HC"/>
+				<aux color="red" font_color="red" label_side="right" x="1115" y="2445" name="conv storage loss factor WC"/>
+				<aux color="red" font_color="red" label_angle="3.1856" x="1306" y="2310" name="adv harvest efficiency HC"/>
+				<aux color="black" font_color="black" label_side="right" x="2106" y="488" name="harvest eff residue by region"/>
+				<aux color="red" font_color="red" label_side="right" x="1315" y="2376" name="adv storage loss factor residue"/>
+				<aux color="black" font_color="black" x="2588" y="714" name="storage loss residue by region"/>
+				<aux color="red" font_color="red" label_angle="1.48057" x="1113" y="2281" name="conv harv efficiency residue"/>
+				<aux color="red" font_color="red" label_side="right" x="1310" y="2338" name="adv harvest efficiency WC"/>
+				<aux color="red" font_color="red" label_angle="1.55189" x="1314" y="2410" name="adv storage loss factor HC"/>
+				<aux color="red" font_color="red" label_angle="4.61254" x="1318" y="2446" name="adv storage loss factor WC"/>
+				<aux color="black" font_color="black" label_angle="19.2856" x="2099" y="575" name="harvest eff HC by region"/>
+				<aux color="black" font_color="black" label_angle="44.5909" x="2448" y="718" name="storage loss HC by region"/>
+				<aux color="red" font_color="red" label_angle="358.215" x="1339" y="2196" name="Advanced WC HCCPA"/>
+				<aux color="red" font_color="red" label_side="right" x="1137" y="2197" name="Conventional WC HCCPA"/>
+				<aux color="red" font_color="red" label_side="right" x="1503" y="2054" name="C to EtOH Conv Storage"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="78.185" x="2150" y="70" name="Ag Res HCCPA"/>
+				<aux color="red" font_color="red" label_angle="359.206" x="1340" y="2036" name="Advanced Ag Res HCCPA"/>
+				<aux color="red" font_color="red" label_angle="359.273" x="1136" y="2036" name="Conventional Ag Res HCCPA"/>
+				<aux color="#65183E" font_color="#65183E" x="2148" y="225" name="ForRes HCCPT"/>
+				<aux color="red" font_color="red" label_side="right" x="1340" y="2116" name="Advanced ForRes HCCPT"/>
+				<aux color="red" font_color="red" label_side="right" x="1136" y="2117" name="Conventional ForRes HCCPT"/>
+				<aux color="#65183E" font_color="#65183E" x="2176" y="314" name="UrbanRes HCCPT"/>
+				<aux color="red" font_color="red" label_angle="0.736789" x="1340" y="2156" name="Advanced UrbanRes HCCPT"/>
+				<aux color="red" font_color="red" label_angle="358.636" x="1137" y="2157" name="Conventional UrbanRes HCCPT"/>
+				<aux color="red" font_color="red" label_angle="357.384" x="1503" y="2134" name="C to EtOH Conv Prepro"/>
+				<aux color="red" font_color="red" label_angle="359.043" x="1657" y="2091" name="C to EtOH Adv Q H"/>
+				<aux color="red" font_color="red" x="1539" y="284" name="base WOM producer adv FS"/>
+				<aux color="black" font_color="black" x="1565" y="239" name="WOM rate"/>
+				<aux color="black" font_color="black" x="1484" y="230" name="conventional producer constraint"/>
+				<flow color="black" font_color="black" x="1556" y="348" name="conversion push transition to adv FS">
+					<pts>
+						<pt x="1436" y="206.5"/>
+						<pt x="1436" y="348"/>
+						<pt x="1676" y="348"/>
+						<pt x="1676" y="203.5"/>
+					</pts>
+				</flow>
+				<aux color="black" font_color="black" x="1365" y="413" name="frac max push rate from supply system"/>
+				<aux color="red" font_color="red" x="1705" y="413" name="max push rate producer adv fs"/>
+				<aux color="black" font_color="black" x="1555" y="413" name="push rate"/>
+				<aux color="black" font_color="black" label_angle="211.815" x="1648" y="762" name="Depot to Plant trans cost input"/>
+				<aux color="red" font_color="red" x="1772" y="2308" name="Depot to Plant trans cost"/>
+				<aux color="red" font_color="red" x="972" y="540" name="Use Dynamic FS Logistics System"/>
+				<aux color="red" font_color="red" x="973" y="480" name="Use Static Advanced System"/>
+				<aux color="black" font_color="black" label_angle="96.1849" x="1161" y="210" name="dynamic frac logistics advanced"/>
+				<aux color="red" font_color="red" label_angle="2.63642" x="1656" y="2058" name="C to EtOH Adv Storage"/>
+				<aux color="red" font_color="red" label_angle="0.902801" x="1659" y="2133" name="C to EtOH Adv Prepro"/>
+				<aux color="black" font_color="black" label_angle="30.5618" x="2083" y="683" name="harvest eff WC by region"/>
+				<aux color="black" font_color="black" x="2358" y="910" name="storage loss WC by region"/>
+				<aux color="red" font_color="red" label_angle="3.95836" x="1323" y="2281" name="adv harv efficiency residue"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="355.418" x="1804" y="957" name="C to EtOH PreProcess Cost"/>
+				<aux color="black" font_color="black" label_angle="53.7315" x="1208" y="924" name="C to A PrePro cost"/>
+				<aux color="black" font_color="black" label_angle="349.319" x="1054" y="1032" name="C to EtOH Q H cost"/>
+				<aux color="black" font_color="black" label_angle="278.976" x="1428" y="861" name="C to EtOH storage cost"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="101.288" x="180" y="711" name="Total Ag Cellulose Producing Acres"/>
+				<aux color="red" font_color="red" label_angle="5.79378" x="1915" y="2317" name="Forest Res Transport CPT"/>
+				<aux color="red" font_color="red" label_angle="3.57145" x="1913" y="2159" name="Expected Residue tons per load"/>
+				<aux color="red" font_color="red" label_angle="3.2078" x="1912" y="2231" name="Expected HC tons per load"/>
+				<aux color="red" font_color="red" label_angle="2.34635" x="1909" y="2199" name="Expected WC tons per load"/>
+				<aux color="#65183E" font_color="#65183E" x="2227" y="1232" name="HC Transport CPT"/>
+				<aux color="#65183E" font_color="#65183E" x="2237" y="1309" name="WC Transport CPT"/>
+				<aux color="red" font_color="red" label_angle="4.21516" x="1916" y="2273" name="Urban Res Transport CPT"/>
+				<aux color="red" font_color="red" label_angle="12.204" x="1912" y="2034" name="Initial Transport vbl cost per mile"/>
+				<aux color="red" font_color="red" label_angle="2.61621" x="1910" y="2118" name="Transport cost multiplier"/>
+				<aux color="black" font_color="black" label_angle="96.1849" x="1233" y="1336" name="expected collection area sq mi"/>
+				<aux color="black" font_color="black" label_angle="10.8342" x="936" y="1516" name="aggregate avg yield for collection area"/>
+				<aux color="red" font_color="red" x="2426" y="2265" name="fraction of land supplying plant PCEC"/>
+				<aux color="black" font_color="black" x="1233" y="1249" name="radial distance from edge to plant"/>
+				<aux color="black" font_color="black" x="1412" y="1249" name="avg radial distance from roadside to plant"/>
+				<aux color="black" font_color="black" x="1586" y="1249" name="Avg travel distance to plant"/>
+				<aux color="red" font_color="red" label_angle="302.539" x="2220" y="2078" name="avg radial weighting factor"/>
+				<aux color="red" font_color="red" x="2227" y="2130" name="road windage factor"/>
+				<aux color="red" font_color="red" x="2214" y="2030" name="acres per square mile"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="83.8151" x="2212" y="1133" name="Residue Transport CPT"/>
+				<aux color="red" font_color="red" label_angle="2.23858" x="1909" y="2072" name="Transport Fixed cost per load"/>
+				<aux color="black" font_color="black" label_angle="208.187" x="1819" y="1249" name="Transport Variable cost per load"/>
+				<aux color="black" font_color="black" x="1911" y="1249" name="Transport Total cost per load"/>
+				<aux color="black" font_color="black" label_angle="315.409" x="1713" y="1320" name="Transport vbl cost per mile"/>
+				<aux color="red" font_color="red" x="2236" y="2173" name="two"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="290.007" x="96" y="833" name="reqd annual feedstock supply tpy"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="95" y="897" name="Est Ag Cellulosic plants incl pipeline"/>
+				<aux color="red" font_color="red" x="2114" y="2091" name="one project"/>
+				<aux color="red" font_color="red" label_angle="107.695" x="2039" y="1453" name="one thousand"/>
+				<aux color="black" font_color="black" label_angle="165.193" x="2039" y="1516" name="total Collection Area"/>
+				<aux color="black" font_color="black" label_angle="96.1849" x="2164" y="1516" name="total required cellulosic acres"/>
+				<aux color="black" font_color="black" label_angle="96.1849" x="1233" y="1516" name="expected collection area acres"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="249.513" x="75" y="709" name="FSM residue yield"/>
+				<aux color="red" font_color="red" x="2151" y="2348" name="fraction of land supplying plnt residue"/>
+				<stock color="black" font_color="black" label_angle="54.5931" x="945" y="204" name="Est Total Cellulosic Plants"/>
+				<flow color="black" font_color="black" label_angle="116.882" x="867.75" y="206" name="chg est total cellulosic plants">
+					<pts>
+						<pt x="801" y="206"/>
+						<pt x="922.5" y="206"/>
+					</pts>
+				</flow>
+				<aux color="red" font_color="red" x="869" y="416" name="avg time for est plants"/>
+				<aux color="black" font_color="black" label_angle="8.39075" x="936" y="1716" name="annualized avg PCEC YPA"/>
+				<aux color="red" font_color="red" x="826" y="1799" name="Min PCEC YPA"/>
+				<aux color="black" font_color="black" label_angle="2.33032" x="936" y="1654" name="annualized PCEC YPA input"/>
+				<aux color="#7F00FF" font_color="#7F00FF" label_angle="359.171" x="550" y="1632" name="urban residue transport storage efficiency factor"/>
+				<aux color="#7F00FF" font_color="#7F00FF" label_side="right" x="549" y="1592" name="forest residue transport storage efficiency factor"/>
+				<group locked="false" color="#65183E" font_color="#65183E" x="4" y="1168" width="734" height="523" name="Outputs to Other Modules">
+					<item uid="3078"/>
+					<item uid="3079"/>
+					<item uid="3080"/>
+					<item uid="3081"/>
+					<item uid="3082"/>
+					<item uid="3083"/>
+					<item uid="3084"/>
+					<item uid="3085"/>
+					<item uid="3086"/>
+					<item uid="3087"/>
+					<item uid="3088"/>
+					<item uid="3089"/>
+					<item uid="3090"/>
+					<item uid="3091"/>
+				</group>
+				<group locked="true" x="1080" y="1969" width="1499" height="519" name="Feedstock logistics params"/>
+				<group locked="false" color="black" font_color="black" x="756" y="31" width="2008" height="1853" name="Feedstock Logistics">
+					<item uid="3022"/>
+					<item uid="3044"/>
+					<item uid="2927"/>
+					<item uid="3041"/>
+					<item uid="3026"/>
+					<item uid="2909"/>
+					<item uid="2985"/>
+					<item uid="2945"/>
+					<item uid="2972"/>
+					<item uid="3034"/>
+					<item uid="2956"/>
+					<item uid="3066"/>
+					<item uid="2982"/>
+					<item uid="3017"/>
+					<item uid="2904"/>
+					<item uid="2920"/>
+					<item uid="3068"/>
+					<item uid="3004"/>
+					<item uid="3057"/>
+					<item uid="2960"/>
+					<item uid="3070"/>
+					<item uid="2931"/>
+					<item uid="2934"/>
+					<item uid="3006"/>
+					<item uid="2937"/>
+					<item uid="2978"/>
+					<item uid="2968"/>
+					<item uid="3037"/>
+					<item uid="2911"/>
+					<item uid="2963"/>
+					<item uid="2951"/>
+					<item uid="2918"/>
+					<item uid="2929"/>
+					<item uid="2899"/>
+					<item uid="2895"/>
+					<item uid="2958"/>
+					<item uid="2922"/>
+					<item uid="3053"/>
+					<item uid="3000"/>
+					<item uid="2949"/>
+					<item uid="3028"/>
+					<item uid="3012"/>
+					<item uid="2991"/>
+					<item uid="3062"/>
+					<item uid="2974"/>
+					<item uid="2997"/>
+					<item uid="2913"/>
+					<item uid="3077"/>
+					<item uid="2902"/>
+					<item uid="2989"/>
+					<item uid="3030"/>
+					<item uid="3051"/>
+					<item uid="2924"/>
+					<item uid="3019"/>
+					<item uid="2906"/>
+					<item uid="3049"/>
+					<item uid="3046"/>
+				</group>
+				<group locked="false" color="#7F00FF" font_color="#7F00FF" x="2" y="602" width="733" height="521" name="Inputs from other modules"/>
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="3092" x="8.33333" y="19.6667" width="638" height="51">Biomass Scenario Model Feedstock Logistics Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="3093" x="12.3333" y="256.667" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="3094" x="385.333" y="209.667" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="3095" x="12.3333" y="208.667" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="3096" x="385.333" y="256.667" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="3097" x="12.3333" y="161.667" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="3098" x="385.333" y="161.667" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<alias color="red" font_style="italic" font_color="red" label_angle="329.438" uid="2945" x="2270" y="305" width="18" height="18">
+					<of>Conventional_UrbanRes_HCCPT</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3090" x="563" y="1445" width="18" height="18">
+					<of>residue_harvest_storage_efficiency_factor</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" label_angle="287.695" uid="2929" x="2439" y="826" width="18" height="18">
+					<of>fraction_Supply_System_advanced</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3019" x="1514" y="1447" width="18" height="18">
+					<of>Transport_cost_multiplier</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="159.903" uid="3066" x="1826" y="484" width="18" height="18">
+					<of>C_to_RR_Adv_Storage</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2956" x="1329" y="622" width="18" height="18">
+					<of>C_to_RR_Conv_Q_H</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3044" x="836" y="320" width="18" height="18">
+					<of>Est_Ag_Cellulosic_plants_incl_pipeline</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="182.833" uid="3062" x="2033" y="1124" width="18" height="18">
+					<of>Expected_Residue_tons_per_load</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3083" x="550" y="1231" width="18" height="18">
+					<of>C_to_RR_PreProcess_Cost</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2978" x="987" y="1054" width="18" height="18">
+					<of>C_to_EtOH_Adv_Q_H</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2902" x="1025" y="1581" width="18" height="18">
+					<of>fraction_of_land_supplying_plnt_residue</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2972" x="2246" y="216" width="18" height="18">
+					<of>Conventional_ForRes_HCCPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3028" x="1507" y="1311" width="18" height="18">
+					<of>Initial_Transport_vbl_cost_per_mile</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3012" x="1649" y="1154" width="18" height="18">
+					<of>two</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3006" x="2660" y="612" width="18" height="18">
+					<of>adv_storage_loss_factor_residue</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2899" x="2391" y="755" width="18" height="18">
+					<of>conv_storage_loss_factor_HC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2974" x="2026" y="1223" width="18" height="18">
+					<of>Expected_HC_tons_per_load</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2937" x="2658" y="660" width="18" height="18">
+					<of>conv_storage_loss_factor_residue</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3051" x="827" y="1575" width="18" height="18">
+					<of>FSM_residue_yield</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3004" x="2295" y="507" width="18" height="18">
+					<of>conv_harv_efficiency_residue</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2989" x="855" y="1676" width="18" height="18">
+					<of>Min_PCEC_YPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="164.361" uid="2927" x="2066" y="319" width="18" height="18">
+					<of>Advanced_UrbanRes_HCCPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2982" x="1733" y="565" width="18" height="18">
+					<of>C_to_RR_Adv_Prepro</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2895" x="2482" y="728" width="18" height="18">
+					<of>adv_storage_loss_factor_HC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3057" x="2168" y="504" width="18" height="18">
+					<of>adv_harv_efficiency_residue</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3037" x="1344" y="774" width="18" height="18">
+					<of>C_to_EtOH_Conv_Storage</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3086" x="229" y="1619" width="18" height="18">
+					<of>WC_Transport_CPT</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3078" x="226" y="1386" width="18" height="18">
+					<of>ForRes_HCCPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2951" x="1558" y="720" width="18" height="18">
+					<of>Depot_to_Plant_trans_cost</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2958" x="2166" y="736" width="18" height="18">
+					<of>adv_harvest_efficiency_WC</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3084" x="552" y="1293" width="18" height="18">
+					<of>C_to_EtOH_PreProcess_Cost</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2911" x="1118" y="861" width="18" height="18">
+					<of>C_to_EtOH_Adv_Prepro</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3087" x="225" y="1570" width="18" height="18">
+					<of>HC_Transport_CPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2997" x="1908.67" y="1337.5" width="18" height="18">
+					<of>Transport_Fixed_cost_per_load</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2968" x="968" y="977" width="18" height="18">
+					<of>C_to_EtOH_Conv_Q_H</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3091" x="566" y="1522" width="18" height="18">
+					<of>HC_harvest_storage_efficiency_factor</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2918" x="1460" y="782" width="18" height="18">
+					<of>C_to_EtOH_Adv_Storage</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3079" x="231" y="1337" width="18" height="18">
+					<of>WC_HCCPA</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3088" x="230" y="1443" width="18" height="18">
+					<of>UrbanRes_HCCPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3041" x="2059" y="232" width="18" height="18">
+					<of>Advanced_ForRes_HCCPT</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3026" x="2068" y="136" width="18" height="18">
+					<of>Conventional_HC_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="187.535" uid="3017" x="1752" y="495" width="18" height="18">
+					<of>C_to_RR_Conv_Storage</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="223.505" uid="2909" x="2142" y="94" width="18" height="18">
+					<of>Advanced_Ag_Res_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2922" x="2251" y="952" width="18" height="18">
+					<of>adv_storage_loss_factor_WC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2960" x="2198" y="612" width="18" height="18">
+					<of>adv_harvest_efficiency_HC</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3085" x="561" y="1379" width="18" height="18">
+					<of>WC_harvest_storage_efficiency_factor</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2991" x="1484" y="1159" width="18" height="18">
+					<of>road_windage_factor</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3080" x="221" y="1225" width="18" height="18">
+					<of>Ag_Res_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3000" x="1313" y="1167" width="18" height="18">
+					<of>avg_radial_weighting_factor</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3022" x="888" y="254" width="18" height="18">
+					<of>avg_time_for_est_plants</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2904" x="1556" y="598" width="18" height="18">
+					<of>C_to_RR_Conv_Prepro</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3053" x="2246" y="870" width="18" height="18">
+					<of>conv_storage_loss_factor_WC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3070" x="2257" y="703" width="18" height="18">
+					<of>conv_harvest_efficiency_WC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2949" x="1116" y="1327" width="18" height="18">
+					<of>acres_per_square_mile</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="181.906" uid="2985" x="1983" y="177" width="18" height="18">
+					<of>Advanced_HC_HCCPA</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2924" x="1224" y="1614" width="18" height="18">
+					<of>reqd_annual_feedstock_supply_tpy</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2920" x="1458" y="599" width="18" height="18">
+					<of>C_to_RR_Adv_Q_H</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3049" x="2030" y="1575" width="18" height="18">
+					<of>Est_Ag_Cellulosic_plants_incl_pipeline</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2931" x="2298" y="598" width="18" height="18">
+					<of>conv_harves_efficiency_HC</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3034" x="2241" y="61" width="18" height="18">
+					<of>Conventional_Ag_Res_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2913" x="2030" y="1300" width="18" height="18">
+					<of>Expected_WC_tons_per_load</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3081" x="228" y="1285" width="18" height="18">
+					<of>HC_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2934" x="2285" y="396" width="18" height="18">
+					<of>Conventional_WC_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="3068" x="2084" y="396" width="18" height="18">
+					<of>Advanced_WC_HCCPA</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2963" x="1114" y="932" width="18" height="18">
+					<of>C_to_EtOH_Conv_Prepro</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="247.24" uid="3030" x="1035" y="1740" width="18" height="18">
+					<of>fraction_of_land_supplying_plant_PCEC</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3082" x="390" y="1231" width="18" height="18">
+					<of>total_required_cellulosic_acres</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="2906" x="1958" y="1551" width="18" height="18">
+					<of>one_project</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="3089" x="226" y="1511" width="18" height="18">
+					<of>Residue_Transport_CPT</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3046" x="927" y="1785" width="18" height="18">
+					<of>Total_Ag_Cellulose_Producing_Acres</of>
+				</alias>
+			</view>
+			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+				<style/>
+			</view>
+			<isee:templates/>
+			<isee:stories/>
+		</views>
+	</model>
+</xmile>
+

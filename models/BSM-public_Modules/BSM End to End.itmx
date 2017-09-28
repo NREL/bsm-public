@@ -1,0 +1,2233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
+	<header>
+		<smile version="1.0" namespace="std, isee" uses_arrays="3" uses_conveyor="" uses_submodels=""/>
+		<name>BSM End to End</name>
+		<uuid>7c324ece-7fb1-4c5f-b896-8165d2d94740</uuid>
+		<vendor>isee systems, inc.</vendor>
+		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+	</header>
+	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
+		<start>1</start>
+		<stop>13</stop>
+		<dt reciprocal="true">4</dt>
+	</sim_specs>
+	<dimensions>
+		<dim name="ConversionPolicy">
+			<elem name="Price"/>
+			<elem name="Feedstock"/>
+			<elem name="FCI"/>
+			<elem name="Loan"/>
+		</dim>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
+		<dim name="CtoRRTech">
+			<elem name="FP"/>
+			<elem name="FT"/>
+			<elem name="IDL"/>
+			<elem name="CP"/>
+			<elem name="F"/>
+			<elem name="APR"/>
+		</dim>
+		<dim name="OilCropTech">
+			<elem name="TransEster"/>
+			<elem name="HEFA"/>
+			<elem name="Catalytic"/>
+		</dim>
+		<dim name="PECrop">
+			<elem name="Herbaceous"/>
+			<elem name="Woody"/>
+		</dim>
+		<dim name="CohortSlot">
+			<elem name="a"/>
+			<elem name="b"/>
+			<elem name="c"/>
+			<elem name="d"/>
+		</dim>
+		<dim name="AlgalTech">
+			<elem name="Pond"/>
+			<elem name="PBR"/>
+		</dim>
+		<dim name="AnnualCrop">
+			<elem name="Corn"/>
+			<elem name="Soy"/>
+			<elem name="Wheat"/>
+			<elem name="Other_Grains"/>
+			<elem name="Cotton"/>
+		</dim>
+		<dim name="Car_v_Truck">
+			<elem name="Car"/>
+			<elem name="Truck"/>
+		</dim>
+		<dim name="ProdnYear" size="10"/>
+		<dim name="TechAttribute">
+			<elem name="ProcessYield"/>
+			<elem name="PSuccess"/>
+			<elem name="InputCap"/>
+			<elem name="CapitalCost"/>
+			<elem name="Risk"/>
+			<elem name="DebtFrac"/>
+		</dim>
+		<dim name="VehicleTech">
+			<elem name="Gas"/>
+			<elem name="Diesel"/>
+			<elem name="PlugInElectric"/>
+			<elem name="Hydrogen"/>
+			<elem name="CNG"/>
+			<elem name="FFV"/>
+			<elem name="GasHev"/>
+			<elem name="GasPhev"/>
+			<elem name="MethanolPropane"/>
+			<elem name="RSPV"/>
+			<elem name="Scenario"/>
+		</dim>
+		<dim name="Region">
+			<elem name="NE"/>
+			<elem name="A"/>
+			<elem name="SE"/>
+			<elem name="DS"/>
+			<elem name="CB"/>
+			<elem name="LS"/>
+			<elem name="NP"/>
+			<elem name="SP"/>
+			<elem name="M"/>
+			<elem name="P"/>
+		</dim>
+		<dim name="RefineryProduct">
+			<elem name="gasoline"/>
+			<elem name="diesel"/>
+			<elem name="JetFuel"/>
+			<elem name="AllOther"/>
+		</dim>
+	</dimensions>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<model_units>
+		<unit name="MilesPerVehiclePerYr">
+			<eqn>mi/(vehicles*yr)</eqn>
+		</unit>
+		<unit name="GalPerTerminalPerYr">
+			<eqn>gal/(terminals*yr)</eqn>
+		</unit>
+		<unit name="PerLoadUSDPerMi">
+			<eqn>USD/(mi*Load)</eqn>
+		</unit>
+		<unit name="ProjectGalPerTon">
+			<eqn>Projects*(gal/ton)</eqn>
+		</unit>
+		<unit name="DaysPerYr">
+			<eqn>day/yr</eqn>
+		</unit>
+		<unit name="ProjectUSDPerYr">
+			<eqn>Projects*(USD/yr)</eqn>
+		</unit>
+		<unit name="ProjectTonPerDay">
+			<eqn>Projects*(ton/day)</eqn>
+		</unit>
+		<unit name="MillionBTUPerGal">
+			<eqn>MillionBTU/gal</eqn>
+		</unit>
+		<unit name="GramsPerMJ">
+			<eqn>g/MJ</eqn>
+		</unit>
+		<unit name="MillionBTUperMJ">
+			<eqn>MillionBTU/MJ</eqn>
+		</unit>
+		<unit name="TonnesPerGram">
+			<eqn>Tonnes/g</eqn>
+		</unit>
+		<unit name="HoursPerProjectPerYr">
+			<eqn>hr/(projects*yr)</eqn>
+		</unit>
+		<unit name="USDPerUnit">
+			<eqn>USD/units</eqn>
+		</unit>
+		<unit name="USDA to nominal">
+			<eqn>units/USDA</eqn>
+		</unit>
+		<unit name="TonsPerUnit">
+			<eqn>ton/units</eqn>
+		</unit>
+		<unit name="UnitsPerAcrePerYrPerYr">
+			<eqn>units/(acre-yr^2)</eqn>
+		</unit>
+		<unit name="acres per square mile">
+			<eqn>acre/mi^2</eqn>
+		</unit>
+		<unit name="barrels per gallon">
+			<eqn>bbl/gal</eqn>
+		</unit>
+		<unit name="billion GPY">
+			<eqn>billions-gal/yr</eqn>
+		</unit>
+		<unit name="BillionMilesPerYear">
+			<eqn>billions-mi/yr</eqn>
+		</unit>
+		<unit name="btu per gallon">
+			<eqn>btu/gallon</eqn>
+		</unit>
+		<unit name="days per year">
+			<eqn>day/year</eqn>
+		</unit>
+		<unit name="dollars per acre">
+			<eqn>usd/acres</eqn>
+		</unit>
+		<unit name="dollars per acre per yr">
+			<eqn>USD/(acre-yr)</eqn>
+		</unit>
+		<unit name="dollars per load">
+			<eqn>usd/load</eqn>
+		</unit>
+		<unit name="gal per ton">
+			<eqn>gal/ton</eqn>
+		</unit>
+		<unit name="gallons per barrel">
+			<eqn>gal/bbl</eqn>
+		</unit>
+		<unit name="gallons per dollar">
+			<eqn>gal/USD</eqn>
+		</unit>
+		<unit name="gallons per month">
+			<eqn>gal/mo</eqn>
+		</unit>
+		<unit name="gallons per visit">
+			<eqn>gal/Visit</eqn>
+		</unit>
+		<unit name="gallons per year">
+			<eqn>gal/yr</eqn>
+		</unit>
+		<unit name="GPD">
+			<eqn>gal/day</eqn>
+		</unit>
+		<unit name="million tons">
+			<eqn>million-ton</eqn>
+		</unit>
+		<unit name="million units">
+			<eqn>million-units</eqn>
+		</unit>
+		<unit name="million USD">
+			<eqn>USD-million</eqn>
+		</unit>
+		<unit name="million usda">
+			<eqn>million-usda</eqn>
+		</unit>
+		<unit name="months per year">
+			<eqn>mo/yr</eqn>
+		</unit>
+		<unit name="MPG">
+			<eqn>mi/gal</eqn>
+		</unit>
+		<unit name="per billion">
+			<eqn>1/billions</eqn>
+		</unit>
+		<unit name="per million">
+			<eqn>1/million</eqn>
+		</unit>
+		<unit name="per thousand">
+			<eqn>1/thousand</eqn>
+		</unit>
+		<unit name="Projects per Year">
+			<eqn>projects/yr</eqn>
+		</unit>
+		<unit name="thousand acres">
+			<eqn>thousand-acres</eqn>
+		</unit>
+		<unit name="thousand ton per yr">
+			<eqn>thousand-ton/yr</eqn>
+		</unit>
+		<unit name="ton per acre per yr">
+			<eqn>ton/(acre-yr)</eqn>
+		</unit>
+		<unit name="ton per day">
+			<eqn>ton/day</eqn>
+		</unit>
+		<unit name="ton per year">
+			<eqn>ton/yr</eqn>
+		</unit>
+		<unit name="tons per load">
+			<eqn>ton/load</eqn>
+		</unit>
+		<unit name="USD per barrel">
+			<eqn>USD/bbl</eqn>
+		</unit>
+		<unit name="USD per gallon">
+			<eqn>USD/gal</eqn>
+		</unit>
+		<unit name="USD per ton">
+			<eqn>USD/ton</eqn>
+		</unit>
+		<unit name="USD per visit">
+			<eqn>USD/Visit</eqn>
+		</unit>
+		<unit name="visits per month">
+			<eqn>Visit/mo</eqn>
+		</unit>
+		<unit name="Visits per year">
+			<eqn>Visit/yr</eqn>
+		</unit>
+		<unit name="VehiclesMPG">
+			<eqn>Vehicles*mi/gal</eqn>
+		</unit>
+	</model_units>
+	<model name="End_to_End">
+		<variables>
+			<module name="V" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/V.itmx">
+				<connect to="V.hi_blend_coeff_from_PIM" from="IP.Hi_blend_Coefficient"/>
+				<connect to="V.low_blend_coeff_from_PIM" from="IP.Lo_blend_coefficient"/>
+			</module>
+			<module name="FU" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/FU.itmx">
+				<connect to="FU.Hi_Blend_Gas_equivalent_price" from="IP.Hi_Blend_Gas_equivalent_price"/>
+				<connect to="FU.Hi_Blend_Pump_Price_From_PIM" from="IP.Hi_Blend_Pump_Price"/>
+				<connect to="FU.Gasoline_Pump_Price_from_PIM" from="IP.Gasoline_Pump_Price"/>
+				<connect to="FU.Station_Coverage_From_Dispensing_Module" from="DS.Station_Coverage"/>
+				<connect to="FU.potential_Hi_Blend_Consn_from_Vehicle_Module" from="V.regional_potential_hi_blend_consn_FFV"/>
+				<connect to="FU.max_FFV_Lo_Blend_Consn_from_Vehicle_Module" from="V.regional_potential_lo_blend_consn_FFV"/>
+			</module>
+			<module name="DS" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/DS.itmx">
+				<connect to="DS.IP_avg_per_gal_markup" from="IP.avg_per_gal_markup"/>
+				<connect to="DS.Expected_Hi_Blend_Cost_after_Subz" from="IP.Expected_PoU_Hi_Blend_Cost_after_Subz"/>
+				<connect to="DS.Hi_Blend_Pump_Price" from="IP.Hi_Blend_Pump_Price"/>
+				<connect to="DS.Hi_Blend_Volumetric_Offset" from="IP.Hi_Blend_Volumetric_Offset"/>
+				<connect to="DS.VM_regional_vehicle_penetration_by_tech" from="V.regional_V_share_by_tech"/>
+				<connect to="DS.Total_potential_hi_blend_consn_from_VM" from="V.regional_potential_hi_blend_consn_FFV"/>
+				<connect to="DS.Total_Potential_Fuel_Consn_Gasoline_from_VM" from="V.Regional_Potential_gasoline_consn"/>
+				<connect to="DS.Total_User_Wtd_HiBlend_Share_from_Fuel_Use" from="FU.Total_User_Wtd_Hi_Blend_Share"/>
+			</module>
+			<module name="IP" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/IP.itmx">
+				<connect to="IP.Total_Desired_Hi_Blend_Consn" from="FU.Total_Desired_Hi_Blend_Consn"/>
+				<connect to="IP.FFV_Lo_Blend_Consn" from="FU.FFV_Lo_Blend_Consn"/>
+				<connect to="IP.CtoA_Output_GPY_by_Region" from="CE.Output_gpy_by_Region"/>
+				<connect to="IP.Utilized_Regional_Production_Capacity_CM" from="SE.Output_gpy_by_region"/>
+				<connect to="IP.est_regional_non_LDV_gas_consn" from="V.estimated_regional_non_LDV_gasoline_consn_2015"/>
+				<connect to="IP.C_to_B_Output_GPY_by_Region" from="CB.Actual_Output_gpy"/>
+				<connect to="IP.CtoA_Output_GPY_by_technology" from="CE.Output_gpy_by_Technology"/>
+				<connect to="IP.Potential_Lo_Blend_Consn_Non_FFV" from="V.regional_potential_lo_blend_consn_non_FFV"/>
+				<connect to="IP.B_capacity" from="CB.Output_Capacity"/>
+				<connect to="IP.Imports_by_Region" from="I.EtOH_Import_from_x_US"/>
+				<connect to="IP.OI_C_Tax_SE_1" from="OI.C_tax_delta_B"/>
+				<connect to="IP.OI_C_Tax_SE" from="OI.C_tax_delta_SE"/>
+				<connect to="IP.OI_C_Tax_CE" from="OI.C_tax_delta_CE"/>
+				<connect to="IP.Gasoline_POD_price_before_tax" from="OI.Gasoline_POD_price_before_tax"/>
+			</module>
+			<module name="I" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/I.itmx">
+				<connect to="I.EtOH_PoP_price" from="IP.EtOH_POP_price"/>
+			</module>
+			<module name="FL" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/FL.itmx">
+				<connect to="FL.reqd_annual_feedstock_supply_tpy" from="FM.reqd_annual_feedstock_supply_tpy"/>
+				<connect to="FL.Est_Ag_Cellulosic_plants_incl_pipeline" from="FM.Est_Ag_Cellulosic_plants_incl_pipeline"/>
+				<connect to="FL.Total_Ag_Cellulose_Producing_Acres" from="GP.PCEC_YPA_by_year"/>
+				<connect to="FL.FSM_residue_yield" from="FS.net_residue_YPA"/>
+			</module>
+			<module name="CHC" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/CHC.itmx">
+				<connect to="CHC.Converter_1" from="OI.lcfs_credit_w_transport_CHC"/>
+				<connect to="CHC.PoP_Subsidized_Price" from="OI.CM_C_to_R_price_input"/>
+				<connect to="CHC.FLM_C_to_RR_PreProcess_Cost" from="FM.C_to_RRpreprocess_cost"/>
+				<connect to="CHC.Use_Agnostic_FS_Conversion" from="FM.Use_Agnostic_FS_Conversion"/>
+				<connect to="CHC.FLM_frac_supply_system_advanced" from="FM.frac_supply_system_advanced"/>
+				<connect to="CHC.Expected_Regional_Cellulosic_FS_cost_USD_per_ton" from="FM.FS_Price_Input_to_CM"/>
+				<connect to="CHC.C_learning_inputs_CHC" from="RA.C_learning_inputs_CHC"/>
+				<connect to="CHC.actual_fs_consn" from="FM.C_to_RR_Feedstock_Consn"/>
+				<connect to="CHC.pilot_learning_inputs_CHC" from="RA.pilot_learning_inputs_CHC"/>
+				<connect to="CHC.PC_learning_inputs_CHC" from="RA.PC_learning_inputs_CHC"/>
+				<connect to="CHC.startup_spend_constraint" from="RA.C_to_RR_constraint_from_cume_spend"/>
+				<connect to="CHC.Const_Cap_Alloc_to_CtoR_C" from="RA.Des_C_to_RR_yrly_starts"/>
+				<connect to="CHC.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+			</module>
+			<module name="RA" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/RA.itmx">
+				<connect to="RA.S_to_J_platform_Attr" from="SJ.Platform_Attr"/>
+				<connect to="RA.OilCrop_Platform_Attr_C" from="OHC.Platform_Attr"/>
+				<connect to="RA.SJ_cume_subs" from="SJ.rollup_cumulative_subsidies"/>
+				<connect to="RA.OHC_PC_Maturity" from="OHC.PC_Maturity"/>
+				<connect to="RA.OHC_Pilot_Maturity" from="OHC.Pilot_Maturity"/>
+				<connect to="RA.C_to_EtOH_cume_subs" from="CE.rollup_cumulative_subsidies"/>
+				<connect to="RA.CE_PC_maturity" from="CE.PC_Maturity"/>
+				<connect to="RA.S_to_EtOH_Platform_Attr" from="SE.Platform_Attr"/>
+				<connect to="RA.OHC_Commercial_Maturity" from="OHC.Commercial_Maturity"/>
+				<connect to="RA.S_to_EtOH_cume_subs" from="SE.rollup_cumulative_subsidies"/>
+				<connect to="RA.Algae_Platform_Attr_C" from="AHC.Platform_Attr"/>
+				<connect to="RA.A_to_RR_cume_subs" from="AHC.rollup_cumulative_subsidies"/>
+				<connect to="RA.C_to_B_cume_subs" from="CB.rollup_cumulative_subsidies"/>
+				<connect to="RA.C_to_RR_Platform_Attr_C" from="CHC.Platform_Attr"/>
+				<connect to="RA.C_to_EtOH_Platform_Attr_C" from="CE.Platform_Attr"/>
+				<connect to="RA.CHC_Pilot_Maturity" from="CHC.Pilot_Maturity"/>
+				<connect to="RA.CHC_PC_Maturity" from="CHC.PC_Maturity"/>
+				<connect to="RA.CE_Commercial_Maturity" from="CE.Commercial_Maturity"/>
+				<connect to="RA.C_to_RR_cume_subs" from="CHC.rollup_cumulative_subsidies"/>
+				<connect to="RA.C_toB_Platform_Attr_C" from="CB.Platform_Attr"/>
+				<connect to="RA.CE_Pilot_Maturity" from="CE.Pilot_Maturity"/>
+				<connect to="RA.OC_to_RR_cume_subs" from="OHC.rollup_cumulative_subsidies"/>
+				<connect to="RA.CHC_Commercial_Maturity" from="CHC.Commercial_Maturity"/>
+			</module>
+			<module name="OI" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/OI.itmx">
+				<connect to="OI.rollup_ff_prodn_across_regions" from="CHC.Output_gpy_by_Technology"/>
+				<connect to="OI.OilCrop_prodn_by_tech" from="OHC.Output_gpy_by_Technology"/>
+				<connect to="OI.SJ_output_gpy" from="SJ.Output_gpy_by_Technology"/>
+				<connect to="OI.Algae_prodn_by_tech" from="AHC.Output_gpy_by_Technology"/>
+			</module>
+			<module name="FM" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/FM.itmx">
+				<connect to="FM.FLM_C_to_EtOH_preprocess_costs" from="FL.C_to_EtOH_PreProcess_Cost"/>
+				<connect to="FM.FLM_C_to_RR_preprocess_costs_1" from="FL.C_to_RR_PreProcess_Cost"/>
+				<connect to="FM.C_to_EtOH_fs_demand_incl_pipeline" from="CE.fs_demand_incl_pipeline"/>
+				<connect to="FM.C_to_EtOH_cost_to_price_ratio_C" from="CE.Cost_to_Price_Ratio"/>
+				<connect to="FM.C_to_EtOH_demand_at_nominal_util" from="CE.fs_demand_at_nominal_utilization"/>
+				<connect to="FM.feedstock_production_ag_system" from="FS.feedstock_production_ag_system"/>
+				<connect to="FM.hay_prodn_from_ag_land" from="FS.hay_prodn_from_ag_land"/>
+				<connect to="FM.fraction_of_supply_system_advanced" from="FL.fraction_Supply_System_advanced"/>
+				<connect to="FM.S_to_EtOH_reqd_fs_supply" from="SE.fs_demand_at_nominal_utilization"/>
+				<connect to="FM.C_to_B_demand_at_nominal_util" from="CB.fs_demand_at_nominal_utilization"/>
+				<connect to="FM.C_to_B_FS_demand_incl_pipeline" from="CB.fs_demand_incl_pipeline"/>
+				<connect to="FM.C_to_B_Capacity_C" from="CB.Output_Capacity_incl_Pipeline"/>
+				<connect to="FM.feedstock_pipeline_ag_system" from="FS.feedstock_pipeline_ag_system"/>
+				<connect to="FM.C_to_B_cost_to_price_ratio_C" from="CB.Cost_to_Price_Ratio"/>
+				<connect to="FM.C_to_RR_Reqd_fs_supply" from="CHC.fs_demand_incl_pipeline"/>
+				<connect to="FM.C_to_RR_Capacity_C" from="CHC.Output_Capacity_incl_Pipeline"/>
+				<connect to="FM.commodity_crop_production_ag_system" from="FS.commodity_crop_production_ag_system"/>
+				<connect to="FM.C_to_EtOH_Output_Capacity_incl_Pipeline" from="CE.Output_Capacity_incl_Pipeline"/>
+				<connect to="FM.feedstock_production_urban_system" from="FS.feedstock_production_forest_system"/>
+				<connect to="FM.C_to_RR_cost_to_price_ratio_C" from="CHC.Cost_to_Price_Ratio"/>
+				<connect to="FM.C_to_RR_demand_at_nominal_util" from="CHC.fs_demand_at_nominal_utilization"/>
+				<connect to="FM.forage_prodn_from_pasture_Land" from="FS.forage_prodn_from_pasture_land"/>
+				<connect to="FM.SJ_fs_demand_at_nominal_utilization" from="SJ.fs_demand_at_nominal_utilization"/>
+				<connect to="FM.feedstock_production_forest_system" from="FS.feedstock_production_urban_system"/>
+				<connect to="FM.OC_reqd_FS_Supply" from="OHC.fs_demand_at_nominal_utilization"/>
+			</module>
+			<module name="FS" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/FS.itmx">
+				<connect to="FS.WC_harvest_storage_efficiency_factor" from="FL.WC_harvest_storage_efficiency_factor"/>
+				<connect to="FS.HC_harvest_storage_efficiency_factor" from="FL.HC_harvest_storage_efficiency_factor"/>
+				<connect to="FS.HC_YPA_pasture_by_yr" from="GP.Pasture_PCEC_YPA_by_year"/>
+				<connect to="FS.HS_wtd_HC_YPA_by_yr" from="GP.PCEC_YPA_by_year"/>
+				<connect to="FS.Urban_Res_Grower_Payment" from="GP.UrbanRes_GP"/>
+				<connect to="FS.Urban_Res_Grower_Payment_1" from="GP.ForRes_GP"/>
+				<connect to="FS.GPPA_Pasture_as_Cellulose" from="GP.Ann_Net_Pasture_as_Cellulose_GPPA"/>
+				<connect to="FS.Pasture_YPA" from="GP.Pasture_YPA"/>
+				<connect to="FS.Hay_YPA" from="GP.Hay_YPA"/>
+				<connect to="FS.GPPA_PCEC" from="GP.Ann_Net_PCEC_GPPA"/>
+				<connect to="FS.GPPA_Hay" from="GP.Net_Hay_GPPA"/>
+				<connect to="FS.GPPA_no_Res" from="GP.Tot_Annual_GPPA_no_Res"/>
+				<connect to="FS.Residue_YPA" from="GP.Residue_YPA"/>
+				<connect to="FS.urban_residue_transport_storage_efficiency_factor" from="FL.urban_residue_transport_storage_efficiency_factor"/>
+				<connect to="FS.GPPA_Pasture_as_Forage" from="GP.Ann_Net_Pasture_as_Pasture_GPPA"/>
+				<connect to="FS.GPPA_PCEC_Pasture" from="GP.Ann_Net_PCEC_GPPA_Pasture"/>
+				<connect to="FS.Ann_Net_HC_GPPA_CRP" from="GP.Ann_Net_HC_GPPA_CRP"/>
+				<connect to="FS.forest_residue_transport_storage_efficiency_factor" from="FL.forest_residue_transport_storage_efficiency_factor"/>
+				<connect to="FS.Annual_YPA_Nom_Units" from="GP.Net_Annual_YPA_Nom_Units"/>
+				<connect to="FS.Net_Residue_GPPA" from="GP.Net_Residue_GPPA"/>
+				<connect to="FS.total_required_cellulosic_acres" from="FM.Reqd_feedstock_shed_area"/>
+				<connect to="FS.residue_switches" from="GP.residue_switches"/>
+			</module>
+			<module name="GP" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/GP.itmx">
+				<connect to="GP.Cropland_PCEC_est" from="FS.Cropland_PCEC_Establish_acres"/>
+				<connect to="GP.Pasture_land_PCEC_est" from="FS.Pasture_PCEC_establish_acres"/>
+				<connect to="GP.cell_prodn_pasture_hvsted_for_cell" from="FS.cell_prodn_pasture_hvsted_for_cell"/>
+				<connect to="GP.PCEC_prodn_pasture_acres" from="FS.PCEC_prodn_pasture_acres"/>
+				<connect to="GP.Ag_Residue_Cellulose_Producing_Acres" from="FS.ag_residue_producing_acres"/>
+				<connect to="GP.Annual_Regional_Price_Input" from="FM.Regionalized_Annual_Regional_Price_Input"/>
+				<connect to="GP.gasoline_price_input" from="OI.Gasoline_POD_price_before_tax"/>
+				<connect to="GP.Res_Prodn_ag_acres" from="FS.actual_residue_prodn"/>
+				<connect to="GP.WC_Transport_CPT" from="FL.WC_Transport_CPT"/>
+				<connect to="GP.HC_Transport_CPT" from="FL.HC_Transport_CPT"/>
+				<connect to="GP.Rorest_Res_HCCPT" from="FL.ForRes_HCCPT"/>
+				<connect to="GP.Ag_Cellulose_Producing_Acres" from="FS.Ag_Cellulose_Acres_in_Production"/>
+				<connect to="GP.WC_harvest_storage_efficiency_factor" from="FL.WC_harvest_storage_efficiency_factor"/>
+				<connect to="GP.Residue_Transport_CPT" from="FL.Residue_Transport_CPT"/>
+				<connect to="GP.PCEC_prodn_ag_acres" from="FS.PCEC_prodn_ag_acres"/>
+				<connect to="GP.Ag_Res_HCCPA" from="FL.Ag_Res_HCCPA"/>
+				<connect to="GP.HC_harvest_storage_efficiency_factor" from="FL.HC_harvest_storage_efficiency_factor"/>
+				<connect to="GP.Hay_Price_Index" from="FM.Hay_Price_Index"/>
+				<connect to="GP.FS_Price_Input" from="FM.FS_Price_Input_to_FarmGate"/>
+				<connect to="GP.WC_HCCPA" from="FL.WC_HCCPA"/>
+				<connect to="GP.UrbanRes_HCCPT" from="FL.UrbanRes_HCCPT"/>
+				<connect to="GP.residue_harvest_storage_efficiency_factor" from="FL.residue_harvest_storage_efficiency_factor"/>
+				<connect to="GP.HC_HCCPA" from="FL.HC_HCCPA"/>
+			</module>
+			<module name="CE" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/CE.itmx">
+				<connect to="CE.PC_inputs_CE" from="RA.PC_learning_inputs_CE"/>
+				<connect to="CE.pilot_inputs_CE" from="RA.pilot_learning_inputs_CE"/>
+				<connect to="CE.C_inputs_CE" from="RA.C_learning_inputs_CE"/>
+				<connect to="CE.startup_spend_constraint" from="RA.C_to_EtOH_constraint_from_cume_spend"/>
+				<connect to="CE.Des_C_to_EtOH_yrly_starts" from="RA.Des_C_to_EtOH_yrly_starts"/>
+				<connect to="CE.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+				<connect to="CE.PoP_Price" from="IP.CE_EtOH_POP_price"/>
+				<connect to="CE.Converter_1" from="OI.lcfs_credit_w_transport_CE"/>
+				<connect to="CE.FLM_C_to_PreProcess_Cost" from="FM.C_to_EtOH_preprocess_cost"/>
+				<connect to="CE.Use_Agnostic_FS_Conversion" from="FM.Use_Agnostic_FS_Conversion"/>
+				<connect to="CE.FLM_frac_supply_system_advanced" from="FM.frac_supply_system_advanced"/>
+				<connect to="CE.Expected_Regional_Cellulosic_FS_cost_USD_per_ton" from="FM.FS_Price_Input_to_CM"/>
+				<connect to="CE.actual_fs_consn" from="FM.C_to_EtOH_Feedstock_Consn"/>
+			</module>
+			<module name="CB" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/CB.itmx">
+				<connect to="CB.startup_spend_constraint" from="RA.C_to_B_constraint_from_cume_spend"/>
+				<connect to="CB.Des_C_to_EtOH_yrly_starts" from="RA.Des_C_to_B_yrly_starts"/>
+				<connect to="CB.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+				<connect to="CB.FLM_C_to_PreProcess_Cost" from="FM.C_to_EtOH_preprocess_cost"/>
+				<connect to="CB.PoP_Price" from="IP.B_POP_price"/>
+				<connect to="CB.Use_Agnostic_FS_Conversion" from="FM.Use_Agnostic_FS_Conversion"/>
+				<connect to="CB.FLM_frac_supply_system_advanced" from="FM.frac_supply_system_advanced"/>
+				<connect to="CB.actual_fs_consn" from="FM.C_to_B_Feedstock_Consn"/>
+				<connect to="CB.Converter_1" from="OI.lcfs_credit_w_transport_B"/>
+				<connect to="CB.Expected_Regional_Cellulosic_FS_cost_USD_ton" from="FM.FS_Price_Input_to_CM"/>
+			</module>
+			<module name="OHC" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/OHC.itmx">
+				<connect to="OHC.Converter_1" from="OI.lcfs_credit_w_transport_OC"/>
+				<connect to="OHC.PoP_Price" from="OI.CM_Oil_Crop_price_input"/>
+				<connect to="OHC.Expected_Regional_Cellulosic_FS_cost_USD_ton_1" from="FM.crop_production"/>
+				<connect to="OHC.Expected_Regional_Cellulosic_FS_cost_USD_ton" from="FM.Annual_Price_input_USD_per_ton"/>
+				<connect to="OHC.C_ilearning_inputs_OHC" from="RA.C_learning_inputs_OHC"/>
+				<connect to="OHC.PC_learning_inputs_OHC" from="RA.PC_learning_inputs_OHC"/>
+				<connect to="OHC.pilot_learning_inputs_OHC" from="RA.pilot_learning_inputs_OHC"/>
+				<connect to="OHC.startup_spend_constraint" from="RA.OC_to_RR_constraint_from_cume_spend"/>
+				<connect to="OHC.Des_C_to_EtOH_yrly_starts" from="RA.Des_OC_to_RR_yrly_starts"/>
+				<connect to="OHC.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+			</module>
+			<module name="AHC" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/AHC.itmx">
+				<connect to="AHC.startup_spend_constraint" from="RA.OC_to_RR_constraint_from_cume_spend"/>
+				<connect to="AHC.Des_C_to_EtOH_yrly_starts" from="RA.Des_A_to_RR_yrly_starts"/>
+				<connect to="AHC.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+				<connect to="AHC.Converter_1" from="OI.lcfs_credit_w_transport_algae"/>
+				<connect to="AHC.PoP_Price" from="OI.CM_Algae_price_input"/>
+			</module>
+			<module name="SE" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/SE.itmx">
+				<connect to="SE.FLM_frac_supply_system_advanced" from="FM.frac_supply_system_advanced"/>
+				<connect to="SE.Expected_Regional_Cellulosic_FS_cost_USD_ton" from="FM.Regionalized_Annual_Price_input_USD_per_ton"/>
+				<connect to="SE.PoP_Price" from="IP.SE_EtOH_POP_price"/>
+				<connect to="SE.Converter_1" from="OI.lcfs_credit_w_transport_SE"/>
+				<connect to="SE.Des_C_to_EtOH_yrly_starts" from="RA.Des_S_to_EtOH_yrly_starts"/>
+				<connect to="SE.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+			</module>
+			<module name="SJ" url="C:/Users/Steve Peterson/BSM/BSM-public_Modules/SJ.itmx">
+				<connect to="SJ.startup_spend_constraint" from="RA.SJ_constraint_from_cume_spend"/>
+				<connect to="SJ.Des_C_to_EtOH_yrly_starts" from="RA.Des_SJ_yrly_starts"/>
+				<connect to="SJ.Expected_Regional_Cellulosic_FS_cost_USD_ton" from="FM.Regionalized_Annual_Price_input_USD_per_ton"/>
+				<connect to="SJ.Converter_1" from="OI.lcfs_credit_w_transport_SJ"/>
+				<connect to="SJ.invest_attractiveness_weighting" from="RA.invest_attractiveness_weighting"/>
+				<connect to="SJ.PoP_Price" from="OI.SJ_price_input"/>
+			</module>
+			<group name="Imports" run="false">
+				<entity name="I"/>
+			</group>
+			<group name="Vehicles" run="false">
+				<entity name="V"/>
+			</group>
+			<group name="Feedstock Supply and Logistics" run="false">
+				<entity name="FS"/>
+				<entity name="FL"/>
+				<entity name="GP"/>
+				<entity name="FM"/>
+			</group>
+			<group name="Conversion" run="false">
+				<entity name="RA"/>
+				<entity name="CHC"/>
+				<entity name="CB"/>
+				<entity name="OHC"/>
+				<entity name="AHC"/>
+				<entity name="CE"/>
+				<entity name="SE"/>
+				<entity name="SJ"/>
+			</group>
+			<group name="EtOH Downstream" run="false">
+				<entity name="DS"/>
+				<entity name="IP"/>
+				<entity name="FU"/>
+			</group>
+			<group name="Oil Industry" run="false">
+				<entity name="OI"/>
+			</group>
+			<isee:dependencies>
+				<var name="V">
+					<in>IP</in>
+				</var>
+				<var name="FU">
+					<in>IP</in>
+					<in>V</in>
+					<in>DS</in>
+				</var>
+				<var name="DS">
+					<in>IP</in>
+					<in>V</in>
+					<in>FU</in>
+				</var>
+				<var name="IP">
+					<in>FU</in>
+					<in>CB</in>
+					<in>CE</in>
+					<in>V</in>
+					<in>SE</in>
+					<in>I</in>
+					<in>OI</in>
+				</var>
+				<var name="I">
+					<in>IP</in>
+				</var>
+				<var name="FL">
+					<in>FM</in>
+					<in>GP</in>
+					<in>FS</in>
+				</var>
+				<var name="CHC">
+					<in>OI</in>
+					<in>FM</in>
+					<in>RA</in>
+				</var>
+				<var name="RA">
+					<in>SJ</in>
+					<in>OHC</in>
+					<in>CE</in>
+					<in>SE</in>
+					<in>AHC</in>
+					<in>CB</in>
+					<in>CHC</in>
+				</var>
+				<var name="OI">
+					<in>CHC</in>
+					<in>OHC</in>
+					<in>AHC</in>
+					<in>SJ</in>
+				</var>
+				<var name="FM">
+					<in>FL</in>
+					<in>CE</in>
+					<in>FS</in>
+					<in>CB</in>
+					<in>SE</in>
+					<in>CHC</in>
+					<in>SJ</in>
+					<in>OHC</in>
+				</var>
+				<var name="FS">
+					<in>FL</in>
+					<in>GP</in>
+					<in>FM</in>
+				</var>
+				<var name="GP">
+					<in>FS</in>
+					<in>FM</in>
+					<in>OI</in>
+					<in>FL</in>
+				</var>
+				<var name="CE">
+					<in>RA</in>
+					<in>IP</in>
+					<in>OI</in>
+					<in>FM</in>
+				</var>
+				<var name="CB">
+					<in>OI</in>
+					<in>IP</in>
+					<in>RA</in>
+					<in>FM</in>
+				</var>
+				<var name="OHC">
+					<in>OI</in>
+					<in>FM</in>
+					<in>RA</in>
+				</var>
+				<var name="AHC">
+					<in>RA</in>
+					<in>OI</in>
+				</var>
+				<var name="SE">
+					<in>FM</in>
+					<in>IP</in>
+					<in>OI</in>
+					<in>RA</in>
+				</var>
+				<var name="SJ">
+					<in>RA</in>
+					<in>FM</in>
+					<in>OI</in>
+				</var>
+			</isee:dependencies>
+		</variables>
+		<views>
+			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+				<isee:loop_indicator color="black" background="white"/>
+				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<isee:series_styles>
+						<isee:series_style color="blue" thickness="1"/>
+						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF7F00" thickness="1"/>
+						<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF007F" thickness="1"/>
+						<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#C8C8C8" thickness="1"/>
+					</isee:series_styles>
+				</graph>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
+				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
+				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<lamp color="black" background="white" font_size="9pt"/>
+				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
+				<isee:spatial_map color="black" background="white"/>
+				<isee:animation_object color="black" background="white"/>
+			</style>
+			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="3" isee:page_rows="4" zoom="80" isee:popup_graphs_are_comparative="true" type="stock_flow">
+				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="45" height="35"/>
+					</stock>
+					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="55" height="45"/>
+					</module>
+					<aux color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom">
+						<shape type="circle" radius="18"/>
+					</aux>
+					<group color="red" background="white" font_color="red" font_size="9pt"/>
+					<connector color="black" background="white" font_size="9pt" isee:thickness="1"/>
+					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+					<isee:loop_indicator color="black" background="white"/>
+					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+						<isee:series_styles>
+							<isee:series_style color="blue" thickness="1"/>
+							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF7F00" thickness="1"/>
+							<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF007F" thickness="1"/>
+							<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#C8C8C8" thickness="1"/>
+						</isee:series_styles>
+					</graph>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				</style>
+				<connector uid="3" color="#444444" isee:thickness="2" angle="269.519">
+					<from>IP</from>
+					<to>DS</to>
+				</connector>
+				<connector uid="4" color="#969696" font_color="#969696" isee:thickness="1.5" angle="29.7976">
+					<from>FL</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="5" color="#C8C8C8" isee:thickness="1" angle="121.53">
+					<from>SJ</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="6" color="#969696" font_color="#969696" isee:thickness="1.5" angle="43.6028">
+					<from>FL</from>
+					<to>FS</to>
+				</connector>
+				<connector uid="7" color="#444444" isee:thickness="1.5" angle="331.807">
+					<from>IP</from>
+					<to>V</to>
+				</connector>
+				<connector uid="8" color="#C8C8C8" isee:thickness="1.5" angle="60.1105">
+					<from>IP</from>
+					<to>I</to>
+				</connector>
+				<connector uid="9" color="#969696" font_color="#969696" isee:thickness="1.5" angle="22.2635">
+					<from>CHC</from>
+					<to>OI</to>
+				</connector>
+				<connector uid="10" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1" angle="34.6607">
+					<from>RA</from>
+					<to>AHC</to>
+				</connector>
+				<connector uid="11" color="#969696" font_color="#969696" isee:thickness="1.5" angle="187.073">
+					<from>OI</from>
+					<to>OHC</to>
+				</connector>
+				<connector uid="12" color="#969696" font_color="#969696" isee:thickness="1.5" angle="254.055">
+					<from>FM</from>
+					<to>FL</to>
+				</connector>
+				<connector uid="13" color="#969696" font_color="#969696" isee:thickness="1.5" angle="183.641">
+					<from>CE</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="14" color="#444444" isee:thickness="1.5" angle="135">
+					<from>FU</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="15" color="#969696" font_color="#969696" isee:thickness="1.5" angle="214.427">
+					<from>OI</from>
+					<to>CB</to>
+				</connector>
+				<connector uid="16" color="#C8C8C8" isee:thickness="1" angle="199.32">
+					<from>OHC</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="17" color="#969696" font_color="#969696" isee:thickness="1.5" angle="17.0205">
+					<from>FS</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="18" color="#969696" font_color="#969696" isee:thickness="1.5" angle="170.581">
+					<from>IP</from>
+					<to>CB</to>
+				</connector>
+				<connector uid="19" color="#969696" font_color="#969696" isee:thickness="1.5" angle="349.979">
+					<from>FM</from>
+					<to>SE</to>
+				</connector>
+				<connector uid="20" color="#444444" isee:thickness="1.5" angle="214.695">
+					<from>IP</from>
+					<to>FU</to>
+				</connector>
+				<connector uid="21" color="#969696" font_color="#969696" isee:thickness="1.5" angle="202.264">
+					<from>OI</from>
+					<to>CHC</to>
+				</connector>
+				<connector uid="22" color="#969696" font_color="#969696" isee:thickness="1.5" angle="36.025">
+					<from>FM</from>
+					<to>OHC</to>
+				</connector>
+				<connector uid="23" color="#969696" font_color="#969696" isee:thickness="1.5" angle="204.989">
+					<from>IP</from>
+					<to>SE</to>
+				</connector>
+				<connector uid="24" color="#969696" font_color="#969696" isee:thickness="1.5" angle="191.31">
+					<from>FS</from>
+					<to>GP</to>
+				</connector>
+				<connector uid="25" color="#969696" font_color="#969696" isee:thickness="1.5" angle="196.805">
+					<from>CB</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="26" color="#C8C8C8" isee:thickness="1" angle="338.96">
+					<from>RA</from>
+					<to>CB</to>
+				</connector>
+				<connector uid="27" color="#C8C8C8" isee:thickness="1" angle="321.229">
+					<from>RA</from>
+					<to>CE</to>
+				</connector>
+				<connector uid="28" color="#969696" font_color="#969696" isee:thickness="1.5" angle="25.641">
+					<from>GP</from>
+					<to>FS</to>
+				</connector>
+				<connector uid="29" color="#969696" font_color="#969696" isee:thickness="1.5" angle="136.66">
+					<from>FM</from>
+					<to>GP</to>
+				</connector>
+				<connector uid="30" color="#969696" font_color="#969696" isee:thickness="1.5" angle="350.581">
+					<from>CB</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="31" color="#C8C8C8" isee:thickness="2" angle="141.229">
+					<from>CE</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="32" color="#969696" font_color="#969696" isee:thickness="1.5" angle="188.438">
+					<from>IP</from>
+					<to>CE</to>
+				</connector>
+				<connector uid="33" color="#969696" font_color="#969696" isee:thickness="1.5" angle="261.469">
+					<from>GP</from>
+					<to>FL</to>
+				</connector>
+				<connector uid="34" color="#969696" font_color="#969696" isee:thickness="1.5" angle="8.43752">
+					<from>CE</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="35" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1.5" angle="169.979">
+					<from>SE</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="36" color="#969696" font_color="#969696" isee:thickness="1.5" angle="7.07258">
+					<from>OHC</from>
+					<to>OI</to>
+				</connector>
+				<connector uid="37" color="black" isee:thickness="1.5" angle="149.719">
+					<from>OI</from>
+					<to>GP</to>
+				</connector>
+				<connector uid="38" color="#444444" isee:thickness="1.5" angle="151.807">
+					<from>V</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="39" color="#969696" font_color="#969696" isee:thickness="1.5" angle="24.9892">
+					<from>SE</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="40" color="#969696" font_color="#969696" isee:thickness="1.5" angle="172.247">
+					<from>OI</from>
+					<to>AHC</to>
+				</connector>
+				<connector uid="41" color="#C8C8C8" isee:thickness="1.5" angle="240.111">
+					<from>I</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="42" color="#444444" isee:thickness="1.5" angle="220.651">
+					<from>V</from>
+					<to>FU</to>
+				</connector>
+				<connector uid="43" color="#969696" font_color="#969696" isee:thickness="1.5" angle="158.279">
+					<from>FL</from>
+					<to>GP</to>
+				</connector>
+				<connector uid="44" color="#C8C8C8" isee:thickness="2" angle="232.798">
+					<from>OI</from>
+					<to>SE</to>
+				</connector>
+				<connector uid="45" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1" angle="129.516">
+					<from>SE</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="46" color="#444444" isee:thickness="2" angle="180">
+					<from>V</from>
+					<to>DS</to>
+				</connector>
+				<connector uid="47" color="#969696" font_color="#969696" isee:thickness="1.5" angle="224.854">
+					<from>OI</from>
+					<to>CE</to>
+				</connector>
+				<connector uid="48" color="#969696" font_color="#969696" isee:thickness="1.5" isee:type="info" angle="207.071">
+					<from>CHC</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="49" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1" angle="214.661">
+					<from>AHC</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="50" color="#C8C8C8" isee:thickness="1" angle="301.53">
+					<from>RA</from>
+					<to>SJ</to>
+				</connector>
+				<connector uid="51" color="#969696" font_color="#969696" isee:thickness="1.5" angle="352.247">
+					<from>AHC</from>
+					<to>OI</to>
+				</connector>
+				<connector uid="52" color="#C8C8C8" isee:thickness="2" angle="58.5671">
+					<from>SJ</from>
+					<to>OI</to>
+				</connector>
+				<connector uid="53" color="black" isee:thickness="1.5" angle="241.189">
+					<from>DS</from>
+					<to>FU</to>
+				</connector>
+				<connector uid="54" color="#969696" font_color="#969696" isee:thickness="1.5" angle="3.64064">
+					<from>FM</from>
+					<to>CE</to>
+				</connector>
+				<connector uid="55" color="#969696" font_color="#969696" isee:thickness="1.5" angle="157.307">
+					<from>SJ</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="56" color="#969696" font_color="#969696" isee:thickness="2" angle="16.8046">
+					<from>FM</from>
+					<to>CB</to>
+				</connector>
+				<connector uid="57" color="#C8C8C8" isee:thickness="2" angle="158.96">
+					<from>CB</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="58" color="black" isee:thickness="1.5" angle="65.7723">
+					<from>FU</from>
+					<to>DS</to>
+				</connector>
+				<connector uid="59" color="#969696" font_color="#969696" isee:thickness="1.5" angle="216.025">
+					<from>OHC</from>
+					<to>FM</to>
+				</connector>
+				<connector uid="60" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1" angle="309.516">
+					<from>RA</from>
+					<to>SE</to>
+				</connector>
+				<connector uid="61" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1" angle="178.675">
+					<from>CHC</from>
+					<to>RA</to>
+				</connector>
+				<connector uid="62" color="#C8C8C8" isee:thickness="2" angle="19.3196">
+					<from>RA</from>
+					<to>OHC</to>
+				</connector>
+				<connector uid="63" color="#969696" font_color="#969696" isee:thickness="1.5" angle="27.071">
+					<from>FM</from>
+					<to>CHC</to>
+				</connector>
+				<connector uid="64" color="#969696" font_color="#969696" isee:thickness="1.5" angle="236.976">
+					<from>FS</from>
+					<to>FL</to>
+				</connector>
+				<connector uid="65" color="#373737" isee:thickness="1.5" angle="285.742">
+					<from>OI</from>
+					<to>IP</to>
+				</connector>
+				<connector uid="66" color="#C8C8C8" font_color="#C8C8C8" isee:thickness="1.5" angle="337.307">
+					<from>FM</from>
+					<to>SJ</to>
+				</connector>
+				<connector uid="67" color="#C8C8C8" isee:thickness="2" angle="238.567">
+					<from>OI</from>
+					<to>SJ</to>
+				</connector>
+				<connector uid="68" color="#E0E0E0" isee:thickness="2" angle="358.675">
+					<from>RA</from>
+					<to>CHC</to>
+				</connector>
+				<connector uid="69" color="#969696" font_color="#969696" isee:thickness="1.5" angle="205.641">
+					<from>FM</from>
+					<to>FS</to>
+				</connector>
+				<stacked_container uid="70" x="189.833" y="88.8333" width="1161" height="536" minimized="true">
+					<table background="#E0E0E0" font_size="9pt" orientation="horizontal" column_width="103" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial" x="189.833" y="88.8333" width="1161" height="536" title="Big Table">
+						<item type="time"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="AHC.Actual_Output_gpy[Pond]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="AHC.Actual_Output_gpy[PBR]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="OHC.Actual_Output_gpy[TransEster]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="OHC.Actual_Output_gpy[HEFA]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FP, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[FT, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[IDL, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[CP, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[F, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Actual_Output_gpy[APR, P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Actual_Output_gpy[P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[BC, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Actual_Output_gpy[TC, P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Actual_Output_gpy[P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="IP.Hi_Blend_Pump_Price[P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Herbaceous, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.FS_Price_Input_to_CM[Woody, P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="AHC.UTIL_by_tech[Pond]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="AHC.UTIL_by_tech[PBR]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="OHC.UTIL_by_tech[TransEster]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="OHC.UTIL_by_tech[HEFA]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[FP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[FT]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[IDL]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[CP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[F]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.UTIL_by_tech[APR]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.UTIL_by_tech"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.UTIL_by_tech[BC]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.UTIL_by_tech[TC]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.UTIL_by_tech"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FP, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[FT, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[IDL, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[CP, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[F, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.Plant_Utilization_Factors[APR, P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CB.Plant_Utilization_Factors[P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[BC, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.Plant_Utilization_Factors[TC, P]"/>
+						</item>
+						<item type="blank"/>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.Plant_Utilization_Factors[P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.Crop_Price_Index[Corn]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.Crop_Price_Index[Soy]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.Crop_Price_Index[Wheat]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.Crop_Price_Index[Other_Grains]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FM.Crop_Price_Index[Cotton]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Herbaceous, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, NE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, A]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, SE]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, DS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, CB]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, LS]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, NP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, SP]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, M]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="FS.feedstock_prodn[Woody, P]"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.rollup_annual_subsidies"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CHC.rollup_cumulative_subsidies"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.rollup_annual_subsidies"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="CE.rollup_cumulative_subsidies"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.rollup_annual_subsidies"/>
+						</item>
+						<item>
+							<format precision="0.01" scale_by="1" delimit_000s="true"/>
+							<entity name="SE.rollup_cumulative_subsidies"/>
+						</item>
+					</table>
+				</stacked_container>
+				<module color="black" font_color="black" label_side="top" x="1327.67" y="519.167" width="100" height="68" name="V">
+					<image width="101" height="46" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAAAuCAYAAAAx49dgAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACmElEQVR4nO3Xz4uNURzH8dcIjV8boVDKQixISVasZKOmTCmS1VhYKv+AsVI0VsrO0lDKREkJGxuFUpSSJoRCWfg9brE483Sfe+e5z73P3KdZmO+7zuKe5/vc8znP93s+5xyCIAiCIAiCIAiCIAiCIAgCI/iLwxViRyuOsbvCGHPGgj7f7+XDZRMf7XOseUO/SbmPLzhUEjOMKdzqc6wyLmHAf5L4fpPyFg+wD6sLng/iIJ5Nt6AH+k1KAxNYhr0Fz3diA27iR65/EK8lW8tamQWO5OK+mVkAnfaGhbjRNs5o+ZQq6RvromtW9JsUyi2syLo24j2eSJYzgGMYVzzxcSmxA1iEe5jU/QMM4hXWS0UzgCU4gl0l7/WqbwzHsWY6ZhsuY2kXXXNCVo2/tU42q7bHWoWOFfRl/5Hv73SiKloVRX1jBZra6fReN33Z3K6X/PesqWOlNHAWi7E/159Z1zlN68r2mDda7ayBl9gsVXWeF22/30krc0uJpoXYpPpe1qu+Bp5K8y1L+qyoIynwSJrIkGaFDeM77ubi1mIFDmj16784WZMWUlK2m/lxu9GrvgZOSPN7qPuKrERdSfmFa9g63bKKu4NPBfETmn6db8s7xM81veibxEppv1ksJacWO6srKSRBmYVl1nW1LeYDvtY4Zjc2qLbxzkZfdkc6ryY7qzMpeQs7aqZ10fTiTveaumhfub3Sj77nFeM7UmdSfuE0dkhHxSLryrx4Cre1VvGIek8zF6TCuJgbJztFdboT9apvo1SAWeIGcUpNl+Q6k0LzzjKFMx1iJrEOq6SPlm2kQ9LhoC6Kxvkj3T+uVHyvXd+kdFT/OP3sJz5jj2oHiyAIgiAIgiAIgiAIgiAIgiAIgiAIgmD+8A+1+r4M9W6k1wAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="black" font_color="black" label_side="bottom" x="1137.83" y="682.167" width="100" height="68" name="FU">
+					<image width="66" height="72" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABICAYAAABCzyOOAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACSUlEQVR4nO3aP2sUYRDH8U/kCME/jaigXSzUxkqwUrCxEQIKFoJdLGwEK201pUV8CRYWWira+BYUIwjaKBgU1ELQIkZUArF4stxm9y6a3LN7K8wXFo5nH55n9rfPzCwzRxAEQRAEQRAEQRAEG3MCq7gw6kLbRrfFNL5KBlWvBWzPsEfj5BCiYA4TlesYfmTcozFyCvFf06YQs/iF45XxYX4+hffWu9rIsWAYXT0R0/iEF/pudgn3NSRGV4W4gkVcLI3dxWNc00AAzinEDfWscXML60zhPD5YH2hX8BaHsWMUQwfRy7jWnK09eJX92IWzkphVljPsUaOrrgEP1dPxBHbiS+7NuijEZyy1vWmbQrzBJA6Wxnq4Xpm3gpc4jb3tmNauEM+lAFiO+rcwU5m3gqv4jSfWZ4hZPGjCuDaF+IlT0jfCshQIl6QT8q0ydxEHsKc0d1US7Vw75gZBEARBEARBEHSLv3WdsnWlmqCLhZmxEEKs0QUh5vXrDd/Vq1KtNHrGLcQ8LmOfVJg9inv6VanWGz052GywLN70RqW3efWOeg+PBoyPxDhPRFGkPaPeD6XlRk/OBs9mKYq0C3gqFWtP4tna/VYbPeOOEYvYLfn9pCRI1VVaafTkFOKjVI0+MuT+Iemtvxtw7470cLf1XaXVRk9OIQrDZ9SDWE864q/WrmG8Lv0eS6MnF0VmqB7v4luhnFGmpUBYPGSRRcrZoPh/VjVDNNboycmgD6BhqW72H+YNWq/zIgRBEARBEARBEARBEARBsCX+ABBcjWngqI/YAAAAAElFTkSuQmCC</image>
+				</module>
+				<module color="black" font_color="black" label_side="bottom" x="1141.83" y="519.167" width="100" height="68" name="DS">
+					<image width="123" height="71" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHsAAABHCAYAAAAnfzipAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE80lEQVR4nO2cS4gdRRSGv9E7OvGx8QWKjtyAUVARVHQz2QgiCJEIggbBxQgKuhCycDvXlaBeQYlm59IXgmJAhYAIWUU0ICj4gAwKPoiiC42OyUBcVB+6b93q51Q/nPwf9OLWVFed7lN1TlX1OQNCCCGEEEIIIYQQQgghhBDblHN76ncVOAYsAJ/0JENsBv9M50RoYwz8DpwJXJMI7YsBYcqe5JT/C9zRsUwiQIyZncc6cBXwC/AxcHmLfYkKtKlsgA3gYeBC4MlM+QrOzD/k1Z+SuoC/mB0gq5my1Uy9PMuxBHzPrFvx+1vN3F/UdxX5Qs9Ut/0Vwu4wJHtt2lY2wGfAD8Ae4IKCelPgceAK3CLnZuB1755F4MOkrYXkOgAcYVbhY+An0gXTAvAo8AbzL+084CjwZ1JvEWeJ1plVSBX5QlRtfyV5jmeSejtw7+1k0uebJf10Qp7PNkbA+8yOZn8W2Cx8t6Afm82fM/uCQ/dOA/VMjmy5tenL3kS+vJldpf2QbHZ/tDVPFzO7CpvAF8C9lD/Y88DfgXvvxg2mJeAB3Kzw630HXI9zK1m+9n7/CPwB3NBAvhBl7efxLc4y7GzQ5xxDUvZTOJN1lHqj2ZRoXAlcDOxl3u/t70G+rbALOAUcj9FYF8oeAbcA3+BeVh7rwCU432p+rshslvEeqb/OXhcBvzZoL7Z8WTaB54BbgfuSsiVgDfgyubZMF8q+HVgGDjFrVvN4DaeUF6lmNkfAdaSD6WfcYqgt6spXhRHwNM7cv4qzQv/gFpi3Ue29ldK2su0hTgKv1Lz3q5zyB73f1+AWPOajfR/eFnnyNcGs31s462FW6P6IfbSq7DFwArgHuIti0znGKcuUU2TC9pKazxHwEm7B9WxSZv71FPAR86vbJqa3jnxNsAG6xvw6w1+hNyamsn1BjwNPAOcDn5bcu47bnpwgNWG/AbuZN2H7krbPAKdxA+lqrw87vbsMZ1VMpj00my115GvCJm6NcQw3cG1m78A9wxEiKfz/gu1Zt3ySNEDyThQh4l57KFuvs51dBX+7sTMpBsR2ntl2Cun7Z5vxUbZ4oxiNiC1ja4zQWcQ+BnIuLoQQQgghhBCilL6SBPpm8AH9bdDHcWkoqWDi1akS81VGjDa2FV0rewX3xepl0i87i7gIjUmHclgAQpd99k6Xx6V5gQybpKE4YptgZrXsY3w2mD7P1PvB9P4nwLI2ij4p+veGAvpjJhdsW+yhJyX1ivzt1Cu3uv5LLGojpOzQYLR4bn8wZTNSJl5dX46pVzYGDnMWBCP4KTmTknpVF1dFyquq7CnhIIFQOzGTCzqj6wXaBnAtLhwX0lCmSaT2y4Lu87AI1VBM2QbwDuEAxraTC6LSV6SKrYZ34l7OGv2Ofovu9LNIsiziTHAd+kouCNJ3WNI6LmntEPVGf9ZnnsEF5A2VNpMLatG3smE+facIWwQdBO4k3avvjiTLMvkLp9M4xTWljeSCWgxB2eYvq7xMM7cfUB6eXAfzyzclVxZLFDxMs7Qhn5jJBbXoUtl2TOrvbR/BxXO/QPoy87I6QuVj3Gz3qZsZcgDnWw8yu/V6G7gUeKxCGz5tJxcMmtB/Fsg7ZPC3af52Jnv/clI2qdhG3qGKuYmsfCH/mhfpGspV99cX0TI8hBBCCCGEEEIIIYQQQgghhBBCCCGEEKJn/gN5hK47ati+mwAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="black" font_color="black" label_side="top" x="1142.67" y="420" width="100" height="68" name="IP">
+					<image width="105" height="65" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGkAAABBCAYAAADSfYphAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEK0lEQVR4nO2aPWgUQRTHf5FERUsRVIhgQAlECIgfTSxEbAQlgoUflbGzDJLWs7KQsxO7gIWKICQoWCqSNAoKAQW1MPgtFjYmolHQYu6xc3Nv73bv5rJ35v3gip2bna+38+bNzB8MwzAMwzAMwzAMwzAMwzAMw9DpBe4CT4F1Bbflv2VV0Q1YZkaAX8DeohuSh5VmpK6kXUYaw7nADcBb4G/lV/LylIEFYGPw7kgl7wklTX5TOesTtzwDrAYeK+VsA74F9fhtkHoWgH1e3lKDvhQ+c9PWpDFcB/yGS5p0XDMG1HY4zCeDWcpZn5SlDZrUUVLS/PelzLCMen0pfL2uZ6SwI2txX3kpeHcqZx4pPzRIo/pAN1JaHVA7yGKkUpAvS1+app1r0m9g3nv+A8wBw97zNHCIZLA349zR/cpzP25gbwdlvwb6cLMqa31pSB1zyn8vgJ2Vn7Dktc+vaxo4TPIB7AY2KXlzU3Tg8BDX6YOV5wPAJ+B5kO8W1WvFTBva8lJJe53j/YfAIs5QAMdw/Qj7kpuijfQemAUGcS5jFLgH/AjynQR6gt8a4EnEtgwqaTtyvC99OYILYI6j9yU3RRtJ3MQR3CDtodo9fAa+ow9gLGRwNbc4RPbZIH3ZCZwhkquD4o0Ezk1sAcapdXU/gYvABWqjtGaipo9UuyRIBneU2khuHLhM9tlwE/hSeSeKq4tBvegu3DekRVGSrkVNQrhPaqU+idDCfVJYhxaqa1FkSBk9HDc6iLSNrdEhyN5I23MZHUIWd2gYhmEYhmEYkfF39NrpQDvJK4zpCiFN7LO7MeAa7nq5BxjA3fncyPh+eDSjXbsbLZB2VpbnClm7ORXDrdhdfDtOwbeSGGQt7l7lHc3fq8wCV6i+wV1RxDSSHPnvAo7iDPQKd69yqcWyX1B9XZ6m2klbY9LURlr+LEonoUwXumf/2qGZoCFNzROeLKepdrRB15Q85cpzmpGyKI+0NnXFuZ2vXdO+5kad0PJoCp1Gqh2pu54SSMsvZTdSHmlKoGjqoJCY7m4EeAM8Avbj3N4MSed3UKvo0fDFi39JosVSkE9T7YTUUwLVo1nlUVuIZaReYAJ4BpzGLfZiKAm/h3Br1GKDspZIQvhYghNNCdQKP4E7wHkSd3eKiLoGn96I5QzjjCRRnBhqBjcjwOkVWlbPNEFsIUsvsB1YD3ytpC3h+htTwQTEm0niDvzwGxJDgZtBVyPVlxVRG8V2U/04ZVPsGa8S00gSfk946dtwCzO4r26e5d3riNooVAKVaW2Bn8cpg/y1M03k3zIxA4dJ3Ky5QNLgN8A53JfWBzwAPrC8YeokcJZqFewArRlJNukXqRZsngWu0wVh+EpAk5BBsgUxOVcHoG2QZc9lcq4OQjux7+grD8MwDMMwDMMwDMMwDMMwDMPoPP4Bi41oVf0e95IAAAAASUVORK5CYII=</image>
+				</module>
+				<module color="black" font_color="black" label_angle="7.40904" x="1318.17" y="114.667" width="100" height="68" name="I">
+					<image width="97" height="72" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGEAAABICAYAAADmpZtdAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADb0lEQVR4nO2bPWgUQRiGn8gZz5/Kv0oDV4gWgo1YxUYQQRCCiH9lBC0tFMEqZyUoJwiKNgYsBBXBoKWItkoUAlqo6GHAxr8qMWpOYjE73Nzc7maT29vb1feBLW529pvZfW+/md15F4QQQgghhBBCCCGEEEII4TAIzEVsU8C6oF4Z+AjcnydeLSTOC2BFTNvViFjDwf7Dic4kRZZk3WDAOaDP21YBXxIeXwG+AyeA9U6MpcAnYJoeXMzF0isROqEMPAXqGAFc4RrAfuAhcBPYkXXnFkMeRagBM8AAMEQzzVSD/UeDfReBHyHHN4ALQD+wt8t9TYU8inAKWA5MAmM0U00VKGGEmQYex8QYD47fR/j4kCvyKEIcJWAb8AYjRBQNYALYDKzMoF8d0SsRRmif1WQ1kIa1PQfcyKj9NvI0O7rdhXbC7piwtvuAY11oPxFFS0dJ04xNW5OED965oogijGGeByox9bZjZlATWXSqU4omAsATTIo5G7G/BJwJ6lzNqlOdkFcRbNrZTfNVhqUOnMZMVf1XFGXgPbAH2EXyJ/CekqfZ0S+aT7gN4CDwDfhM++xpFPMssRbzj7cxZoCXwDLgebdPQgghhBBCCCGEEEKIImBNVYXx+cSQ1HSWKnl9lf1fIRFyQLdEGKS5PmA9nr7fNKocZ78td+u66w4+vjc1Lu4AJvVY/+p14k1nfvyw2D0jbExwjb/VoMzm2yngFs28WwIe0H5Sw5gLPk5rjq7RLoSN7a602bh+XTdulVbixoSa18cK8IicmMviRPBPZjiiPCyGrRu2hOlfqDBhoupG9SGqflx5KnR7TLjj/X4bUW7ZElLme0799ecSsAl4FWwuP4F7tK9V/wbOz9N3F9vmXrpgMi7iwNwA3jm/k3iM5rPIJGnzJGY9+xnx49KCKaIIvaIOrMY49foxYqSSnooogk0/vsVxgOhBchZzEdNgFGObvERK6akIIhzyfm/EDOQ2/di8vzXYXMrAAcwsJm0P0uu0AhVBhCFap7OXMT5Ud2C9grkrrtE6Rb0LrAGOJ2wrynRWwYjuflM3QvhkYMEUQYQjwAfMtHIW46zbQKu5y346Zb9Xs3X/sLBv4aJMZ3XMM4UtmwG+AjspgOG4E3r2NWXWFOFO+OeRCDlAIgghhBBCCCGEEEIIIYQQYj7+ArLy9hXLfO9fAAAAAElFTkSuQmCC</image>
+				</module>
+				<module color="#005500" font_color="#005500" label_side="bottom" x="156.5" y="658.5" width="100" height="68" name="FL">
+					<image width="117" height="72" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHUAAABICAYAAADI4LrPAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAELklEQVR4nO2cP4icRRjGf9FV7vxTaLBIE1jBWCgEFKzOMo2FKFhoY7G2QjrbrK1wVmJhEbAUBEXLg3CtgRwIiuYOcmhjIWihZzQ50GJucHZ2Zr53dmf32717frAc7L4z7+w8s/Pn+57vQAghhBBCCCGEEEIIIYQQQiyfB/tuwAIYAneATWC336Yk2QJ+Am4D3y0iwQMN6hgCvwH/Jl63gEca5Fg0G7iO/qLvhrSghaie94Fz0etF4K+GOYSBlqKKFWHZovppLpyi32wYV5o+t4O4P4GngvfvAheB14KYcaF8XEfIAPgqio3ritlixZYrv6aOjXFhx4+YFswa5wUNOyLs+LA920yKMAR2gnKlNTWVxwv3D/BSR+wGsB/EeQH9d/HfNzdIesEq6jbTI9F3TiyMNS7uVP9+KKplE1SKyeVJlcnFhoSi+jqaCtpy+r3G9O53fPLZBvAG8DOTG6dj4AB4Fni0Im4APIM7EsTHgo+A36Oy3wKvUO7sFKU8fwOfA1dwgpRiU2zijjXncT+MXyvblmXQqiLc7nec+ewC8Dj/r1kxR5VxA+AysEf37voYuIr7lX8D3ANeBm52lLPmeQgnyh8VbQK4fvL3LRoKCsvfKH3J9LHnHPAYk1/MGncR28biEHgSeAd4GCdu32fSt4GvgU+pn0GKLEvUX3AjuVWcn1JruY4bHB9SNx2XBs993KCxxMblruJmnxus6Jpawovg158WcQfA8yevkHeBJzra833H5x6/bqby+PV/Bzd7lGJzHAKv4vYJnxjLLIXaI028sx0xORXWxsW7zx+i9gxxGy8/SEpHlNQuNNWeXHwp1h9h4iONb7flPLs0rKJC+qJC6WzYFRdfdx4HZcP2jJisK3XIj3OGnZ66oJBbk1NtD9uSEjV37hVCCCGEEEIIIYQQQohZOI1mbnDXevdwt9l2V7C+hbLoW281F/v75lQZuheJRO0BmblPIaskqtUsvcW0azG+B5q6ZxnnqDF05+qzGLdzOdcWy/RbY5b2nTuOysadlXMXzGroTtVnMW535VxLLKJazdIpQze4nWlOfC/CvIbu3CApORV6W6P7nn5rzNI59nG2z6cLMfMYulNYjNutc5pZBVEvM+3ID/Fm6RyXcAbtO4UYb+g+wnl+5/UCWdrdOqeZvkWt4Rj4AHgBZ6sEN8Vdw/aoQx+G7l5M5KsiqsUsPQDeA34EPsatcXdxV3pqHm6e1dCdwmrcbpmzk75FrTFL+ynvM9zo949ivD5jbquhO8Usxu15c64Mlt2v1SydOhPmfLypZ0DnMXSndr9dxm1LzrWk9E8+wrXFapYeMd0pqc5KiTCPoTt38aHLuG3JeabJdSykz6pnlr7X1BouFT57bmmtEE3JPTjlf8Frf3flrJJaw3JTshBCCCGEEEIIIYQQQgghhBBCzMN/uqPAGSUT6V0AAAAASUVORK5CYII=</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="top" x="784" y="261.5" width="100" height="68" name="CHC">
+					<image width="120" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA7CAYAAACwqE4QAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAERUlEQVR4nO2bPYgdVRTHf5Hd5Bmx0SgmW20KsbCSJTYrxioiGqKgiFauEiF2riIYZDdVimRSSBpBtJB8gbDBQBDED9BGRSsD2mwwIQQU0sToahbW4szl3bmZj7tv78zbffn/YIo39849Z+bOnHNm7v+BEEIIIYQQQgghhBBCiBIyYKHm9yBj3Lbc0dK4GbDibRv5Yo8Bn7FBzyH1BPeA34HdwF3ApnxbBOYT29oITAP/AruG5cBY4vFeAu4FpoC/vf2zie10yTKwd9hODErKJ7gHzAFHgT8b+voh/C/gvlXYKcuvMTl3hvq0MQlc89pfjLBZdw4zwLfAZuD7kjGb/ElCygneDtwN/NrQLwN20g/fHwCfA1sT+hIyA7wP3J/bvBN4hP5F7QHfAAe89hdqfMoopqEngTeCPh8BjwH/AY/m/U5H+pOMtoqsKiaxMH7Y23cc2AE83JJNF1leox9ZloCXgaew/OhuTrz25yimGcck8ApwxGv/jvgaI8afZHQ9wRPAA/RD1gpWgN3Tos3tWJhcDPZfAW5g0eQi8DFwiuaiaAJ7csPxUvqTjJQTfBW4DjzU0M8PWW7bAvyQ0JdBmM19OY7dgD/RbtrohJQTvAR8CjxD9YVp5S6NYEuJzQnsSfoy2D+b952kvHpezTlcwQq3tfizJlKH6IPANqx69Cc5w3LUZSxfve2194ALxFfSFyjmqgx4s6a/C78fejZ6wAngCywPTlMscOrCcNk5hMf7hJMZ48+6xn35qXoFCNvDnBfzqdJ/RVnAqtLVHLPCrUVR2F73mhSeQ92rnj9uOGadP0IIIYQQQgghhBhB1ru+al37l+JT5QzlX3Lc1575BDbEgHS9XCg6RhM84nQ5wRm3rrE6FWbVR/iy3OZWprKSPjE6pyotlfPFtYW+1tkNbZetJTf5Fo6fRKfV5QQvYLIcX5ozhakw3RpoBrxOX6u0SPlS4BwmLtgEPJvvi9E5VWmpxoBPgOfz/ePYWu6JCLsA+7B1cGd3W3BsrAbLH38n8DjroIYJ78xwm8/7uSdk3jvWr0DL2sM+7ndMJICiLtmpJsM+VYR2yuyW+efsuugQ41vVOGuu0FM9wTfo351uGwfOeX2WgEP0FR9OvHYmb49VZQJcoiiIi9E5NWmpwhBdFjlCu3WMY+fYqQYrpOsi62v6CsonaEGiMiA94DdMaeFu0GND9SgRXU/wZeBH4D0sb/kieSfaG5QmnVPdEzOFqT3Pr8G+z4PATUyeE+Nba3Q9wcvAWeBpYA/FC+pEe75WqUlv5YjROdVpqcLJn46069hHsZaY8+wOVYM1jPfgk1gu+yXffN4BvgL+wPLgdeDVyHFnsX9JuGP/wS6sq3aXMTG7m8wV7B8V+7FJeAvTRbv9767inA5hOdbZ/Zlild3k20hRVS2LEWHof6kU7eEWIEbiXwNCCCGEEEIIIYQQQgghhBAjz/+u/lvPt8jaZAAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#65482A" font_color="#65482A" label_side="top" x="510.167" y="255.167" width="100" height="68" name="RA">
+					<image width="128" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAA7CAYAAACzM4J9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEIElEQVR4nO2bT2gcVRzHP5GNWdqbRSgGhM25pxL/gOtBRISAwYilSz2Za8FDogd7Wk+CJZ4KxYNGEFGxdKUFaSlpDu2hinqyBxESTAkWaoVCKioL6+HNY96+zLzZ2Ul2ZuP3AwO77735vd/M7/f+zO53QAghhBBCCCGEEEIIIYQYW1aATtlOVJ1HynYghRWg5x3tEvyoAZc4wIlU1QQA+Ak4DEwAM8Bb7G8SNIF/gKf3sY/KUeUEcNkEVoFXgEMj7LcLzAMLI+xzpIxLAqThLhU7wOOBtnXgN6f9j8TJtAjcAB4FvovqW04fHeeze55rt+WU5fGrVMYlAZrAEnAW+CsqW8EsDRPR8RFwheQZogZ8BpyI2k4C28DnUf0nwPPAv8AzUZsvE+x0gGPRYZkFjgBrQ/hVOlVOgOPAQ8woWsMExgalAZwC3nfanwOeoD84li4m+N87338FniRfYH4A7mICbFkArgH3hvCrdKqcAHYTOAlcBc4TB2saOEo8XfeADeCxgD1/CVgawqe/gQvAScfm68BXBfwqlSongKULfICZEeadcne6tscU8Sh3qQO/YDaStu2HQ/rTAV7CrOuzwB+YR8Vh/CqdcUgAgFvAZeKRt41ZHmZSz+hnFjMyvw202Qb+HNCX68CLmOn/MvG+JK9fpTMuCdAFviEeeXeAm8A7xMtCHbhN8o7bD4zdVPpMkR0868sbmD2Em1R5/SqdcUkAgHXM9HoaE4TXiAPbAx4Ab2I2Yz6bwNvAF1HbK8CZhDarTpsW6awDz2GS5WenPK9fQgghhBBCCCGEEEKMFw3M7+iVFj8kcOA1f1ns1U/BL2D+7bqP+ZPEJ01vN0od3v9S85dFbY9svAp8CjyF+ccuSU1TRazmTxSgAWxhpv4mu5eBRXZLvFuBcjCyqjaxts5O0SFdH865vh4vq6+91Pz5vrv+Z/lpsUuq72tWXSksEt+0pJsF+ZcAe3PaTlkN+Nppm7R++wFsOjZCfXUCbfyk9l848fv0fbcBa3vnpNnw72EduDhAXSnYILS9737GD5MASaPbx21nb3TaiBgkAdJGu61vAL97NvyypDeS8tgIXUfWNeam6CbwWeBlYlGEFUvMUXyztUWstLGEdH3TGA3hRoE+R6H5y7Lh6hL8hA3VDUXRBFigX0vfAz6OyuYK2vbZS11fiFFo/rJsLEdl5zD31p0NQ3W5KZIAdnS8R/+F2MC4b/Gk6e0G1eFBtq4vS49XFc1fHhvLUbsGu59WQnUDUyQBQgFJeoEiTW83iA4PsnV9SXq8Jv3rcRU0f1k2fJ/dpS1UN3JCGzW7Vre99kmPLknlaa92u49zO8C7ng92Exp6RBukL7vZSro+vw9/Lc7aBA5qI+mRNatOCCGEEEIIIYQQQgghhBBCCCGEEIL/AGt2gi2iJ1ZIAAAAAElFTkSuQmCC</image>
+				</module>
+				<module color="#2A2A2A" font_color="#2A2A2A" x="1142.67" y="114.667" width="100" height="68" name="OI">
+					<image width="101" height="71" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAABHCAYAAAAeGInyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADqklEQVR4nO3bP4gcVRgA8N/p5TxNpRixOriAaKGIKFaK/whCQFAQFSuJhQiCRVSw8ixETLhUClaxkYAgGkwpGgsLI0YIKPgHs3jBRqMWSTTKgRZvHjO3t3u3tzu7O5P7frAcO/tu5u1+M997M/MNIYQQQgghhBBCCCGEEEa2D/9hqbLsrmLZE9Po0KAum3YHtmhZ+lGrr5O4apqd2q4W8QfOY1dl+Sw+Mvje34ojpQ3m8bP+R0QOzD+4c5N1tSIobUhfT2IBB/FXj89XcQBz2FtZ3ooA9NL0oMziYVzAJxu0+woreMglML60ISi34nspMP2s4hRuxM4J9Gusmh6UbelSC8pmR1QrND0og6alnOZW9J4MtEobgnIUO6RzlX7ukGZopybRqXFrelDguJSSXu7z+SxeKtq8NalOjVMbgtLBC9LUuPsEch4/4UHcj98m3rsxaENQ4DCuxLXSEZGve/2Nr3EFvpxa70IIIYQQQgghhBBCE10+7Q5sYhGnpeten023K5NT1wXJtlaO5PKlD6fdkaq2XCXeViIoDTTOoOxTVi1Wa4C7S0+znEpyu34ppbreqn4ptN+2l6X7MQvSDbTcZqmynfPF57lfJ/F2n+3ndQ5SqbmhcR8pcziBc5iR7rV/Kt1NrAZmXqpEOSsVSMxIA/xpXD3C9pfxDK4r1nkLjkh3L/dLE4gVqQ5gpngtVf5/Bz7AO8Vnt+Nd66sx83d4FN8Ur6FNIn29qvyiucR0Jx6otHkN1+NZZTXKfhwaYbv5R/pYeZu4gz0Gr3iZwxlrA/UFjkm3qKs7Vi7eOLaF9fc0iaB81/X+F/yJm4r3s7hB7z3szaLtMHJ50l7Dp5N/8XqP9R61fsd6RE3FG00Y6MdVs7WK56Uf6oQacn3FcWlnebx43+uoHFoTgpItqL84u4Nr8LRyfKvjnOQMPpdS4S5l6nqvhnU3Iig5zYzTYWmgPmS0dJZ1p7CcujZ6MmBgTQnKj7i5eFU9Z/3s6wdpr99dWZYL8jbz7ZB97OWIlHKfUmPqohlBIQ3o3VWQy9Je3T3Q52dRXlSmuzekZ1OqFot2eYY0j1esnVDko3SP3udOG7mI96VCwNpSF80JSkc6B7hHeRJ3DrcVf6su4l7pR79Qabvb2gB2pKnsr8rCvbO4WzmhWMVj+L3SbivX7/L4VFvqCqPLD8jWekGzKUdKW90njXm1pa4wmvxUcr9reWEK8gXQRt2LCSGEEEIIIYQQQgghhBBC7f4HASTVJvK31ewAAAAASUVORK5CYII=</image>
+				</module>
+				<module color="#005500" font_color="#005500" label_side="top" x="310.5" y="503.5" width="100" height="68" name="FM">
+					<image width="117" height="71" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHUAAABHCAYAAAA5tggaAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEdUlEQVR4nO2bPYgkRRiGn9P12PM08C9QYWEC0UBQFNTgLhIT4eQE8ScRHA0XDgQRTW6MBHWNBMFgwUQQBEXhEA5F0EBFD0RF9MBFE1FRA39O1wUNvv3omprq6uq93u6+5X2g2dmZr7q+qbemfrrfBiGEEEIIIYQQQgghhBBCjJ7zh05gF5gA3wIHgPeGTSXJIeA74Gvgi92o4LwOzjEBfgX+SxyfAhd2UMdus4w19OtDJ9IFXYjqPAXsi46bgb86rEMU0KWoYiT0LaoPc+EQfX+Hcbnhcy2I+wO4Inj/DLACHA1iZpny8TlCloA3o9j4XDGHGNl05XPqrDAubPgpi4KVxrmgYUOEDR/ms8a8CBPgZFAuN6em6nHh/gFuaYhdBr4J4lxA/y7+fes6ySCUirrGYk/0xomFKY2LG9XfD0UtWQTlYurqSZWpiw0JRfVzdCpol8PvcRZXv7Ptz5aBe4DvmV84bQGngWuBgy3iloBrsC1BvC14AfgtKvsZcCf5xk6Rq+dv4DXgDkyQXGyKA9i25jLsh/Fzy9xqWerqRNjqd1bz2ZXAxVRzVsyfLeOWgBuAUzSvrreAY9iv/CNgEzgMfNxQrrSeCzBRfm+RE8D69t8H6FBQ6H+h9AaL2559wEXMf7HSuBXKFhYbwKXAw8B+TNyh96QPAm8BL9N+BMnSl6g/YD25qzgfUtuyjnWO52k3HOc6z79YpymJjcsdw0afdxnpnJrDRfD5p4u408D120fIKnBJQz5fNnzu+LyZqsfn/5PY6JGLrWMDuAtbJ7xUWKYX2m5p4pXtlPmhsG1cvPr8Kspngi28vJPktiipVWgqn7r4XKxvYeItjeddsp/tjVJRIX1RIbc3bIqLrzvPgrJhPlPmz5Xa5Md1ho2euqBQNyencg9zSYlat+8VQgghhBBCCCGEEEII0Z7UddhzniEsouFF+BL3nN/BOBcudo/CFD6EqFdT3e+8CbufWMcEeGjXM9pjDGnmfga7z3lfJmYVs5882UtGe4QhRT2DOQXqbCWhs+DHmnP4nOhHaoieYjezV6juc+aG/TpjdZPBvNQUvifxRptFr2OmVCKFr5015ueuOg+tl/0kUU+psbqtwXxoU1vvhELW2UJi83ZK1Ny5w4b2xk81dKmxutRgPgpRh35Aaguzgx4Ebg/evw04AjzLzp6auy76fxN4OhOfM1aXGsxHw9CiAryCNdhjVD3+bsw6+U5POaxjc+EjLBqrY4N5eDzaU36tGIOosbXStzHP0excjw1l7+8whxJjdanBfHDGICrYHLQfWwmvYsPZiUy8z2cvArdSNfDhHdafM1aXGsxHw1hE/RD7pRzHhrQT5J918WdcmuLaUGesLjWYj4axiOoLJufVgvi4oSfYr/ds+AB7JOMo1fbHH7DaBN4mbzAfRQcYi6hQLZhO0SzOFnAv8AvwEzaffg7cuH2Os+FxbNR4gmp+3QCuAi7Hhmifw49gi7pcXnvqZoEQQgghhBBCCCGEEEIIIYQQQgghhBAt+R+hvZP3YyTDBQAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#005500" font_color="#005500" label_side="top" x="160.5" y="503.5" width="100" height="68" name="FS">
+					<image width="117" height="71" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHUAAABHCAYAAAA5tggaAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEZklEQVR4nO2bPahcRRTHf9F98uJHoaJgYeQFxEYQoojFsxBJE1AUhGgjsrZCurS51vIsJDYWARshEEjQwiJoBG0UFARFkoAPtbAQtPArmoAWs4ednZ2ZnXlvdu99yf8Hy+Pd/c/MuXPmzpy5ewaEEEIIIYQQQgghhBBCCCHE6rm5bwOWwAbwPbAf+KRfU6JsAj8AF4FvltHATQ3q2AB+Bf6LfL4Ebm3QxrJZx3X02b4NaUELpxqvA/uCz6PAXw3bEAW0dKoYCKt2qk1z/hT9YkNdbvrc8nR/APd41/8GDgDPeZouUz6sw2cEvB9ow7pCNhnYcmVraleo8zt+zLzDSnXmUL8j/I737dli1gkbwHmvXG5NjbVjjvsHeHyBdh245OnMgXYvdr+pQdILpU7dYn4kWueEjinVhZ1q132nlgRBOU2qnViZlNbHd6rV0dShLaffE8xHv93ku3XgBeBHZgOna8Bl4CHgtgrdCHgQtyUItwUngd+Csl8DR8h3doxcO1eAM8BhnENy2hj7cduau3EPxi+VtiUZtaoIF/12ie/uA+5gumaF/FmpGwGPAF+xOLq+BhzDPeWfA/8CTwJfLChX2s4azim/V9gEcGry9yUaOhRWHyidY37bsw+4ndkbK9UdoCyw2AbuAl4FbsE5t+896cvAB8C71M8gWVbl1J9xI7mVzqbUWk7hBseb1E3HucFzFTdoSrRhuWO42edjBrqm5jAn2PrTQncZeHjy8XkNuHOBPd8u+N6wdTPWjq3/53GzR06bYht4FhcnvFNYZiXUbmnCyHbM7FRYqwujz+8CezZwgZcNktwWJRaFxuxJ6XNa28KEWxqzu2Q/uzJKnQrxlwq5veEiXfjeufPK+vaMma0rtskP2/Q7PfZCIbUmx2z3bYk5NbXvFUIIIYQQQgghhBBCCLE8Yu9rB0vfKaKxRPCuT4OuB/p06ibueMRbTDMb1oBDyLF7ktzvl0NE028BltB1kWkyWYox8d8ZYx09ZjpQ/N9QY+VrtCG5VNCSNNGl0pdTLfXjEHC8cd1rwIfAM0yn9ZPAp8x3dI3W5ywuge1IcN1SXErTRK87wgyBLqGrfVJjmQ2xxOsabdhWavkwXepeVkKfgdIV4AFc2iZMk8G7BnW/wXwyeCqhrUbra87hEsae9q4/j1tO3t6p4S3oe0sD07TNg7jM+hO0z8m17MOW2gs4e49O/g+zC3tjCE41toF7cQnOOzkisWp+Aj5j+kQ/hsv5Pd2nUTAsp0LdE1WDnXMpibZLteEUbFPvR7s1drcMzanWoX7W+yVcpHkw0OWi5qPB//fjgpjw4FWtNuS9ie4VBjL19om9Hgw38xaRdt61RedQY9Gvn5ebyqmt0eZePqRsuSGxjio5nR1L2o4NDP9wcurk+E60Oafad3vl7dieI3bivIU2R+z4R68MbU3dizyFO5DVe9RryKm7Y4Q7ID2IqNeQU3fHE7j3xjd01CuEEEIIIYQQQgghhBBCCCEA/gcO5JthgfiZoAAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#005500" font_color="#005500" label_side="top" x="20.5" y="503.5" width="100" height="68" name="GP">
+					<image width="106" height="72" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGoAAABICAYAAAAeRWCqAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAES0lEQVR4nO2by4tURxSHP2VGRk0CAQM+UJhAHouAgho3IyISAoKgENRlMH+AoLi2s8pqluLGrZGBgIOCCKIjqIsEFUSFkIQMjuSB8bHQ+MqAWZx76OqaqjvdM32v3fr74DLc012PPqfqVN1bvwEhhBBCCCGEEEIIIYQQQghRwgjwKnE1XmOfRMAQcAd4AXye+axRc59ExABwCngCfPCa+yJK2Ielt70dlnkCrMFm2yvgGrAk+M4orekzHgi5dkdmsTcCm8/2sJ24XDt97XnmOpv2YWnyKjNTojsvdIa3E6bWYeAhcDIq7wGO7d5mWflU8Mv62jeknNoO7pDYmWCOLlvrvIwHLxXQKxl7aBtN9Dv1vbK+dp2FFdW7AngXmAKeBvY4baV2fi+B7yLbAPARcKu4Qp4DPwBfYLN3GhgHPisugNXAOuAAsDKwDwBrgdNFP4eArxL9ngZ+BT4Bls7S10qoKlB/AY+x/B2OzIPAguLa3EF97tDYgSGDWNoCmAD+BT4s7lcB/wC/Yc51+wZgOXCmuPcBtpOZA+pAB/3tOlUFahq4wcwRWBc+UPYU97uwID/AZp/bPwb+Ayaj8uM0B1R4vYMFvHaqDNQ4FqRtXaw3nqEhocPDdLgSS5tjxWe3i3rew2bOOZrO9wD3HFUFCuB7bBQfY/7PUe74cN1xfF0JHQ62yA8CW4CNwO+FfQIL3josnY4FZTwT+Hr31uBb3dRuzXdNjciW+m5YV2rXlnoM8N1gbqd3JVMu1Y73Ld6y5/rat3hQwisXvLIf704O6ynbHueenXJ2J/XAO9vzlxBCCCGEEEIIIYQQQtSCv22OX7q+zTKxWMcxb7p5HvUtzZPQQeACcI/O5GIiQ5UnvLuxg8ND9JnWrRep8oQ3p5uIdejxmU5OFpb6bCS4D8+8wrSbs4e0K7j0tkI1VVznKPAMO+4PRTKNRLttU2WgUozSqkRaDPyNpUn/sSeBRcD2qKwfuceSsUXAj5hjvM4HmH7iOLCD1nQ8Satjh4E/getBv74BTjAzWN7W45I6DxZ9mKJVJNMod031+GaikbHPtqDGUuPc8XpKeuy21Olryp6SNXcquAzbz9XZ05uJkCHgIpby2hUoflr8zSmYdmFavSOJsmPR/S8Ze9xWp4JLgJ+j+z+AR0GdldDNQB2mmY+fAfeB94Gf5lDXBPbjXX+XUxrNl54VXMZUtT1fAKwnrWqNhS6XEt+5C1ymKdvagK1BuRkyX3pOcBlT52bC8/5RYBPl0uY4/XnaO9/lPvWs4DKm7kCtxXTe7aRDF3B+TTVpD/pIcFlnoFJOGcZmWQpXx35JdWlvGtiP/ePAWcoFl53W29UBUHegdmPPOPew9ekmJi2eypRxR1WR9pxJTOK8rGjH184dWMqdC6nf+ka/Smv3WeyNp+43E52yFdviV7XbE11A/1XfJ+ReDwkhhBBCCCGEEEIIIYQQQoj+4X9/cmysx6N+kgAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="top" x="782" y="473.5" width="100" height="68" name="CE">
+					<image width="113" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHEAAAA7CAYAAABMvWXaAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADcklEQVR4nO2aPWgUURDHf0o0p2LjF8aAcKksBCEEbU60FEFRQRGtDFbaedpoETsLPQtJI4gWErQQIhYSEEHQxoB2AUVIEAmCgo1fUQKxeLvcu+fe7t7t27s98v/BFrfv7czszu7M3HsDQgghhBBCCCGEEEIIIYpKDZiM+d2OjGXDSo+yasCSdfTyA+0DntAj9+DDiSXgI7AfWAesCI5Z4KoH+b1GBfgD7O6Uwj4PMk4BG4ER4Jd1vupBdrdYBA5324i0ZP0SS8AYcAP4mjDXDrc/gM0t6InKd2ly4CjxIb4MfLPGT6bQGXcPo8BLYDXwOkJmkj1tkdWJA8B64F3CvBowRD3U3gamgLUZ9ccxCtwCtgQ61wDD1B9cCXgBnLPGT8TYVKMxZRwAzjtz7gJ7gb/AnmDew5T2tI3PwqYZZUzIvWadGwe2ATtz0hlGiLPUI8QCcBo4iMlX4QuINX6MxpQQUgbOANet8Vekz/lp7GmbTjhxENhKPbwsYYqeDTnqHMCEtFnn/DzwExMV5oB7wAOSC5FBzBfoyvNpT9tkdeJn4DuwI2GeHV7Cox+Yzqg/K9XAlnHMS/aGfEN8LmR14gLwCDhE85v38ra1QX+EzkHMF/HcOV8N5paJrkpbuYd5TLGUxZ6W8BFOrwCbMFWZ7cgaJmd8wuSPS9Z4CZghfYU6Q2PuqAEXYuaHofKOpaMETADPMHmpQmNRERcyo+7Bvd7GdVgae7pOuMLRrHx2x90clGbZzS7vJzHVXivXLPF/IeKOx/3FcO8h7m+SLdeVGWePEEIIIYQQQgixbClSP03XbenELkYc7gpG1CqHSKDbTgR4S2Nvjr2R2vF+lV6kCE4UGSmyE5P6VcI5zfpVwi68cNzdKwx3WdyF9Sg7Ct2KWWQnxvWrABwBtgfnh4B91HcF+oD7wPFgfBVmn2/C0TGG2dSOkgE59sX4pAhOHMZsuLb6pj+m/sDD/bpdwe9FjAOnrd8fME63v8Y4Gbn2xfikCE50C5ujnuS64TRuEzmKXPtifFIEJ+ZBCXiP+bLCl+NmVy3KkaI7sVm/ShIjmA67pxn159YX45OiOxGiH2QSbsir0Ho47Ym+GCiGE93Cxu49sXtDW1nJmQMuWtdNAZfbsK2K6Vb/Esj5HdjjK28LIYQQQgghhBBCCCGEEEIIUWT+ARGHAcvIdwWcAAAAAElFTkSuQmCC</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="top" x="784" y="360.5" width="100" height="68" name="CB">
+					<image width="113" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHEAAAA7CAYAAABMvWXaAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADvElEQVR4nO3aTYgcRRTA8V9kNWPEi18Y97SePAhCCOphlwgeFEFBQQ16cvWkB8HVix7izYOOEMlFkHiQoAchEkECEhD0oIIBwYAiJIgEIYIXv6IurIeaZmo7Mz0f3TM9q+8PDdP18apqXtd7r7seQRAEQRAEQRAEQRAEQRD8R+nieMX9NDL+N1zWoKwutrJrJ/+hSzhhh6yhCSV28APuwlXY1bvO4uUG5O80VvEXbp/XgEsNyHgM12I//sjKNxqQ3RabeKDtSYxL3Z3YwSG8hp9HtM3N7W+4foJxBvm7cXzgumoTv4JfsvqDY4xZtYZ1fIor8MUAmaPmMxV1lbgXV+PbEe26uFnf1L6Jk9hTc/wq1vEGbuiNeSX26f9xHXyCp7P6Ryrm1LXdZdyLZ0ptjmINf+OOXrv3xpzP1DQZ2AxjRTK5r2RlR3ATbp3RmIWFeErfQlzE47hP8lfFAyirf8h2l1Cwgifwalb/mfF9/jjzmZp5KHEZN+qbly0p6LlmhmPulUza2VL5efwuWYVzeBvvGh2ILEs7sCyvyflMTV0l/oRfccuIdrl5Ka7d+LLm+HXZ6M3liPSQfWW2Jn4m1FXiRbyP+w1ffCNP2xTsHjDmsrQjTpXKN3ptVwyOSidZw3kpWKozn4lowpy+hOukqCxXZFfyGT9K/uOFrL6DM8aPUM/Y7ju6eK6ifWEq38rG6OAYPpb80qrtQUWVyRy0hnL/nLLCxplP6xRfOIaFz+X6sg8a57NbHt4fl6K9SfpsuTQQKddXvWKU11D1mpTLLcusmk8QBEEQBEEQBEEQBAtA67k98zjFGEb560V8wZiSNpUIp/UPWdekM7eDlT0uZe45LYtG20rM+Rwf4tG2J7LTWCQlFnyd/R6VW1OV01Jk4RWmunxWWJyylD+sl5lJXkyTLJIS78Q9+GiCPsNyWpbwDh7ulV0unfMdK/U/JB1q75KOjg7Y7pdnlhfTJE2kLNZhn3TYWnAa3zQgd1NSYH7/vZTotEc/T+YDfaUVZ3639e6r8mJOST647cwEtL8T88Cm2C0XTJbOOIyyOa06RB7ETPNimqRtJeZs4lnJNN5dU1YH30k7q8jpeb2mzIVlkZQ4LYNyWvZLGXaT+NdBzCwvpkkWSYlLOCz5phO9snFza8p/dtnkrQ7pV8WOyIuhfSUWgc0W/pGe8jX9wOOofjrhlqSUJ0sy8vzR4hXjHJ7Pyk7ixSnmtyFlq1/oyfmzN9aDU8gKgiAIgiAIgiAIgiAIgiAIgiAIgiCYO/8Cb2oLu/GuigcAAAAASUVORK5CYII=</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="top" x="784" y="159.167" width="100" height="68" name="OHC">
+					<image width="120" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA7CAYAAACwqE4QAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD+0lEQVR4nO3bO6gcVRzH8Y9yr15flQ+MqW5AsUglQZsraiFaqCSiYOsVtLDzQVCQ3BR2roWdIKYQXyAkKEhA1EIbEa0s1CIXjUFQsYnRaJRYzBz27NzZ3dnHnd27+X9hip3z+J/Z/5zz/8+c3xAEQRAEQRAEQRAEQRAEQRAEQaKDo7MexE7j4hnZ7eB8dvyBa7PyJbwvHDoxbTt4BT/gTlyBi8rjVfyEW1sezzRYw9/mdOxLLdt7Eb/hdvyZnT+IG/EcDuBfPNDy2BaSNmfwCh7CB3qdS+HQY7hbd6luEnPzpT5f5jvYyMrzftb1hoeqjdQ2r/cVLq+xv47PcAm+KOs+MoKtbadNB+/CVfi2T/n3WMZqw/46epf6e/FkVn4Ip8uyA+W5dbyC68rzl+EWW//4Q7g/q3MN3qwZw+uK1egf3FbWf2dEWwvDKn7Xe4fnVGNZdQbnv4f11bF11qX4X20zzG6qU00E+7Ufxda2M6sselJ2K2buiQF1ftQbCnYpltJqm1M4gz1DbI6yukxqa2q06eCfFUvmzX3Kb8I5bLY2oguANh18Fu8pYls1YVnCfnyEXxv0Ne5MuLSmzW7FbPt4QLtBN98pRbiYlq0dTYqdeYxLLzWqMW5QDE5t8ji7lpX3y8A7FTspVlbt5BlvXZ26a6rG2ya2tp22Y/AmblBkk+nR4Rz+w5WazV6Kx6oHdWfyeRzH40PaPa14qfJL2eYvHNHNshPHFPEz1fm6pk5+TUfwtt7HpKa2gpZZqHfeOzWLDhoSDg6CIAiCIAiCRWTen0vnenzTeExaV7+Vll4nbkzBRjAm8Ry84ISDF5w2HdxUZZHrrPrtCG0YT29V7b9ut6efDmuQ3artOg1XUy3YsOsfiTYdfBR7yyOxD1fr7o928ISujukEnqrpa1y9VT8d1xLewMPl+WXFTlVVh1Vnl2Ive5CGaxQtWOp/D+4wBzlM9c6sHhtlvTRDNrK2eQZaV16tk36Po7capuOqUrVTZ7dufMluWh0m0YJNnKFPawaf0b0707GskMgmzuKwrqJjFY/i3bJ8mOoyZxy91TAdV3WJrls5qnYHkTRcM9VntZ1kfarY8N+Lu8yPfGUF3yk25NMN+vJMRzQl2nbwSXyJFxRx6yVdFUcS5Y3LMA3UoBmzD9fjwwns51Q1XDPTZ7Xt4PQFw324R+8fmkR5r+n9QqFuqaySZDN52xVFopOEfCfxOZ61VcdVdf5aQ7uJ/XpziUOZ3SZj2zZm8Rz8liKWfVMeOQfxia6O6TQea9jvMA3UIB3XJp7R1VUdx/MjXNNhgzVcF5Q+q1+2HCwIc/25ZTAZdXrmIAiCIAiCIAiCIAiCIAiCIAh2MP8DiKJR/QTLA4QAAAAASUVORK5CYII=</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="top" x="784" y="65.8333" width="100" height="68" name="AHC">
+					<image width="120" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA7CAYAAACwqE4QAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEGElEQVR4nO2bT4iOWxzHPzSuf/du/AuTxczCykISFlPIgmQKkenu7igWdriJ0oy918JOESUkakRJCRsbRCmKuxghTd0bG38vUyzOc3rOc+Y8f17zzvs87+v7qWfxPOfvnN85v/M77/kOCCGEEEIIIYQQQgghhBDCpQYMld2JVmJy2R3w6ALeAR+AuSX3pS2omoHXAveBt8C6kvvi0wP8D6wouyP1UCUDdwCbgTPAZWBHqb0RDacLeIVxzT2E3bS/B08DXgLfvWcwJf0hMCNQp01P2xr6A230ZaQrTgjQT2wAa5g+L49rYJtnMOW9A7hE7FI7gKskB9+fMDXCkwDSXXQ/yYlh+yEjO9jBH/Te/UFyDdIFjJAc8Lwo2zVgqHzomyVk4LSJWJn9uip78CpgPXA9eh8FrgAbSR+kEeBrlAfMYG8DHjt5fBe910nrBOYD95z0YWBWHf1eAPwWlXN5A3wEuuuoa0KoioG3YAbKHexT0beNKWVGMcYciPJ/Bh6RdNnPgdPApOg55tXxFVjppE8CpmIi+bagCga2K+8IyYG2BuklvCcuApYC85z8W5z05ZgVen1sUaD+VfYGc0b3mRqooxMzOW8VrHvCqIKBswwxBCyJnhC/A/8SjqB9A/aQdNGvgbvA38QTaBrwlPQfWXxjvsB4iJMkg6xzwE3gv5R6fimyIlc/Mvaj6H8YGyS9Iw563OPLB+Cg15YN5myevMDIPVL1pXx3J5kYB+6xyuJPiF+eKrjo8eC77z/J3ndFi+G7xkqcPYUQQgghhCidquuwKt2/RpyD/ftQi38FKEqg1X/oEDnIwG1OMw0culQIKSLcX6dCe1sN4/ZrgTxFtFFpGqw8/VZWu37bocuTvL759TdE29VMA4eu/pYDs4nvTWvAbuI73mGSV3yWAeA9yTvgfuC4U3Y6sIyxmqs1wMwozwZgDyZeOAtsj75PwVw3nivQLhg1aK/T7hyvbJG++fV3A6upQAwTUhxmKRwHnbJZIrpQHvtexBNAUhvlXyXm4beTdq0ZiqJdVWhR3VaonnFH6I1awR9JKivsKrjm5PmCUW1YhUYX8BdwMUpfAPwBPCvQ3ivgk/NeRBvViVm5fh5Lln4rrd0spmD+xlJ1W80Osu4ACzFuei0VkbVQTL/VkjTbwK+BB8BhzL51lFjWMoLZf36WPG1U1orJ02/Vy2LgG0bSU6RvE0azDWzlsJtIymTBuPDLJPVNNcKu0qeINiqkwerB7HF5+q08NpOMJQacdkvVbZVxDj6P2cueRI/LAeA2sZDuPbCzYL37gBNO2c+YgbXR7iiwldiY34EbwC6MEfYDF5zvh+r4m45g9lhXvutG2Xl9ayukm2pzKvNvHaLx2AuINJmsEEIIIYQQQgghhBBCCCFajB8KjVDlSmMHKAAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#652A48" font_color="#652A48" label_side="left" x="784" y="587.167" width="100" height="68" name="SE">
+					<image width="92" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAA7CAYAAAD2Hu26AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC9UlEQVR4nO2Zv4vUQBTHPyerrtoJinIoeP+AcIo2KxY2YqWFsGB3WImVPwptvH9gLewE0UIOBUHFQg7EShsF7UVwUblGwcbz1yGcxcyQ7Owku5udJHve9wMhZDJ5783L5L3JPBBCCCGEEEIIIYQQ65kO8KhuI7LYEElOA3gCrNpjGdgRSfZ/RQyHN4CHwDSwDZgCjgOLwFbbpwX8AQ5F0BebSm1rRJCxB2P0OeCnbXsJHIggWwRoAh/JjptzJKHGHW3vWdf+huSrABOP5+151dPRIRzCXAxP6y1iW+j+xOQGZ1hW7A59tg3gQarN5YGQU+c9eR16X04r1cd/Zh/wLSAjzzY3pvR4Bk2synEDCzl+2DjpO9K/TutpEya0SslbuYRsc871dYwd72OtUgC6wHZgBlix14NWKn5IuRDo84kkN0CSnD+MaW8eu4FNAR1LwA/MGAsR0+GOLiZhrgDHcvo1gXfAHczKZgq4XoI9E0UZDg+xhAkDaQ4Cu4CnBWSNNcsC8nzbADYHdExjZv7zospiOLxFf5w9T79h/gB8x7UIhxSfz5hl52V6k+Y4ycy3rYv58m7RmzQXgGfA1zF0RcFfPvkvAHqXce3Ac8vAFfqTZsiReX+2oybNLNv89tBqSQghhBBCCCFGZpLqkaXYUtZeiv+HFvqLW5eUuXn1lqTG6Y779t4k1zhLpardQmGpw+FzwAvMbuIrwqEmrx45ah00qxZZS72yDoffBo5gChSH6Q01ACeBvbZ9BjhKskvXAO4Cp+39jZht3gVPxzXge4YMMM6+Aey0fbYAs1Tg9DIdPovZ7x51Bj0mcY7bl95vr/9inP06df0e84LSszxPRhPzQs6S7Gv/Bs4AJyg5r1SZNE9FkjtMHTSP0uqVw7DWkuaar4PW5fCsOuIgitZBfUqpVw5DnTM8NOhBFK2Dpqm1Xlll0kzXBN2g7zHaH2gXuJR6bhG4WsC2i8BN4IuV88vaEyvPCCGEEEIIIYQQQgghhJgs/gGxJer+nCn2hAAAAABJRU5ErkJggg==</image>
+				</module>
+				<module color="#979800" font_color="#979800" label_side="left" x="784" y="701.5" width="100" height="68" name="SJ">
+					<image width="91" height="59" size_to_parent="false">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFsAAAA7CAYAAAAUwvbDAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACiklEQVR4nO3av4vUQBjG8e9J0EU7QVAXixPs7BRt9iob/4TF8kqxEizsrrNaKxtBtBIEQcFCBLHS5gRLCxuXU64SrE7Bbc5iMiSZfZM7MzE/lucDy7HZZObNe5t3ZjMBERERERERERFZFTPgZddBlDnSQBsJ8ArYT197wKkG2l05sclOgBfAGDgBrAHXgTfA8XSfCfAHuBLZ1//QamxJ5PHncAHfBH6n2z4AlyLbFcMI2KG8Tm6SlRf/mgbH+u2fyK4GcPV3K/27H/Qxwy5bvmbn+60Tm/V5L8YCH1RZrbYu1QR4ntvm676V0K2gvRnFf8wkt094zDrw02ijKjZ/TvnzOehL1Sp/UlbSD1sXwySG7/P9TLFZs5GqGYoVm09s2Ed0fW9iNgIwB04C54FF+v6gGUlYRm4b+3wjGwsgG4i/RsZb5Qxw1OhjF/iFO8damkq2N8cNjgvgWsV+I+AL8AQ3g1kD7jccS+80nWzLLu7Sz7sMnAZe12gr6ttltBfGBnDM6GOM+8a/q9tZbLInLNfVW0ZQYfBh0ibYZST0HTe1vENxgIwZuMLY5rgr7hHFAfIp8Bb4EdFXtHCKFCYfilO1qXHcHnCX5QHSSmLVL9Z/HSDLYgu3W7MiERERERER6QvrFuugtXEjqi19XusEVivZvTe0ZJetPW4C73F3G7dZvqnUC0NK9gx3K9QvNjwke2TiMbCBW7S4mn7+rJswyw0l2evADeBebtsD4CxwsZOIaoh9bqQtY9zKznawfdFBLLUNJdngErsBfOw6kLqGUkYOs/ZYtp7YG31NdgJcIHuUwVp7HAGfKT4yYS3USon8syThwz7h2qP1A6ZsPVFEREREREREREREhu0vUlmyQ2JoniMAAAAASUVORK5CYII=</image>
+				</module>
+				<group isee:name_image="true" locked="true" color="black" font_color="black" x="1275.58" y="49.8333" width="167.5" height="184.333" name="Imports">
+					<item uid="41"/>
+				</group>
+				<group isee:name_image="true" locked="true" color="black" font_color="black" x="1298.5" y="379.167" width="158.333" height="394.333" name="Vehicles">
+					<item uid="42"/>
+					<item uid="46"/>
+					<item uid="38"/>
+				</group>
+				<group locked="true" color="#65652A" font_color="#65652A" x="7" y="230.333" width="470" height="536.667" name="Feedstock Supply and Logistics">
+					<item uid="24"/>
+					<item uid="56"/>
+					<item uid="66"/>
+					<item uid="4"/>
+					<item uid="22"/>
+					<item uid="54"/>
+					<item uid="33"/>
+					<item uid="63"/>
+					<item uid="12"/>
+					<item uid="19"/>
+					<item uid="69"/>
+				</group>
+				<group isee:name_image="true" locked="false" color="#651818" font_color="#651818" x="481" y="46" width="541.333" height="728.333" name="Conversion"/>
+				<group locked="true" color="black" font_color="black" x="1028.33" y="378.5" width="261.5" height="395.5" name="EtOH Downstream">
+					<item uid="32"/>
+					<item uid="58"/>
+					<item uid="14"/>
+					<item uid="53"/>
+					<item uid="3"/>
+					<item uid="23"/>
+					<item uid="7"/>
+					<item uid="8"/>
+					<item uid="20"/>
+					<item uid="18"/>
+				</group>
+				<group isee:name_image="true" locked="true" color="black" font_color="black" x="1028.33" y="47.5" width="242.333" height="186" name="Oil Industry">
+					<item uid="67"/>
+					<item uid="15"/>
+					<item uid="37"/>
+					<item uid="47"/>
+					<item uid="21"/>
+					<item uid="65"/>
+					<item uid="40"/>
+					<item uid="11"/>
+					<item uid="44"/>
+				</group>
+				<graphics_frame border_color="#AA0000" border_width="thin" border_style="solid" fill="none" uid="71" x="1488.25" y="32.5" width="533" height="542">
+					<image width="504" height="510" size_to_parent="false">data:image/png;base64,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</image>
+				</graphics_frame>
+			</view>
+			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+				<style/>
+			</view>
+			<isee:templates/>
+			<isee:stories/>
+		</views>
+	</model>
+</xmile>
+

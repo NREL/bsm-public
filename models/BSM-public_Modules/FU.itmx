@@ -1,0 +1,2098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
+	<header>
+		<smile version="1.0" namespace="std, isee" uses_arrays="1"/>
+		<name>FU</name>
+		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
+		<vendor>isee systems, inc.</vendor>
+		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+	</header>
+	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
+		<start>1</start>
+		<stop>13</stop>
+		<dt reciprocal="true">4</dt>
+	</sim_specs>
+	<dimensions>
+		<dim name="Region">
+			<elem name="NE"/>
+			<elem name="A"/>
+			<elem name="SE"/>
+			<elem name="DS"/>
+			<elem name="CB"/>
+			<elem name="LS"/>
+			<elem name="NP"/>
+			<elem name="SP"/>
+			<elem name="M"/>
+			<elem name="P"/>
+		</dim>
+	</dimensions>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<model_units>
+		<unit name="Dimensionless">
+			<eqn>1</eqn>
+			<alias>dmnl</alias>
+			<alias>unitless</alias>
+		</unit>
+		<unit name="Gallons">
+			<eqn/>
+			<alias>gal</alias>
+			<alias>gallon</alias>
+		</unit>
+		<unit name="US Dollars">
+			<eqn/>
+			<alias>USD</alias>
+			<alias>$</alias>
+		</unit>
+		<unit name="Years">
+			<eqn/>
+			<alias>yr</alias>
+			<alias>year</alias>
+		</unit>
+		<unit name="Per Year">
+			<eqn>1/Years</eqn>
+		</unit>
+		<unit name="MilesPerVehiclePerYr">
+			<eqn>mi/(vehicles*yr)</eqn>
+		</unit>
+		<unit name="GalPerTerminalPerYr">
+			<eqn>gal/(terminals*yr)</eqn>
+		</unit>
+		<unit name="PerLoadUSDPerMi">
+			<eqn>USD/(mi*Load)</eqn>
+		</unit>
+		<unit name="ProjectGalPerTon">
+			<eqn>Projects*(gal/ton)</eqn>
+		</unit>
+		<unit name="DaysPerYr">
+			<eqn>day/yr</eqn>
+		</unit>
+		<unit name="ProjectUSDPerYr">
+			<eqn>Projects*(USD/yr)</eqn>
+		</unit>
+		<unit name="ProjectTonPerDay">
+			<eqn>Projects*(ton/day)</eqn>
+		</unit>
+		<unit name="MillionBTUPerGal">
+			<eqn>MillionBTU/gal</eqn>
+		</unit>
+		<unit name="GramsPerMJ">
+			<eqn>g/MJ</eqn>
+		</unit>
+		<unit name="MillionBTUperMJ">
+			<eqn>MillionBTU/MJ</eqn>
+		</unit>
+		<unit name="TonnesPerGram">
+			<eqn>Tonnes/g</eqn>
+		</unit>
+		<unit name="HoursPerProjectPerYr">
+			<eqn>hr/(projects*yr)</eqn>
+		</unit>
+		<unit name="USDPerUnit">
+			<eqn>USD/units</eqn>
+		</unit>
+		<unit name="USDA to nominal">
+			<eqn>units/USDA</eqn>
+		</unit>
+		<unit name="TonsPerUnit">
+			<eqn>ton/units</eqn>
+		</unit>
+		<unit name="UnitsPerAcrePerYrPerYr">
+			<eqn>units/(acre-yr^2)</eqn>
+		</unit>
+		<unit name="acres per square mile">
+			<eqn>acre/mi^2</eqn>
+		</unit>
+		<unit name="barrels per gallon">
+			<eqn>bbl/gal</eqn>
+		</unit>
+		<unit name="billion GPY">
+			<eqn>billions-gal/yr</eqn>
+		</unit>
+		<unit name="BillionMilesPerYear">
+			<eqn>billions-mi/yr</eqn>
+		</unit>
+		<unit name="btu per gallon">
+			<eqn>btu/gallon</eqn>
+		</unit>
+		<unit name="days per year">
+			<eqn>day/year</eqn>
+		</unit>
+		<unit name="dollars per acre">
+			<eqn>usd/acres</eqn>
+		</unit>
+		<unit name="dollars per acre per yr">
+			<eqn>USD/(acre-yr)</eqn>
+		</unit>
+		<unit name="dollars per load">
+			<eqn>usd/load</eqn>
+		</unit>
+		<unit name="gal per ton">
+			<eqn>gal/ton</eqn>
+		</unit>
+		<unit name="gallons per barrel">
+			<eqn>gal/bbl</eqn>
+		</unit>
+		<unit name="gallons per dollar">
+			<eqn>gal/USD</eqn>
+		</unit>
+		<unit name="gallons per month">
+			<eqn>gal/mo</eqn>
+		</unit>
+		<unit name="gallons per visit">
+			<eqn>gal/Visit</eqn>
+		</unit>
+		<unit name="gallons per year">
+			<eqn>gal/yr</eqn>
+		</unit>
+		<unit name="GPD">
+			<eqn>gal/day</eqn>
+		</unit>
+		<unit name="million tons">
+			<eqn>million-ton</eqn>
+		</unit>
+		<unit name="million units">
+			<eqn>million-units</eqn>
+		</unit>
+		<unit name="million USD">
+			<eqn>USD-million</eqn>
+		</unit>
+		<unit name="million usda">
+			<eqn>million-usda</eqn>
+		</unit>
+		<unit name="months per year">
+			<eqn>mo/yr</eqn>
+		</unit>
+		<unit name="MPG">
+			<eqn>mi/gal</eqn>
+		</unit>
+		<unit name="per billion">
+			<eqn>1/billions</eqn>
+		</unit>
+		<unit name="per million">
+			<eqn>1/million</eqn>
+		</unit>
+		<unit name="per thousand">
+			<eqn>1/thousand</eqn>
+		</unit>
+		<unit name="Projects per Year">
+			<eqn>projects/yr</eqn>
+		</unit>
+		<unit name="thousand acres">
+			<eqn>thousand-acres</eqn>
+		</unit>
+		<unit name="thousand ton per yr">
+			<eqn>thousand-ton/yr</eqn>
+		</unit>
+		<unit name="ton per acre per yr">
+			<eqn>ton/(acre-yr)</eqn>
+		</unit>
+		<unit name="ton per day">
+			<eqn>ton/day</eqn>
+		</unit>
+		<unit name="ton per year">
+			<eqn>ton/yr</eqn>
+		</unit>
+		<unit name="tons per load">
+			<eqn>ton/load</eqn>
+		</unit>
+		<unit name="USD per barrel">
+			<eqn>USD/bbl</eqn>
+		</unit>
+		<unit name="USD per gallon">
+			<eqn>USD/gal</eqn>
+		</unit>
+		<unit name="USD per ton">
+			<eqn>USD/ton</eqn>
+		</unit>
+		<unit name="USD per visit">
+			<eqn>USD/Visit</eqn>
+		</unit>
+		<unit name="visits per month">
+			<eqn>Visit/mo</eqn>
+		</unit>
+		<unit name="Visits per year">
+			<eqn>Visit/yr</eqn>
+		</unit>
+		<unit name="VehiclesMPG">
+			<eqn>Vehicles*mi/gal</eqn>
+		</unit>
+	</model_units>
+	<model name="FU">
+		<variables>
+			<aux name="Station Coverage From Dispensing Module" access="input">
+				<doc>DEFINITION: module interface to DS.Station Coverage
+
+UNITS: unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>100</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Initial Non HiBlend Users">
+				<doc>DEFINITION: In the initial model condition, % of HiBlend capable owners in the region who do not use HiBlend at all.  Note that in each region, sum of initial values for non, occasional, and regular users should sum to 100
+
+UNITS: percent
+
+TYPE: array | constant  | assumed value
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>100</eqn>
+				</element>
+				<units>percent</units>
+			</aux>
+			<aux name="Initial Regular Hi Blend Users">
+				<doc>DEFINITION: In the initial model condition, % of HiBlend capable owners in the region who are regular users of HiBlend.  Note that in each region, sum of initial values for non, occasional, and regular users should sum to 100
+
+UNITS: percent
+
+TYPE: array | constant  | assumed value
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0</eqn>
+				</element>
+				<units>percent</units>
+			</aux>
+			<aux name="Initial Occasional Hi Blend Users">
+				<doc>DEFINITION: In the initial model condition, % of HiBlend capable owners in the region who are occasional users of HiBlend.  Note that in each region, sum of initial values for non, occasional, and regular users should sum to 100
+
+UNITS: percent
+
+TYPE: array | constant  | assumed value
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0</eqn>
+				</element>
+				<units>percent</units>
+			</aux>
+			<aux name="max FFV Lo Blend Consn from Vehicle Module" access="input">
+				<doc>DEFINITION: module interface to V.regional potential lo blend consn FFV
+
+UNITS: gallons per year
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>1</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="FFV Lo Blend Consn" access="output">
+				<doc>DEFINITION: calculates lo blend fuel consumption by flex fuel vehicles
+
+UNITS: gallons per year
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>max_FFV_Lo_Blend_Consn_from_Vehicle_Module[Region]*(1-Total_User_Wtd_Hi_Blend_Share[Region])</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="Hi Blend Attractiveness Occasional Hi Blend Users">
+				<doc>DEFINITION: Part of logit forumulation used to calculate market shares. Calculates attractiveness of hi blend fuel for occasional hiblend users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>EXP(k_Hi_Blend_Occasional_Users-occasional_user_price_attractiveness_weighting*Hi_Blend_Gas_equivalent_price[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="k Hi Blend Occasional Users">
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness for occasional hi blend users
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input | assumed value
+
+COMMENTS: default value gives 20-80 share distribution under price parity</doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="occasional user price attractiveness weighting">
+				<doc>DEFINITION: Weighting factor for logit function calculation
+
+UNITS: gallons per dollar
+
+TYPE: scalar | constant | assumed value | scenario input
+
+COMMENTS: </doc>
+				<eqn>2</eqn>
+				<units>gallons per dollar</units>
+			</aux>
+			<stock name="Occasional HiBlend Users">
+				<doc>DEFINITION: Stock of % of HiBlend capable owners in the region who  use HiBlend occasionally (as determined by model logic around occasional share)
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Initial_Occasional_Hi_Blend_Users[Region]</eqn>
+				<inflow>becoming_occasional_user</inflow>
+				<inflow>dropping_back_to_occasional_user</inflow>
+				<outflow>becoming_regular_user</outflow>
+				<non_negative/>
+				<units>percent</units>
+			</stock>
+			<stock name="Regular HiBlend Users">
+				<doc>DEFINITION: Stock of % of HiBlend capable owners in the region who use HiBlend as their default option.
+
+UNITS: percent
+
+TYPE: Array | internal calculation 
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Initial_Regular_Hi_Blend_Users[Region]</eqn>
+				<inflow>becoming_regular_user</inflow>
+				<outflow>dropping_back_to_occasional_user</outflow>
+				<non_negative/>
+				<units>percent</units>
+			</stock>
+			<flow name="becoming regular user">
+				<doc>DEFINITION: captures flow (in %/year) of &quot;occasional&quot; HiBlend Users in the region into &quot;Regular&quot; user category
+
+UNITS: percent/yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Regular_HiBlend_User_Gap[Region]*rate_of_becoming_reg_HiBlend_user[Region]</eqn>
+				<non_negative/>
+				<units>percent/yr</units>
+			</flow>
+			<aux name="Regular HiBlend User Gap">
+				<doc>DEFINITION: calculates difference between preference share for regular users and actual % regular users, thus creating  gap that is eliminated over time, subject to availability of occasional users
+
+UNITS: percent
+
+TYPE: Array | internal calculation 
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>preference_share_Regular_Users[Region]-Regular_HiBlend_Users[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<flow name="becoming occasional user">
+				<doc>DEFINITION: captures flow (in %/year) of Non-HiBlend Users in the region into &quot;Occasional&quot; user category
+
+UNITS: percent/yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>susceptible_non_HiBlend_users[Region]*rate_of_becoming_occasional_HiBlend_user[Region]</eqn>
+				<non_negative/>
+				<units>percent/yr</units>
+			</flow>
+			<aux name="Total Desired Hi Blend Consn" access="output">
+				<doc>DEFINITION: Calculates total  desired amount of hi blend consumption in each region
+
+UNITS: gallons per year
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>FFV_Hi_Blend_Consn</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="preference share Regular Users">
+				<doc>DEFINITION: Sets target % of hiblend capable owners who will use hiblend regularly.  Based on ratio of long term (smoothed) prices for gasoline/hiblend
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="A">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="SE">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="DS">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="CB">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="LS">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="NP">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="SP">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="M">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<element subscript="P">
+					<gf>
+						<yscale min="0" max="100"/>
+						<xpts>0.8,0.84,0.88,0.92,0.96,1,1.04,1.08,1.12,1.16,1.2</xpts>
+						<ypts>80,75,67.5,55.5,40,20,6.5,2.5,2,1.5,0</ypts>
+					</gf>
+				</element>
+				<eqn>Long_Term_Relative_Price[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<stock name="Non HiBlend Users">
+				<doc>DEFINITION: Stock of % of HiBlend capable owners in the region, who do not use HiBlend at all
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Initial_Non_HiBlend_Users[Region]</eqn>
+				<outflow>becoming_occasional_user</outflow>
+				<non_negative/>
+				<units>percent</units>
+			</stock>
+			<aux name="occasional user constraint on becoming regular HiBlend User">
+				<doc>DEFINITION: Relates size of occasional user pool to the rate at which the regular user gap is eliminated.  Provides 1st order control on stock
+
+UNITS: Unitless
+
+TYPE: Array | Graphical function | Internal Calculation 
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="A">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SE">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="DS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="CB">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="LS">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="NP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SP">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="M">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<element subscript="P">
+					<gf>
+						<yscale min="0" max="1"/>
+						<xpts>0,1,2,3,4,5,6,7,8,9,10</xpts>
+						<ypts>0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1</ypts>
+					</gf>
+				</element>
+				<eqn>Occasional_HiBlend_Users[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="rate of becoming occasional HiBlend user">
+				<doc>DEFINITION: fractional rate of potential users becoming hi-blend users per year
+
+UNITS: per year
+
+TYPE: Array | Constant | assumed value
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.5</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.5</eqn>
+				</element>
+				<units>per year</units>
+			</aux>
+			<aux name="fraction NonUsers susceptible">
+				<doc>DEFINITION: fraction of  potential new hiblend users who are susceptible of  becoming users. Allows for setting of arbitrary &quot;floor&quot; on uptake of hi blend
+
+UNITS: Unitless
+
+TYPE: array | constant | scenario input | assumed value
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>1</eqn>
+				</element>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Potential Hi Blend Users">
+				<doc>DEFINITION: % of Highblend capable users in region who could become users because of dispensing station coverage
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Non_HiBlend_Users[Region]-HiBlend_Capable_PCT_WITHOUT_station_coverage[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<aux name="susceptible non HiBlend users">
+				<doc>DEFINITION: % of Highblend capable users in region who have potential to become occasional users, based on station coverage and on assumed maximum susceptibility
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Potential_Hi_Blend_Users[Region]*fraction_NonUsers_susceptible[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<aux name="rate of becoming reg HiBlend user">
+				<doc>DEFINITION: Sets the rate at which the regular hiblend user gap is eliminated
+
+UNITS: per year
+
+TYPE: Array | internal calculation 
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>max_rate_of_becoming_regular_HiBlend_user*occasional_user_constraint_on_becoming_regular_HiBlend_User[Region]</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="max rate of becoming regular HiBlend user">
+				<doc>DEFINITION: Sets the maximum rate at which the regular hiblend user gap is eliminated
+
+UNITS: per year
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.5</eqn>
+				<units>per year</units>
+			</aux>
+			<aux name="Hi Blend Pump Price From PIM" access="input">
+				<doc>DEFINITION: module interface to IP.Hi Blend Pump Price
+
+UNITS: USD per gallon
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>1.42</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="Gasoline Pump Price from PIM" access="input">
+				<doc>DEFINITION: module interface to IP.Gasoline Pump Price
+
+UNITS: USD per gallon
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>2</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="Long Term Avg Gas Price">
+				<doc>DEFINITION: smooths gas prices to filter out spikes in price if they occur.  used as input to drive movement of users to/from regular user bucket
+
+UNITS: USD per gallon
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>SMTH3(Gasoline_Pump_Price_from_PIM[Region],gas_price_averaging_time)</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="potential Hi Blend Consn from Vehicle Module" access="input">
+				<doc>DEFINITION: module interface to V.regional potential hi blend consn FFV
+
+UNITS: gallons per year
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>1</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="Occasional User Wtd Hi Blend Share">
+				<doc>DEFINITION: calculates total share of potential hiblend cons&apos;n that accrues to occasional users
+
+UNITS: Unitless
+
+TYPE: array | graphical function | assumed values | scenario input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Occasional_HiBlend_Users_as_Frac[Region]*Share_Occasional_Use_to_Hi_Blend[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Reg HiBlend Users as Frac">
+				<doc>DEFINITION: fraction of HiBlend capable owners in the region who  use HiBlend as their default option.
+
+UNITS: Unitless
+
+TYPE: Array | internal calculation 
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF Total_PCT_HiBlend_Capable_By_Region[Region] &gt; 0 THENRegular_HiBlend_Users[Region]/Total_PCT_HiBlend_Capable_By_Region[Region]ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Share Occasional Use to Hi Blend">
+				<doc>DEFINITION: share of occasional hiblend user user total fuel use allocated to hiblend fuels
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>RAT_HiBlend_Occasional_Hi_Blend_Users[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="maximum HiBlend Users PCT from regional coverage">
+				<doc>DEFINITION: calculates % of Highblend capable users in region who have access to hiblend dispensing stations
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Total_PCT_HiBlend_Capable_By_Region[Region]*frac_HiBlend_capable_with_station_coverage[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<flow name="dropping back to occasional user">
+				<doc>DEFINITION: calculates flow (in $/yr) from HiBlend Regular Users in the region to occasional users
+
+UNITS: percent/yr
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>-1 * (Regular_HiBlend_User_Gap[Region]/time_to_drop_out)</eqn>
+				<non_negative/>
+				<units>percent/yr</units>
+			</flow>
+			<aux name="time to drop out">
+				<doc>DEFINITION: Time, on average, to drop out of regular use, preference share is less than stock of regular hiblend users
+
+UNITS: years
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>0.5</eqn>
+				<units>years</units>
+			</aux>
+			<aux name="Total PCT HiBlend Capable By Region">
+				<doc>DEFINITION: Sums together Non, Occassional, and Regular User percentages.
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Non_HiBlend_Users[Region]+Occasional_HiBlend_Users[Region]+Regular_HiBlend_Users[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<aux name="HiBlend Capable PCT WITHOUT station coverage">
+				<doc>DEFINITION: % of Highblend capable users in region who do not have dispensing station coverage and therefore cannot become Hiblend user
+
+UNITS: percent
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Total_PCT_HiBlend_Capable_By_Region[Region]-maximum_HiBlend_Users_PCT_from_regional_coverage[Region]</eqn>
+				<units>percent</units>
+			</aux>
+			<aux name="Hi Blend Gas equivalent price" access="input">
+				<doc>DEFINITION: module interface to IP.Hi Blend Gas equivalent price
+
+UNITS: USD per gallon
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>DSM_PIM.Hi_Blend_Pump_Price[Region]*Hi_Blend_Volumetric_Offset[Region]</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="Gasoline Attractiveness Occasional Users">
+				<doc>DEFINITION: Part of logit forumulation used to calculate market shares. Calculates attractiveness of gasoline, for occasional hiblend users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>EXP(k_Gas_Occasional_Users-occasional_user_price_attractiveness_weighting*Gasoline_Pump_Price_from_PIM[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="k Gas Occasional Users">
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness for regular hi blend users
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input | assumed value
+
+COMMENTS: default value gives 20-80 share distribution under price parity</doc>
+				<eqn>1.1</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT HiBlend Occasional Hi Blend Users">
+				<doc>DEFINITION: attractiveness (relative to plain old gasoline) of hiblend for occasional users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users[Region]/(Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users[Region]+Gasoline_Attractiveness_Occasional_Users[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Occasional HiBlend Users as Frac">
+				<doc>DEFINITION: expresses stock of occasional hiblend users as a fraction of total hiblend capable population
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>IF Total_PCT_HiBlend_Capable_By_Region[Region] &gt; 0 THENOccasional_HiBlend_Users[Region]/Total_PCT_HiBlend_Capable_By_Region[Region]ELSE 0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Hi Blend Attractiveness Regular Hi Blend Users">
+				<doc>DEFINITION: Part of logit forumulation used to calculate market shares. Calculates attractiveness of hi blend fuel for regular hiblend users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>EXP(k_Hi_Blend_Regular_Users-regular_user_price_attractiveness_weighting*Hi_Blend_Gas_equivalent_price[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="k Hi Blend Regular Users">
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness for regular hi blend users
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input | assumed value
+
+COMMENTS: default value gives 20-80 share distribution under price parity</doc>
+				<eqn>1.1</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="regular user price attractiveness weighting">
+				<doc>DEFINITION: Weighting factor for logit function calculation
+
+UNITS: gallons per dollar
+
+TYPE: scalar | constant | assumed value | scenario input
+
+COMMENTS: </doc>
+				<eqn>2</eqn>
+				<units>gallons per dollar</units>
+			</aux>
+			<aux name="Regular User Wtd Hi Blend Share">
+				<doc>DEFINITION: calculates total share of potential hiblend cons&apos;n that accrues to regular users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Reg_HiBlend_Users_as_Frac[Region]*Share_Regular_Use_to_Hi_Blend[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Share Regular Use to Hi Blend">
+				<doc>DEFINITION: share of regular hiblend user total fuel use allocated to hiblend fuels
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>RAT_HiBlend_Regular_Hi_Blend_Users[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Gasoline Attractiveness Reg Hi Blend Users">
+				<doc>DEFINITION: Part of logit forumulation used to calculate market shares. Calculates attractiveness of gasoline, for &quot;regular&quot; hiblend users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>EXP(k_Gas_Regular_Users-regular_user_price_attractiveness_weighting*Gasoline_Pump_Price_from_PIM[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="k Gas Regular Users">
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness for regular hi blend users
+
+UNITS: Unitless
+
+TYPE: scalar | constant | scenario input | assumed value
+
+COMMENTS: default value gives 20-80 share distribution under price parity</doc>
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="RAT HiBlend Regular Hi Blend Users">
+				<doc>DEFINITION: attractiveness (relative to plain old gasoline) of hiblend for regular users
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users[Region]/(Hi_Blend_Attractiveness_Regular_Hi_Blend_Users[Region]+Gasoline_Attractiveness_Reg_Hi_Blend_Users[Region])</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Total User Wtd Hi Blend Share" access="output">
+				<doc>DEFINITION: calculates total share of potential hiblend consumption that accrues to hiblend capable vehicles
+
+UNITS: Unitless
+
+TYPE: array | module interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Occasional_User_Wtd_Hi_Blend_Share[Region]+Regular_User_Wtd_Hi_Blend_Share[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Long Term Avg Hi Blend Gas Equivalent Price">
+				<doc>DEFINITION: calculates long term (smoothed) average for hi blend gas equivalent price
+
+UNITS: USD per gallon
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>SMTH3(Hi_Blend_Gas_equivalent_price[Region],gas_price_averaging_time)</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="gas price averaging time">
+				<doc>DEFINITION: Provides averaging time for price smoothing of price dynamics. Used as time constant input for  long term price for gasoline, hi-blend
+
+UNITS: years
+
+TYPE: scalar | constant | assumed value
+
+COMMENTS: </doc>
+				<eqn>2</eqn>
+				<units>years</units>
+			</aux>
+			<aux name="Long Term Relative Price">
+				<doc>DEFINITION: Calculates ratio of long term (smoothed) prices of hiblend (in gasoline equivalent price) relative to gasoline
+
+UNITS: Unitless
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price[Region]/Long_Term_Avg_Gas_Price[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="frac HiBlend capable with station coverage">
+				<doc>DEFINITION: This graphical function relates the percentage of stations in the region with hiblend capability, to the fraction of hiblend-capable vehicles/owners with access to dispensing stations.
+
+UNITS: Unitless
+
+TYPE: array | graphical function | assumed values
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="A">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SE">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="DS">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="CB">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="LS">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="NP">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="SP">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="M">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<element subscript="P">
+					<gf>
+						<xscale min="0" max="1"/>
+						<yscale min="0" max="1"/>
+						<ypts>0,0.2,0.7,0.9,1,1,1,1,1,1,1</ypts>
+					</gf>
+				</element>
+				<eqn>Station_Coverage_From_Dispensing_Module[Region]</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="FFV Hi Blend Consn">
+				<doc>DEFINITION: Sets total  desired amount of hi blend consumption by FFV vehicles (which is then subject to inventory constraints in the region)
+
+UNITS: gallons per year
+
+TYPE: array | internal calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>potential_Hi_Blend_Consn_from_Vehicle_Module[Region]*Total_User_Wtd_Hi_Blend_Share[Region]</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<group name="Input Data and Initializations" run="false">
+				<entity name="Initial_Non_HiBlend_Users"/>
+				<entity name="fraction_NonUsers_susceptible"/>
+				<entity name="Initial_Regular_Hi_Blend_Users"/>
+				<entity name="Initial_Occasional_Hi_Blend_Users"/>
+				<entity name="k_Hi_Blend_Occasional_Users"/>
+				<entity name="occasional_user_price_attractiveness_weighting"/>
+				<entity name="rate_of_becoming_occasional_HiBlend_user"/>
+				<entity name="max_rate_of_becoming_regular_HiBlend_user"/>
+				<entity name="time_to_drop_out"/>
+				<entity name="k_Hi_Blend_Regular_Users"/>
+				<entity name="regular_user_price_attractiveness_weighting"/>
+				<entity name="gas_price_averaging_time"/>
+				<entity name="k_Gas_Occasional_Users"/>
+				<entity name="k_Gas_Regular_Users"/>
+			</group>
+			<group name="Outputs to Other Modules" run="false"/>
+			<group name="Non Spreadsheet Inputs from Other Modules" run="false">
+				<entity name="Station_Coverage_From_Dispensing_Module"/>
+				<entity name="max_FFV_Lo_Blend_Consn_from_Vehicle_Module"/>
+				<entity name="Hi_Blend_Pump_Price_From_PIM"/>
+				<entity name="Gasoline_Pump_Price_from_PIM"/>
+				<entity name="potential_Hi_Blend_Consn_from_Vehicle_Module"/>
+				<entity name="Hi_Blend_Gas_equivalent_price"/>
+			</group>
+			<group name="HiBlend and Fuel Use Logic" run="false">
+				<entity name="becoming_occasional_user"/>
+				<entity name="Non_HiBlend_Users"/>
+				<entity name="Potential_Hi_Blend_Users"/>
+				<entity name="susceptible_non_HiBlend_users"/>
+				<entity name="HiBlend_Capable_PCT_WITHOUT_station_coverage"/>
+				<entity name="Occasional_HiBlend_Users"/>
+				<entity name="Regular_HiBlend_Users"/>
+				<entity name="becoming_regular_user"/>
+				<entity name="occasional_user_constraint_on_becoming_regular_HiBlend_User"/>
+				<entity name="rate_of_becoming_reg_HiBlend_user"/>
+				<entity name="dropping_back_to_occasional_user"/>
+				<entity name="Regular_HiBlend_User_Gap"/>
+				<entity name="preference_share_Regular_Users"/>
+				<entity name="Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price"/>
+				<entity name="Long_Term_Relative_Price"/>
+				<entity name="Long_Term_Avg_Gas_Price"/>
+				<entity name="Gasoline_Attractiveness_Occasional_Users"/>
+				<entity name="Hi_Blend_Attractiveness_Regular_Hi_Blend_Users"/>
+				<entity name="maximum_HiBlend_Users_PCT_from_regional_coverage"/>
+				<entity name="Total_PCT_HiBlend_Capable_By_Region"/>
+				<entity name="Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users"/>
+				<entity name="Share_Occasional_Use_to_Hi_Blend"/>
+				<entity name="RAT_HiBlend_Occasional_Hi_Blend_Users"/>
+				<entity name="Share_Regular_Use_to_Hi_Blend"/>
+				<entity name="RAT_HiBlend_Regular_Hi_Blend_Users"/>
+				<entity name="Gasoline_Attractiveness_Reg_Hi_Blend_Users"/>
+				<entity name="frac_HiBlend_capable_with_station_coverage"/>
+				<entity name="Reg_HiBlend_Users_as_Frac"/>
+				<entity name="Occasional_HiBlend_Users_as_Frac"/>
+				<entity name="FFV_Lo_Blend_Consn"/>
+				<entity name="Occasional_User_Wtd_Hi_Blend_Share"/>
+				<entity name="Regular_User_Wtd_Hi_Blend_Share"/>
+				<entity name="Total_User_Wtd_Hi_Blend_Share"/>
+				<entity name="FFV_Hi_Blend_Consn"/>
+				<entity name="Total_Desired_Hi_Blend_Consn"/>
+			</group>
+			<isee:dependencies>
+				<var name="FFV_Lo_Blend_Consn">
+					<in>Total_User_Wtd_Hi_Blend_Share</in>
+					<in>max_FFV_Lo_Blend_Consn_from_Vehicle_Module</in>
+				</var>
+				<var name="Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users">
+					<in>Hi_Blend_Gas_equivalent_price</in>
+					<in>occasional_user_price_attractiveness_weighting</in>
+					<in>k_Hi_Blend_Occasional_Users</in>
+				</var>
+				<var name="Occasional_HiBlend_Users">
+					<in>Initial_Occasional_Hi_Blend_Users</in>
+				</var>
+				<var name="Regular_HiBlend_Users">
+					<in>Initial_Regular_Hi_Blend_Users</in>
+				</var>
+				<var name="becoming_regular_user">
+					<in>rate_of_becoming_reg_HiBlend_user</in>
+					<in>Regular_HiBlend_User_Gap</in>
+				</var>
+				<var name="Regular_HiBlend_User_Gap">
+					<in>preference_share_Regular_Users</in>
+					<in>Regular_HiBlend_Users</in>
+				</var>
+				<var name="becoming_occasional_user">
+					<in>rate_of_becoming_occasional_HiBlend_user</in>
+					<in>susceptible_non_HiBlend_users</in>
+				</var>
+				<var name="Total_Desired_Hi_Blend_Consn">
+					<in>FFV_Hi_Blend_Consn</in>
+				</var>
+				<var name="preference_share_Regular_Users">
+					<in>Long_Term_Relative_Price</in>
+				</var>
+				<var name="Non_HiBlend_Users">
+					<in>Initial_Non_HiBlend_Users</in>
+				</var>
+				<var name="occasional_user_constraint_on_becoming_regular_HiBlend_User">
+					<in>Occasional_HiBlend_Users</in>
+				</var>
+				<var name="Potential_Hi_Blend_Users">
+					<in>HiBlend_Capable_PCT_WITHOUT_station_coverage</in>
+					<in>Non_HiBlend_Users</in>
+				</var>
+				<var name="susceptible_non_HiBlend_users">
+					<in>Potential_Hi_Blend_Users</in>
+					<in>fraction_NonUsers_susceptible</in>
+				</var>
+				<var name="rate_of_becoming_reg_HiBlend_user">
+					<in>occasional_user_constraint_on_becoming_regular_HiBlend_User</in>
+					<in>max_rate_of_becoming_regular_HiBlend_user</in>
+				</var>
+				<var name="Long_Term_Avg_Gas_Price">
+					<in>Gasoline_Pump_Price_from_PIM</in>
+					<in>gas_price_averaging_time</in>
+				</var>
+				<var name="Occasional_User_Wtd_Hi_Blend_Share">
+					<in>Share_Occasional_Use_to_Hi_Blend</in>
+					<in>Occasional_HiBlend_Users_as_Frac</in>
+				</var>
+				<var name="Reg_HiBlend_Users_as_Frac">
+					<in>Total_PCT_HiBlend_Capable_By_Region</in>
+					<in>Regular_HiBlend_Users</in>
+				</var>
+				<var name="Share_Occasional_Use_to_Hi_Blend">
+					<in>RAT_HiBlend_Occasional_Hi_Blend_Users</in>
+				</var>
+				<var name="maximum_HiBlend_Users_PCT_from_regional_coverage">
+					<in>Total_PCT_HiBlend_Capable_By_Region</in>
+					<in>frac_HiBlend_capable_with_station_coverage</in>
+				</var>
+				<var name="dropping_back_to_occasional_user">
+					<in>Regular_HiBlend_User_Gap</in>
+					<in>time_to_drop_out</in>
+				</var>
+				<var name="Total_PCT_HiBlend_Capable_By_Region">
+					<in>Regular_HiBlend_Users</in>
+					<in>Occasional_HiBlend_Users</in>
+					<in>Non_HiBlend_Users</in>
+				</var>
+				<var name="HiBlend_Capable_PCT_WITHOUT_station_coverage">
+					<in>maximum_HiBlend_Users_PCT_from_regional_coverage</in>
+					<in>Total_PCT_HiBlend_Capable_By_Region</in>
+				</var>
+				<var name="Gasoline_Attractiveness_Occasional_Users">
+					<in>k_Gas_Occasional_Users</in>
+					<in>Gasoline_Pump_Price_from_PIM</in>
+					<in>occasional_user_price_attractiveness_weighting</in>
+				</var>
+				<var name="RAT_HiBlend_Occasional_Hi_Blend_Users">
+					<in>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</in>
+					<in>Gasoline_Attractiveness_Occasional_Users</in>
+				</var>
+				<var name="Occasional_HiBlend_Users_as_Frac">
+					<in>Total_PCT_HiBlend_Capable_By_Region</in>
+					<in>Occasional_HiBlend_Users</in>
+				</var>
+				<var name="Hi_Blend_Attractiveness_Regular_Hi_Blend_Users">
+					<in>Hi_Blend_Gas_equivalent_price</in>
+					<in>k_Hi_Blend_Regular_Users</in>
+					<in>regular_user_price_attractiveness_weighting</in>
+				</var>
+				<var name="Regular_User_Wtd_Hi_Blend_Share">
+					<in>Reg_HiBlend_Users_as_Frac</in>
+					<in>Share_Regular_Use_to_Hi_Blend</in>
+				</var>
+				<var name="Share_Regular_Use_to_Hi_Blend">
+					<in>RAT_HiBlend_Regular_Hi_Blend_Users</in>
+				</var>
+				<var name="Gasoline_Attractiveness_Reg_Hi_Blend_Users">
+					<in>Gasoline_Pump_Price_from_PIM</in>
+					<in>regular_user_price_attractiveness_weighting</in>
+					<in>k_Gas_Regular_Users</in>
+				</var>
+				<var name="RAT_HiBlend_Regular_Hi_Blend_Users">
+					<in>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</in>
+					<in>Gasoline_Attractiveness_Reg_Hi_Blend_Users</in>
+				</var>
+				<var name="Total_User_Wtd_Hi_Blend_Share">
+					<in>Occasional_User_Wtd_Hi_Blend_Share</in>
+					<in>Regular_User_Wtd_Hi_Blend_Share</in>
+				</var>
+				<var name="Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price">
+					<in>Hi_Blend_Gas_equivalent_price</in>
+					<in>gas_price_averaging_time</in>
+				</var>
+				<var name="Long_Term_Relative_Price">
+					<in>Long_Term_Avg_Gas_Price</in>
+					<in>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</in>
+				</var>
+				<var name="frac_HiBlend_capable_with_station_coverage">
+					<in>Station_Coverage_From_Dispensing_Module</in>
+				</var>
+				<var name="FFV_Hi_Blend_Consn">
+					<in>potential_Hi_Blend_Consn_from_Vehicle_Module</in>
+					<in>Total_User_Wtd_Hi_Blend_Share</in>
+				</var>
+			</isee:dependencies>
+		</variables>
+		<views>
+			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+				<isee:loop_indicator color="black" background="white"/>
+				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<isee:series_styles>
+						<isee:series_style color="blue" thickness="1"/>
+						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF7F00" thickness="1"/>
+						<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#FF007F" thickness="1"/>
+						<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+						<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+						<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+						<isee:series_style color="#C8C8C8" thickness="1"/>
+					</isee:series_styles>
+				</graph>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
+				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
+				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<lamp color="black" background="white" font_size="9pt"/>
+				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
+				<isee:spatial_map color="black" background="white"/>
+				<isee:animation_object color="black" background="white"/>
+			</style>
+			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="4" isee:page_rows="3" isee:scroll_y="627" isee:popup_graphs_are_comparative="true" type="stock_flow">
+				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="45" height="35"/>
+					</stock>
+					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
+						<shape type="rectangle" width="55" height="45"/>
+					</module>
+					<aux color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom">
+						<shape type="circle" radius="18"/>
+					</aux>
+					<group color="red" background="white" font_color="red" font_size="9pt"/>
+					<connector color="black" background="white" font_size="9pt" isee:thickness="1"/>
+					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
+					<isee:loop_indicator color="black" background="white"/>
+					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+						<isee:series_styles>
+							<isee:series_style color="blue" thickness="1"/>
+							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="fuchsia" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="#008F44" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF7F00" thickness="1"/>
+							<isee:series_style color="#7F00FF" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#0CA0FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="lime" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#FF007F" thickness="1"/>
+							<isee:series_style color="aqua" thickness="1" pen_style="dot_dashed"/>
+							<isee:series_style color="#F586FF" thickness="1" pen_style="dotted"/>
+							<isee:series_style color="black" thickness="1" pen_style="dashed"/>
+							<isee:series_style color="#C8C8C8" thickness="1"/>
+						</isee:series_styles>
+					</graph>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+				</style>
+				<connector uid="3991" angle="270">
+					<from>
+						<alias uid="3992"/>
+					</from>
+					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3993" angle="90">
+					<from>HiBlend_Capable_PCT_WITHOUT_station_coverage</from>
+					<to>Potential_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3994" angle="270">
+					<from>preference_share_Regular_Users</from>
+					<to>Regular_HiBlend_User_Gap</to>
+				</connector>
+				<connector uid="3995" angle="0">
+					<from>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</from>
+					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3996" angle="270">
+					<from>
+						<alias uid="3997"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3998" angle="270">
+					<from>RAT_HiBlend_Regular_Hi_Blend_Users</from>
+					<to>Share_Regular_Use_to_Hi_Blend</to>
+				</connector>
+				<connector uid="3999" angle="305.538">
+					<from>
+						<alias uid="4000"/>
+					</from>
+					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4001" angle="352.875">
+					<from>Potential_Hi_Blend_Users</from>
+					<to>susceptible_non_HiBlend_users</to>
+				</connector>
+				<connector uid="4002" angle="353.66">
+					<from>
+						<alias uid="3997"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4003" angle="125.218">
+					<from>
+						<alias uid="4004"/>
+					</from>
+					<to>Total_PCT_HiBlend_Capable_By_Region</to>
+				</connector>
+				<connector uid="4005" angle="180">
+					<from>Long_Term_Relative_Price</from>
+					<to>preference_share_Regular_Users</to>
+				</connector>
+				<connector uid="4006" angle="270">
+					<from>Share_Occasional_Use_to_Hi_Blend</from>
+					<to>Occasional_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4007" angle="0">
+					<from>occasional_user_constraint_on_becoming_regular_HiBlend_User</from>
+					<to>rate_of_becoming_reg_HiBlend_user</to>
+				</connector>
+				<connector uid="4008" angle="309.472">
+					<from>Regular_HiBlend_Users</from>
+					<to>Regular_HiBlend_User_Gap</to>
+				</connector>
+				<connector uid="4009" angle="200.556">
+					<from>Regular_HiBlend_User_Gap</from>
+					<to>dropping_back_to_occasional_user</to>
+				</connector>
+				<connector uid="4010" angle="0">
+					<from>Occasional_User_Wtd_Hi_Blend_Share</from>
+					<to>Total_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4011" angle="319.399">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>Reg_HiBlend_Users_as_Frac</to>
+				</connector>
+				<connector uid="4012" angle="288.435">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>Occasional_HiBlend_Users_as_Frac</to>
+				</connector>
+				<connector uid="4013" angle="270">
+					<from>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</from>
+					<to>RAT_HiBlend_Regular_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4014" angle="90">
+					<from>
+						<alias uid="3992"/>
+					</from>
+					<to>Long_Term_Avg_Gas_Price</to>
+				</connector>
+				<connector uid="4015" angle="180">
+					<from>
+						<alias uid="4016"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4017" angle="0">
+					<from>Occasional_HiBlend_Users_as_Frac</from>
+					<to>Occasional_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4018" angle="0">
+					<from>
+						<alias uid="4004"/>
+					</from>
+					<to>Reg_HiBlend_Users_as_Frac</to>
+				</connector>
+				<connector uid="4019" angle="180">
+					<from>
+						<alias uid="4020"/>
+					</from>
+					<to>FFV_Hi_Blend_Consn</to>
+				</connector>
+				<connector uid="4021" angle="180">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
+				</connector>
+				<connector uid="4022" angle="90">
+					<from>
+						<alias uid="4023"/>
+					</from>
+					<to>susceptible_non_HiBlend_users</to>
+				</connector>
+				<connector uid="4024" angle="161.565">
+					<from>
+						<alias uid="4025"/>
+					</from>
+					<to>dropping_back_to_occasional_user</to>
+				</connector>
+				<connector uid="4026" angle="0">
+					<from>Total_User_Wtd_Hi_Blend_Share</from>
+					<to>FFV_Lo_Blend_Consn</to>
+				</connector>
+				<connector uid="4027" angle="90">
+					<from>
+						<alias uid="4028"/>
+					</from>
+					<to>rate_of_becoming_reg_HiBlend_user</to>
+				</connector>
+				<connector uid="4029" angle="173.66">
+					<from>Long_Term_Avg_Gas_Price</from>
+					<to>Long_Term_Relative_Price</to>
+				</connector>
+				<connector uid="4030" angle="125.538">
+					<from>
+						<alias uid="4000"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4031" angle="90">
+					<from>
+						<alias uid="4032"/>
+					</from>
+					<to>Total_PCT_HiBlend_Capable_By_Region</to>
+				</connector>
+				<connector uid="4033" angle="102.529">
+					<from>
+						<alias uid="4034"/>
+					</from>
+					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4035" angle="270">
+					<from>Regular_User_Wtd_Hi_Blend_Share</from>
+					<to>Total_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4036" angle="229.399">
+					<from>
+						<alias uid="4037"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4038" angle="90">
+					<from>
+						<alias uid="4039"/>
+					</from>
+					<to>becoming_occasional_user</to>
+				</connector>
+				<connector uid="4040" angle="180">
+					<from>Gasoline_Attractiveness_Reg_Hi_Blend_Users</from>
+					<to>RAT_HiBlend_Regular_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4041" angle="0">
+					<from>
+						<alias uid="4042"/>
+					</from>
+					<to>Gasoline_Attractiveness_Occasional_Users</to>
+				</connector>
+				<connector uid="4043" angle="96.2773">
+					<from>rate_of_becoming_reg_HiBlend_user</from>
+					<to>becoming_regular_user</to>
+				</connector>
+				<connector uid="4044" angle="180">
+					<from>
+						<alias uid="4045"/>
+					</from>
+					<to>FFV_Lo_Blend_Consn</to>
+				</connector>
+				<connector uid="4046" angle="67.6199">
+					<from>
+						<alias uid="4047"/>
+					</from>
+					<to>Total_PCT_HiBlend_Capable_By_Region</to>
+				</connector>
+				<connector uid="4048" angle="0">
+					<from>Reg_HiBlend_Users_as_Frac</from>
+					<to>Regular_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4049" angle="90">
+					<from>
+						<alias uid="4050"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4051" angle="263.66">
+					<from>Total_User_Wtd_Hi_Blend_Share</from>
+					<to>FFV_Hi_Blend_Consn</to>
+				</connector>
+				<connector uid="4052" angle="283.241">
+					<from>Occasional_HiBlend_Users</from>
+					<to>occasional_user_constraint_on_becoming_regular_HiBlend_User</to>
+				</connector>
+				<connector uid="4053" angle="90">
+					<from>maximum_HiBlend_Users_PCT_from_regional_coverage</from>
+					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
+				</connector>
+				<connector uid="4054" angle="270">
+					<from>FFV_Hi_Blend_Consn</from>
+					<to>Total_Desired_Hi_Blend_Consn</to>
+				</connector>
+				<connector uid="4055" angle="180">
+					<from>
+						<alias uid="4056"/>
+					</from>
+					<to>frac_HiBlend_capable_with_station_coverage</to>
+				</connector>
+				<connector uid="4057" angle="90">
+					<from>
+						<alias uid="3997"/>
+					</from>
+					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
+				</connector>
+				<connector uid="4058" angle="49.3987">
+					<from>susceptible_non_HiBlend_users</from>
+					<to>becoming_occasional_user</to>
+				</connector>
+				<connector uid="4059" angle="180">
+					<from>
+						<alias uid="4060"/>
+					</from>
+					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
+				</connector>
+				<connector uid="4061" angle="192.529">
+					<from>
+						<alias uid="3992"/>
+					</from>
+					<to>Gasoline_Attractiveness_Occasional_Users</to>
+				</connector>
+				<connector uid="4062" angle="158.474">
+					<from>Regular_HiBlend_User_Gap</from>
+					<to>becoming_regular_user</to>
+				</connector>
+				<connector uid="4063" angle="153.435">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
+				</connector>
+				<connector uid="4064" angle="270">
+					<from>Share_Regular_Use_to_Hi_Blend</from>
+					<to>Regular_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4065" angle="270">
+					<from>RAT_HiBlend_Occasional_Hi_Blend_Users</from>
+					<to>Share_Occasional_Use_to_Hi_Blend</to>
+				</connector>
+				<connector uid="4066" angle="216.027">
+					<from>Non_HiBlend_Users</from>
+					<to>Potential_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4067" angle="270">
+					<from>Gasoline_Attractiveness_Occasional_Users</from>
+					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4068" angle="307.405">
+					<from>
+						<alias uid="4032"/>
+					</from>
+					<to>Occasional_HiBlend_Users_as_Frac</to>
+				</connector>
+				<connector uid="4069" angle="90">
+					<from>frac_HiBlend_capable_with_station_coverage</from>
+					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
+				</connector>
+				<connector uid="4070" angle="90">
+					<from>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</from>
+					<to>Long_Term_Relative_Price</to>
+				</connector>
+				<connector uid="4071" angle="49.3987">
+					<from>
+						<alias uid="4037"/>
+					</from>
+					<to>Gasoline_Attractiveness_Occasional_Users</to>
+				</connector>
+				<connector uid="4072" angle="0">
+					<from>
+						<alias uid="4060"/>
+					</from>
+					<to>Long_Term_Avg_Gas_Price</to>
+				</connector>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="359.171" x="45" y="1303" name="Station Coverage From Dispensing Module"/>
+				<aux color="red" font_color="red" label_side="top" x="102" y="673" name="Initial Non HiBlend Users"/>
+				<aux color="red" font_color="red" label_side="top" x="104" y="731" name="Initial Regular Hi Blend Users"/>
+				<aux color="red" font_color="red" label_side="top" x="107" y="791" name="Initial Occasional Hi Blend Users"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_side="right" x="285" y="1246" name="max FFV Lo Blend Consn from Vehicle Module"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="276.185" x="2112" y="961" name="FFV Lo Blend Consn"/>
+				<aux color="black" font_color="black" label_angle="278.691" x="1665" y="518" name="Hi Blend Attractiveness Occasional Hi Blend Users"/>
+				<aux color="red" font_color="red" label_angle="308.206" x="393" y="1021" name="k Hi Blend Occasional Users"/>
+				<aux color="red" font_color="red" label_angle="278.691" x="395" y="955" name="occasional user price attractiveness weighting"/>
+				<stock color="black" font_color="black" label_angle="106.032" x="1128" y="134" name="Occasional HiBlend Users"/>
+				<stock color="black" font_color="black" label_angle="72.309" x="1419" y="137" name="Regular HiBlend Users"/>
+				<flow color="black" font_color="black" label_side="top" x="1267.5" y="134" name="becoming regular user">
+					<pts>
+						<pt x="1150.5" y="134"/>
+						<pt x="1396.5" y="134"/>
+					</pts>
+				</flow>
+				<aux color="black" font_color="black" label_angle="252.305" x="1483" y="219" name="Regular HiBlend User Gap"/>
+				<flow color="black" font_color="black" label_angle="84.7499" x="991" y="134" name="becoming occasional user">
+					<pts>
+						<pt x="888.5" y="134"/>
+						<pt x="1105.5" y="134"/>
+					</pts>
+				</flow>
+				<aux color="#65183E" font_color="#65183E" label_angle="244.401" x="2010" y="1095" name="Total Desired Hi Blend Consn"/>
+				<aux color="black" font_color="black" label_angle="276.185" x="1483" y="67" name="preference share Regular Users"/>
+				<stock color="black" font_color="black" label_angle="82.075" x="866" y="132" name="Non HiBlend Users"/>
+				<aux color="black" font_color="black" label_angle="241.8" x="1177" y="184" name="occasional user constraint on becoming regular HiBlend User"/>
+				<aux color="red" font_color="red" label_angle="75.112" x="301" y="742" name="rate of becoming occasional HiBlend user"/>
+				<aux color="red" font_color="red" label_side="top" x="299" y="674" name="fraction NonUsers susceptible"/>
+				<aux color="black" font_color="black" label_angle="61.8727" x="837" y="245" name="Potential Hi Blend Users"/>
+				<aux color="black" font_color="black" label_angle="132.239" x="929" y="209" name="susceptible non HiBlend users"/>
+				<aux color="black" font_color="black" label_angle="355.466" x="1273" y="184" name="rate of becoming reg HiBlend user"/>
+				<aux color="red" font_color="red" x="304" y="776" name="max rate of becoming regular HiBlend user"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="358.01" x="45" y="1340" name="Hi Blend Pump Price From PIM"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="2.73194" x="45" y="1389" name="Gasoline Pump Price from PIM"/>
+				<aux color="black" font_color="black" label_angle="135.409" x="2172" y="144" name="Long Term Avg Gas Price"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="2.33032" x="46" y="1252" name="potential Hi Blend Consn from Vehicle Module"/>
+				<aux color="black" font_color="black" label_angle="129.765" x="1843" y="961" name="Occasional User Wtd Hi Blend Share"/>
+				<aux color="black" font_color="black" label_angle="104.716" x="1386" y="740" name="Reg HiBlend Users as Frac"/>
+				<aux color="black" font_color="black" label_angle="98.6913" x="1843" y="679" name="Share Occasional Use to Hi Blend"/>
+				<aux color="black" font_color="black" label_angle="52.4062" x="837" y="457" name="maximum HiBlend Users PCT from regional coverage"/>
+				<flow color="black" font_color="black" label_angle="198.277" x="1268" y="310" name="dropping back to occasional user">
+					<pts>
+						<pt x="1419" y="154.5"/>
+						<pt x="1419" y="310"/>
+						<pt x="1117" y="310"/>
+						<pt x="1117" y="151.5"/>
+					</pts>
+				</flow>
+				<aux color="red" font_color="red" x="305" y="879" name="time to drop out"/>
+				<aux color="black" font_color="black" label_angle="40.3296" x="1029" y="457" name="Total PCT HiBlend Capable By Region"/>
+				<aux color="black" font_color="black" label_angle="76.8757" x="837" y="364" name="HiBlend Capable PCT WITHOUT station coverage"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="288" y="1292" name="Hi Blend Gas equivalent price"/>
+				<aux color="black" font_color="black" label_angle="294.998" x="1843" y="308" name="Gasoline Attractiveness Occasional Users"/>
+				<aux color="red" font_color="red" x="398" y="1090" name="k Gas Occasional Users"/>
+				<aux color="black" font_color="black" label_angle="278.691" x="1843" y="518" name="RAT HiBlend Occasional Hi Blend Users"/>
+				<aux color="black" font_color="black" label_angle="218.94" x="1198" y="960" name="Occasional HiBlend Users as Frac"/>
+				<aux color="black" font_color="black" label_angle="240.093" x="2010" y="308" name="Hi Blend Attractiveness Regular Hi Blend Users"/>
+				<aux color="red" font_color="red" label_angle="172.016" x="261" y="1032" name="k Hi Blend Regular Users"/>
+				<aux color="red" font_color="red" label_side="left" x="260" y="972" name="regular user price attractiveness weighting"/>
+				<aux color="black" font_color="black" label_angle="0.658898" x="2010" y="740" name="Regular User Wtd Hi Blend Share"/>
+				<aux color="black" font_color="black" label_angle="281.815" x="2010" y="671" name="Share Regular Use to Hi Blend"/>
+				<aux color="black" font_color="black" label_angle="278.691" x="2172" y="519" name="Gasoline Attractiveness Reg Hi Blend Users"/>
+				<aux color="red" font_color="red" x="261" y="1094" name="k Gas Regular Users"/>
+				<aux color="black" font_color="black" label_angle="278.691" x="2010" y="519" name="RAT HiBlend Regular Hi Blend Users"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="101.815" x="2010" y="961" name="Total User Wtd Hi Blend Share"/>
+				<aux color="black" font_color="black" label_angle="336.948" x="1665" y="144" name="Long Term Avg Hi Blend Gas Equivalent Price"/>
+				<aux color="red" font_color="red" x="304" y="833" name="gas price averaging time"/>
+				<aux color="black" font_color="black" label_angle="78.185" x="1665" y="67" name="Long Term Relative Price"/>
+				<aux color="black" font_color="black" label_side="right" label_angle="45" x="837" y="897" name="frac HiBlend capable with station coverage"/>
+				<aux color="black" font_color="black" label_angle="244.401" x="2010" y="1028" name="FFV Hi Blend Consn"/>
+				<group locked="false" x="17" y="625" width="721" height="539" name="Input Data and Initializations"/>
+				<group locked="false" x="1" y="1472" width="745" height="161" name="Outputs to Other Modules">
+					<item uid="4073"/>
+					<item uid="4074"/>
+					<item uid="4075"/>
+				</group>
+				<group locked="false" x="7" y="1209" width="732" height="226" name="Non Spreadsheet Inputs from Other Modules"/>
+				<group locked="false" color="black" font_color="black" x="776" y="25" width="2110" height="1341" name="HiBlend and Fuel Use Logic">
+					<item uid="4039"/>
+					<item uid="4023"/>
+					<item uid="4025"/>
+					<item uid="4028"/>
+					<item uid="4042"/>
+					<item uid="3997"/>
+					<item uid="4016"/>
+					<item uid="4060"/>
+					<item uid="3992"/>
+					<item uid="4037"/>
+					<item uid="4050"/>
+					<item uid="4000"/>
+					<item uid="4034"/>
+					<item uid="4047"/>
+					<item uid="4032"/>
+					<item uid="4056"/>
+					<item uid="4004"/>
+					<item uid="4045"/>
+					<item uid="4020"/>
+				</group>
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="4076" x="8" y="8.5" width="701" height="51">Biomass Scenario Downstream Fuel Use Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="4077" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="4078" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="4079" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="4080" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="4081" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="4082" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="293.573" uid="4056" x="964" y="888" width="18" height="18">
+					<of>Station_Coverage_From_Dispensing_Module</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="4025" x="1335" y="324" width="18" height="18">
+					<of>time_to_drop_out</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="4037" x="1746" y="407" width="18" height="18">
+					<of>occasional_user_price_attractiveness_weighting</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3997" x="1656" y="241" width="18" height="18">
+					<of>Hi_Blend_Gas_equivalent_price</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4073" x="69" y="1564" width="18" height="18">
+					<of>FFV_Lo_Blend_Consn</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="272.739" uid="4034" x="2163" y="601" width="18" height="18">
+					<of>k_Gas_Regular_Users</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="240.139" uid="4042" x="1722" y="299" width="18" height="18">
+					<of>k_Gas_Occasional_Users</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="249.993" uid="4020" x="2216" y="1019" width="18" height="18">
+					<of>potential_Hi_Blend_Consn_from_Vehicle_Module</of>
+				</alias>
+				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4047" x="898.5" y="724.5" width="45" height="35">
+					<of>Non_HiBlend_Users</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4045" x="2215" y="952" width="18" height="18">
+					<of>max_FFV_Lo_Blend_Consn_from_Vehicle_Module</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="146.947" uid="4016" x="2113" y="299" width="18" height="18">
+					<of>k_Hi_Blend_Regular_Users</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="44.5909" uid="4050" x="1656" y="604" width="18" height="18">
+					<of>k_Hi_Blend_Occasional_Users</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4074" x="78" y="1506" width="18" height="18">
+					<of>Total_Desired_Hi_Blend_Consn</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="45" uid="4039" x="988" y="240" width="18" height="18">
+					<of>rate_of_becoming_occasional_HiBlend_user</of>
+				</alias>
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4075" x="218" y="1567" width="18" height="18">
+					<of>Total_User_Wtd_Hi_Blend_Share</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="261.309" uid="4000" x="2076" y="395" width="18" height="18">
+					<of>regular_user_price_attractiveness_weighting</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_side="left" uid="4028" x="1264" y="239" width="18" height="18">
+					<of>max_rate_of_becoming_regular_HiBlend_user</of>
+				</alias>
+				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4032" x="1006.5" y="723.5" width="45" height="35">
+					<of>Occasional_HiBlend_Users</of>
+				</alias>
+				<alias color="black" font_style="italic" font_color="black" label_angle="43.6665" uid="4004" x="1196.5" y="722.5" width="45" height="35">
+					<of>Regular_HiBlend_Users</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="4060" x="1889" y="135" width="18" height="18">
+					<of>gas_price_averaging_time</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="4023" x="920" y="315" width="18" height="18">
+					<of>fraction_NonUsers_susceptible</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="177.284" uid="3992" x="2163" y="206" width="18" height="18">
+					<of>Gasoline_Pump_Price_from_PIM</of>
+				</alias>
+			</view>
+			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+				<style/>
+			</view>
+			<isee:templates/>
+			<isee:stories/>
+		</views>
+	</model>
+</xmile>
+
