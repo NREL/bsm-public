@@ -12,7 +12,7 @@ This work was funded by the [United States Department of Energy’s](http://ener
 
 ## Licensing and Attribution:
 
-The BSM-public is released under the [BSD license] (http://github.com/NREL/bsm-public) in this folder.
+The BSM-public is released under the [BSD license](http://github.com/NREL/bsm-public) in this folder.
 
 If you are using the BSM-public outside of the National Renewable Energy Laboratory’s (NREL) BSM project, clearly distinguish your results (e.g., BSM-X, where X indicates your name or institution). The suggested citation is: National Renewable Energy Laboratory ([year]). Biomass Scenario Model, Public Version, Release [version number]. http://en.openei.org/wiki/Biomass_Scenario_Model.
 
@@ -39,7 +39,7 @@ See [ISEE Systems](http://www.iseesystems.com) for documentation and training re
 -    Allow access to all the features of the BSM-public.
 
 #### Wiki and Frequently Asked Questions (FAQ):
-The BSM wiki is [here](http://en.openei.org/wiki/Biomass_Scenario_Model), and includes [Frequently Asked Questions](https://openei.org/wiki/File:Frequently Asked Questions.pdf).
+The BSM wiki is [here](http://en.openei.org/wiki/Biomass_Scenario_Model), and includes [Frequently Asked Questions](https://openei.org/wiki/File:Frequently_Asked_Questions.pdf).
 
 
 #### Interacting with the BSM Development Team: User Community and Collaboration:
