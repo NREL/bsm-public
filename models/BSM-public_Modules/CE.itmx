@@ -5,27 +5,28 @@
 		<name>CE</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
 		<dim name="ConversionPolicy">
 			<elem name="Price"/>
 			<elem name="Feedstock"/>
 			<elem name="FCI"/>
 			<elem name="Loan"/>
 		</dim>
-		<dim name="CtoATech">
-			<elem name="BC"/>
-			<elem name="TC"/>
-		</dim>
-		<dim name="PECrop">
-			<elem name="Herbaceous"/>
-			<elem name="Woody"/>
+		<dim name="Product">
+			<elem name="Primary"/>
+			<elem name="Co1"/>
+			<elem name="Co2"/>
 		</dim>
 		<dim name="TechAttribute">
 			<elem name="ProcessYield"/>
@@ -34,6 +35,10 @@
 			<elem name="CapitalCost"/>
 			<elem name="Risk"/>
 			<elem name="DebtFrac"/>
+		</dim>
+		<dim name="PECrop">
+			<elem name="Herbaceous"/>
+			<elem name="Woody"/>
 		</dim>
 		<dim name="Region">
 			<elem name="NE"/>
@@ -48,13 +53,19 @@
 			<elem name="P"/>
 		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -266,16 +277,17 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>OnLine[CtoATech,Region] * (Avg_Plant_Output_gal_yr[CtoATech,Region]/one_project)</eqn>
+				<eqn>OnLine[CtoATech,Region] * (Avg_Plant_Output_gal_yr / one_project)</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Plant Utilization Factors">
-				<doc>DEFINITION: Calculates overall utilization of on line facilities by pathway
+				<doc>DEFINITION: Calculates overall utilization of on-line facilities, by pathway
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -288,7 +300,7 @@ Nominal_Plant_Utilization_Factors * (1-frac_contracted_capacity))
 				<units>Unitless</units>
 			</aux>
 			<aux name="Op Experience Per Year">
-				<doc>DEFINITION: Hours of experience generated per year of operation, for pre commercial scale operations
+				<doc>DEFINITION: Hours of experience generated per year of operation, for  commercial scale operations
 
 UNITS: HoursPerProjectPerYr
 
@@ -303,13 +315,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_prodn_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -334,19 +351,20 @@ COMMENTS: </doc>
 				<units>ton per day</units>
 			</aux>
 			<aux name="Avg PY Pipeline">
-				<doc>DEFINITION: Tracks the average process yield of facilities that are on in design and construction
+				<doc>DEFINITION: Tracks the average process yield of facilities that are in design and construction
 
 UNITS: gal per ton
 
-TYPE: Array | Internal Calculation | Sector Interface 
+TYPE: Array | Internal Calculation | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>IF In_Design_and_Cons[CtoATech,Region] &gt;0 
-THEN PY_in_In_Design_and_Cons[CtoATech,Region]/In_Design_and_Cons[CtoATech,Region]
+THEN PY_in_In_Design_and_Cons/In_Design_and_Cons[CtoATech,Region]
 ELSE 0</eqn>
 				<units>gal per ton</units>
 			</aux>
@@ -360,8 +378,9 @@ TYPE: Array | Internal Calculation | Sector Interface | Module Interface
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>SUM(Actual_Output_gpy[CtoATech, *])</eqn>
+				<eqn>SUM(Actual_Output_gpy[CtoATech,*,Product])</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="one billion">
@@ -385,12 +404,25 @@ TYPE: Array | Constant | Techno Economic Input
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
+					<dim name="Product"/>
 				</dimensions>
-				<element subscript="BC">
+				<element subscript="BC, Primary">
 					<eqn>79</eqn>
 				</element>
-				<element subscript="TC">
+				<element subscript="BC, Co1">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, Co2">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, Primary">
 					<eqn>83.8</eqn>
+				</element>
+				<element subscript="TC, Co1">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, Co2">
+					<eqn>0</eqn>
 				</element>
 				<units>gal per ton</units>
 			</aux>
@@ -399,14 +431,15 @@ COMMENTS: </doc>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>OnLine[CtoATech,Region]*Industry_Process_Yield_Gap[CtoATech,Region]*rate_of_industry_process_yield_adjustment</eqn>
+				<eqn>OnLine[CtoATech,Region] * Industry_Process_Yield_Gap * rate_of_industry_process_yield_adjustment</eqn>
 				<non_negative/>
 				<units>gal-projects/(ton-yr)</units>
 			</flow>
@@ -490,14 +523,73 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC, NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, P">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, NE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, A">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, SE">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, DS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, CB">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, LS">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, NP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, SP">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, M">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, P">
+					<eqn>0</eqn>
+				</element>
 				<inflow>plant_planning</inflow>
 				<outflow>initiating</outflow>
 				<non_negative/>
@@ -508,7 +600,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -524,7 +616,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -545,8 +637,9 @@ TYPE: Array | Internal Calculation | Sector Interface
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Mature_Industry_Process_Yield[CtoATech]*State_of_the_Industry_Multipliers[CtoATech,ProcessYield]</eqn>
+				<eqn>Mature_Industry_Process_Yield * State_of_the_Industry_Multipliers[CtoATech,ProcessYield] * Active_Product_Switches</eqn>
 				<units>gal per ton</units>
 			</aux>
 			<aux name="Initial Equity Investment">
@@ -554,7 +647,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -565,7 +658,7 @@ COMMENTS: </doc>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="est depreciation expense">
-				<doc>DEFINITION: Calculates depreciation expense for the &quot;next&quot; facility 
+				<doc>DEFINITION: Calculates depreciation expense for the &quot;next&quot; facility
 
 UNITS: US dollars per year
 
@@ -584,7 +677,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -614,7 +707,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -628,7 +721,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -669,25 +762,25 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>Debt_Interest_Rate_as_Pct/one_hundred_PCT</eqn>
 				<units>per year</units>
 			</aux>
 			<aux name="Regional FS Cost USD yr">
-				<doc>DEFINITION: Calculates Expected Cost in $/yr for &quot;next&quot; commercial facility
+				<doc>DEFINITION: Calculates Expected feedstock Cost in $/yr, for &quot;next&quot; commercial facility
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Regional_FS_Cost_USD_per_gal[CtoATech,Region] * Expected_Plant_Output[CtoATech,Region]</eqn>
+				<eqn>Regional_FS_Cost_USD_per_gal[CtoATech,Region] * Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Expected Other VBL Op Cost">
@@ -744,7 +837,7 @@ COMMENTS: </doc>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="total project length">
-				<doc>DEFINITION: Total length of commercial project, including desingn, construction, and economic  lifetime once facility becomes operational
+				<doc>DEFINITION: Total length of commercial project, including design, construction, and economic  lifetime once facility becomes operational
 
 UNITS: years
 
@@ -762,7 +855,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -777,7 +870,7 @@ COMMENTS: </doc>
 
 UNITS: percent/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -791,22 +884,23 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Expected_Plant_Output[CtoATech,Region] * Expected_Price_after_Subs</eqn>
+				<eqn>Expected_Plant_Output * total_price_input</eqn>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Exp Revs Net of Op Cost">
-				<doc>DEFINITION: Calculates expected revenues net of  expected operating cost for &quot;next&quot; commercial plant
+				<doc>DEFINITION: Calculates expected revenues net of expected operating cost for &quot;next&quot; commercial plant
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -859,14 +953,14 @@ COMMENTS: value is for a &quot;standard&quot; mature industry commercial scale f
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Exp_Sales_Rev[CtoATech,Region]+NextPlant_Expected_Power_Sales_Rev[CtoATech,Region] +NextPlant_Other_Coproduct_Sales_Rev[CtoATech,Region]</eqn>
+				<eqn>SUM(Exp_Sales_Rev[CtoATech,Region,*]) + NextPlant_Expected_Power_Sales_Rev[CtoATech,Region] +NextPlant_Other_Coproduct_Sales_Rev[CtoATech,Region]</eqn>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Cume Loan Payment">
@@ -874,7 +968,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -889,7 +983,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -900,11 +994,11 @@ COMMENTS: </doc>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="Rough Estimate Annual Interest">
-				<doc>DEFINITION: Calculates the average amount of interest paid per year, across the life of loan 
+				<doc>DEFINITION: Calculates the average amount of interest paid per year, across the life of loan
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -919,7 +1013,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -938,7 +1032,7 @@ ELSE
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -964,7 +1058,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -979,7 +1073,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -994,7 +1088,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1009,7 +1103,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1024,7 +1118,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1039,7 +1133,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1054,7 +1148,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1070,7 +1164,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1085,7 +1179,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1100,7 +1194,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1115,7 +1209,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1141,7 +1235,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1156,7 +1250,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1171,7 +1265,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1186,7 +1280,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1201,7 +1295,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1216,7 +1310,7 @@ MIN(depreciation_period,term_of_loan)</eqn>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1230,7 +1324,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1245,7 +1339,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: USD per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1260,7 +1354,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: scalar | constant 
+TYPE: scalar | constant
 
 COMMENTS: </doc>
 				<eqn>1</eqn>
@@ -1271,14 +1365,15 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Accounts for number of days per year facilities are expected to be on line under full utilization</doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Avg_Plant_Output_gal_day[CtoATech,Region]* (Days_per_Year_Online[CtoATech])</eqn>
+				<eqn>Avg_Plant_Output_gal_day * (Days_per_Year_Online[CtoATech])</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<stock name="Commercial Maturity" access="output">
@@ -1303,7 +1398,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1368,7 +1463,7 @@ COMMENTS: Default values determined through focus group expert opinion</doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1383,7 +1478,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Constant | Scenario Input 
+TYPE: Array | Constant | Scenario Input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1402,7 +1497,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1457,7 +1552,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1467,7 +1562,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="Mature Pilot Multipliers">
-				<doc>DEFINITION: Assumed value indicates the fraction of feedstock cost attribute that is realized at the fully mature stage of pilot effort
+				<doc>DEFINITION: Assumed values indicate the fraction of technoeconomic attributes that are realized at the fully mature stage of pilot effort
 
 UNITS: Unitless
 
@@ -1508,7 +1603,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>329</eqn>
+				<element subscript="BC">
+					<eqn>329</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>329</eqn>
+				</element>
 				<units>DaysPerYr</units>
 			</aux>
 			<aux name="Avg Plant Output gal day">
@@ -1516,14 +1616,15 @@ COMMENTS: </doc>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Avg_FS_throughput[CtoATech,Region] * Avg_PY[CtoATech,Region]</eqn>
+				<eqn>Avg_FS_throughput[CtoATech,Region] * Avg_PY</eqn>
 				<units>GPD</units>
 			</aux>
 			<aux name="technology switches">
@@ -1569,7 +1670,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1656,7 +1757,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0.025</eqn>
+				<element subscript="BC">
+					<eqn>0.025</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0.025</eqn>
+				</element>
 				<units>billions-gal</units>
 			</aux>
 			<aux name="P Success">
@@ -1664,7 +1770,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: provides an output diagnostic metric only</doc>
 				<dimensions>
@@ -1676,7 +1782,7 @@ COMMENTS: provides an output diagnostic metric only</doc>
 			<stock name="OnLine" access="output">
 				<doc>DEFINITION: Calculates commercial scale operations that are currently on line
 
-UNITS: projects
+UNITS: Projects
 
 TYPE: Array | Internal Calculation | Module Interface
 
@@ -1756,7 +1862,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1770,9 +1876,9 @@ COMMENTS: </doc>
 			<flow name="completing D and C">
 				<doc>DEFINITION: Conveyor outflow that captures completion of design/construction phase of  commercial scale projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1784,18 +1890,18 @@ COMMENTS: </doc>
 				<units>Projects per Year</units>
 			</flow>
 			<aux name="NPV rel to a million">
-				<doc>DEFINITION: Scales NPV of commercial scale project by normalizing by expected next plant output, which is expressed in million gallons per year. The calculation gives a measure of the net present value of the investment relative to expected annual production.
+				<doc>DEFINITION: Scales NPV of commercial scale project by normalizing by expected next plant output, which is expressed in gallons per year. The calculation gives a measure of the net present value of the investment relative to expected annual production.
 
 UNITS: US Dollars*Years/Gallons
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>NPV_Investment[CtoATech,Region]/Expected_Plant_Output</eqn>
+				<eqn>NPV_Investment[CtoATech,Region]/Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>US Dollars*Years/Gallons</units>
 			</aux>
 			<aux name="Years in D and C">
@@ -1809,7 +1915,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>3</eqn>
+				<element subscript="BC">
+					<eqn>3</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>3</eqn>
+				</element>
 				<units>years</units>
 			</aux>
 			<stock name="Pilot Maturity" access="output">
@@ -1817,7 +1928,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1834,7 +1945,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1849,7 +1960,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1880,7 +1991,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>100</eqn>
+				<element subscript="BC">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>100</eqn>
+				</element>
 				<units>hours</units>
 			</aux>
 			<stock name="Number of Doublings of Cume Output">
@@ -1888,7 +2004,7 @@ COMMENTS: </doc>
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1923,13 +2039,13 @@ ELSE 0</eqn>
 
 UNITS: billion GPY
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>(Output_gpy_by_Technology[CtoATech])/one_billion</eqn>
+				<eqn>(Output_gpy_by_Technology[CtoATech,Primary])/one_billion</eqn>
 				<non_negative/>
 				<units>billion GPY</units>
 			</flow>
@@ -1938,7 +2054,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1953,7 +2069,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1965,11 +2081,11 @@ ELSE 0</eqn>
 				<units>per year</units>
 			</aux>
 			<stock name="Number of Doublings of Pilot Experience">
-				<doc>DEFINITION: Accumulates the number of doublings of cumulative pilot scale
+				<doc>DEFINITION: Accumulates the number of doublings of pilot scale experience
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1987,7 +2103,7 @@ LN(pilot_maturity_gap)/LN(Pilot_Progress_Ratios)</eqn>
 
 UNITS: USD per gallon
 
-TYPE: Array | Sector Interface 
+TYPE: Array | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2001,14 +2117,15 @@ COMMENTS: </doc>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>retirements[CtoATech,Region]*Avg_PY[CtoATech,Region]</eqn>
+				<eqn>retirements[CtoATech,Region] * Avg_PY</eqn>
 				<non_negative/>
 				<units>gal-projects/(ton-yr)</units>
 			</flow>
@@ -2017,14 +2134,15 @@ COMMENTS: </doc>
 
 UNITS: ProjectGalPerTon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>In_Design_and_Cons[CtoATech,Region]*State_of_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>In_Design_and_Cons[CtoATech,Region] * State_of_Industry_Process_Yield[CtoATech,Product]</eqn>
 				<inflow>PY_influx</inflow>
 				<outflow>PY_D_and_C_to_Startup</outflow>
 				<non_negative/>
@@ -2035,7 +2153,7 @@ COMMENTS: </doc>
 
 UNITS: hours
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -2051,7 +2169,7 @@ COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 
 UNITS: hr/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2066,7 +2184,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2081,7 +2199,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2135,7 +2253,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2159,7 +2277,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2181,9 +2299,9 @@ COMMENTS: </doc>
 			<flow name="completing PC development">
 				<doc>DEFINITION: Conveyor outflow that captures completion of development for pre commercial (PC) projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2198,7 +2316,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2213,14 +2331,15 @@ COMMENTS: </doc>
 
 UNITS: ProjectGalPerTon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>OnLine[CtoATech,Region]*State_of_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>OnLine[CtoATech,Region]* State_of_Industry_Process_Yield[CtoATech,Product]</eqn>
 				<inflow>increase_in_PY_commercial_industry</inflow>
 				<inflow>PY_D_and_C_to_Startup</inflow>
 				<outflow>PY_retirements</outflow>
@@ -2251,14 +2370,15 @@ COMMENTS: </doc>
 
 UNITS: gal per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>State_of_Industry_Process_Yield[CtoATech]-Avg_PY[CtoATech,Region]</eqn>
+				<eqn>State_of_Industry_Process_Yield[CtoATech,Product] - Avg_PY</eqn>
 				<units>gal per ton</units>
 			</aux>
 			<flow name="yrly prodn subs">
@@ -2272,7 +2392,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>Output_gpy_by_Technology[CtoATech] * PoP_Price_Subs_Logic[CtoATech]</eqn>
+				<eqn>Output_gpy_by_Technology[CtoATech,Primary] * PoP_Price_Subs_Logic[CtoATech]</eqn>
 				<non_negative/>
 				<units>US dollars per year</units>
 			</flow>
@@ -2281,7 +2401,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2309,7 +2429,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2324,7 +2444,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2344,7 +2464,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>100</eqn>
+				<element subscript="BC">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>100</eqn>
+				</element>
 				<units>hours</units>
 			</aux>
 			<stock name="Number of Doublings of PC Experience">
@@ -2352,7 +2477,7 @@ COMMENTS: </doc>
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2370,7 +2495,7 @@ LN(PC_maturity_gap)/LN(PC_Progress_Ratios)</eqn>
 
 UNITS: hour
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -2383,11 +2508,11 @@ ELSE 0</eqn>
 				<units>hour</units>
 			</stock>
 			<flow name="logging PC experience">
-				<doc>DEFINITION: Calculates the influx of pilot scale experience
+				<doc>DEFINITION: Calculates the influx of pre-commercial scale experience
 
 UNITS: hr/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2402,7 +2527,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2417,7 +2542,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2433,14 +2558,15 @@ ELSE 0</eqn>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>(initiating + scheduled_plant_initiation) * State_of_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>(initiating[CtoATech,Region] + scheduled_plant_initiation[CtoATech,Region]) * State_of_Industry_Process_Yield[CtoATech,Product]</eqn>
 				<non_negative/>
 				<units>gal-projects/(ton-yr)</units>
 			</flow>
@@ -2468,7 +2594,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2480,7 +2606,7 @@ Early_Pilot_Multipliers[TechAttribute]*(1-Pilot_Maturity[CtoATech])</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Mature PC Multipliers">
-				<doc>DEFINITION: Assumed value indicates the fraction of feedstock cost is realized at the fully mature stage of demo effort
+				<doc>DEFINITION: Assumed value indicates the fraction of mature industry performance attributes that are realized at the fully mature stage of pre-commercial effort
 
 UNITS: Unitless
 
@@ -2515,7 +2641,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2534,9 +2660,9 @@ COMMENTS: </doc>
 			<flow name="completing PC scale ops">
 				<doc>DEFINITION: Conveyor outflow that captures completion of operation for pre commercial (PC) projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2547,18 +2673,19 @@ COMMENTS: </doc>
 				<units>Projects per Year</units>
 			</flow>
 			<flow name="PY D and C to Startup">
-				<doc>DEFINITION: Co-flow of process yield associated withmovement of facilities from design and construction to on line status
+				<doc>DEFINITION: Co-flow of process yield associated with movement of facilities from design and construction to on line status
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>completing_D_and_C[CtoATech,Region]*Avg_PY_Pipeline[CtoATech,Region]</eqn>
+				<eqn>completing_D_and_C[CtoATech,Region]*Avg_PY_Pipeline</eqn>
 				<non_negative/>
 				<units>gal-projects/(ton-yr)</units>
 			</flow>
@@ -2604,15 +2731,16 @@ COMMENTS: </doc>
 
 UNITS: gal per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>IF OnLine[CtoATech,Region] &gt;0 
-THEN PY_OnLine[CtoATech,Region]/OnLine[CtoATech,Region]
+THEN PY_OnLine / OnLine[CtoATech,Region]
 ELSE 0</eqn>
 				<units>gal per ton</units>
 			</aux>
@@ -2632,7 +2760,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2648,14 +2776,15 @@ Pilot_Multipliers[CtoATech,TechAttribute]*(1-PC_Maturity[CtoATech])</eqn>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>NextPlant_FS_Thruput_Cap[CtoATech,Region] * State_of_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>NextPlant_FS_Thruput_Cap[CtoATech,Region] * State_of_Industry_Process_Yield[CtoATech,Product]</eqn>
 				<units>GPD</units>
 			</aux>
 			<aux name="Expected Plant Output">
@@ -2663,18 +2792,19 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Expected_Plant_Output_Gal_Day_C[CtoATech,Region] * Days_per_Year_Online[CtoATech]</eqn>
+				<eqn>Expected_Plant_Output_Gal_Day_C * Days_per_Year_Online[CtoATech]</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Mature Commercial Multipliers">
-				<doc>DEFINITION: Values of 1 reflect concept that when industry is fully mature, investers will encounter mature industry values for technology attributes.
+				<doc>DEFINITION: Values of 1 reflect concept that when industry is fully mature, investors will encounter mature industry values for technology attributes.
 
 UNITS: Unitless
 
@@ -2720,7 +2850,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2734,26 +2864,19 @@ COMMENTS: </doc>
 
 UNITS: ton per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Avg_PY[CtoATech,Region] &gt;0 
-THEN  Actual_Output_gpy[CtoATech,Region]/Avg_PY[CtoATech,Region]
+				<eqn>IF Avg_PY[CtoATech,Region,Primary] &gt;0 
+THEN  Actual_Output_gpy[CtoATech,Region,Primary]/Avg_PY[CtoATech,Region,Primary]
 ELSE 0</eqn>
 				<units>ton per year</units>
 			</aux>
 			<aux name="invest attractiveness weighting" access="input">
-				<doc>DEFINITION: module interface to RA.invest attractiveness weighting
-
-UNITS: Gallons/(US Dollars*Years)
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<eqn>15</eqn>
 				<units>Gallons/(US Dollars*Years)</units>
 			</aux>
@@ -2762,7 +2885,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2792,7 +2915,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2807,7 +2930,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2829,8 +2952,9 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Output_Capacity[CtoATech,Region]*Plant_Utilization_Factors[CtoATech,Region]</eqn>
+				<eqn>Output_Capacity * Plant_Utilization_Factors[CtoATech,Region]</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="nominal Attr">
@@ -2838,7 +2962,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: part of nested logit calculation for allocation of investment to different pathways, regions</doc>
 				<dimensions>
@@ -2853,13 +2977,18 @@ COMMENTS: part of nested logit calculation for allocation of investment to diffe
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_Loan_guarantee_flux</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -2884,7 +3013,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2899,7 +3028,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2909,7 +3038,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="k">
-				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness of commercial scale operations
+				<doc>DEFINITION: Assumed non-$-based utility component of attractiveness of commercial scale operations
 
 UNITS: Unitless
 
@@ -2920,7 +3049,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="nominal regional distn new facilities">
-				<doc>DEFINITION: Calculates relative attractiveness of different commercial scale conversion options, by region.
+				<doc>DEFINITION: Calculates regional distribution of new facilities, based on their relative regional attractiveness
 
 UNITS: Unitless
 
@@ -2939,14 +3068,14 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Expected_FS_cost_after_Subs[CtoATech,Region] / State_of_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>Expected_FS_cost_after_Subs[CtoATech,Region] / State_of_Industry_Process_Yield[CtoATech,Primary]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<stock name="Cume FS Subs">
@@ -2954,13 +3083,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_fs_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -2985,13 +3119,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_FCI_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -3016,7 +3155,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3074,7 +3213,7 @@ ELSE 0</eqn>
 
 UNITS: USD per ton
 
-TYPE: Array | Sector Interface 
+TYPE: Array | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3088,7 +3227,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3141,7 +3280,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3179,7 +3318,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation | Sector Interface 
+TYPE: Array | Internal Calculation | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3209,7 +3348,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3298,7 +3437,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3315,7 +3454,7 @@ ELSE 0</eqn>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3331,7 +3470,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3370,7 +3509,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>SUM(Cume_Prodn_Subs) + SUM(Cume_FCI_Subs) + SUM(Cume_FS_Subs)</eqn>
@@ -3381,7 +3520,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>rollup_cumulative_subsidies - DELAY(rollup_cumulative_subsidies,1)</eqn>
@@ -3392,7 +3531,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>SUM(Cume_Loan_Guarantee_Exposure)</eqn>
@@ -3403,7 +3542,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3418,7 +3557,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3439,7 +3578,36 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="NE">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="one project">
@@ -3458,7 +3626,7 @@ COMMENTS: </doc>
 
 UNITS: 1/doubling
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: essentially a constant but expressed as a calculation to enable unit consistency</doc>
 				<eqn>LN(2)/Doubling</eqn>
@@ -3491,15 +3659,15 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Expected_Plant_Output[CtoATech,Region] =0 THEN 0 ELSE
-est_depreciation_expense[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region]</eqn>
+				<eqn>IF Expected_Plant_Output[CtoATech,Region,Primary] =0 THEN 0 ELSE
+est_depreciation_expense[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="fixed cost USD per gal">
@@ -3507,7 +3675,7 @@ est_depreciation_expense[CtoATech,Region] / Expected_Plant_Output[CtoATech,Regio
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3518,13 +3686,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="PoP Price" access="input">
-				<doc>DEFINITION: module interface to IP.CE EtOH PoP price
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -3536,15 +3697,15 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Avg_PY &gt; 0 THEN 
-Expected_FS_cost_after_Subs[CtoATech,Region] / Avg_PY
+				<eqn>IF Avg_PY[CtoATech,Region,Primary] &gt; 0 THEN 
+Expected_FS_cost_after_Subs[CtoATech,Region] / Avg_PY[CtoATech,Region,Primary]
 ELSE 0</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -3560,7 +3721,7 @@ COMMENTS: </doc>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>(Feedstock_Cost_USD_per_gal[CtoATech,Region]-Other_rev_net_of_vbl_cost_per_gal[CtoATech,Region])/(Expected_Price_after_Subs[CtoATech, Region])</eqn>
+				<eqn>(Feedstock_Cost_USD_per_gal[CtoATech,Region]-Other_rev_net_of_vbl_cost_per_gal[CtoATech,Region])/(Expected_Price_after_Subs)</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="UTIL by tech">
@@ -3574,8 +3735,8 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>IF SUM(Output_Capacity[CtoATech,*]) &gt; 0 THEN
-100 * SUM(Actual_Output_gpy[CtoATech,*])/SUM(Output_Capacity[CtoATech,*])
+				<eqn>IF SUM(Output_Capacity[CtoATech,*,Primary]) &gt; 0 THEN
+100 * SUM(Actual_Output_gpy[CtoATech,*,Primary])/SUM(Output_Capacity[CtoATech,*,Primary])
 ELSE 0</eqn>
 				<units>Unitless</units>
 			</aux>
@@ -3591,8 +3752,8 @@ COMMENTS: </doc>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn> IF Avg_Plant_Output_gal_yr[CtoATech,Region] &gt; 0 THEN
-Avg_ORNOVOC[CtoATech,Region] / Avg_Plant_Output_gal_yr[CtoATech,Region]
+				<eqn> IF Avg_Plant_Output_gal_yr[CtoATech,Region,Primary] &gt; 0 THEN
+(Avg_ORNOVOC[CtoATech,Region] + SUM(annual_coproduct_rev[CtoATech,Region,*])) / Avg_Plant_Output_gal_yr[CtoATech,Region,Primary]
 ELSE 0</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -3601,16 +3762,16 @@ ELSE 0</eqn>
 
 UNITS: ton per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Avg_PY &gt; 0 THEN
-(Output_Capacity / Avg_PY) * frac_contracted_capacity + 
-(Output_Capacity / Avg_PY) * 
+				<eqn>IF Avg_PY[CtoATech,Region,Primary] &gt; 0 THEN
+(Output_Capacity[CtoATech,Region,Primary] / Avg_PY[CtoATech,Region,Primary]) * frac_contracted_capacity + 
+(Output_Capacity[CtoATech,Region,Primary] / Avg_PY[CtoATech,Region,Primary]) * 
 Nominal_Plant_Utilization_Factors * (1-frac_contracted_capacity)
 ELSE 0</eqn>
 				<units>ton per year</units>
@@ -3797,13 +3958,6 @@ COMMENTS: </doc>
 				<units>per million</units>
 			</aux>
 			<aux name="Expected Regional Cellulosic FS cost USD per ton" access="input">
-				<doc>DEFINITION: module interface to FM.FS Price Input to CM
-
-UNITS: USD per ton
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="PECrop"/>
 					<dim name="Region"/>
@@ -3816,15 +3970,15 @@ COMMENTS: </doc>
 
 UNITS: ton per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Avg_PY_Pipeline &gt; 0 THEN
-(Output_Capacity_Pipeline / Avg_PY_Pipeline) 
+				<eqn>IF Avg_PY_Pipeline[CtoATech,Region,Primary] &gt; 0 THEN
+(Output_Capacity_Pipeline[CtoATech,Region,Primary] / Avg_PY_Pipeline[CtoATech,Region,Primary]) 
 ELSE 0</eqn>
 				<units>ton per year</units>
 			</aux>
@@ -3833,7 +3987,7 @@ ELSE 0</eqn>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3848,15 +4002,15 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Expected_Plant_Output[CtoATech,Region] =0 THEN 0 ELSE
-(Initial_Equity_Investment[CtoATech,Region]*Reqd_Rate_of_Return[CtoATech])/Expected_Plant_Output[CtoATech,Region]</eqn>
+				<eqn>IF Expected_Plant_Output[CtoATech,Region,Primary] =0 THEN 0 ELSE
+(Initial_Equity_Investment[CtoATech,Region]*Reqd_Rate_of_Return[CtoATech])/Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Taxes USD per gal">
@@ -3864,7 +4018,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3879,15 +4033,15 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: variable is mis-named.  Should be Loan Payment USD per gal</doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Expected_Plant_Output[CtoATech,Region] =0 THEN 0 ELSE
-Annual_Loan_Payment[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region]</eqn>
+				<eqn>IF Expected_Plant_Output[CtoATech,Region,Primary] =0 THEN 0 ELSE
+Annual_Loan_Payment[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="expnet op cost USD per gal">
@@ -3895,14 +4049,14 @@ Annual_Loan_Payment[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region]</e
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: variable is mis named</doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn> exp_net_op_cost_USD_per_yr[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region]</eqn>
+				<eqn> exp_net_op_cost_USD_per_yr[CtoATech,Region] / Expected_Plant_Output[CtoATech,Region,Primary]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Reqd FS Supply Pipeline Million TPY">
@@ -3910,7 +4064,7 @@ COMMENTS: variable is mis named</doc>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3925,17 +4079,17 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Output_gpy_by_Technology[CtoATech] = 0
+				<eqn>IF Output_gpy_by_Technology[CtoATech,Primary] = 0
 THEN 0.1   
 ELSE
-Actual_Output_gpy[CtoATech,Region]/Output_gpy_by_Technology[CtoATech]</eqn>
+Actual_Output_gpy[CtoATech,Region,Primary]/Output_gpy_by_Technology[CtoATech,Primary]</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="volume wtd net op cost USD per gal">
@@ -4119,6 +4273,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>Output_Capacity + Output_Capacity_Pipeline</eqn>
 				<units>gallons per year</units>
@@ -4128,14 +4283,15 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Avg_Plant_Output_gpd_pipeline_C[CtoATech,Region]*Days_per_Year_Online[CtoATech]</eqn>
+				<eqn>Avg_Plant_Output_gpd_pipeline_C * Days_per_Year_Online[CtoATech]</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Output Capacity Pipeline">
@@ -4143,14 +4299,15 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>In_Design_and_Cons * (Pipeline_Potential_Plant_Output_gal_per_yr_C[CtoATech,Region]/one_project)</eqn>
+				<eqn>In_Design_and_Cons[CtoATech,Region] * (Pipeline_Potential_Plant_Output_gal_per_yr_C / one_project)</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Avg Plant Output gpd pipeline C">
@@ -4158,24 +4315,18 @@ COMMENTS: </doc>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>Avg_FS_Thruput_Pipeline_C[CtoATech,Region] *  Avg_PY_Pipeline[CtoATech,Region]</eqn>
+				<eqn>Avg_FS_Thruput_Pipeline_C[CtoATech,Region] *  Avg_PY_Pipeline</eqn>
 				<units>GPD</units>
 			</aux>
 			<aux name="FLM C to PreProcess Cost" access="input">
-				<doc>DEFINITION: module interface to FM.C to EtOH preprocess cost
-
-UNITS: USD per ton
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
@@ -4212,13 +4363,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="startup spend constraint" access="input">
-				<doc>DEFINITION: module interface to RA.C to EtOH constraint from cume spend
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<eqn>1</eqn>
 				<units>Unitless</units>
 			</aux>
@@ -4283,13 +4427,6 @@ COMMENTS: </doc>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="FLM frac supply system advanced" access="input">
-				<doc>DEFINITION: module interface to FM.frac supply system advanced
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -4312,7 +4449,7 @@ COMMENTS: </doc>
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4327,7 +4464,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4344,7 +4481,7 @@ ELSE 0</eqn>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4359,7 +4496,7 @@ COMMENTS: </doc>
 
 UNITS: ProjectUSDPerYr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4376,7 +4513,7 @@ COMMENTS: </doc>
 
 UNITS: ProjectUSDPerYr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4438,15 +4575,20 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="BC">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>0</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<flow name="ORNOVOC influx">
-				<doc>DEFINITION: Calculates the state of the industry other rev net of vbl op cost, applying it to influx of full commercial-scale plantsinto design and construction.  Resultant downstream structure used to track the attribute for commercial facilities.
+				<doc>DEFINITION: Calculates the state of the industry other rev net of vbl op cost, applying it to influx of full commercial-scale plants into design and construction.  Resultant downstream structure used to track the attribute for commercial facilities.
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4462,7 +4604,7 @@ scheduled_plant_initiation * start_schedule_ORNOVOC</eqn>
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4488,7 +4630,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4501,13 +4643,6 @@ ELSE 0</eqn>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Des C to EtOH yrly starts" access="input">
-				<doc>DEFINITION: module interface to RA.Des C to EtOH yrly starts
-
-UNITS: Projects per Year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -4519,7 +4654,7 @@ COMMENTS: </doc>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4535,7 +4670,7 @@ COMMENTS: </doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4552,7 +4687,7 @@ ELSE 0</eqn>
 
 UNITS: ProjectTonPerDay
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4566,11 +4701,11 @@ COMMENTS: </doc>
 				<units>ProjectTonPerDay</units>
 			</stock>
 			<stock name="Tot FS Thruput Cap OnLine">
-				<doc>DEFINITION: Tracks total weight of throughput capacity associated with  commercial scale plants that are on-line
+				<doc>DEFINITION: Tracks total weight of throughput capacity associated with commercial scale plants that are on-line
 
 UNITS: ProjectTonPerDay
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4588,7 +4723,7 @@ COMMENTS: </doc>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4605,7 +4740,7 @@ scheduled_plant_initiation * start_schedule_thruput_capacity</eqn>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4617,11 +4752,11 @@ COMMENTS: </doc>
 				<units>projects-ton/(day-yr)</units>
 			</flow>
 			<aux name="Avg FS Thruput Cap Pipeline">
-				<doc>DEFINITION: Tracks average potential feedstock throughput at full utilization and full maturity, for facilities that are currently in design and construction 
+				<doc>DEFINITION: Tracks average potential feedstock throughput at full utilization and full maturity, for facilities that are currently in design and construction
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4669,7 +4804,7 @@ NextPlant_Expected_Other_VBL_Op_Cost</eqn>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5021,7 +5156,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="BC">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="op cost scale factor">
@@ -5035,7 +5175,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="BC">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="TC">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="NextPlant Expected FCI">
@@ -5069,7 +5214,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5086,7 +5231,7 @@ ELSE 0</eqn>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5097,11 +5242,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="L G exposure by pathway and region" flow_concept="true">
-				<doc>DEFINITION: Calculates annual loan guarantee expsure for new commercial scale operations
+				<doc>DEFINITION: Calculates annual loan guarantee exposure for new commercial scale operations
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5116,7 +5261,7 @@ COMMENTS: </doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5142,13 +5287,6 @@ COMMENTS: </doc>
 				<units>million-ton/yr</units>
 			</aux>
 			<aux name="actual fs consn" access="input">
-				<doc>DEFINITION: module interface to FM.C to EtOH Feedstock Consn
-
-UNITS: million-ton/yr
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="PECrop"/>
 					<dim name="Region"/>
@@ -5172,7 +5310,7 @@ COMMENTS: </doc>
 				<units>million-ton/yr</units>
 			</aux>
 			<aux name="potential demand">
-				<doc>DEFINITION: Calculates potential feedstock demand for on line facilities by  feedstock type 
+				<doc>DEFINITION: Calculates potential feedstock demand for on line facilities by  feedstock type
 
 UNITS: million-ton/yr
 
@@ -5245,7 +5383,7 @@ COMMENTS: </doc>
 				<units>million-ton/yr</units>
 			</aux>
 			<aux name="potential pipeline">
-				<doc>DEFINITION: Calculates potential feedstock demand for facilities in design and construction, by  feedstock type 
+				<doc>DEFINITION: Calculates potential feedstock demand for facilities in design and construction, by  feedstock type
 
 UNITS: million-ton/yr
 
@@ -5265,7 +5403,7 @@ COMMENTS: </doc>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5281,7 +5419,7 @@ COMMENTS: </doc>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5296,7 +5434,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Graphical function | Internal Calculation 
+TYPE: Array | Graphical function | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5451,7 +5589,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5467,7 +5605,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5483,7 +5621,7 @@ COMMENTS: </doc>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5498,7 +5636,7 @@ COMMENTS: </doc>
 
 UNITS: USD per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5514,7 +5652,7 @@ COMMENTS: </doc>
 
 UNITS: USD per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5530,7 +5668,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5550,18 +5688,12 @@ TYPE: Array| Module Interface
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
-				<eqn>SUM(Actual_Output_gpy[*,Region])</eqn>
+				<eqn>SUM(Actual_Output_gpy[*,Region,Product])</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Use Agnostic FS Conversion" access="input">
-				<doc>DEFINITION: module interface to FM.Use Agnostic FS Conversion
-
-UNITS: unitless
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<eqn>2</eqn>
 				<units>Unitless</units>
 			</aux>
@@ -5626,7 +5758,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5641,14 +5773,14 @@ COMMENTS: </doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>initial_pipeline_nameplate_output_gpd / Mature_Industry_Process_Yield[CtoATech]</eqn>
+				<eqn>initial_pipeline_nameplate_output_gpd / Mature_Industry_Process_Yield[CtoATech,Primary]</eqn>
 				<units>ton per day</units>
 			</aux>
 			<aux name="initial pipeline ORNOVOC">
@@ -5656,7 +5788,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5671,7 +5803,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5687,7 +5819,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5709,7 +5841,7 @@ COMMENTS: </doc>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Mature_Industry_Process_Yield[CtoATech] &gt; 0 THEN start_schedule_nameplate_output_gpd /Mature_Industry_Process_Yield[CtoATech] ELSE 0</eqn>
+				<eqn>IF Mature_Industry_Process_Yield[CtoATech,Primary] &gt; 0 THEN start_schedule_nameplate_output_gpd /Mature_Industry_Process_Yield[CtoATech,Primary] ELSE 0</eqn>
 				<units>ton per day</units>
 			</aux>
 			<aux name="start schedule ORNOVOC">
@@ -5756,11 +5888,11 @@ COMMENTS: Graphical function should range between 0 and 1</doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="maturing industry scale factor">
-				<doc>DEFINITION: Calculates scale factor for thruput capacity as industry matures.  As weight factor moves from 0 to 1, this equation reutrns a value between the pioneer capacity scale factor and 1, which is then is applied to mature thruput capactity to determine the next plant&apos;s capacity.
+				<doc>DEFINITION: Calculates scale factor for thruput capacity as industry matures.  As weight factor moves from 0 to 1, this equation returns a value between the pioneer capacity scale factor and 1, which is then is applied to mature thruput capacity to determine the next plant&apos;s capacity.
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5929,7 +6061,7 @@ COMMENTS: important to define both start schedule and start schedule nameplate o
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5944,7 +6076,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6066,7 +6198,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6090,7 +6222,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6112,9 +6244,9 @@ COMMENTS: </doc>
 			<flow name="completing Pilot developmentt">
 				<doc>DEFINITION: Conveyor outflow that captures completion of development for pilot projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6129,7 +6261,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6144,7 +6276,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6163,9 +6295,9 @@ COMMENTS: </doc>
 			<flow name="completing Pilot scale ops">
 				<doc>DEFINITION: Conveyor outflow that captures completion of development for pilot projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6232,11 +6364,11 @@ COMMENTS: </doc>
 				<units>hr/yr</units>
 			</aux>
 			<aux name="Startup Subs Volume Input">
-				<doc>DEFINITION: Calculates cumulative volume (for entire module or for specific pathways.  When this signal exceeds volume threshold, startup subsidy ends.
+				<doc>DEFINITION: Calculates cumulative volume (for entire module or for specific pathways).  When this signal exceeds volume threshold, startup subsidy ends.
 
 UNITS: billions-gal
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6257,13 +6389,6 @@ COMMENTS: </doc>
 				<units>billions-gal</units>
 			</aux>
 			<aux name="pilot inputs CE" access="input">
-				<doc>DEFINITION: module interface to RA.pilot learning inputs CE
-
-UNITS: per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -6271,13 +6396,6 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="PC inputs CE" access="input">
-				<doc>DEFINITION: module interface to RA.PC learning inputs CE
-
-UNITS: per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -6285,13 +6403,6 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="C inputs CE" access="input">
-				<doc>DEFINITION: module interface to RA.C learning inputs CE
-
-UNITS: per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -6303,7 +6414,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6318,7 +6429,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6333,7 +6444,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6348,7 +6459,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6362,7 +6473,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6376,7 +6487,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6390,7 +6501,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6404,7 +6515,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6585,15 +6696,15 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF Output_Capacity &gt; 0 THEN 
-MIN(1,Contracted_Output_Capacity[CtoATech,Region] / Output_Capacity[CtoATech,Region])
+				<eqn>IF Output_Capacity[CtoATech,Region,Primary] &gt; 0 THEN 
+MIN(1,Contracted_Output_Capacity[CtoATech,Region] / Output_Capacity[CtoATech,Region,Primary])
 ELSE 0</eqn>
 				<units>Unitless</units>
 			</aux>
@@ -6607,6 +6718,7 @@ ELSE 0</eqn>
 				<entity name="Total_Exp_Revs"/>
 				<entity name="Expected_Taxable_Income_2"/>
 				<entity name="Expected_Plant_Output"/>
+				<entity name="total_price_input"/>
 				<entity name="Expected_Tax_2"/>
 				<entity name="Expected_Taxable_Income_3"/>
 				<entity name="Expected_Tax_3"/>
@@ -6677,6 +6789,7 @@ ELSE 0</eqn>
 				<entity name="Price_Increase_Due_to_RINs"/>
 				<entity name="PoP_Price"/>
 				<entity name="Converter_1"/>
+				<entity name="Coproduct_Price_Input"/>
 				<entity name="Expected_Regional_Cellulosic_FS_cost_USD_per_ton"/>
 				<entity name="FLM_C_to_PreProcess_Cost"/>
 				<entity name="FLM_frac_supply_system_advanced"/>
@@ -6694,6 +6807,7 @@ ELSE 0</eqn>
 				<entity name="Pilot_op_time"/>
 				<entity name="Days_per_Year_Online"/>
 				<entity name="Plant_Economic_Lifetime"/>
+				<entity name="Active_Product_Switches"/>
 			</group>
 			<group name="Physical conversions and Constants 1" run="false">
 				<entity name="one"/>
@@ -6705,6 +6819,7 @@ ELSE 0</eqn>
 				<entity name="technology_switches"/>
 				<entity name="Regional_coeffs"/>
 				<entity name="one_million"/>
+				<entity name="Coproduct_Coeffs"/>
 			</group>
 			<group name="Learning Curve Parameters and Start scenarios" run="false">
 				<entity name="Initial_Indices_of_Pilot_Maturity"/>
@@ -6770,6 +6885,7 @@ ELSE 0</eqn>
 				<entity name="Feedstock_Cost_USD_per_gal"/>
 				<entity name="Cost_to_Price_Ratio"/>
 				<entity name="Other_rev_net_of_vbl_cost_per_gal"/>
+				<entity name="annual_coproduct_rev"/>
 				<entity name="Plant_Utilization_Factors"/>
 				<entity name="Nominal_Plant_Utilization_Factors"/>
 				<entity name="frac_contracted_capacity"/>
@@ -6901,13 +7017,13 @@ ELSE 0</eqn>
 				<entity name="NextPlant_ORNOVOC"/>
 				<entity name="Contracted_Output_Capacity"/>
 				<entity name="contracted_utilization"/>
+				<entity name="Mature_Industry_Process_Yield"/>
 				<entity name="k"/>
 				<entity name="threshold_for_total_attr_calc"/>
 				<entity name="W"/>
 				<entity name="lambda"/>
 				<entity name="feedstock_fractions_agnostic_conversion"/>
 				<entity name="feedstock_fractions_targeted_FS"/>
-				<entity name="Mature_Industry_Process_Yield"/>
 				<entity name="feedstock_effectiveness_multiplier"/>
 			</group>
 			<group name="Feedstock Cost Demand and Constraint on Utilization" run="false">
@@ -6934,13 +7050,6 @@ ELSE 0</eqn>
 				<entity name="Expected_FS_cost_after_Subs"/>
 			</group>
 			<aux name="Converter 1" access="input">
-				<doc>DEFINITION: module interface to OI.lcfs credit w transport CE
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 					<dim name="Region"/>
@@ -6953,7 +7062,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -6986,935 +7095,106 @@ COMMENTS: </doc>
 				</element>
 				<units>years</units>
 			</aux>
-			<isee:dependencies>
-				<var name="Output_Capacity">
-					<in>one_project</in>
-					<in>OnLine</in>
-					<in>Avg_Plant_Output_gal_yr</in>
-				</var>
-				<var name="Plant_Utilization_Factors">
-					<in>contracted_utilization</in>
-					<in>frac_contracted_capacity</in>
-					<in>Nominal_Plant_Utilization_Factors</in>
-					<in>Feedstock_Constraint_on_Utilization</in>
-				</var>
-				<var name="Avg_PY_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>PY_in_In_Design_and_Cons</in>
-				</var>
-				<var name="Output_gpy_by_Technology">
-					<in>Actual_Output_gpy</in>
-				</var>
-				<var name="increase_in_PY_commercial_industry">
-					<in>rate_of_industry_process_yield_adjustment</in>
-					<in>Industry_Process_Yield_Gap</in>
-					<in>OnLine</in>
-				</var>
-				<var name="plant_planning">
-					<in>endogenous_plant_planning</in>
-				</var>
-				<var name="initiating">
-					<in>number_of_plants_to_start</in>
-				</var>
-				<var name="State_of_Industry_Process_Yield">
-					<in>Mature_Industry_Process_Yield</in>
-					<in>State_of_the_Industry_Multipliers</in>
-				</var>
-				<var name="Initial_Equity_Investment">
-					<in>Equity_Fraction</in>
-					<in>Expected_FCI_after_Subs</in>
-				</var>
-				<var name="est_depreciation_expense">
-					<in>Expected_FCI_after_Subs</in>
-					<in>depreciation_period</in>
-				</var>
-				<var name="Expected_Equity_Fraction">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_Equity_Fraction</in>
-				</var>
-				<var name="Expected_FCI">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>NextPlant_Expected_FCI</in>
-					<in>fraction_of_Commercial_cost_growth_anticipated</in>
-				</var>
-				<var name="Frac_Plant_Debt_Financed">
-					<in>Equity_Fraction</in>
-				</var>
-				<var name="Loan_Principal">
-					<in>Expected_FCI_after_Subs</in>
-					<in>Frac_Plant_Debt_Financed</in>
-				</var>
-				<var name="Annual_Loan_Payment">
-					<in>discount_factor_Loan_Payment</in>
-					<in>Loan_Principal</in>
-				</var>
-				<var name="debt_interest_rate_as_frac">
-					<in>Debt_Interest_Rate_as_Pct</in>
-					<in>one_hundred_PCT</in>
-				</var>
-				<var name="Regional_FS_Cost_USD_yr">
-					<in>Regional_FS_Cost_USD_per_gal</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Expected_Op_Cost">
-					<in>Regional_FS_Cost_USD_yr</in>
-					<in>NextPlant_Expected_Other_VBL_Op_Cost</in>
-					<in>NextPlant_Expected_Fixed_Op_Cost</in>
-				</var>
-				<var name="total_project_length">
-					<in>Plant_Economic_Lifetime</in>
-					<in>Years_in_D_and_C</in>
-				</var>
-				<var name="NPV_Revs_Net_of_Op_Cost">
-					<in>discount_factor_DC</in>
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-					<in>discount_factor</in>
-				</var>
-				<var name="Reqd_Rate_of_Return_as_PCT">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_Rate_of_Return_as_PCT</in>
-				</var>
-				<var name="Exp_Sales_Rev">
-					<in>Expected_Plant_Output</in>
-					<in>Expected_Price_after_Subs</in>
-				</var>
-				<var name="Exp_Revs_Net_of_Op_Cost">
-					<in>Total_Exp_Revs</in>
-					<in>Expected_Op_Cost</in>
-				</var>
-				<var name="Total_Exp_Revs">
-					<in>Exp_Sales_Rev</in>
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-				</var>
-				<var name="Cume_Loan_Payment">
-					<in>term_of_loan</in>
-					<in>Annual_Loan_Payment</in>
-				</var>
-				<var name="Cume_Interest_Payment">
-					<in>Cume_Loan_Payment</in>
-					<in>Loan_Principal</in>
-				</var>
-				<var name="Rough_Estimate_Annual_Interest">
-					<in>Cume_Interest_Payment</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Taxable_Income_2">
-					<in>term_of_loan</in>
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-					<in>est_depreciation_expense</in>
-					<in>depreciation_period</in>
-					<in>Rough_Estimate_Annual_Interest</in>
-				</var>
-				<var name="Expected_Taxable_Income_1">
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-					<in>Rough_Estimate_Annual_Interest</in>
-					<in>est_depreciation_expense</in>
-				</var>
-				<var name="Expected_Tax_2">
-					<in>Expected_Taxable_Income_2</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="Expected_Tax_1">
-					<in>Expected_Tax_Rate</in>
-					<in>Expected_Taxable_Income_1</in>
-				</var>
-				<var name="NPV_Taxes_1">
-					<in>discount_factor_DC</in>
-					<in>discount_factor_1</in>
-					<in>Expected_Tax_1</in>
-				</var>
-				<var name="NPV_Taxes_2">
-					<in>Expected_Tax_2</in>
-					<in>discount_factor_1</in>
-					<in>discount_factor_2</in>
-				</var>
-				<var name="NPV_Taxes">
-					<in>NPV_Taxes_3</in>
-					<in>NPV_Taxes_2</in>
-					<in>NPV_Taxes_1</in>
-				</var>
-				<var name="PV_Loan_Payment">
-					<in>discount_factor_DC</in>
-					<in>discount_factor_loan</in>
-					<in>Annual_Loan_Payment</in>
-				</var>
-				<var name="NPV_Investment">
-					<in>NPV_Revs_Net_of_Op_Cost</in>
-					<in>NPV_Taxes</in>
-					<in>PV_Loan_Payment</in>
-					<in>Initial_Equity_Investment</in>
-				</var>
-				<var name="discount_factor_Loan_Payment">
-					<in>debt_interest_rate_as_frac</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="discount_factor_DC">
-					<in>Years_in_D_and_C</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="discount_factor">
-					<in>Reqd_Rate_of_Return</in>
-					<in>total_project_length</in>
-				</var>
-				<var name="discount_factor_2">
-					<in>Reqd_Rate_of_Return</in>
-					<in>length_of_period_2</in>
-				</var>
-				<var name="Expected_Taxable_Income_3">
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-				</var>
-				<var name="Expected_Tax_3">
-					<in>Expected_Taxable_Income_3</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="discount_factor_loan">
-					<in>term_of_loan</in>
-					<in>Reqd_Rate_of_Return</in>
-					<in>Years_in_D_and_C</in>
-				</var>
-				<var name="NPV_Taxes_3">
-					<in>discount_factor</in>
-					<in>discount_factor_2</in>
-					<in>Expected_Tax_3</in>
-				</var>
-				<var name="length_of_period_1">
-					<in>Years_in_D_and_C</in>
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="length_of_period_2">
-					<in>Years_in_D_and_C</in>
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="discount_factor_1">
-					<in>length_of_period_1</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="Expected_Feedstock_Cost">
-					<in>FLM_C_to_PreProcess_Cost</in>
-					<in>FS_cost_by_FS_share</in>
-				</var>
-				<var name="Avg_Plant_Output_gal_yr">
-					<in>Days_per_Year_Online</in>
-					<in>Avg_Plant_Output_gal_day</in>
-				</var>
-				<var name="Commercial_Maturity">
-					<in>Initial_Indices_of_Commercial_Maturity</in>
-				</var>
-				<var name="learning_logic">
-					<in>Progress_Ratios_Commercial</in>
-					<in>commercial_maturity_gap</in>
-					<in>rate_of_doubling_industry_output_by_technology</in>
-				</var>
-				<var name="Avg_FS_Thruput_Pipeline_C">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Avg_FS_Thruput_Cap_Pipeline</in>
-				</var>
-				<var name="commercial_maturity_gap">
-					<in>Commercial_Maturity</in>
-					<in>one</in>
-				</var>
-				<var name="Reqd_Rate_of_Return">
-					<in>Reqd_Rate_of_Return_as_PCT</in>
-					<in>one_hundred_PCT</in>
-				</var>
-				<var name="Avg_Plant_Output_gal_day">
-					<in>Avg_PY</in>
-					<in>Avg_FS_throughput</in>
-				</var>
-				<var name="P_Success">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_P_Success</in>
-				</var>
-				<var name="retirements">
-					<in>OnLine</in>
-					<in>Retirement_Fraction</in>
-				</var>
-				<var name="NPV_rel_to_a_million">
-					<in>NPV_Investment</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Pilot_Maturity">
-					<in>Initial_Indices_of_Pilot_Maturity</in>
-				</var>
-				<var name="pilot_learning_logic">
-					<in>rate_of_doubling_pilot_experience</in>
-					<in>pilot_maturity_gap</in>
-					<in>Pilot_Progress_Ratios</in>
-				</var>
-				<var name="pilot_maturity_gap">
-					<in>one</in>
-					<in>Pilot_Maturity</in>
-				</var>
-				<var name="Number_of_Doublings_of_Cume_Output">
-					<in>Commercial_Maturity</in>
-					<in>Progress_Ratios_Commercial</in>
-					<in>commercial_maturity_gap</in>
-				</var>
-				<var name="Cumulative_Industry_Output">
-					<in>Number_of_Doublings_of_Cume_Output</in>
-					<in>Min_Cume_Industry_Output_For_Learning</in>
-				</var>
-				<var name="output_bb_gpy_by_tech">
-					<in>one_billion</in>
-					<in>Output_gpy_by_Technology</in>
-				</var>
-				<var name="rate_of_doubling_industry_output_by_technology">
-					<in>doubling_factor</in>
-					<in>frac_rate_of_growth_in_industry_output</in>
-				</var>
-				<var name="frac_rate_of_growth_in_industry_output">
-					<in>Min_Cume_Industry_Output_For_Learning</in>
-					<in>output_bb_gpy_by_tech</in>
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="Number_of_Doublings_of_Pilot_Experience">
-					<in>Pilot_Maturity</in>
-					<in>Pilot_Progress_Ratios</in>
-					<in>pilot_maturity_gap</in>
-				</var>
-				<var name="PoP_Price_Subs_Logic">
-					<in>Subsidy_Amt</in>
-					<in>one_dollar_per_gal</in>
-					<in>Policy_Switch</in>
-					<in>Policy_time_constraints</in>
-				</var>
-				<var name="PY_retirements">
-					<in>Avg_PY</in>
-					<in>retirements</in>
-				</var>
-				<var name="PY_in_In_Design_and_Cons">
-					<in>In_Design_and_Cons</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Cumulative_Pilot_Experience">
-					<in>Number_of_Doublings_of_Pilot_Experience</in>
-					<in>Min_Pilot_Experience_for_Learning</in>
-				</var>
-				<var name="logging_pilot_experience">
-					<in>pilot_op_experience_per_year</in>
-					<in>IBR_Pilot_experience</in>
-					<in>Pilot_Scale_Operations</in>
-				</var>
-				<var name="rate_of_doubling_pilot_experience">
-					<in>frac_rate_of_growth_pilot_experience</in>
-					<in>doubling_factor</in>
-				</var>
-				<var name="frac_rate_of_growth_pilot_experience">
-					<in>Cumulative_Pilot_Experience</in>
-					<in>Min_Pilot_Experience_for_Learning</in>
-					<in>logging_pilot_experience</in>
-				</var>
-				<var name="initiating_PC_development">
-					<in>technology_switches</in>
-					<in>PC_start</in>
-				</var>
-				<var name="PY_OnLine">
-					<in>OnLine</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Industry_Process_Yield_Gap">
-					<in>State_of_Industry_Process_Yield</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="yrly_prodn_subs">
-					<in>Output_gpy_by_Technology</in>
-					<in>PoP_Price_Subs_Logic</in>
-				</var>
-				<var name="PC_Maturity">
-					<in>Initial_Indices_of_PC_Maturity</in>
-				</var>
-				<var name="PC_learning_logic">
-					<in>rate_of_doubling_demo_experience</in>
-					<in>PC_maturity_gap</in>
-					<in>PC_Progress_Ratios</in>
-				</var>
-				<var name="PC_maturity_gap">
-					<in>PC_Maturity</in>
-					<in>one</in>
-				</var>
-				<var name="Number_of_Doublings_of_PC_Experience">
-					<in>PC_Maturity</in>
-					<in>PC_Progress_Ratios</in>
-					<in>PC_maturity_gap</in>
-				</var>
-				<var name="Cumulative_PC_Experience">
-					<in>Number_of_Doublings_of_PC_Experience</in>
-					<in>Min_PC_Experience_for_Learning</in>
-				</var>
-				<var name="logging_PC_experience">
-					<in>Op_Experience_Per_Year</in>
-					<in>PC_Scale_Operations</in>
-					<in>IBR_PC_experience</in>
-				</var>
-				<var name="rate_of_doubling_demo_experience">
-					<in>doubling_factor</in>
-					<in>frac_rate_of_growth_PC_experience</in>
-				</var>
-				<var name="frac_rate_of_growth_PC_experience">
-					<in>logging_PC_experience</in>
-					<in>Min_PC_Experience_for_Learning</in>
-					<in>Cumulative_PC_Experience</in>
-				</var>
-				<var name="PY_influx">
-					<in>initiating</in>
-					<in>scheduled_plant_initiation</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Pilot_Multipliers">
-					<in>Early_Pilot_Multipliers</in>
-					<in>Pilot_Maturity</in>
-					<in>Mature_Pilot_Multipliers</in>
-				</var>
-				<var name="PY_D_and_C_to_Startup">
-					<in>completing_D_and_C</in>
-					<in>Avg_PY_Pipeline</in>
-				</var>
-				<var name="Expected_FS_cost_after_Subs">
-					<in>Expected_Feedstock_Cost</in>
-					<in>FS_Subs_Logic</in>
-				</var>
-				<var name="Avg_PY">
-					<in>PY_OnLine</in>
-					<in>OnLine</in>
-				</var>
-				<var name="Demo_Multipliers">
-					<in>PC_Maturity</in>
-					<in>Mature_PC_Multipliers</in>
-					<in>Pilot_Multipliers</in>
-				</var>
-				<var name="Expected_Plant_Output_Gal_Day_C">
-					<in>State_of_Industry_Process_Yield</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="Expected_Plant_Output">
-					<in>Expected_Plant_Output_Gal_Day_C</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="Equity_Fraction">
-					<in>Loan_Guarantee_Logic</in>
-					<in>Expected_Equity_Fraction</in>
-				</var>
-				<var name="industry_FS_thruput_tpy">
-					<in>Actual_Output_gpy</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="Expected_FCI_after_Subs">
-					<in>FCI_Subs_Logic</in>
-					<in>Expected_FCI</in>
-				</var>
-				<var name="Expected_Price_after_Subs">
-					<in>Price_Increase_Due_to_RINs</in>
-					<in>PoP_Price_Subs_Logic</in>
-					<in>PoP_Price</in>
-					<in>Converter_1</in>
-				</var>
-				<var name="number_of_plants_to_start">
-					<in>Plant_Start_Accumulator</in>
-				</var>
-				<var name="State_of_the_Industry_Multipliers">
-					<in>Commercial_Maturity</in>
-					<in>Mature_Commercial_Multipliers</in>
-					<in>Demo_Multipliers</in>
-				</var>
-				<var name="Actual_Output_gpy">
-					<in>Output_Capacity</in>
-					<in>Plant_Utilization_Factors</in>
-				</var>
-				<var name="nominal_Attr">
-					<in>invest_attractiveness_weighting</in>
-					<in>NPV_rel_to_a_million</in>
-					<in>k</in>
-					<in>lambda</in>
-				</var>
-				<var name="yrly_Loan_guarantee_flux">
-					<in>L_G_exposure_by_pathway_and_region</in>
-				</var>
-				<var name="Attr">
-					<in>Regional_coeffs</in>
-					<in>nominal_Attr</in>
-					<in>technology_switches</in>
-				</var>
-				<var name="RegionRollup_Attr">
-					<in>threshold_for_total_attr_calc</in>
-					<in>Attr</in>
-				</var>
-				<var name="nominal_regional_distn_new_facilities">
-					<in>RegionRollup_Attr</in>
-					<in>Attr</in>
-				</var>
-				<var name="Regional_FS_Cost_USD_per_gal">
-					<in>Expected_FS_cost_after_Subs</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="yrly_fs_subs">
-					<in>industry_FS_thruput_tpy</in>
-					<in>FS_Subs_Logic</in>
-				</var>
-				<var name="yrly_FCI_subs">
-					<in>FCI_subs_by_pathway_and_region</in>
-				</var>
-				<var name="per_plant_L_G_exposure_C">
-					<in>Loan_Guarantee_Logic</in>
-					<in>Cume_Loan_Payment</in>
-				</var>
-				<var name="Policy_time_constraints">
-					<in>Policy_End</in>
-					<in>Policy_Start</in>
-				</var>
-				<var name="FS_Subs_Logic">
-					<in>Subsidy_Amt</in>
-					<in>Policy_time_constraints</in>
-					<in>one_dollar_per_ton</in>
-					<in>Policy_Switch</in>
-				</var>
-				<var name="Policy_End">
-					<in>Policy_Duration</in>
-					<in>Policy_Start</in>
-				</var>
-				<var name="FCI_Subs_Logic">
-					<in>Subsidy_Amt</in>
-					<in>Policy_time_constraints</in>
-					<in>Expected_FCI</in>
-					<in>Policy_Switch</in>
-				</var>
-				<var name="Loan_Guarantee_Logic">
-					<in>Subsidy_Amt</in>
-					<in>Policy_Switch</in>
-					<in>Policy_time_constraints</in>
-				</var>
-				<var name="platform_specific_regional_concentration_weighting_factor">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Cumulative_Module_Output">
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="distn_new_facilities">
-					<in>weighted_distn_new_facilities</in>
-				</var>
-				<var name="Use_Startup_Subs">
-					<in>Startup_Subs_Vol_Thresh</in>
-					<in>Startup_Subs_Volume_Input</in>
-				</var>
-				<var name="Subsidy_Amt">
-					<in>Background_Subs</in>
-					<in>Use_Startup_Subs</in>
-					<in>Startup_Subs</in>
-					<in>startup_spend_constraint</in>
-				</var>
-				<var name="rollup_cumulative_subsidies">
-					<in>Cume_FS_Subs</in>
-					<in>Cume_Prodn_Subs</in>
-					<in>Cume_FCI_Subs</in>
-				</var>
-				<var name="rollup_annual_subsidies">
-					<in>rollup_cumulative_subsidies</in>
-				</var>
-				<var name="Rollup_Loan_Expsure">
-					<in>Cume_Loan_Guarantee_Exposure</in>
-				</var>
-				<var name="exp_net_op_cost_USD_per_yr">
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-					<in>Expected_Op_Cost</in>
-				</var>
-				<var name="weighted_distn_new_facilities">
-					<in>nominal_regional_distn_new_facilities</in>
-					<in>platform_specific_regional_concentration_weighting_factor</in>
-				</var>
-				<var name="doubling_factor">
-					<in>Doubling</in>
-				</var>
-				<var name="est_depreciation_exp_USD_per_gal">
-					<in>Expected_Plant_Output</in>
-					<in>est_depreciation_expense</in>
-				</var>
-				<var name="fixed_cost_USD_per_gal">
-					<in>est_depreciation_exp_USD_per_gal</in>
-					<in>FCI_after_USD_per_gal</in>
-					<in>ROI_USD_per_gal</in>
-					<in>Taxes_USD_per_gal</in>
-				</var>
-				<var name="Feedstock_Cost_USD_per_gal">
-					<in>Expected_FS_cost_after_Subs</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="Cost_to_Price_Ratio">
-					<in>Feedstock_Cost_USD_per_gal</in>
-					<in>Other_rev_net_of_vbl_cost_per_gal</in>
-					<in>Expected_Price_after_Subs</in>
-				</var>
-				<var name="UTIL_by_tech">
-					<in>Output_Capacity</in>
-					<in>Actual_Output_gpy</in>
-				</var>
-				<var name="Other_rev_net_of_vbl_cost_per_gal">
-					<in>Avg_ORNOVOC</in>
-					<in>Avg_Plant_Output_gal_yr</in>
-				</var>
-				<var name="Reqd_Annual_FS_Supply_TPY">
-					<in>Output_Capacity</in>
-					<in>frac_contracted_capacity</in>
-					<in>Nominal_Plant_Utilization_Factors</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="Feedstock_Constraint_on_Utilization">
-					<in>path_weighted_fs_constraint</in>
-				</var>
-				<var name="Nominal_Plant_Utilization_Factors">
-					<in>Cost_to_Price_Ratio</in>
-				</var>
-				<var name="Reqd_FS_supply_Pipeline_TPY">
-					<in>Avg_PY_Pipeline</in>
-					<in>Output_Capacity_Pipeline</in>
-				</var>
-				<var name="Reqd_Annual_FS_Supply_Million_TPY">
-					<in>Reqd_Annual_FS_Supply_TPY</in>
-					<in>one_million</in>
-				</var>
-				<var name="ROI_USD_per_gal">
-					<in>Expected_Plant_Output</in>
-					<in>Initial_Equity_Investment</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="Taxes_USD_per_gal">
-					<in>Expected_Tax_Rate</in>
-					<in>ROI_USD_per_gal</in>
-				</var>
-				<var name="FCI_after_USD_per_gal">
-					<in>Annual_Loan_Payment</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="expnet_op_cost_USD_per_gal">
-					<in>exp_net_op_cost_USD_per_yr</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Reqd_FS_Supply_Pipeline_Million_TPY">
-					<in>Reqd_FS_supply_Pipeline_TPY</in>
-					<in>one_million</in>
-				</var>
-				<var name="regional_op_cost_weights">
-					<in>Actual_Output_gpy</in>
-					<in>Output_gpy_by_Technology</in>
-				</var>
-				<var name="volume_wtd_net_op_cost_USD_per_gal">
-					<in>expnet_op_cost_USD_per_gal</in>
-					<in>regional_op_cost_weights</in>
-				</var>
-				<var name="Output_Capacity_incl_Pipeline">
-					<in>Output_Capacity</in>
-					<in>Output_Capacity_Pipeline</in>
-				</var>
-				<var name="Pipeline_Potential_Plant_Output_gal_per_yr_C">
-					<in>Avg_Plant_Output_gpd_pipeline_C</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="Output_Capacity_Pipeline">
-					<in>Pipeline_Potential_Plant_Output_gal_per_yr_C</in>
-					<in>In_Design_and_Cons</in>
-					<in>one_project</in>
-				</var>
-				<var name="Avg_Plant_Output_gpd_pipeline_C">
-					<in>Avg_PY_Pipeline</in>
-					<in>Avg_FS_Thruput_Pipeline_C</in>
-				</var>
-				<var name="NextPlant_Expected_Other_VBL_Op_Cost">
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>Expected_Other_VBL_Op_Cost</in>
-					<in>op_cost_scale_factor</in>
-				</var>
-				<var name="NextPlant_Expected_Fixed_Op_Cost">
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>op_cost_scale_factor</in>
-					<in>Expected_Fixed_Op_Cost</in>
-				</var>
-				<var name="NextPlant_Expected_Power_Sales_Rev">
-					<in>Exp_Power_Sales_Rev</in>
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>other_rev_scale_factor</in>
-				</var>
-				<var name="NextPlant_Other_Coproduct_Sales_Rev">
-					<in>Exp_Other_Coproduct_Sales_Rev</in>
-					<in>other_rev_scale_factor</in>
-					<in>FS_thruput_Cap_Ratio</in>
-				</var>
-				<var name="ORNOVOC_Retirements">
-					<in>retirements</in>
-					<in>Avg_ORNOVOC</in>
-				</var>
-				<var name="Avg_ORNOVOC">
-					<in>OnLine</in>
-					<in>Tot_ORNOVOC_OnLine</in>
-				</var>
-				<var name="FCI_subs_by_pathway_and_region">
-					<in>FCI_Subs_Logic</in>
-					<in>initiating</in>
-					<in>one_project</in>
-				</var>
-				<var name="Tot_ORNOVOC_in_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>initial_pipeline_ORNOVOC</in>
-				</var>
-				<var name="Tot_ORNOVOC_OnLine">
-					<in>OnLine</in>
-					<in>NextPlant_ORNOVOC</in>
-				</var>
-				<var name="L_Commercial">
-					<in>RegionRollup_Attr</in>
-				</var>
-				<var name="Platform_Attr">
-					<in>W</in>
-					<in>lambda</in>
-					<in>L_Commercial</in>
-				</var>
-				<var name="ORNOVOC_influx">
-					<in>start_schedule_ORNOVOC</in>
-					<in>initiating</in>
-					<in>scheduled_plant_initiation</in>
-					<in>NextPlant_ORNOVOC</in>
-				</var>
-				<var name="ORNOVOC_to_Startup_C">
-					<in>completing_D_and_C</in>
-					<in>Avg_ORNOVOC_D_and_C_C</in>
-				</var>
-				<var name="Avg_ORNOVOC_D_and_C_C">
-					<in>In_Design_and_Cons</in>
-					<in>Tot_ORNOVOC_in_Pipeline</in>
-				</var>
-				<var name="FS_Thruput_Cap_Retirements">
-					<in>Avg_FS_Thruput_Cap</in>
-					<in>retirements</in>
-				</var>
-				<var name="Avg_FS_Thruput_Cap">
-					<in>Tot_FS_Thruput_Cap_OnLine</in>
-					<in>OnLine</in>
-				</var>
-				<var name="Tot_FS_Thruput_Cap_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>initial_pipeline_thruput_capacity</in>
-				</var>
-				<var name="Tot_FS_Thruput_Cap_OnLine">
-					<in>OnLine</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="FS_thruput_cap_influx">
-					<in>NextPlant_FS_Thruput_Cap</in>
-					<in>start_schedule_thruput_capacity</in>
-					<in>initiating</in>
-					<in>scheduled_plant_initiation</in>
-				</var>
-				<var name="FS_Thruput_Cap_to_Startup_C">
-					<in>completing_D_and_C</in>
-					<in>Avg_FS_Thruput_Cap_Pipeline</in>
-				</var>
-				<var name="Avg_FS_Thruput_Cap_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>Tot_FS_Thruput_Cap_Pipeline</in>
-				</var>
-				<var name="NextPlant_FS_Thruput_Cap">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>Feedstock_Thruput_Incremental_Scale_Factor</in>
-					<in>maturing_industry_scale_factor</in>
-				</var>
-				<var name="NextPlant_ORNOVOC">
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-					<in>NextPlant_Expected_Other_VBL_Op_Cost</in>
-				</var>
-				<var name="Feedstock_Thruput_Incremental_Scale_Factor">
-					<in>incremental_scale_up_level</in>
-					<in>incremental_scale_factor_from_industry_maturity</in>
-					<in>SCALE_UP_Switch</in>
-					<in>Impact_of_regional_industry_development_on_scale_factor</in>
-				</var>
-				<var name="incremental_scale_factor_from_industry_maturity">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Impact_of_regional_industry_development_on_scale_factor">
-					<in>FLM_frac_supply_system_advanced</in>
-				</var>
-				<var name="NextPlant_Expected_FCI">
-					<in>Mature_Industry_FCI</in>
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>FCI_scale_factor</in>
-				</var>
-				<var name="FS_thruput_Cap_Ratio">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="volume_wtd_fixed_cost_USD_per_gal">
-					<in>regional_op_cost_weights</in>
-					<in>fixed_cost_USD_per_gal</in>
-				</var>
-				<var name="L_G_exposure_by_pathway_and_region">
-					<in>one_project</in>
-					<in>per_plant_L_G_exposure_C</in>
-					<in>initiating</in>
-				</var>
-				<var name="Avg_FS_throughput">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Avg_FS_Thruput_Cap</in>
-				</var>
-				<var name="fs_demand_incl_pipeline">
-					<in>fs_demand_at_nominal_utilization</in>
-					<in>pipeline_by_fs_region</in>
-				</var>
-				<var name="fs_demand_at_nominal_utilization">
-					<in>FS_demand_by_path_fs_region</in>
-				</var>
-				<var name="potential_demand">
-					<in>Reqd_Annual_FS_Supply_Million_TPY</in>
-					<in>feedstock_effectiveness_multiplier</in>
-				</var>
-				<var name="feedstock_fractions">
-					<in>Use_Agnostic_FS_Conversion</in>
-					<in>feedstock_fractions_targeted_FS</in>
-					<in>feedstock_fractions_agnostic_conversion</in>
-				</var>
-				<var name="FS_demand_by_path_fs_region">
-					<in>potential_demand</in>
-					<in>feedstock_fractions</in>
-				</var>
-				<var name="potential_pipeline">
-					<in>Reqd_FS_Supply_Pipeline_Million_TPY</in>
-					<in>feedstock_effectiveness_multiplier</in>
-				</var>
-				<var name="pipeline_by_path_region_fs">
-					<in>potential_pipeline</in>
-					<in>feedstock_fractions</in>
-				</var>
-				<var name="pipeline_by_fs_region">
-					<in>pipeline_by_path_region_fs</in>
-				</var>
-				<var name="fs_constraint_by_fs_type">
-					<in>fs_demand_at_nominal_utilization</in>
-					<in>actual_fs_consn</in>
-				</var>
-				<var name="FS_demand_path_fs_region_share">
-					<in>FS_demand_by_path_region</in>
-					<in>FS_demand_by_path_fs_region</in>
-				</var>
-				<var name="path_weighted_fs_constraint">
-					<in>FS_demand_path_fs_region_share</in>
-					<in>fs_constraint_by_fs_type</in>
-				</var>
-				<var name="FS_demand_by_path_region">
-					<in>FS_demand_by_path_fs_region</in>
-				</var>
-				<var name="FS_efficiency_weighted_FS_cost">
-					<in>feedstock_effectiveness_multiplier</in>
-					<in>Expected_Regional_Cellulosic_FS_cost_USD_per_ton</in>
-				</var>
-				<var name="FS_cost_by_FS_share">
-					<in>FS_efficiency_weighted_FS_cost</in>
-					<in>feedstock_fractions</in>
-				</var>
-				<var name="endogenous_plant_planning">
-					<in>distn_new_facilities</in>
-					<in>Des_C_to_EtOH_yrly_starts</in>
-				</var>
-				<var name="Output_gpy_by_Region">
-					<in>Actual_Output_gpy</in>
-				</var>
-				<var name="initial_pipeline_scale_factor">
-					<in>initial_pipeline_thruput_capacity</in>
-					<in>Mature_FS_Thruput_Capacity</in>
-				</var>
-				<var name="initial_pipeline_thruput_capacity">
-					<in>initial_pipeline_nameplate_output_gpd</in>
-					<in>Mature_Industry_Process_Yield</in>
-				</var>
-				<var name="initial_pipeline_ORNOVOC">
-					<in>op_cost_scale_factor</in>
-					<in>Exp_Power_Sales_Rev</in>
-					<in>initial_pipeline_scale_factor</in>
-					<in>Exp_Other_Coproduct_Sales_Rev</in>
-					<in>other_rev_scale_factor</in>
-					<in>Expected_Other_VBL_Op_Cost</in>
-				</var>
-				<var name="scheduled_plant_initiation">
-					<in>Start_Schedule</in>
-				</var>
-				<var name="start_schedule_scale_factor">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>start_schedule_thruput_capacity</in>
-				</var>
-				<var name="start_schedule_thruput_capacity">
-					<in>start_schedule_nameplate_output_gpd</in>
-					<in>Mature_Industry_Process_Yield</in>
-				</var>
-				<var name="start_schedule_ORNOVOC">
-					<in>start_schedule_scale_factor</in>
-					<in>other_rev_scale_factor</in>
-					<in>op_cost_scale_factor</in>
-					<in>Expected_Other_VBL_Op_Cost</in>
-					<in>Exp_Power_Sales_Rev</in>
-					<in>Exp_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="maturity_weight_factor">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="maturing_industry_scale_factor">
-					<in>pioneer_capacity_scale_factor</in>
-					<in>maturity_weight_factor</in>
-				</var>
-				<var name="start_schedule_nameplate_output_gpd">
-					<in>start_schedule_nameplate_output_gpy</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="initial_pipeline_nameplate_output_gpd">
-					<in>initial_pipeline_nameplate_output_gpy</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="initiating_Pilot_development">
-					<in>technology_switches</in>
-					<in>Pilot_start</in>
-				</var>
-				<var name="Startup_Subs_Volume_Input">
-					<in>Cumulative_Module_Output</in>
-					<in>Use_Startup_Subs_Module_Volume_Input</in>
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="pilot_shared_learning">
-					<in>pilot_inputs_CE</in>
-				</var>
-				<var name="pc_shared_learning">
-					<in>PC_inputs_CE</in>
-				</var>
-				<var name="c_shared_learning">
-					<in>C_inputs_CE</in>
-				</var>
-				<var name="MFSP_fixed_cost_per_gal">
-					<in>volume_wtd_fixed_cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_net_op_cost_per_gal">
-					<in>volume_wtd_net_op_cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_fs_per_gal">
-					<in>volume_wtd_fs_cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_USD_per_gal">
-					<in>MFSP_fixed_cost_per_gal</in>
-					<in>MFSP_net_op_cost_per_gal</in>
-				</var>
-				<var name="volume_wtd_fs_cost_USD_per_gal">
-					<in>Regional_FS_Cost_USD_per_gal</in>
-					<in>regional_op_cost_weights</in>
-				</var>
-				<var name="frac_contracted_capacity">
-					<in>Contracted_Output_Capacity</in>
-					<in>Output_Capacity</in>
-				</var>
-			</isee:dependencies>
+			<aux name="annual coproduct rev">
+				<doc>DEFINITION: calculates coproduct revenue stream associated with pathways that have endogenously-developed coproducts
+
+UNITS: US dollars per year
+
+TYPE: Array | Internal Calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+					<dim name="Product"/>
+				</dimensions>
+				<eqn>Avg_Plant_Output_gal_yr * Coproduct_Price_Input[Product] * Coproduct_Coeffs[Product]</eqn>
+				<units>US dollars per year</units>
+			</aux>
+			<aux name="Coproduct Coeffs">
+				<doc>DEFINITION: Calculates (per plant)  average output in gallons per year under full utilization for facilities that are currently on line
+
+UNITS: unitless
+
+TYPE: Array | Internal Calculation
+
+COMMENTS: Accounts for number of days per year facilities are expected to be on line under full utilization</doc>
+				<dimensions>
+					<dim name="Product"/>
+				</dimensions>
+				<element subscript="Primary">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Co1">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="Co2">
+					<eqn>1</eqn>
+				</element>
+				<units>unitless</units>
+			</aux>
+			<aux name="Coproduct Price Input" access="input">
+				<dimensions>
+					<dim name="Product"/>
+				</dimensions>
+				<eqn>1</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="total price input">
+				<doc>DEFINITION: price input for primary and coproducts, when pathways have endogenously-developed coproducts
+
+UNITS: USD per gallon
+
+TYPE: Array | Internal Calculation
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Region"/>
+					<dim name="Product"/>
+				</dimensions>
+				<eqn>Expected_Price_after_Subs[CtoATech,Region] * (1-Coproduct_Coeffs[Product]) + Coproduct_Price_Input[Product] * Coproduct_Coeffs[Product]</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="Active Product Switches">
+				<doc>DEFINITION: Calculates (per plant)  average output in gallons per year under full utilization for facilities that are currently on line
+
+UNITS: unitless
+
+TYPE: Array | Internal Calculation
+
+COMMENTS: Accounts for number of days per year facilities are expected to be on line under full utilization</doc>
+				<dimensions>
+					<dim name="CtoATech"/>
+					<dim name="Product"/>
+				</dimensions>
+				<element subscript="BC, Primary">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="BC, Co1">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="BC, Co2">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, Primary">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="TC, Co1">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="TC, Co2">
+					<eqn>0</eqn>
+				</element>
+				<units>unitless</units>
+			</aux>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -7931,28 +7211,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="9" isee:page_rows="5" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="6" isee:page_rows="4" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="55" height="45"/>
 					</module>
@@ -7964,7 +7252,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -7981,7 +7269,7 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
 				<connector uid="1306" angle="40.6013">
 					<from>
@@ -9345,7 +8633,7 @@ COMMENTS: </doc>
 					</from>
 					<to>initiating_Pilot_development</to>
 				</connector>
-				<connector uid="1684" angle="167.471">
+				<connector uid="1684" angle="147.611">
 					<from>
 						<alias uid="1685"/>
 					</from>
@@ -9615,575 +8903,569 @@ COMMENTS: </doc>
 					<from>est_depreciation_expense</from>
 					<to>Expected_Taxable_Income_2</to>
 				</connector>
-				<connector uid="1756" angle="0">
+				<connector uid="1756" angle="151.518">
 					<from>
 						<alias uid="1757"/>
 					</from>
-					<to>Exp_Sales_Rev</to>
-				</connector>
-				<connector uid="1758" angle="151.518">
-					<from>
-						<alias uid="1759"/>
-					</from>
 					<to>initial_pipeline_thruput_capacity</to>
 				</connector>
-				<connector uid="1760" angle="0">
+				<connector uid="1758" angle="0">
 					<from>Industry_Process_Yield_Gap</from>
 					<to>increase_in_PY_commercial_industry</to>
 				</connector>
-				<connector uid="1761" angle="144.462">
+				<connector uid="1759" angle="144.462">
 					<from>
 						<alias uid="1315"/>
 					</from>
 					<to>initial_pipeline_scale_factor</to>
 				</connector>
-				<connector uid="1762" angle="0">
+				<connector uid="1760" angle="0">
 					<from>
 						<alias uid="1481"/>
 					</from>
 					<to>Regional_FS_Cost_USD_per_gal</to>
 				</connector>
-				<connector uid="1763" angle="153.435">
+				<connector uid="1761" angle="153.435">
 					<from>
-						<alias uid="1764"/>
+						<alias uid="1762"/>
 					</from>
 					<to>Expected_Taxable_Income_2</to>
 				</connector>
-				<connector uid="1765" angle="90">
+				<connector uid="1763" angle="90">
 					<from>platform_specific_regional_concentration_weighting_factor</from>
 					<to>weighted_distn_new_facilities</to>
 				</connector>
-				<connector uid="1766" angle="134.874">
+				<connector uid="1764" angle="134.874">
 					<from>
-						<alias uid="1767"/>
+						<alias uid="1765"/>
 					</from>
 					<to>pilot_shared_learning</to>
 				</connector>
-				<connector uid="1768" angle="333.435">
+				<connector uid="1766" angle="333.435">
 					<from>
 						<alias uid="1751"/>
 					</from>
 					<to>start_schedule_ORNOVOC</to>
 				</connector>
-				<connector uid="1769" angle="0">
+				<connector uid="1767" angle="0">
 					<from>Avg_Plant_Output_gpd_pipeline_C</from>
 					<to>Pipeline_Potential_Plant_Output_gal_per_yr_C</to>
 				</connector>
-				<connector uid="1770" angle="69.444">
+				<connector uid="1768" angle="69.444">
 					<from>Expected_Op_Cost</from>
 					<to>Exp_Revs_Net_of_Op_Cost</to>
 				</connector>
-				<connector uid="1771" angle="339.444">
+				<connector uid="1769" angle="339.444">
 					<from>op_cost_scale_factor</from>
 					<to>NextPlant_Expected_Other_VBL_Op_Cost</to>
 				</connector>
-				<connector uid="1772" angle="0">
+				<connector uid="1770" angle="0">
 					<from>Exp_Revs_Net_of_Op_Cost</from>
 					<to>NPV_Revs_Net_of_Op_Cost</to>
 				</connector>
-				<connector uid="1773" angle="153.435">
+				<connector uid="1771" angle="153.435">
 					<from>Policy_Switch</from>
 					<to>PoP_Price_Subs_Logic</to>
 				</connector>
-				<connector uid="1774" angle="347.471">
+				<connector uid="1772" angle="347.471">
 					<from>
-						<alias uid="1775"/>
+						<alias uid="1773"/>
 					</from>
 					<to>PV_Loan_Payment</to>
 				</connector>
-				<connector uid="1776" angle="6.34019">
+				<connector uid="1774" angle="6.34019">
 					<from>
-						<alias uid="1777"/>
+						<alias uid="1775"/>
 					</from>
 					<to>Reqd_FS_supply_Pipeline_TPY</to>
 				</connector>
-				<connector uid="1778" angle="0">
+				<connector uid="1776" angle="0">
 					<from>PoP_Price</from>
 					<to>Expected_Price_after_Subs</to>
 				</connector>
-				<connector uid="1779" angle="310.601">
+				<connector uid="1777" angle="310.601">
 					<from>
 						<alias uid="1385"/>
 					</from>
 					<to>L_G_exposure_by_pathway_and_region</to>
 				</connector>
-				<connector uid="1780" angle="225">
+				<connector uid="1778" angle="225">
 					<from>Pilot_Scale_Operations</from>
 					<to>logging_pilot_experience</to>
 				</connector>
-				<connector uid="1781" angle="76.7595">
+				<connector uid="1779" angle="76.7595">
 					<from>
-						<alias uid="1782"/>
+						<alias uid="1780"/>
 					</from>
 					<to>Startup_Subs_Volume_Input</to>
 				</connector>
-				<connector uid="1783" angle="90">
+				<connector uid="1781" angle="90">
 					<from>weighted_distn_new_facilities</from>
 					<to>distn_new_facilities</to>
 				</connector>
-				<connector uid="1784" angle="90">
+				<connector uid="1782" angle="90">
 					<from>Avg_Plant_Output_gal_yr</from>
 					<to>Output_Capacity</to>
 				</connector>
-				<connector uid="1785" color="#C8C8C8" angle="319.399">
+				<connector uid="1783" color="#C8C8C8" angle="319.399">
 					<from>one_dollar_per_ton</from>
 					<to>FS_Subs_Logic</to>
 				</connector>
-				<connector uid="1786" angle="270.073">
+				<connector uid="1784" angle="270.073">
 					<from>
 						<alias uid="1432"/>
 					</from>
 					<to>FS_thruput_cap_influx</to>
 				</connector>
-				<connector uid="1787" color="white" angle="18.4349">
+				<connector uid="1785" color="white" angle="18.4349">
+					<from>
+						<alias uid="1786"/>
+					</from>
+					<to>industry_FS_thruput_tpy</to>
+				</connector>
+				<connector uid="1787" color="white" angle="0">
 					<from>
 						<alias uid="1788"/>
 					</from>
 					<to>industry_FS_thruput_tpy</to>
 				</connector>
-				<connector uid="1789" color="white" angle="0">
-					<from>
-						<alias uid="1790"/>
-					</from>
-					<to>industry_FS_thruput_tpy</to>
-				</connector>
-				<connector uid="1791" angle="90">
+				<connector uid="1789" angle="90">
 					<from>Avg_FS_Thruput_Pipeline_C</from>
 					<to>Avg_Plant_Output_gpd_pipeline_C</to>
 				</connector>
-				<connector uid="1792" angle="57.9946">
+				<connector uid="1790" angle="57.9946">
 					<from>
 						<alias uid="1548"/>
 					</from>
 					<to>NPV_Revs_Net_of_Op_Cost</to>
 				</connector>
-				<connector uid="1793" angle="90">
+				<connector uid="1791" angle="90">
 					<from>
 						<alias uid="1647"/>
 					</from>
 					<to>NPV_Taxes_2</to>
 				</connector>
-				<connector uid="1794" angle="0">
+				<connector uid="1792" angle="0">
 					<from>NPV_Investment</from>
 					<to>NPV_rel_to_a_million</to>
 				</connector>
-				<connector uid="1795" angle="335.556">
+				<connector uid="1793" angle="335.556">
 					<from>OnLine</from>
 					<to>retirements</to>
 				</connector>
-				<connector uid="1796" angle="26.5651">
+				<connector uid="1794" angle="26.5651">
 					<from>FS_demand_by_path_fs_region</from>
 					<to>FS_demand_path_fs_region_share</to>
 				</connector>
-				<connector uid="1797" angle="69.444">
+				<connector uid="1795" angle="69.444">
 					<from>Rough_Estimate_Annual_Interest</from>
 					<to>Expected_Taxable_Income_2</to>
 				</connector>
-				<connector uid="1798" angle="156.292">
+				<connector uid="1796" angle="156.292">
 					<from>
-						<alias uid="1799"/>
+						<alias uid="1797"/>
 					</from>
 					<to>c_shared_learning</to>
 				</connector>
-				<connector uid="1800" angle="333.435">
+				<connector uid="1798" angle="333.435">
 					<from>Annual_Loan_Payment</from>
 					<to>PV_Loan_Payment</to>
 				</connector>
-				<connector uid="1801" angle="20.556">
+				<connector uid="1799" angle="10.3643">
 					<from>
-						<alias uid="1802"/>
+						<alias uid="1800"/>
 					</from>
 					<to>Total_Exp_Revs</to>
 				</connector>
-				<connector uid="1803" angle="270">
+				<connector uid="1801" angle="270">
 					<from>Tot_ORNOVOC_OnLine</from>
 					<to>Avg_ORNOVOC</to>
 				</connector>
-				<connector uid="1804" angle="6.34019">
+				<connector uid="1802" angle="6.34019">
 					<from>Reqd_Rate_of_Return</from>
 					<to>discount_factor_1</to>
 				</connector>
-				<connector uid="1805" angle="90">
+				<connector uid="1803" angle="90">
 					<from>
-						<alias uid="1806"/>
+						<alias uid="1804"/>
 					</from>
 					<to>regional_op_cost_weights</to>
 				</connector>
-				<connector uid="1807" color="#C8C8C8" angle="135">
+				<connector uid="1805" color="#C8C8C8" angle="135">
 					<from>
-						<alias uid="1808"/>
+						<alias uid="1806"/>
 					</from>
 					<to>Pipeline_Potential_Plant_Output_gal_per_yr_C</to>
 				</connector>
-				<connector uid="1809" angle="333.435">
+				<connector uid="1807" angle="333.435">
 					<from>Loan_Principal</from>
 					<to>Annual_Loan_Payment</to>
 				</connector>
-				<connector uid="1810" angle="0">
+				<connector uid="1808" angle="0">
 					<from>
-						<alias uid="1811"/>
+						<alias uid="1809"/>
 					</from>
 					<to>yrly_prodn_subs</to>
 				</connector>
-				<connector uid="1812" angle="180">
+				<connector uid="1810" angle="180">
 					<from>
-						<alias uid="1813"/>
+						<alias uid="1811"/>
 					</from>
 					<to>Avg_FS_Thruput_Pipeline_C</to>
 				</connector>
-				<connector uid="1814" angle="110.556">
+				<connector uid="1812" angle="110.556">
 					<from>fraction_of_Commercial_cost_growth_anticipated</from>
 					<to>Expected_FCI</to>
 				</connector>
-				<connector uid="1815" angle="0">
+				<connector uid="1813" angle="0">
 					<from>Demo_Multipliers</from>
 					<to>State_of_the_Industry_Multipliers</to>
 				</connector>
-				<connector uid="1816" angle="26.5651">
+				<connector uid="1814" angle="26.5651">
 					<from>FCI_scale_factor</from>
 					<to>NextPlant_Expected_FCI</to>
 				</connector>
-				<connector uid="1817" angle="40.6013">
+				<connector uid="1815" angle="40.6013">
 					<from>
 						<alias uid="1712"/>
 					</from>
 					<to>FS_demand_by_path_fs_region</to>
 				</connector>
-				<connector uid="1818" angle="339.444">
+				<connector uid="1816" angle="339.444">
 					<from>
-						<alias uid="1819"/>
+						<alias uid="1817"/>
 					</from>
 					<to>Reqd_Rate_of_Return_as_PCT</to>
 				</connector>
-				<connector uid="1820" angle="83.6598">
+				<connector uid="1818" angle="83.6598">
 					<from>
-						<alias uid="1821"/>
+						<alias uid="1819"/>
 					</from>
 					<to>NPV_Taxes_3</to>
 				</connector>
-				<connector uid="1822" angle="26.5651">
+				<connector uid="1820" angle="26.5651">
 					<from>
-						<alias uid="1823"/>
+						<alias uid="1821"/>
 					</from>
 					<to>Attr</to>
 				</connector>
-				<connector uid="1824" angle="0">
+				<connector uid="1822" angle="0">
 					<from>Expected_FCI</from>
 					<to>Expected_FCI_after_Subs</to>
 				</connector>
-				<connector uid="1825" angle="0">
+				<connector uid="1823" angle="0">
 					<from>pipeline_by_fs_region</from>
 					<to>fs_demand_incl_pipeline</to>
 				</connector>
-				<connector uid="1826" angle="270">
+				<connector uid="1824" angle="270">
 					<from>Startup_Subs</from>
 					<to>Subsidy_Amt</to>
 				</connector>
-				<connector uid="1827" angle="23.7322">
+				<connector uid="1825" angle="23.7322">
 					<from>L_G_exposure_by_pathway_and_region</from>
 					<to>yrly_Loan_guarantee_flux</to>
 				</connector>
-				<connector uid="1828" angle="243.435">
+				<connector uid="1826" angle="243.435">
 					<from>FS_thruput_Cap_Ratio</from>
 					<to>NextPlant_Expected_Power_Sales_Rev</to>
 				</connector>
-				<connector uid="1829" angle="0">
+				<connector uid="1827" angle="0">
 					<from>
-						<alias uid="1830"/>
+						<alias uid="1828"/>
 					</from>
 					<to>Expected_Plant_Output_Gal_Day_C</to>
 				</connector>
-				<connector uid="1831" angle="161.565">
+				<connector uid="1829" angle="161.565">
 					<from>
-						<alias uid="1832"/>
+						<alias uid="1830"/>
 					</from>
 					<to>exp_net_op_cost_USD_per_yr</to>
 				</connector>
-				<connector uid="1833" angle="167.471">
+				<connector uid="1831" angle="167.471">
 					<from>Avg_FS_Thruput_Cap</from>
 					<to>Avg_FS_throughput</to>
 				</connector>
-				<connector uid="1834" color="#787878" angle="333.435">
+				<connector uid="1832" color="#787878" angle="333.435">
 					<from>retirements</from>
 					<to>PY_retirements</to>
 				</connector>
-				<connector uid="1835" angle="143.739">
+				<connector uid="1833" angle="143.739">
 					<from>
-						<alias uid="1836"/>
+						<alias uid="1834"/>
 					</from>
 					<to>pc_shared_learning</to>
 				</connector>
-				<connector uid="1837" angle="45">
+				<connector uid="1835" angle="45">
 					<from>
-						<alias uid="1838"/>
+						<alias uid="1836"/>
 					</from>
 					<to>Reqd_Annual_FS_Supply_TPY</to>
 				</connector>
-				<connector uid="1839" angle="333.435">
+				<connector uid="1837" angle="333.435">
 					<from>
-						<alias uid="1840"/>
+						<alias uid="1838"/>
 					</from>
 					<to>Subsidy_Amt</to>
 				</connector>
-				<connector uid="1841" angle="333.435">
+				<connector uid="1839" angle="333.435">
 					<from>NextPlant_Expected_Other_VBL_Op_Cost</from>
 					<to>NextPlant_ORNOVOC</to>
 				</connector>
-				<connector uid="1842" angle="270">
+				<connector uid="1840" angle="270">
 					<from>
 						<alias uid="1718"/>
 					</from>
 					<to>Avg_FS_Thruput_Cap</to>
 				</connector>
-				<connector uid="1843" angle="0">
+				<connector uid="1841" angle="0">
 					<from>Expected_Feedstock_Cost</from>
 					<to>Expected_FS_cost_after_Subs</to>
 				</connector>
-				<connector uid="1844" angle="339.444">
+				<connector uid="1842" angle="339.444">
 					<from>
-						<alias uid="1845"/>
+						<alias uid="1843"/>
 					</from>
 					<to>Reqd_FS_supply_Pipeline_TPY</to>
 				</connector>
-				<connector uid="1846" angle="251.565">
+				<connector uid="1844" angle="251.565">
 					<from>FS_thruput_Cap_Ratio</from>
 					<to>NextPlant_Other_Coproduct_Sales_Rev</to>
 				</connector>
-				<connector uid="1847" angle="0">
+				<connector uid="1845" angle="0">
 					<from>Expected_Tax_1</from>
 					<to>NPV_Taxes_1</to>
 				</connector>
-				<connector uid="1848" angle="276.71">
+				<connector uid="1846" angle="276.71">
 					<from>Cumulative_Industry_Output</from>
 					<to>frac_rate_of_growth_in_industry_output</to>
 				</connector>
-				<connector uid="1849" angle="0">
+				<connector uid="1847" angle="0">
 					<from>Reqd_Rate_of_Return_as_PCT</from>
 					<to>Reqd_Rate_of_Return</to>
 				</connector>
-				<connector uid="1850" angle="128.098">
+				<connector uid="1848" angle="128.098">
 					<from>State_of_Industry_Process_Yield</from>
 					<to>PY_influx</to>
 				</connector>
-				<connector uid="1851" color="white" angle="353.66">
+				<connector uid="1849" color="white" angle="353.66">
 					<from>
-						<alias uid="1852"/>
+						<alias uid="1850"/>
 					</from>
 					<to>per_plant_L_G_exposure_C</to>
 				</connector>
-				<connector uid="1853" angle="140.561">
+				<connector uid="1851" angle="140.561">
 					<from>Avg_ORNOVOC</from>
 					<to>ORNOVOC_Retirements</to>
 				</connector>
-				<connector uid="1854" angle="0">
+				<connector uid="1852" angle="0">
 					<from>Initial_Equity_Investment</from>
 					<to>NPV_Investment</to>
 				</connector>
-				<connector uid="1855" angle="90">
+				<connector uid="1853" angle="90">
 					<from>Avg_FS_throughput</from>
 					<to>Avg_Plant_Output_gal_day</to>
 				</connector>
-				<connector uid="1856" angle="0">
+				<connector uid="1854" angle="0">
 					<from>
-						<alias uid="1857"/>
+						<alias uid="1855"/>
 					</from>
 					<to>feedstock_fractions</to>
 				</connector>
-				<connector uid="1858" angle="26.5651">
+				<connector uid="1856" angle="26.5651">
 					<from>Policy_Switch</from>
 					<to>FCI_Subs_Logic</to>
 				</connector>
-				<connector uid="1859" angle="45">
+				<connector uid="1857" angle="45">
 					<from>NPV_Taxes_1</from>
 					<to>NPV_Taxes</to>
 				</connector>
-				<connector uid="1860" angle="0">
+				<connector uid="1858" angle="0">
 					<from>pipeline_by_path_region_fs</from>
 					<to>pipeline_by_fs_region</to>
 				</connector>
-				<connector uid="1861" angle="216.327">
+				<connector uid="1859" angle="216.327">
 					<from>
-						<alias uid="1759"/>
+						<alias uid="1757"/>
 					</from>
 					<to>start_schedule_thruput_capacity</to>
 				</connector>
-				<connector uid="1862" angle="26.5651">
+				<connector uid="1860" angle="26.5651">
 					<from>other_rev_scale_factor</from>
 					<to>NextPlant_Expected_Power_Sales_Rev</to>
 				</connector>
-				<connector uid="1863" angle="135">
+				<connector uid="1861" angle="135">
 					<from>
-						<alias uid="1864"/>
+						<alias uid="1862"/>
 					</from>
 					<to>rate_of_doubling_industry_output_by_technology</to>
 				</connector>
-				<connector uid="1865" angle="90">
+				<connector uid="1863" angle="90">
 					<from>Policy_Switch</from>
 					<to>FS_Subs_Logic</to>
 				</connector>
-				<connector uid="1866" angle="40.6013">
+				<connector uid="1864" angle="40.6013">
 					<from>
-						<alias uid="1867"/>
+						<alias uid="1865"/>
 					</from>
 					<to>Expected_FS_cost_after_Subs</to>
 				</connector>
-				<connector uid="1868" angle="80.5377">
+				<connector uid="1866" angle="80.5377">
 					<from>rate_of_doubling_industry_output_by_technology</from>
 					<to>learning_logic</to>
 				</connector>
-				<connector uid="1869" angle="239.446">
+				<connector uid="1867" angle="239.446">
 					<from>
 						<alias uid="1459"/>
 					</from>
 					<to>FS_thruput_cap_influx</to>
 				</connector>
-				<connector uid="1870" angle="144.462">
+				<connector uid="1868" angle="144.462">
 					<from>
-						<alias uid="1806"/>
+						<alias uid="1804"/>
 					</from>
 					<to>UTIL_by_tech</to>
 				</connector>
-				<connector uid="1871" angle="0">
+				<connector uid="1869" angle="0">
 					<from>Output_Capacity_Pipeline</from>
 					<to>Output_Capacity_incl_Pipeline</to>
 				</connector>
-				<connector uid="1872" angle="270">
+				<connector uid="1870" angle="270">
 					<from>OnLine</from>
 					<to>Avg_PY</to>
 				</connector>
-				<connector uid="1873" angle="0">
+				<connector uid="1871" angle="0">
 					<from>
-						<alias uid="1874"/>
+						<alias uid="1872"/>
 					</from>
 					<to>est_depreciation_exp_USD_per_gal</to>
 				</connector>
-				<connector uid="1875" angle="90">
+				<connector uid="1873" angle="90">
 					<from>
-						<alias uid="1876"/>
+						<alias uid="1874"/>
 					</from>
 					<to>Plant_Utilization_Factors</to>
 				</connector>
-				<connector uid="1877" angle="179.959">
+				<connector uid="1875" angle="179.959">
 					<from>frac_rate_of_growth_in_industry_output</from>
 					<to>rate_of_doubling_industry_output_by_technology</to>
 				</connector>
-				<connector uid="1878" angle="100.731">
+				<connector uid="1876" angle="100.731">
 					<from>
-						<alias uid="1879"/>
+						<alias uid="1877"/>
 					</from>
 					<to>retirements</to>
 				</connector>
-				<connector uid="1880" color="#C8C8C8" angle="130.601">
+				<connector uid="1878" color="#C8C8C8" angle="130.601">
 					<from>Policy_time_constraints</from>
 					<to>PoP_Price_Subs_Logic</to>
 				</connector>
-				<connector uid="1881" angle="90">
+				<connector uid="1879" angle="90">
 					<from>Annual_Loan_Payment</from>
 					<to>Cume_Loan_Payment</to>
 				</connector>
-				<connector uid="1882" angle="0">
+				<connector uid="1880" angle="359.834">
 					<from>
-						<alias uid="1883"/>
+						<alias uid="1881"/>
 					</from>
 					<to>Total_Exp_Revs</to>
 				</connector>
-				<connector uid="1884" angle="0">
+				<connector uid="1882" angle="0">
 					<from>FS_demand_by_path_fs_region</from>
 					<to>fs_demand_at_nominal_utilization</to>
 				</connector>
-				<connector uid="1885" angle="270">
+				<connector uid="1883" angle="270">
 					<from>ROI_USD_per_gal</from>
 					<to>Taxes_USD_per_gal</to>
 				</connector>
-				<connector uid="1886" angle="217.689">
+				<connector uid="1884" angle="217.689">
 					<from>
-						<alias uid="1887"/>
+						<alias uid="1885"/>
 					</from>
 					<to>logging_PC_experience</to>
 				</connector>
-				<connector uid="1888" angle="49.3987">
+				<connector uid="1886" angle="49.3987">
 					<from>
 						<alias uid="1416"/>
 					</from>
 					<to>initial_pipeline_ORNOVOC</to>
 				</connector>
-				<connector uid="1889" angle="288.435">
+				<connector uid="1887" angle="288.435">
 					<from>length_of_period_2</from>
 					<to>discount_factor_2</to>
 				</connector>
-				<connector uid="1890" angle="270">
+				<connector uid="1888" angle="270">
 					<from>
 						<alias uid="1630"/>
 					</from>
 					<to>Reqd_Rate_of_Return</to>
 				</connector>
-				<connector uid="1891" angle="0">
+				<connector uid="1889" angle="0">
 					<from>Policy_Start</from>
 					<to>Policy_time_constraints</to>
 				</connector>
-				<connector uid="1892" angle="0">
+				<connector uid="1890" angle="0">
 					<from>
 						<alias uid="1672"/>
 					</from>
 					<to>initial_pipeline_ORNOVOC</to>
 				</connector>
-				<connector uid="1893" angle="0">
+				<connector uid="1891" angle="0">
 					<from>regional_op_cost_weights</from>
 					<to>volume_wtd_net_op_cost_USD_per_gal</to>
 				</connector>
-				<connector uid="1894" angle="0">
+				<connector uid="1892" angle="0">
 					<from>Expected_Tax_3</from>
 					<to>NPV_Taxes_3</to>
 				</connector>
-				<connector uid="1895" angle="28.5164">
+				<connector uid="1893" angle="28.5164">
 					<from>number_of_plants_to_start</from>
 					<to>initiating</to>
 				</connector>
-				<connector uid="1896" angle="159.444">
+				<connector uid="1894" angle="159.444">
 					<from>
-						<alias uid="1897"/>
+						<alias uid="1895"/>
 					</from>
 					<to>regional_op_cost_weights</to>
 				</connector>
-				<connector uid="1898" color="#C8C8C8" angle="322.306">
+				<connector uid="1896" color="#C8C8C8" angle="322.306">
 					<from>OnLine</from>
 					<to>increase_in_PY_commercial_industry</to>
 				</connector>
-				<connector uid="1899" angle="20.1411">
+				<connector uid="1897" angle="20.1411">
 					<from>
-						<alias uid="1900"/>
+						<alias uid="1898"/>
 					</from>
 					<to>yrly_fs_subs</to>
 				</connector>
-				<connector uid="1901" angle="20.556">
+				<connector uid="1899" angle="20.556">
 					<from>Avg_PY</from>
 					<to>Feedstock_Cost_USD_per_gal</to>
 				</connector>
-				<connector uid="1902" angle="263.66">
+				<connector uid="1900" angle="263.66">
 					<from>
-						<alias uid="1821"/>
+						<alias uid="1819"/>
 					</from>
 					<to>NPV_Taxes_2</to>
 				</connector>
-				<connector uid="1903" angle="0">
+				<connector uid="1901" angle="0">
 					<from>Cume_Prodn_Subs</from>
 					<to>rollup_cumulative_subsidies</to>
 				</connector>
-				<connector uid="1904" angle="2.48955">
+				<connector uid="1902" angle="2.48955">
 					<from>Cume_FCI_Subs</from>
 					<to>rollup_cumulative_subsidies</to>
 				</connector>
-				<connector uid="1905" angle="89.9181">
+				<connector uid="1903" angle="89.9181">
 					<from>endogenous_plant_planning</from>
 					<to>plant_planning</to>
 				</connector>
-				<connector uid="1906" angle="90">
+				<connector uid="1904" angle="90">
 					<from>
-						<alias uid="1907"/>
+						<alias uid="1905"/>
 					</from>
 					<to>Expected_Equity_Fraction</to>
 				</connector>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="1908" x="5399" y="854" width="256" height="32">Discount Factor Calculations</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="1906" x="5399" y="854" width="256" height="32">Discount Factor Calculations</text_box>
 				<aux color="#65183E" font_color="#65183E" label_angle="72.3046" x="3177" y="384" name="Output Capacity"/>
 				<aux color="black" font_color="black" label_side="top" x="3783" y="519" name="Plant Utilization Factors"/>
 				<aux color="red" font_color="red" x="175" y="1953" name="Op Experience Per Year"/>
@@ -10192,7 +9474,7 @@ COMMENTS: </doc>
 				<aux color="#008F44" font_color="#008F44" label_angle="1.14165" x="2463" y="556" name="Avg PY Pipeline"/>
 				<aux color="#651818" font_color="#651818" label_angle="42.4045" x="4025" y="691" name="Output gpy by Technology"/>
 				<aux color="red" font_color="red" x="397" y="1695" name="one billion"/>
-				<aux color="red" font_color="red" x="1833" y="2289" name="Mature Industry Process Yield"/>
+				<aux color="red" font_color="red" x="1724" y="2394" name="Mature Industry Process Yield"/>
 				<flow color="black" font_color="black" label_side="top" x="2913" y="792" name="increase in PY commercial industry">
 					<pts>
 						<pt x="2974" y="792"/>
@@ -10266,7 +9548,7 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_side="top" x="5345" y="1084" name="discount factor 1"/>
 				<aux color="black" font_color="black" label_angle="255.284" x="2654" y="2124" name="Expected Feedstock Cost"/>
 				<aux color="red" font_color="red" x="255" y="1696" name="one"/>
-				<aux color="black" font_color="black" label_angle="126.268" x="3177" y="644" name="Avg Plant Output gal yr"/>
+				<aux color="black" font_color="black" label_angle="126.268" x="3177" y="597" name="Avg Plant Output gal yr"/>
 				<stock color="#65183E" font_color="#65183E" label_angle="83.6687" x="2855" y="1150" name="Commercial Maturity"/>
 				<flow color="black" font_color="black" label_angle="162.099" x="2747.25" y="1147" name="learning logic">
 					<pts>
@@ -10505,7 +9787,7 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="276.185" x="3310" y="439" name="Feedstock Cost USD per gal"/>
 				<aux color="#65183E" font_color="#65183E" label_angle="36.6747" x="3310" y="519" name="Cost to Price Ratio"/>
 				<aux color="black" font_color="black" label_angle="176.007" x="3861" y="2056" name="UTIL by tech"/>
-				<aux color="#65183E" font_color="#65183E" label_angle="109.295" x="3310" y="644" name="Other rev net of vbl cost per gal"/>
+				<aux color="#65183E" font_color="#65183E" label_angle="109.295" x="3310" y="597" name="Other rev net of vbl cost per gal"/>
 				<aux color="black" font_color="black" label_angle="325.725" x="2163" y="1899" name="Reqd Annual FS Supply TPY"/>
 				<aux color="#65183E" font_color="#65183E" label_angle="87.9976" x="2917" y="1830" name="Feedstock Constraint on Utilization"/>
 				<aux color="#008F44" font_color="#008F44" label_side="top" x="3618" y="519" name="Nominal Plant Utilization Factors"/>
@@ -10698,15 +9980,17 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="1339" y="2389" name="contracted utilization"/>
 				<aux color="black" font_color="black" label_angle="1.69157" x="3643" y="382" name="frac contracted capacity"/>
 				<group isee:name_image="true" locked="false" color="black" font_color="black" x="4263" y="36" width="1783" height="1110" name="Pro Forma Financials and NPV and Attractiveness">
-					<item uid="1883"/>
-					<item uid="1802"/>
+					<item uid="1881"/>
+					<item uid="1800"/>
 					<item uid="1566"/>
-					<item uid="1757"/>
+					<item uid="1907"/>
 					<item uid="1481"/>
-					<item uid="1830"/>
+					<item uid="1828"/>
+					<item uid="1908"/>
+					<item uid="1909"/>
 					<item uid="1598"/>
-					<item uid="1821"/>
-					<item uid="1764"/>
+					<item uid="1819"/>
+					<item uid="1762"/>
 					<item uid="1328"/>
 					<item uid="1548"/>
 					<item uid="1523"/>
@@ -10716,52 +10000,51 @@ COMMENTS: </doc>
 					<item uid="1664"/>
 					<item uid="1322"/>
 					<item uid="1605"/>
-					<item uid="1775"/>
+					<item uid="1773"/>
 					<item uid="1592"/>
 					<item uid="1647"/>
 					<item uid="1639"/>
 					<item uid="1544"/>
 					<item uid="1313"/>
-					<item uid="1823"/>
+					<item uid="1821"/>
 					<item uid="1535"/>
-					<item uid="1819"/>
+					<item uid="1817"/>
 					<item uid="1716"/>
-					<item uid="1907"/>
+					<item uid="1905"/>
 					<item uid="1475"/>
 					<item uid="1354"/>
 					<item uid="1546"/>
 					<item uid="1630"/>
 					<item uid="1471"/>
-					<item uid="1908"/>
+					<item uid="1906"/>
 					<item uid="1492"/>
-					<item uid="1909"/>
-					<item uid="1370"/>
 					<item uid="1910"/>
+					<item uid="1370"/>
+					<item uid="1911"/>
 					<item uid="1486"/>
 					<item uid="1343"/>
 				</group>
 				<group isee:name_image="true" locked="false" color="black" font_color="black" x="4942" y="1442" width="1064" height="870" name="Cumulative Govt Spend">
 					<item uid="1581"/>
-					<item uid="1790"/>
-					<item uid="1811"/>
-					<item uid="1900"/>
+					<item uid="1788"/>
+					<item uid="1809"/>
+					<item uid="1898"/>
 					<item uid="1334"/>
 					<item uid="1324"/>
-					<item uid="1788"/>
+					<item uid="1786"/>
 					<item uid="1385"/>
 					<item uid="1702"/>
-					<item uid="1852"/>
+					<item uid="1850"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="19" y="1248" width="730" height="361" name="Module Interfaces">
-					<item uid="1911"/>
 					<item uid="1912"/>
 					<item uid="1913"/>
 					<item uid="1914"/>
 					<item uid="1915"/>
 					<item uid="1916"/>
 					<item uid="1917"/>
-					<item uid="1735"/>
 					<item uid="1918"/>
+					<item uid="1735"/>
 					<item uid="1919"/>
 					<item uid="1920"/>
 					<item uid="1921"/>
@@ -10772,6 +10055,7 @@ COMMENTS: </doc>
 					<item uid="1926"/>
 					<item uid="1927"/>
 					<item uid="1928"/>
+					<item uid="1929"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="9" y="1789" width="723" height="215" name="Plant Physical Parameters 1"/>
 				<group locked="false" color="black" font_color="black" x="18" y="1672" width="715" height="69" name="Physical conversions and Constants 1"/>
@@ -10780,23 +10064,25 @@ COMMENTS: </doc>
 					<item uid="1683"/>
 					<item uid="1586"/>
 					<item uid="1365"/>
-					<item uid="1813"/>
-					<item uid="1808"/>
+					<item uid="1811"/>
+					<item uid="1806"/>
 					<item uid="1398"/>
 					<item uid="1400"/>
 					<item uid="1521"/>
 					<item uid="1529"/>
-					<item uid="1929"/>
 					<item uid="1930"/>
+					<item uid="1931"/>
 					<item uid="1503"/>
 					<item uid="1556"/>
-					<item uid="1931"/>
+					<item uid="1932"/>
 					<item uid="1367"/>
-					<item uid="1879"/>
+					<item uid="1877"/>
 					<item uid="1345"/>
 					<item uid="1685"/>
-					<item uid="1932"/>
-					<item uid="1876"/>
+					<item uid="1933"/>
+					<item uid="1934"/>
+					<item uid="1935"/>
+					<item uid="1874"/>
 					<item uid="1515"/>
 					<item uid="1558"/>
 					<item uid="1562"/>
@@ -10804,11 +10090,12 @@ COMMENTS: </doc>
 					<item uid="1326"/>
 					<item uid="1348"/>
 					<item uid="1553"/>
-					<item uid="1933"/>
-					<item uid="1934"/>
+					<item uid="1936"/>
+					<item uid="1937"/>
 					<item uid="1330"/>
 					<item uid="1669"/>
-					<item uid="1887"/>
+					<item uid="1885"/>
+					<item uid="1938"/>
 					<item uid="1336"/>
 					<item uid="1465"/>
 					<item uid="1641"/>
@@ -10824,55 +10111,55 @@ COMMENTS: </doc>
 					<item uid="1613"/>
 					<item uid="1490"/>
 					<item uid="1721"/>
-					<item uid="1935"/>
-					<item uid="1767"/>
+					<item uid="1939"/>
+					<item uid="1765"/>
 					<item uid="1518"/>
 					<item uid="1602"/>
 					<item uid="1434"/>
 					<item uid="1744"/>
-					<item uid="1936"/>
+					<item uid="1940"/>
 					<item uid="1501"/>
-					<item uid="1836"/>
+					<item uid="1834"/>
 					<item uid="1568"/>
-					<item uid="1864"/>
-					<item uid="1937"/>
-					<item uid="1799"/>
+					<item uid="1862"/>
+					<item uid="1941"/>
+					<item uid="1797"/>
 					<item uid="1382"/>
 					<item uid="1697"/>
 					<item uid="1732"/>
 					<item uid="1658"/>
 				</group>
 				<group isee:name_image="true" locked="false" color="black" font_color="black" x="9" y="618" width="743" height="538" name="GOVT POLICIES LOGIC">
-					<item uid="1840"/>
+					<item uid="1838"/>
 					<item uid="1655"/>
 					<item uid="1413"/>
-					<item uid="1782"/>
+					<item uid="1780"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="3304" y="1825" width="1288" height="495" name="MFSP and Utilization">
-					<item uid="1874"/>
+					<item uid="1872"/>
 					<item uid="1690"/>
 					<item uid="1728"/>
 					<item uid="1680"/>
-					<item uid="1806"/>
-					<item uid="1897"/>
+					<item uid="1804"/>
+					<item uid="1895"/>
 					<item uid="1395"/>
 					<item uid="1748"/>
 					<item uid="1374"/>
 					<item uid="1453"/>
 					<item uid="1583"/>
 					<item uid="1507"/>
-					<item uid="1832"/>
+					<item uid="1830"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="785" y="1641" width="1149" height="845" name="Plant Financial and Operational and Scale factors and Logit input">
 					<item uid="1531"/>
 					<item uid="1445"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="1984" y="1783" width="1053" height="552" name="Feedstock Cost Demand and Constraint on Utilization">
-					<item uid="1777"/>
+					<item uid="1775"/>
 					<item uid="1740"/>
 					<item uid="1406"/>
-					<item uid="1845"/>
-					<item uid="1838"/>
+					<item uid="1843"/>
+					<item uid="1836"/>
 					<item uid="1443"/>
 					<item uid="1712"/>
 					<item uid="1542"/>
@@ -10880,49 +10167,102 @@ COMMENTS: </doc>
 					<item uid="1637"/>
 					<item uid="1484"/>
 					<item uid="1570"/>
-					<item uid="1857"/>
+					<item uid="1855"/>
 					<item uid="1574"/>
 					<item uid="1341"/>
-					<item uid="1867"/>
+					<item uid="1865"/>
 					<item uid="1307"/>
 				</group>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="588" y="1382" name="Converter 1"/>
-				<connector uid="1938" angle="39.1737">
+				<connector uid="1942" angle="39.1737">
 					<from>Converter_1</from>
 					<to>Expected_Price_after_Subs</to>
 				</connector>
 				<aux color="red" font_color="red" x="202" y="1107" name="Policy Duration"/>
-				<connector uid="1939" angle="0">
+				<connector uid="1943" angle="0">
 					<from>Policy_Duration</from>
 					<to>Policy_End</to>
 				</connector>
-				<connector uid="1940" angle="332.021">
+				<connector uid="1944" angle="332.021">
 					<from>Policy_Start</from>
 					<to>Policy_End</to>
 				</connector>
-				<connector uid="1941" angle="93.2705">
+				<connector uid="1945" angle="93.2705">
 					<from>
-						<alias uid="1910"/>
+						<alias uid="1911"/>
 					</from>
 					<to>NPV_rel_to_a_million</to>
 				</connector>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="1942" x="8" y="18" width="701" height="51">Biomass Scenario Model Cellulose to Ethanol Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="1943" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="1944" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="1945" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="1946" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="1947" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="1948" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="1946" x="8" y="18" width="701" height="51">Biomass Scenario Model Cellulose to Ethanol Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="1947" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="1948" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="1949" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="1950" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="1951" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="1952" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<aux color="black" font_color="black" label_side="bottom" x="3257" y="641" name="annual coproduct rev"/>
+				<connector uid="1953" angle="331.189">
+					<from>Avg_Plant_Output_gal_yr</from>
+					<to>annual_coproduct_rev</to>
+				</connector>
+				<aux color="red" font_color="red" label_side="bottom" x="621.5" y="1710" name="Coproduct Coeffs"/>
+				<connector uid="1954" angle="46.6366">
+					<from>annual_coproduct_rev</from>
+					<to>Other_rev_net_of_vbl_cost_per_gal</to>
+				</connector>
+				<connector uid="1955" angle="86.5318">
+					<from>
+						<alias uid="1933"/>
+					</from>
+					<to>annual_coproduct_rev</to>
+				</connector>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="498" y="1360" name="Coproduct Price Input"/>
+				<connector uid="1956" angle="178.303">
+					<from>
+						<alias uid="1934"/>
+					</from>
+					<to>annual_coproduct_rev</to>
+				</connector>
+				<aux color="white" font_color="white" label_angle="83.8151" x="4585" y="172" name="total price input"/>
+				<connector uid="1957" angle="0">
+					<from>
+						<alias uid="1907"/>
+					</from>
+					<to>total_price_input</to>
+				</connector>
+				<connector uid="1958" angle="0">
+					<from>total_price_input</from>
+					<to>Exp_Sales_Rev</to>
+				</connector>
+				<connector uid="1959" angle="280.305">
+					<from>
+						<alias uid="1909"/>
+					</from>
+					<to>total_price_input</to>
+				</connector>
+				<connector uid="1960" angle="333.435">
+					<from>
+						<alias uid="1908"/>
+					</from>
+					<to>total_price_input</to>
+				</connector>
+				<aux color="red" font_color="red" label_side="bottom" x="655" y="1827" name="Active Product Switches"/>
+				<connector uid="1961" angle="0">
+					<from>
+						<alias uid="1938"/>
+					</from>
+					<to>State_of_Industry_Process_Yield</to>
+				</connector>
 				<alias color="red" font_style="italic" font_color="red" uid="1390" x="895" y="2787" width="18" height="18">
 					<of>start_schedule_nameplate_output_gpy</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1922" x="461.5" y="1426.5" width="45" height="35">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1923" x="461.5" y="1426.5" width="45" height="35">
 					<of>Pilot_Maturity</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1367" x="3086" y="635" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1367" x="3086" y="588" width="18" height="18">
 					<of>Days_per_Year_Online</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="215.483" uid="1821" x="5275" y="240" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="215.483" uid="1819" x="5275" y="240" width="18" height="18">
 					<of>discount_factor_2</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1535" x="5975" y="658" width="18" height="18">
@@ -10931,25 +10271,25 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1639" x="5873" y="702" width="18" height="18">
 					<of>k</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="227.761" uid="1931" x="2503" y="431" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="227.761" uid="1932" x="2503" y="431" width="18" height="18">
 					<of>Years_in_D_and_C</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1748" x="4486" y="2090" width="18" height="18">
 					<of>NextPlant_Expected_Power_Sales_Rev</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1777" x="2017" y="2070" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1775" x="2017" y="2070" width="18" height="18">
 					<of>Avg_PY_Pipeline</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1658" x="4098" y="1259" width="18" height="18">
 					<of>one_billion</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1764" x="5010" y="339" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1762" x="5010" y="339" width="18" height="18">
 					<of>depreciation_period</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="104.716" uid="1813" x="2888" y="293" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="104.716" uid="1811" x="2888" y="293" width="18" height="18">
 					<of>Avg_FS_Thruput_Cap_Pipeline</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1923" x="630.5" y="1431.5" width="45" height="35">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1924" x="630.5" y="1431.5" width="45" height="35">
 					<of>Commercial_Maturity</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" label_angle="83.8151" uid="1404" x="890" y="2724" width="18" height="18">
@@ -10961,16 +10301,16 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1562" x="1334" y="1042" width="18" height="18">
 					<of>Mature_Pilot_Multipliers</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="222.405" uid="1874" x="3420" y="1869" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="222.405" uid="1872" x="3420" y="1869" width="18" height="18">
 					<of>est_depreciation_expense</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1900" x="5118" y="1774" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1898" x="5118" y="1774" width="18" height="18">
 					<of>FS_Subs_Logic</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" label_angle="72.3046" uid="1641" x="3035" y="1047" width="18" height="18">
 					<of>Mature_Industry_P_Success</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1883" x="4379" y="56" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1881" x="4327" y="55" width="18" height="18">
 					<of>NextPlant_Expected_Power_Sales_Rev</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1529" x="1255" y="637" width="18" height="18">
@@ -10985,7 +10325,7 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1322" x="4936" y="647" width="18" height="18">
 					<of>term_of_loan</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1867" x="2676" y="2199" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1865" x="2676" y="2199" width="18" height="18">
 					<of>FS_Subs_Logic</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1672" x="85" y="2585" width="18" height="18">
@@ -10994,7 +10334,7 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="178.881" uid="1354" x="5201" y="939" width="18" height="18">
 					<of>Years_in_D_and_C</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1802" x="4385" y="119" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" label_side="right" label_angle="45" uid="1800" x="4333" y="118" width="18" height="18">
 					<of>NextPlant_Other_Coproduct_Sales_Rev</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1523" x="5701" y="238" width="18" height="18">
@@ -11006,16 +10346,16 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1382" x="3876" y="1340" width="18" height="18">
 					<of>Min_Cume_Industry_Output_For_Learning</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1933" x="1637" y="722" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1936" x="1637" y="722" width="18" height="18">
 					<of>PC_op_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1819" x="4569" y="1045" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1817" x="4569" y="1045" width="18" height="18">
 					<of>Mature_Industry_Rate_of_Return_as_PCT</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1932" x="3634" y="702" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1935" x="3634" y="702" width="18" height="18">
 					<of>initial_pipeline_ORNOVOC</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1935" x="1443" y="1286" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1939" x="1443" y="1286" width="18" height="18">
 					<of>Initial_Indices_of_Pilot_Maturity</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1605" x="5117" y="368" width="18" height="18">
@@ -11027,7 +10367,7 @@ COMMENTS: </doc>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1507" x="4487" y="2158" width="18" height="18">
 					<of>NextPlant_Other_Coproduct_Sales_Rev</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1924" x="647" y="1535" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1925" x="647" y="1535" width="18" height="18">
 					<of>Avg_PY</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" label_angle="216.675" uid="1546" x="5289" y="1031" width="18" height="18">
@@ -11036,7 +10376,7 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1484" x="2299" y="2173" width="18" height="18">
 					<of>feedstock_effectiveness_multiplier</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1925" x="640" y="1476" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1926" x="640" y="1476" width="18" height="18">
 					<of>Feedstock_Constraint_on_Utilization</of>
 				</alias>
 				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1341" x="2387" y="2281" width="18" height="18">
@@ -11051,13 +10391,13 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="341.354" uid="1336" x="2688" y="878" width="18" height="18">
 					<of>Mature_Industry_Process_Yield</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1911" x="225" y="1264" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1912" x="225" y="1264" width="18" height="18">
 					<of>rollup_cumulative_subsidies</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1740" x="2071" y="1890" width="18" height="18">
 					<of>Nominal_Plant_Utilization_Factors</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1918" x="95" y="1445" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1919" x="95" y="1445" width="18" height="18">
 					<of>Avg_PY</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" label_angle="164.14" uid="1602" x="2065" y="1066" width="18" height="18">
@@ -11066,10 +10406,10 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1408" x="81" y="2638" width="18" height="18">
 					<of>op_cost_scale_factor</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1926" x="542.5" y="1424.5" width="45" height="35">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1927" x="542.5" y="1424.5" width="45" height="35">
 					<of>PC_Maturity</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1919" x="74.5" y="1547.5" width="45" height="35">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1920" x="74.5" y="1547.5" width="45" height="35">
 					<of>OnLine</of>
 				</alias>
 				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1406" x="2073" y="1835" width="18" height="18">
@@ -11084,13 +10424,13 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1521" x="887" y="356" width="18" height="18">
 					<of>technology_switches</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1937" x="3009" y="1247" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1941" x="3009" y="1247" width="18" height="18">
 					<of>Initial_Indices_of_Commercial_Maturity</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1475" x="4634" y="987" width="18" height="18">
 					<of>Loan_Guarantee_Logic</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1767" x="1574" y="1247" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1765" x="1574" y="1247" width="18" height="18">
 					<of>pilot_inputs_CE</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1570" x="2221" y="2283" width="18" height="18">
@@ -11099,13 +10439,13 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1751" x="79" y="2687" width="18" height="18">
 					<of>Exp_Other_Coproduct_Sales_Rev</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="115.599" uid="1566" x="4341" y="217" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="1566" x="4341" y="217" width="18" height="18">
 					<of>Days_per_Year_Online</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1315" x="479" y="2666" width="18" height="18">
 					<of>Mature_FS_Thruput_Capacity</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1757" x="4471" y="165" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1907" x="4330" y="163" width="18" height="18">
 					<of>Expected_Price_after_Subs</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" label_side="top" uid="1661" x="4357" y="602" width="18" height="18">
@@ -11114,7 +10454,7 @@ COMMENTS: </doc>
 				<alias color="#65183E" font_style="italic" font_color="#65183E" label_angle="111.913" uid="1531" x="1491.5" y="1747.5" width="45" height="35">
 					<of>Commercial_Maturity</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1929" x="1308" y="372" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1930" x="1308" y="372" width="18" height="18">
 					<of>Pilot_op_time</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1558" x="949" y="973" width="18" height="18">
@@ -11138,10 +10478,10 @@ COMMENTS: </doc>
 				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1690" x="3411" y="2003" width="18" height="18">
 					<of>Reqd_Rate_of_Return</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1912" x="97" y="1354" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1913" x="97" y="1354" width="18" height="18">
 					<of>Output_Capacity_incl_Pipeline</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1808" x="3008" y="246" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1806" x="3008" y="246" width="18" height="18">
 					<of>Days_per_Year_Online</of>
 				</alias>
 				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1445" x="1652" y="1932" width="18" height="18">
@@ -11156,19 +10496,19 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="57.4606" uid="1542" x="2190" y="1971" width="18" height="18">
 					<of>one_million</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1934" x="1428" y="729" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1937" x="1428" y="729" width="18" height="18">
 					<of>PC_dev_time</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="black" uid="1503" x="2035" y="579" width="18" height="18">
 					<of>nominal_regional_distn_new_facilities</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1790" x="4968" y="1723" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1788" x="4968" y="1723" width="18" height="18">
 					<of>Avg_PY</of>
 				</alias>
 				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1432" x="3719" y="940" width="18" height="18">
 					<of>initiating</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" label_angle="96.1849" uid="1806" x="3981" y="2115" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" label_angle="96.1849" uid="1804" x="3981" y="2115" width="18" height="18">
 					<of>Actual_Output_gpy</of>
 				</alias>
 				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1486" x="5811" y="724" width="18" height="18">
@@ -11189,28 +10529,28 @@ COMMENTS: </doc>
 				<alias color="blue" font_style="italic" font_color="#008F44" label_angle="39.0125" uid="1481" x="4315" y="346" width="18" height="18">
 					<of>State_of_Industry_Process_Yield</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1832" x="4484" y="2232" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1830" x="4484" y="2232" width="18" height="18">
 					<of>Expected_Op_Cost</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1544" x="5684" y="397" width="18" height="18">
 					<of>threshold_for_total_attr_calc</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1836" x="2340" y="1201" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1834" x="2340" y="1201" width="18" height="18">
 					<of>PC_inputs_CE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1759" x="667" y="2687" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1757" x="667" y="2687" width="18" height="18">
 					<of>Mature_Industry_Process_Yield</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" label_angle="323.325" uid="1685" x="3454" y="543" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" label_angle="323.325" uid="1685" x="3414.5" y="582" width="18" height="18">
 					<of>Expected_Price_after_Subs</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1913" x="224" y="1309" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1914" x="224" y="1309" width="18" height="18">
 					<of>Platform_Attr</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1434" x="2100" y="1241" width="18" height="18">
 					<of>one</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1864" x="2612" y="1337" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1862" x="2612" y="1337" width="18" height="18">
 					<of>doubling_factor</of>
 				</alias>
 				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1637" x="2883" y="1890" width="18" height="18">
@@ -11219,31 +10559,31 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1398" x="3095" y="203" width="18" height="18">
 					<of>one_project</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1914" x="95" y="1266" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1915" x="95" y="1266" width="18" height="18">
 					<of>fs_demand_at_nominal_utilization</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1927" x="548" y="1531" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1928" x="548" y="1531" width="18" height="18">
 					<of>Output_Capacity</of>
 				</alias>
 				<alias color="black" font_style="italic" font_color="black" label_angle="154.598" uid="1328" x="5185" y="145" width="18" height="18">
 					<of>discount_factor_DC</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1811" x="5100" y="1532" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1809" x="5100" y="1532" width="18" height="18">
 					<of>PoP_Price_Subs_Logic</of>
 				</alias>
 				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1307" x="2556" y="2192" width="18" height="18">
 					<of>FLM_C_to_PreProcess_Cost</of>
 				</alias>
-				<alias color="#651818" font_style="italic" font_color="#651818" uid="1920" x="235" y="1431" width="18" height="18">
+				<alias color="#651818" font_style="italic" font_color="#651818" uid="1921" x="235" y="1431" width="18" height="18">
 					<of>Output_gpy_by_Technology</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1909" x="5579" y="734" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1910" x="5579" y="734" width="18" height="18">
 					<of>one_million</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1313" x="5694" y="496" width="18" height="18">
 					<of>Regional_coeffs</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="1852" x="4984" y="2116" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="1850" x="4984" y="2116" width="18" height="18">
 					<of>Cume_Loan_Payment</of>
 				</alias>
 				<alias color="black" font_style="italic" font_color="black" uid="1583" x="3793" y="2158" width="18" height="18">
@@ -11255,13 +10595,13 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1416" x="77" y="2787" width="18" height="18">
 					<of>other_rev_scale_factor</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="81.0236" uid="1936" x="2176" y="1302" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="81.0236" uid="1940" x="2176" y="1302" width="18" height="18">
 					<of>Initial_Indices_of_PC_Maturity</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1915" x="99" y="1311" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1916" x="99" y="1311" width="18" height="18">
 					<of>fs_demand_incl_pipeline</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1788" x="4974" y="1774" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="1786" x="4974" y="1774" width="18" height="18">
 					<of>Actual_Output_gpy</of>
 				</alias>
 				<alias color="black" font_style="italic" font_color="black" uid="1392" x="3288" y="947" width="18" height="18">
@@ -11270,7 +10610,7 @@ COMMENTS: </doc>
 				<alias color="black" font_style="italic" font_color="black" uid="1718" x="3369.5" y="958.5" width="45" height="35">
 					<of>OnLine</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="181.99" uid="1857" x="2230" y="2224" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="181.99" uid="1855" x="2230" y="2224" width="18" height="18">
 					<of>feedstock_fractions_agnostic_conversion</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1465" x="2703" y="1028" width="18" height="18">
@@ -11291,7 +10631,7 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="237.461" uid="1724" x="4401" y="473" width="18" height="18">
 					<of>depreciation_period</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1799" x="3030" y="1186" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1797" x="3030" y="1186" width="18" height="18">
 					<of>C_inputs_CE</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1326" x="1202" y="818" width="18" height="18">
@@ -11309,10 +10649,10 @@ COMMENTS: </doc>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1732" x="3880" y="1076" width="18" height="18">
 					<of>start_schedule_thruput_capacity</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1916" x="232" y="1355" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1917" x="232" y="1355" width="18" height="18">
 					<of>Cost_to_Price_Ratio</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1876" x="3774" y="575" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1874" x="3774" y="575" width="18" height="18">
 					<of>Feedstock_Constraint_on_Utilization</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1515" x="3937" y="510" width="18" height="18">
@@ -11324,7 +10664,7 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="133.281" uid="1630" x="5038" y="1020" width="18" height="18">
 					<of>one_hundred_PCT</of>
 				</alias>
-				<alias color="#651818" font_style="italic" font_color="#651818" uid="1897" x="4083" y="2064" width="18" height="18">
+				<alias color="#651818" font_style="italic" font_color="#651818" uid="1895" x="4083" y="2064" width="18" height="18">
 					<of>Output_gpy_by_Technology</of>
 				</alias>
 				<alias color="black" font_style="italic" font_color="black" uid="1608" x="2195" y="1827" width="18" height="18">
@@ -11351,10 +10691,10 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1551" x="2845" y="830" width="18" height="18">
 					<of>rate_of_industry_process_yield_adjustment</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="1830" x="4326" y="260" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="1828" x="4326" y="260" width="18" height="18">
 					<of>NextPlant_FS_Thruput_Cap</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="328.185" uid="1907" x="4446" y="983" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="328.185" uid="1905" x="4446" y="983" width="18" height="18">
 					<of>Mature_Industry_Equity_Fraction</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1370" x="5656" y="880" width="18" height="18">
@@ -11369,7 +10709,7 @@ COMMENTS: </doc>
 				<alias color="blue" font_style="italic" font_color="#008F44" uid="1339" x="3852" y="801" width="18" height="18">
 					<of>start_schedule_ORNOVOC</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="1845" x="2021" y="2009" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="1843" x="2021" y="2009" width="18" height="18">
 					<of>Output_Capacity_Pipeline</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1463" x="77" y="2732" width="18" height="18">
@@ -11378,34 +10718,34 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" uid="1490" x="1365" y="1288" width="18" height="18">
 					<of>one</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1917" x="94" y="1401" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1918" x="94" y="1401" width="18" height="18">
 					<of>Output_Capacity</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" label_angle="51.7939" uid="1413" x="646" y="815" width="18" height="18">
 					<of>Cumulative_Module_Output</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1838" x="2075" y="1951" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1836" x="2075" y="1951" width="18" height="18">
 					<of>Avg_PY</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1930" x="1101" y="372" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1931" x="1101" y="372" width="18" height="18">
 					<of>Pilot_dev_time</of>
 				</alias>
 				<alias color="blue" font_style="italic" font_color="#008F44" label_angle="139.67" uid="1343" x="4357" y="1097" width="18" height="18">
 					<of>State_of_the_Industry_Multipliers</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1840" x="138" y="661" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1838" x="138" y="661" width="18" height="18">
 					<of>startup_spend_constraint</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="1782" x="478.5" y="808.5" width="45" height="35">
+				<alias color="black" font_style="italic" font_color="black" uid="1780" x="478.5" y="808.5" width="45" height="35">
 					<of>Cumulative_Industry_Output</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1823" x="5690" y="562" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1821" x="5690" y="562" width="18" height="18">
 					<of>technology_switches</of>
 				</alias>
-				<alias color="#651818" font_style="italic" font_color="#651818" uid="1921" x="98" y="1486" width="18" height="18">
+				<alias color="#651818" font_style="italic" font_color="#651818" uid="1922" x="98" y="1486" width="18" height="18">
 					<of>Output_gpy_by_Technology</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="8.13277" uid="1775" x="5147" y="628" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="8.13277" uid="1773" x="5147" y="628" width="18" height="18">
 					<of>discount_factor_loan</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1501" x="2484" y="1138" width="18" height="18">
@@ -11435,23 +10775,38 @@ COMMENTS: </doc>
 				<alias color="red" font_style="italic" font_color="red" label_angle="101.815" uid="1592" x="5038" y="653" width="18" height="18">
 					<of>Debt_Interest_Rate_as_Pct</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1928" x="547" y="1479" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="1929" x="547" y="1479" width="18" height="18">
 					<of>Other_rev_net_of_vbl_cost_per_gal</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1879" x="2928" y="437" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1877" x="2928" y="437" width="18" height="18">
 					<of>Retirement_Fraction</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="1887" x="1957" y="830" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="1885" x="1957" y="830" width="18" height="18">
 					<of>IBR_PC_experience</of>
 				</alias>
 				<alias color="red" font_style="italic" font_color="red" uid="1721" x="1272" y="1269" width="18" height="18">
 					<of>Pilot_Progress_Ratios</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="1910" x="5666" y="724" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="1911" x="5666" y="724" width="18" height="18">
 					<of>Expected_Plant_Output</of>
 				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="1933" x="3248" y="695" width="18" height="18">
+					<of>Coproduct_Coeffs</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1934" x="3383" y="636" width="18" height="18">
+					<of>Coproduct_Price_Input</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="1909" x="4576" y="100" width="18" height="18">
+					<of>Coproduct_Price_Input</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="1908" x="4482" y="129" width="18" height="18">
+					<of>Coproduct_Coeffs</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="1938" x="2379" y="878" width="18" height="18">
+					<of>Active_Product_Switches</of>
+				</alias>
 			</view>
-			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+			<view isee:show_pages="true" background="white" page_width="1012" page_height="696" home_view="true" type="interface">
 				<style/>
 			</view>
 			<isee:templates/>

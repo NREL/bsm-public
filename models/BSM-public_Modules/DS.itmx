@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
 	<header>
-		<smile version="1.0" namespace="std, isee" uses_arrays="2"/>
+		<smile version="1.0" namespace="std, isee" uses_arrays="1"/>
 		<name>DS</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
-		<dim name="VehicleTech">
-			<elem name="Gas"/>
-			<elem name="Diesel"/>
-			<elem name="PlugInElectric"/>
-			<elem name="Hydrogen"/>
-			<elem name="CNG"/>
-			<elem name="FFV"/>
-			<elem name="GasHev"/>
-			<elem name="GasPhev"/>
-			<elem name="MethanolPropane"/>
-			<elem name="RSPV"/>
-			<elem name="Scenario"/>
-		</dim>
 		<dim name="Region">
 			<elem name="NE"/>
 			<elem name="A"/>
@@ -39,13 +26,19 @@
 			<elem name="P"/>
 		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -263,9 +256,9 @@ COMMENTS: </doc>
 			<stock name="With Hi Blend RP">
 				<doc>DEFINITION: Stock of Stations (By Region) with Hi Blend Capacity
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -279,7 +272,7 @@ COMMENTS: </doc>
 			<flow name="repurposing to HiBlend">
 				<doc>DEFINITION: flux in stations per yr of deciding to repurpose mid-grade tankage/equipment
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -294,7 +287,7 @@ COMMENTS: </doc>
 			<flow name="putting on table RP">
 				<doc>DEFINITION: flux in stations per yr of putting repurpose decision on the table for consideration
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -307,13 +300,6 @@ COMMENTS: </doc>
 				<units>Stations/Years</units>
 			</flow>
 			<aux name="Hi Blend Volumetric Offset" access="input">
-				<doc>DEFINITION: module interface to IP.Hi Blend volumetric Offset
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -424,7 +410,7 @@ COMMENTS: </doc>
 			<flow name="taking off table RP">
 				<doc>DEFINITION: flux in stations per yr of taking repurpose decision off the table from consideration
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -461,7 +447,7 @@ COMMENTS: </doc>
 			<aux name="completing consideration repurpose">
 				<doc>DEFINITION: flux in stations per yr of completing investment investment decision
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -475,9 +461,9 @@ COMMENTS: </doc>
 			<aux name="total RP by region">
 				<doc>DEFINITION: Total number of repurposable Stations By Region
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -487,13 +473,6 @@ COMMENTS: </doc>
 				<units>Stations</units>
 			</aux>
 			<aux name="Total potential hi blend consn from VM" access="input">
-				<doc>DEFINITION: module interface to V.regional potential hi blend consn FFV
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -527,13 +506,6 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Hi Blend Pump Price" access="input">
-				<doc>DEFINITION: module interface to IP.Hi Blend Pump Price
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -541,7 +513,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="regional sales vol gas eq per mo">
-				<doc>DEFINITION: Calculates the regional amt of gas equivalent per month coming out of all stations
+				<doc>DEFINITION: Calculates the regional amount of gas equivalent per month coming out of all stations in the region
 
 UNITS: gallons per month
 
@@ -555,7 +527,7 @@ COMMENTS: </doc>
 				<units>gallons per month</units>
 			</aux>
 			<aux name="Frac FCI subs">
-				<doc>DEFINITION: Fraction of Fixed Capital Expense that is subsidized by gov&apos;t
+				<doc>DEFINITION: Fraction of Fixed Capital Expense that is subsidized 
 
 UNITS: Unitless
 
@@ -742,12 +714,12 @@ COMMENTS: </doc>
 				<eqn>7</eqn>
 				<units>years</units>
 			</aux>
-			<aux name="total with hi blend\nby region">
+			<aux name="total with hi blend by region">
 				<doc>DEFINITION: Total number of stations (By Region) with Hi Blend Capacity
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -757,7 +729,7 @@ COMMENTS: </doc>
 				<units>Stations</units>
 			</aux>
 			<stock name="Considering Investment">
-				<doc>DEFINITION: stock of stations (By Region By Owner) currently contemplating addition of Hi-Blend Capability
+				<doc>DEFINITION: stock of stations (By Region) currently contemplating addition of Hi-Blend Capability
 
 UNITS: Stations
 
@@ -891,7 +863,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per visit
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1083,7 +1055,7 @@ COMMENTS: </doc>
 				<units>Visits per year</units>
 			</aux>
 			<aux name="discount factor 1">
-				<doc>DEFINITION: Calculates discount factor for doing NPV calculation for portion of project lifetime up to end of depreciation period OR end of loan term, whichever is SMALLER.
+				<doc>DEFINITION: Calculates discount factor for  NPV calculation for portion of project lifetime up to end of depreciation period OR end of loan term, whichever is SMALLER.
 
 UNITS: years
 
@@ -1098,7 +1070,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 				<units>years</units>
 			</aux>
 			<aux name="NPV Investment">
-				<doc>DEFINITION: Net Present Value of potential investment in tankage/eqip, discounted to now in simulation
+				<doc>DEFINITION: Net Present Value of potential investment in tankage/equip, discounted to current time in simulation
 
 UNITS: US Dollars
 
@@ -1172,7 +1144,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 				<units>years</units>
 			</aux>
 			<aux name="mnthly station traffic">
-				<doc>DEFINITION: Expected  monthly visits flux 
+				<doc>DEFINITION: Expected  monthly visits flux
 
 UNITS: visits per month
 
@@ -1224,7 +1196,36 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>0.7</eqn>
+				<element subscript="NE">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.7</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.7</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Frac Tankage Debt Financed">
@@ -1246,7 +1247,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1313,7 +1314,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1508,13 +1509,6 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 				<units>years</units>
 			</aux>
 			<aux name="Expected Hi Blend Cost after Subz" access="input">
-				<doc>DEFINITION: module interface to IP.Expected PoU Hi Blend Cost after Subz
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1684,7 +1678,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1725,7 +1719,7 @@ COMMENTS: </doc>
 			<aux name="total initial stations">
 				<doc>DEFINITION: Initial count of dispensing stations in US
 
-UNITS: stations
+UNITS: Stations
 
 TYPE: scalar | constant
 
@@ -1860,13 +1854,6 @@ COMMENTS: </doc>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="Total User Wtd HiBlend Share from Fuel Use" access="input">
-				<doc>DEFINITION: module interface to FU.Total User Wtd Hi Blend Share
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1916,10 +1903,10 @@ COMMENTS: </doc>
 				</element>
 				<units>Unitless</units>
 			</aux>
-			<aux name="total hi blend investable\nby region">
+			<aux name="total hi blend investable by region">
 				<doc>DEFINITION: total stations who must invest or have invested in hi blend tankage and equipment (equals total stations net of repurposable/repurposed stations
 
-UNITS: stations
+UNITS: Stations
 
 TYPE: array | internal calculation
 
@@ -1931,7 +1918,7 @@ COMMENTS: </doc>
 				<units>Stations</units>
 			</aux>
 			<aux name="NPV Investment RP">
-				<doc>DEFINITION: Net Present Value of potential investment in tankage/eqip, discounted to now in simulation
+				<doc>DEFINITION: Net Present Value of potential investment in tankage/eqip, discounted to current time in simulation
 
 UNITS: US Dollars
 
@@ -1962,9 +1949,9 @@ COMMENTS: </doc>
 			<stock name="With Hi Blend Investment">
 				<doc>DEFINITION: stock of stations (By Region) with Hi Blend Capacity
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1978,7 +1965,7 @@ COMMENTS: </doc>
 			<flow name="investing in HiBlend">
 				<doc>DEFINITION: flux in stations per yr of investing in hi blend tankage and equipment
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -1993,7 +1980,7 @@ COMMENTS: </doc>
 			<flow name="putting on the table">
 				<doc>DEFINITION: flux in stations per yr of putting investment decision on the table for consideration
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -2109,7 +2096,7 @@ COMMENTS: </doc>
 			<flow name="taking off the table">
 				<doc>DEFINITION: flux in stations per yr of taking investment decision off the table from consideration
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -2124,7 +2111,7 @@ COMMENTS: </doc>
 			<aux name="completing consideration">
 				<doc>DEFINITION: flux in stations per yr of completing investment investment decision
 
-UNITS: stations/years
+UNITS: Stations/Years
 
 TYPE: array | internal calculation
 
@@ -2138,9 +2125,9 @@ COMMENTS: </doc>
 			<aux name="initial not considering repurpose">
 				<doc>DEFINITION: Initial count of stations, by region by owner, with repurposable tankage, who are NOT considering repurpose
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2167,9 +2154,9 @@ COMMENTS: </doc>
 			<aux name="initial with hi blend repurposed">
 				<doc>DEFINITION: Initial count of stations, by region, with repurposable tankage, who have ALREADY repurposed their tankage
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2181,9 +2168,9 @@ COMMENTS: </doc>
 			<aux name="initial not considering Invest">
 				<doc>DEFINITION: Initial count of stations, by region who are NOT considering investment in new hiblend tankage
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2210,9 +2197,9 @@ COMMENTS: </doc>
 			<aux name="initial with hi blend invest">
 				<doc>DEFINITION: Initial count of stations, by region, who have already invested in Hiblend tankage
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2224,9 +2211,9 @@ COMMENTS: </doc>
 			<aux name="total initial stations by region">
 				<doc>DEFINITION: Initial count of dispensing stations in US, distributed by region
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2240,7 +2227,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2278,12 +2265,12 @@ COMMENTS: </doc>
 				</element>
 				<units>Unitless</units>
 			</aux>
-			<aux name="initial repurposable\nstations">
+			<aux name="initial repurposable stations">
 				<doc>DEFINITION: Initial count of stations, by region, WITH repurposable tankage
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2292,12 +2279,12 @@ COMMENTS: </doc>
 				<eqn>total_initial_stations_by_region * initial_frac_ALL_stations_with_repurposable_tankage</eqn>
 				<units>Stations</units>
 			</aux>
-			<aux name="initial non repurposable\nstations">
+			<aux name="initial non repurposable stations">
 				<doc>DEFINITION: Initial count of stations, by region, WITHOUT repurposable tankage
 
-UNITS: stations
+UNITS: Stations
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2311,7 +2298,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2350,11 +2337,11 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="initial frac stations considering repurpose">
-				<doc>DEFINITION: Initial fraction of stations, by region,, with repurposable tankage,  that are considering repurposing
+				<doc>DEFINITION: Initial fraction of stations, by region, with repurposable tankage,  that are considering repurposing
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2397,7 +2384,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2440,7 +2427,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | constant 
+TYPE: array | constant
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2478,10 +2465,10 @@ COMMENTS: </doc>
 				</element>
 				<units>Unitless</units>
 			</aux>
-			<aux name="total stations by\nregion">
+			<aux name="total stations by region">
 				<doc>DEFINITION: Total number of stations (By Region) in system
 
-UNITS: stations
+UNITS: Stations
 
 TYPE: array | internal calculation | sector interface
 
@@ -2493,13 +2480,6 @@ COMMENTS: </doc>
 				<units>Stations</units>
 			</aux>
 			<aux name="Total Potential Fuel Consn Gasoline from VM" access="input">
-				<doc>DEFINITION: module interface to V.Regional Potential gasoline consn
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -2511,7 +2491,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2577,7 +2557,7 @@ COMMENTS: </doc>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Expected Taxable Income 2 RP">
-				<doc>DEFINITION: Calculates expected taxable income during portion of plant life between end of depreciation period and end of loan term.
+				<doc>DEFINITION: Calculates expected taxable income during portion of project life between end of depreciation period and end of loan term.
 
 UNITS: US dollars per year
 
@@ -2710,7 +2690,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: array | graphical function 
+TYPE: array | graphical function
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2789,21 +2769,6 @@ COMMENTS: </doc>
 				<eqn>Station_Coverage[Region]</eqn>
 				<units>Unitless</units>
 			</aux>
-			<aux name="VM regional vehicle penetration by tech" access="input">
-				<doc>DEFINITION: module interface to V.regional V share by tech
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
-				<dimensions>
-					<dim name="VehicleTech"/>
-					<dim name="Region"/>
-				</dimensions>
-				<eqn>0</eqn>
-				<units>Unitless</units>
-			</aux>
 			<aux name="Expected Share Current Traffic to higher blends">
 				<doc>DEFINITION: Calculation of expected share of current hi-blend capable station traffic that will make switch to using hiblend if tankage were present
 
@@ -2819,27 +2784,20 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="volumetric offset for investment">
-				<doc>DEFINITION: Calculates energy-offset for hi blend vs regular gasoliie use--used as input to frequency of visits associated with hi blend use
+				<doc>DEFINITION: Calculates energy-offset for hi blend vs regular gasoline use--used as input to frequency of visits associated with hi blend use
 
 UNITS: Unitless
 
-TYPE: array | internal calculation 
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Hi_Blend_Volumetric_Offset</eqn>
+				<eqn> Hi_Blend_Volumetric_Offset</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="IP avg per gal markup" access="input">
-				<doc>DEFINITION: module interface to IP.avg per gal markup
-
-UNITS: USD per gallon
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="alt fuel pump price">
@@ -2872,639 +2830,173 @@ COMMENTS: </doc>
 			</aux>
 			<group name="Outputs to Other Modules 2" run="false"/>
 			<group name="Inputs from Other Modules 2" run="false">
-				<entity name="Hi_Blend_Pump_Price"/>
-				<entity name="Expected_Hi_Blend_Cost_after_Subz"/>
 				<entity name="Hi_Blend_Volumetric_Offset"/>
-				<entity name="IP_avg_per_gal_markup"/>
-				<entity name="Total_User_Wtd_HiBlend_Share_from_Fuel_Use"/>
 				<entity name="Total_Potential_Fuel_Consn_Gasoline_from_VM"/>
-				<entity name="VM_regional_vehicle_penetration_by_tech"/>
+				<entity name="Total_User_Wtd_HiBlend_Share_from_Fuel_Use"/>
 				<entity name="Total_potential_hi_blend_consn_from_VM"/>
+				<entity name="IP_avg_per_gal_markup"/>
+				<entity name="Expected_Hi_Blend_Cost_after_Subz"/>
+				<entity name="Hi_Blend_Pump_Price"/>
 			</group>
 			<group name="Input Data and Initializations 1" run="false">
-				<entity name="NPV_Threshold_for_Investment"/>
-				<entity name="debt_interest_rate_as_frac"/>
-				<entity name="total_initial_stations"/>
-				<entity name="Frac_FCI_subs"/>
-				<entity name="FCI_subs_stop_time"/>
-				<entity name="initial_frac_stations_considering_repurpose"/>
-				<entity name="one_station"/>
-				<entity name="Incremental_Traffic_Fraction"/>
-				<entity name="total_project_length"/>
 				<entity name="initial_frac_ALL_stations_with_repurposable_tankage"/>
-				<entity name="FCI_subs_switch"/>
-				<entity name="dwell_time_for_considering_investment"/>
-				<entity name="Expected_FCI_Repurposing_Midgrade"/>
-				<entity name="term_of_loan"/>
 				<entity name="Expected_Share_Inc_Traffic_to_Hi_Blend"/>
-				<entity name="Gross_Expected_Other_Rev_per_visit"/>
-				<entity name="depreciation_period"/>
-				<entity name="reqd_rate_of_return"/>
 				<entity name="Expected_Tax_Rate"/>
-				<entity name="regional_dispensing_station_distn"/>
-				<entity name="initial_frac_stations_considering_invest"/>
+				<entity name="debt_interest_rate_as_frac"/>
+				<entity name="total_project_length"/>
+				<entity name="Frac_FCI_subs"/>
+				<entity name="dwell_time_for_considering_investment"/>
+				<entity name="repurp_subs_stop_time"/>
+				<entity name="reqd_rate_of_return"/>
 				<entity name="initial_frac_stations_with_hi_blend_invest"/>
+				<entity name="initial_frac_stations_considering_repurpose"/>
+				<entity name="Gross_Expected_Other_Rev_per_visit"/>
+				<entity name="initial_frac_stations_considering_invest"/>
+				<entity name="FCI_subs_switch"/>
+				<entity name="months_per_year"/>
+				<entity name="initial_frac_stations_with_repurposed_tankage"/>
+				<entity name="Volume_Per_Visit"/>
+				<entity name="one_station"/>
+				<entity name="Margin_on_Other_Rev"/>
 				<entity name="Repurpose_subs_switch"/>
 				<entity name="Share_Current_HiBlend_CapableTraffic_to_Hi_Blend_Weighting_Factor"/>
-				<entity name="Margin_on_Other_Rev"/>
-				<entity name="initial_frac_stations_with_repurposed_tankage"/>
+				<entity name="term_of_loan"/>
+				<entity name="NPV_Threshold_for_Investment"/>
+				<entity name="Incremental_Traffic_Fraction"/>
+				<entity name="total_initial_stations"/>
 				<entity name="rate_of_putting_on_table"/>
-				<entity name="repurp_subs_stop_time"/>
-				<entity name="months_per_year"/>
+				<entity name="Expected_FCI_Repurposing_Midgrade"/>
+				<entity name="regional_dispensing_station_distn"/>
+				<entity name="depreciation_period"/>
 				<entity name="Expected_FCI_New_Tankage_and_Equip"/>
-				<entity name="Volume_Per_Visit"/>
+				<entity name="FCI_subs_stop_time"/>
 			</group>
 			<group name="Pro Forma Financials and NPV Calculations" run="false">
-				<entity name="Net_Expected_Inc_Other_Rev"/>
-				<entity name="Expected_Inc_Hi_Blend_Volume_Current_Traffic"/>
-				<entity name="Expected_Tax_2"/>
 				<entity name="Per_Station_Repurpose_Subs"/>
-				<entity name="NPV_Taxes_RP"/>
-				<entity name="Annual_Loan_Payment_RP"/>
-				<entity name="Cume_Loan_Payment"/>
-				<entity name="Expected_Tax_1_RP"/>
-				<entity name="discount_factor_2"/>
-				<entity name="Current_Gas_Volume"/>
-				<entity name="length_of_period_2"/>
-				<entity name="Rough_Estimate_Annual_Interest_RP"/>
-				<entity name="Expected_Inc_Gas_Visits"/>
-				<entity name="discount_factor_3"/>
-				<entity name="Annual_Loan_Payment"/>
-				<entity name="Expected_Higher_Blend_Visits_from_Current_Traffic"/>
-				<entity name="Cume_Interest_Payment_RP"/>
-				<entity name="Initial_Equity_Investment"/>
-				<entity name="NPV_Taxes_1_RP"/>
-				<entity name="Expected_Tax_3"/>
-				<entity name="discount_factor_1"/>
-				<entity name="Expected_Gas_Visits_from_Current_Traffic"/>
-				<entity name="NPV_Net_Inc_Revs"/>
-				<entity name="Equity_Fraction"/>
-				<entity name="Expected_Taxable_Income_1"/>
-				<entity name="length_of_period_1"/>
-				<entity name="NPV_Taxes_1"/>
-				<entity name="FCI_New_Tankage_Equip"/>
-				<entity name="Expected_Taxable_Income_1_RP"/>
-				<entity name="NPV_Investment_RP"/>
-				<entity name="Expected_Tax_1"/>
-				<entity name="volumetric_offset_for_investment"/>
-				<entity name="Total_Net_Expected_Incremental_Revenues"/>
-				<entity name="discount_factor_Loan_Payment_RP"/>
-				<entity name="impact_station_coverage_on_incremental_traffic"/>
-				<entity name="discount_factor_Loan_Payment"/>
-				<entity name="Expected_Incremental_Traffic"/>
-				<entity name="Expected_Share_Current_Traffic_to_Hi_Blend"/>
-				<entity name="Expected_Taxable_Income_2"/>
-				<entity name="PV_Loan_Payment"/>
-				<entity name="Max_share_market_Hi_Blend_Gas_Equivalent"/>
-				<entity name="discount_factor_loan"/>
-				<entity name="alt_fuel_pump_price"/>
-				<entity name="NPV_Taxes_3"/>
-				<entity name="regional_sales_vol_gas_eq_per_mo"/>
-				<entity name="Expected_Inc_Hi_Blend_Visits"/>
-				<entity name="alt_fuel_POU_cost"/>
-				<entity name="Expected_Inc_Hi_Blend_Volume_Inc_Visits"/>
-				<entity name="Expected_Inc_Hi_Blend_Rev"/>
-				<entity name="Expected_Inc_Hi_Blend_Cost"/>
-				<entity name="Actual_User_Weighted_Hi_Blend_Share"/>
-				<entity name="NPV_Taxes_2_RP"/>
-				<entity name="Per_Station_FCI_Subs"/>
-				<entity name="Cume_Interest_Payment"/>
-				<entity name="Expected_Share_Current_Traffic_to_higher_blends"/>
-				<entity name="Net_Expected_Hi_Blend_Inc_Rev"/>
-				<entity name="NPV_Taxes_2"/>
-				<entity name="estimated_depreciation_expense"/>
-				<entity name="Expected_Gas_Volume_from_Current_Traffic_after_invest"/>
-				<entity name="Loan_Principal"/>
-				<entity name="Expected_Taxable_Income_3"/>
-				<entity name="Initial_Equity_Investment_RP"/>
-				<entity name="Loan_Principal_RP"/>
-				<entity name="implementation_time"/>
-				<entity name="Frac_Tankage_Debt_Financed"/>
-				<entity name="Rough_Estimate_Annual_Interest"/>
-				<entity name="avg_per_station_vol_gas_eq_per_mo"/>
-				<entity name="mnthly_station_traffic"/>
-				<entity name="NPV_Taxes"/>
-				<entity name="Expected_Tax_2_RP"/>
-				<entity name="PV_Loan_Payment_RP"/>
-				<entity name="Expected_Inc_Hi_Blend_Volume"/>
-				<entity name="Net_Expected_Other_Revenue_per_Visit"/>
-				<entity name="Expected_Taxable_Income_2_RP"/>
-				<entity name="Expected_Inc_Gas_Volume_Current_Traffic"/>
-				<entity name="Expected_Inc_Gas_Volume"/>
 				<entity name="Cume_Loan_Payment_RP"/>
-				<entity name="FCI_Repurposing_Midgrade"/>
-				<entity name="estimated_depreciation_expense_RP"/>
-				<entity name="Expected_Inc_Gas_Volume_Inc_Visits"/>
-				<entity name="Net_Exp_Inc_Gas_Rev"/>
+				<entity name="Expected_Tax_3"/>
+				<entity name="discount_factor_Loan_Payment"/>
+				<entity name="Total_Net_Expected_Incremental_Revenues"/>
+				<entity name="Expected_Inc_Hi_Blend_Visits"/>
+				<entity name="NPV_Taxes"/>
 				<entity name="annual_station_traffic"/>
+				<entity name="NPV_Taxes_RP"/>
+				<entity name="Expected_Inc_Hi_Blend_Rev"/>
+				<entity name="Net_Exp_Inc_Gas_Rev"/>
+				<entity name="Expected_Share_Current_Traffic_to_Hi_Blend"/>
 				<entity name="NPV_Investment"/>
+				<entity name="NPV_Taxes_1_RP"/>
+				<entity name="Expected_Gas_Visits_from_Current_Traffic"/>
+				<entity name="estimated_depreciation_expense"/>
+				<entity name="Expected_Tax_2"/>
+				<entity name="Equity_Fraction"/>
+				<entity name="Expected_Taxable_Income_3"/>
+				<entity name="FCI_New_Tankage_Equip"/>
+				<entity name="alt_fuel_pump_price"/>
+				<entity name="Net_Expected_Other_Revenue_per_Visit"/>
+				<entity name="Initial_Equity_Investment"/>
+				<entity name="discount_factor_loan"/>
+				<entity name="mnthly_station_traffic"/>
+				<entity name="NPV_Taxes_3"/>
+				<entity name="Actual_User_Weighted_Hi_Blend_Share"/>
+				<entity name="Loan_Principal_RP"/>
+				<entity name="Expected_Tax_1"/>
+				<entity name="Expected_Inc_Gas_Volume"/>
+				<entity name="Rough_Estimate_Annual_Interest"/>
+				<entity name="Net_Expected_Inc_Other_Rev"/>
+				<entity name="Expected_Share_Current_Traffic_to_higher_blends"/>
+				<entity name="NPV_Investment_RP"/>
+				<entity name="discount_factor_3"/>
+				<entity name="Frac_Tankage_Debt_Financed"/>
+				<entity name="Expected_Tax_1_RP"/>
+				<entity name="implementation_time"/>
+				<entity name="Expected_Inc_Hi_Blend_Cost"/>
+				<entity name="Initial_Equity_Investment_RP"/>
+				<entity name="Loan_Principal"/>
+				<entity name="Max_share_market_Hi_Blend_Gas_Equivalent"/>
+				<entity name="Expected_Higher_Blend_Visits_from_Current_Traffic"/>
+				<entity name="Expected_Inc_Hi_Blend_Volume_Current_Traffic"/>
+				<entity name="Expected_Tax_2_RP"/>
+				<entity name="discount_factor_2"/>
+				<entity name="Expected_Taxable_Income_1_RP"/>
+				<entity name="NPV_Net_Inc_Revs"/>
+				<entity name="discount_factor_Loan_Payment_RP"/>
+				<entity name="Expected_Inc_Hi_Blend_Volume"/>
+				<entity name="Cume_Interest_Payment"/>
+				<entity name="alt_fuel_POU_cost"/>
+				<entity name="Expected_Taxable_Income_1"/>
+				<entity name="Expected_Inc_Hi_Blend_Volume_Inc_Visits"/>
+				<entity name="Cume_Interest_Payment_RP"/>
+				<entity name="estimated_depreciation_expense_RP"/>
+				<entity name="Net_Expected_Hi_Blend_Inc_Rev"/>
+				<entity name="Expected_Inc_Gas_Volume_Current_Traffic"/>
+				<entity name="Expected_Taxable_Income_2"/>
+				<entity name="length_of_period_2"/>
+				<entity name="Expected_Incremental_Traffic"/>
+				<entity name="impact_station_coverage_on_incremental_traffic"/>
+				<entity name="Rough_Estimate_Annual_Interest_RP"/>
+				<entity name="Per_Station_FCI_Subs"/>
+				<entity name="FCI_Repurposing_Midgrade"/>
+				<entity name="length_of_period_1"/>
+				<entity name="regional_sales_vol_gas_eq_per_mo"/>
+				<entity name="PV_Loan_Payment"/>
+				<entity name="Expected_Taxable_Income_2_RP"/>
+				<entity name="Current_Gas_Volume"/>
+				<entity name="NPV_Taxes_2"/>
+				<entity name="Cume_Loan_Payment"/>
+				<entity name="discount_factor_1"/>
+				<entity name="NPV_Taxes_2_RP"/>
+				<entity name="volumetric_offset_for_investment"/>
+				<entity name="Expected_Inc_Gas_Volume_Inc_Visits"/>
+				<entity name="Expected_Inc_Gas_Visits"/>
+				<entity name="Expected_Gas_Volume_from_Current_Traffic_after_invest"/>
+				<entity name="Annual_Loan_Payment"/>
+				<entity name="PV_Loan_Payment_RP"/>
+				<entity name="avg_per_station_vol_gas_eq_per_mo"/>
+				<entity name="Annual_Loan_Payment_RP"/>
+				<entity name="NPV_Taxes_1"/>
 			</group>
 			<group name="Station Adoption Logic" run="false">
-				<entity name="Not_Considering_Investment"/>
-				<entity name="Station_Coverage"/>
-				<entity name="repurposing_to_HiBlend"/>
-				<entity name="completing_consideration"/>
-				<entity name="With_Hi_Blend_Investment"/>
-				<entity name="Considering_RP"/>
-				<entity name="completing_consideration_repurpose"/>
-				<entity name="total_stations_by_region"/>
-				<entity name="total_hi_blend_investable_by_region"/>
-				<entity name="taking_off_table_RP"/>
-				<entity name="With_Hi_Blend_RP"/>
-				<entity name="investment_hit_rate_RP"/>
-				<entity name="putting_on_table_RP"/>
-				<entity name="taking_off_the_table"/>
-				<entity name="total_with_hi_blend_by_region"/>
 				<entity name="putting_on_the_table"/>
 				<entity name="total_RP_by_region"/>
-				<entity name="Considering_Investment"/>
+				<entity name="putting_on_table_RP"/>
 				<entity name="investing_in_HiBlend"/>
-				<entity name="investment_hit_rate"/>
+				<entity name="taking_off_table_RP"/>
+				<entity name="Considering_Investment"/>
+				<entity name="total_stations_by_region"/>
+				<entity name="total_hi_blend_investable_by_region"/>
+				<entity name="completing_consideration"/>
+				<entity name="Considering_RP"/>
+				<entity name="With_Hi_Blend_Investment"/>
+				<entity name="completing_consideration_repurpose"/>
+				<entity name="Not_Considering_Investment"/>
 				<entity name="Not_Considering_RP"/>
+				<entity name="investment_hit_rate"/>
+				<entity name="total_with_hi_blend_by_region"/>
+				<entity name="With_Hi_Blend_RP"/>
+				<entity name="taking_off_the_table"/>
+				<entity name="Station_Coverage"/>
+				<entity name="repurposing_to_HiBlend"/>
+				<entity name="investment_hit_rate_RP"/>
 			</group>
 			<group name="Station Initialization Logic" run="false">
-				<entity name="initial_not_considering_Invest"/>
-				<entity name="initial_considering_invest"/>
-				<entity name="initial_with_hi_blend_invest"/>
-				<entity name="initial_considering_repurpose"/>
-				<entity name="total_initial_stations_by_region"/>
 				<entity name="initial_with_hi_blend_repurposed"/>
-				<entity name="initial_non_repurposable_stations"/>
+				<entity name="initial_with_hi_blend_invest"/>
 				<entity name="initial_not_considering_repurpose"/>
+				<entity name="total_initial_stations_by_region"/>
+				<entity name="initial_non_repurposable_stations"/>
+				<entity name="initial_considering_invest"/>
 				<entity name="initial_repurposable_stations"/>
+				<entity name="initial_considering_repurpose"/>
+				<entity name="initial_not_considering_Invest"/>
 			</group>
-			<isee:dependencies>
-				<var name="Considering_RP">
-					<in>initial_considering_repurpose</in>
-				</var>
-				<var name="With_Hi_Blend_RP">
-					<in>initial_with_hi_blend_repurposed</in>
-				</var>
-				<var name="repurposing_to_HiBlend">
-					<in>investment_hit_rate_RP</in>
-					<in>completing_consideration_repurpose</in>
-				</var>
-				<var name="putting_on_table_RP">
-					<in>rate_of_putting_on_table</in>
-					<in>Not_Considering_RP</in>
-				</var>
-				<var name="investment_hit_rate_RP">
-					<in>NPV_Threshold_for_Investment</in>
-					<in>NPV_Investment_RP</in>
-				</var>
-				<var name="Not_Considering_RP">
-					<in>initial_not_considering_repurpose</in>
-				</var>
-				<var name="taking_off_table_RP">
-					<in>completing_consideration_repurpose</in>
-					<in>investment_hit_rate_RP</in>
-				</var>
-				<var name="completing_consideration_repurpose">
-					<in>dwell_time_for_considering_investment</in>
-					<in>Considering_RP</in>
-				</var>
-				<var name="total_RP_by_region">
-					<in>Considering_RP</in>
-					<in>With_Hi_Blend_RP</in>
-					<in>Not_Considering_RP</in>
-				</var>
-				<var name="Station_Coverage">
-					<in>total_stations_by_region</in>
-					<in>total_with_hi_blend_by_region</in>
-				</var>
-				<var name="regional_sales_vol_gas_eq_per_mo">
-					<in>Total_Potential_Fuel_Consn_Gasoline_from_VM</in>
-					<in>months_per_year</in>
-				</var>
-				<var name="FCI_New_Tankage_Equip">
-					<in>FCI_subs_stop_time</in>
-					<in>implementation_time</in>
-					<in>Frac_FCI_subs</in>
-					<in>Expected_FCI_New_Tankage_and_Equip</in>
-					<in>FCI_subs_switch</in>
-				</var>
-				<var name="FCI_Repurposing_Midgrade">
-					<in>Expected_FCI_Repurposing_Midgrade</in>
-					<in>Repurpose_subs_switch</in>
-					<in>repurp_subs_stop_time</in>
-					<in>implementation_time</in>
-					<in>Frac_FCI_subs</in>
-				</var>
-				<var name="Per_Station_FCI_Subs">
-					<in>Expected_FCI_New_Tankage_and_Equip</in>
-					<in>FCI_New_Tankage_Equip</in>
-				</var>
-				<var name="Per_Station_Repurpose_Subs">
-					<in>FCI_Repurposing_Midgrade</in>
-					<in>Expected_FCI_Repurposing_Midgrade</in>
-				</var>
-				<var name="total_with_hi_blend_by_region">
-					<in>With_Hi_Blend_Investment</in>
-					<in>With_Hi_Blend_RP</in>
-				</var>
-				<var name="Considering_Investment">
-					<in>initial_considering_invest</in>
-				</var>
-				<var name="Net_Expected_Other_Revenue_per_Visit">
-					<in>Gross_Expected_Other_Rev_per_visit</in>
-					<in>Margin_on_Other_Rev</in>
-				</var>
-				<var name="Expected_Inc_Gas_Volume">
-					<in>Expected_Inc_Gas_Volume_Inc_Visits</in>
-					<in>Expected_Inc_Gas_Volume_Current_Traffic</in>
-				</var>
-				<var name="Expected_Inc_Gas_Volume_Current_Traffic">
-					<in>Current_Gas_Volume</in>
-					<in>Expected_Gas_Volume_from_Current_Traffic_after_invest</in>
-				</var>
-				<var name="Expected_Inc_Gas_Visits">
-					<in>Expected_Incremental_Traffic</in>
-					<in>Expected_Share_Inc_Traffic_to_Hi_Blend</in>
-				</var>
-				<var name="estimated_depreciation_expense">
-					<in>FCI_New_Tankage_Equip</in>
-					<in>depreciation_period</in>
-				</var>
-				<var name="Expected_Inc_Gas_Volume_Inc_Visits">
-					<in>Volume_Per_Visit</in>
-					<in>Expected_Inc_Gas_Visits</in>
-				</var>
-				<var name="Expected_Incremental_Traffic">
-					<in>annual_station_traffic</in>
-					<in>impact_station_coverage_on_incremental_traffic</in>
-					<in>Incremental_Traffic_Fraction</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Volume_Inc_Visits">
-					<in>Volume_Per_Visit</in>
-					<in>Expected_Inc_Hi_Blend_Visits</in>
-				</var>
-				<var name="Net_Exp_Inc_Gas_Rev">
-					<in>IP_avg_per_gal_markup</in>
-					<in>Expected_Inc_Gas_Volume</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Volume">
-					<in>Expected_Inc_Hi_Blend_Volume_Current_Traffic</in>
-					<in>Expected_Inc_Hi_Blend_Volume_Inc_Visits</in>
-				</var>
-				<var name="Net_Expected_Inc_Other_Rev">
-					<in>Expected_Incremental_Traffic</in>
-					<in>Net_Expected_Other_Revenue_per_Visit</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Rev">
-					<in>alt_fuel_pump_price</in>
-					<in>Expected_Inc_Hi_Blend_Volume</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Visits">
-					<in>Expected_Share_Inc_Traffic_to_Hi_Blend</in>
-					<in>Expected_Incremental_Traffic</in>
-				</var>
-				<var name="discount_factor_2">
-					<in>reqd_rate_of_return</in>
-					<in>length_of_period_2</in>
-				</var>
-				<var name="annual_station_traffic">
-					<in>months_per_year</in>
-					<in>mnthly_station_traffic</in>
-				</var>
-				<var name="discount_factor_1">
-					<in>length_of_period_1</in>
-					<in>reqd_rate_of_return</in>
-				</var>
-				<var name="NPV_Investment">
-					<in>NPV_Taxes</in>
-					<in>NPV_Net_Inc_Revs</in>
-					<in>PV_Loan_Payment</in>
-					<in>Initial_Equity_Investment</in>
-				</var>
-				<var name="Current_Gas_Volume">
-					<in>Volume_Per_Visit</in>
-					<in>annual_station_traffic</in>
-				</var>
-				<var name="Expected_Gas_Visits_from_Current_Traffic">
-					<in>Expected_Share_Current_Traffic_to_higher_blends</in>
-					<in>annual_station_traffic</in>
-				</var>
-				<var name="Expected_Share_Current_Traffic_to_Hi_Blend">
-					<in>Share_Current_HiBlend_CapableTraffic_to_Hi_Blend_Weighting_Factor</in>
-					<in>Actual_User_Weighted_Hi_Blend_Share</in>
-					<in>Max_share_market_Hi_Blend_Gas_Equivalent</in>
-				</var>
-				<var name="discount_factor_3">
-					<in>reqd_rate_of_return</in>
-					<in>total_project_length</in>
-				</var>
-				<var name="mnthly_station_traffic">
-					<in>Volume_Per_Visit</in>
-					<in>avg_per_station_vol_gas_eq_per_mo</in>
-				</var>
-				<var name="Expected_Higher_Blend_Visits_from_Current_Traffic">
-					<in>volumetric_offset_for_investment</in>
-					<in>Expected_Share_Current_Traffic_to_higher_blends</in>
-					<in>annual_station_traffic</in>
-				</var>
-				<var name="Initial_Equity_Investment">
-					<in>Equity_Fraction</in>
-					<in>FCI_New_Tankage_Equip</in>
-				</var>
-				<var name="Frac_Tankage_Debt_Financed">
-					<in>Equity_Fraction</in>
-				</var>
-				<var name="Loan_Principal">
-					<in>FCI_New_Tankage_Equip</in>
-					<in>Frac_Tankage_Debt_Financed</in>
-				</var>
-				<var name="Annual_Loan_Payment">
-					<in>Loan_Principal</in>
-					<in>discount_factor_Loan_Payment</in>
-				</var>
-				<var name="NPV_Net_Inc_Revs">
-					<in>discount_factor_3</in>
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-				</var>
-				<var name="Expected_Gas_Volume_from_Current_Traffic_after_invest">
-					<in>Expected_Gas_Visits_from_Current_Traffic</in>
-					<in>Volume_Per_Visit</in>
-				</var>
-				<var name="Total_Net_Expected_Incremental_Revenues">
-					<in>Net_Exp_Inc_Gas_Rev</in>
-					<in>Net_Expected_Hi_Blend_Inc_Rev</in>
-					<in>Net_Expected_Inc_Other_Rev</in>
-				</var>
-				<var name="NPV_Taxes_3">
-					<in>Expected_Tax_3</in>
-					<in>discount_factor_2</in>
-					<in>discount_factor_3</in>
-				</var>
-				<var name="Cume_Loan_Payment">
-					<in>Annual_Loan_Payment</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Cume_Interest_Payment">
-					<in>Cume_Loan_Payment</in>
-					<in>Loan_Principal</in>
-				</var>
-				<var name="Rough_Estimate_Annual_Interest">
-					<in>Cume_Interest_Payment</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Cost">
-					<in>alt_fuel_POU_cost</in>
-					<in>Expected_Inc_Hi_Blend_Volume</in>
-				</var>
-				<var name="Expected_Taxable_Income_2">
-					<in>depreciation_period</in>
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-					<in>Rough_Estimate_Annual_Interest</in>
-					<in>estimated_depreciation_expense</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Taxable_Income_1">
-					<in>Rough_Estimate_Annual_Interest</in>
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-					<in>estimated_depreciation_expense</in>
-				</var>
-				<var name="Expected_Tax_2">
-					<in>Expected_Tax_Rate</in>
-					<in>Expected_Taxable_Income_2</in>
-				</var>
-				<var name="Expected_Tax_1">
-					<in>Expected_Taxable_Income_1</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="Expected_Taxable_Income_3">
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-				</var>
-				<var name="NPV_Taxes_1">
-					<in>discount_factor_1</in>
-					<in>Expected_Tax_1</in>
-				</var>
-				<var name="NPV_Taxes_2">
-					<in>discount_factor_1</in>
-					<in>Expected_Tax_2</in>
-					<in>discount_factor_2</in>
-				</var>
-				<var name="discount_factor_Loan_Payment">
-					<in>debt_interest_rate_as_frac</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="NPV_Taxes">
-					<in>NPV_Taxes_3</in>
-					<in>NPV_Taxes_2</in>
-					<in>NPV_Taxes_1</in>
-				</var>
-				<var name="PV_Loan_Payment">
-					<in>Annual_Loan_Payment</in>
-					<in>discount_factor_loan</in>
-				</var>
-				<var name="Net_Expected_Hi_Blend_Inc_Rev">
-					<in>Expected_Inc_Hi_Blend_Cost</in>
-					<in>Expected_Inc_Hi_Blend_Rev</in>
-				</var>
-				<var name="Expected_Tax_3">
-					<in>Expected_Taxable_Income_3</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="length_of_period_1">
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="length_of_period_2">
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="discount_factor_loan">
-					<in>reqd_rate_of_return</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Inc_Hi_Blend_Volume_Current_Traffic">
-					<in>Volume_Per_Visit</in>
-					<in>Expected_Higher_Blend_Visits_from_Current_Traffic</in>
-				</var>
-				<var name="avg_per_station_vol_gas_eq_per_mo">
-					<in>regional_sales_vol_gas_eq_per_mo</in>
-					<in>one_station</in>
-					<in>total_stations_by_region</in>
-				</var>
-				<var name="estimated_depreciation_expense_RP">
-					<in>FCI_Repurposing_Midgrade</in>
-					<in>depreciation_period</in>
-				</var>
-				<var name="Actual_User_Weighted_Hi_Blend_Share">
-					<in>Total_User_Wtd_HiBlend_Share_from_Fuel_Use</in>
-					<in>Max_share_market_Hi_Blend_Gas_Equivalent</in>
-				</var>
-				<var name="Max_share_market_Hi_Blend_Gas_Equivalent">
-					<in>Total_potential_hi_blend_consn_from_VM</in>
-					<in>Total_Potential_Fuel_Consn_Gasoline_from_VM</in>
-				</var>
-				<var name="total_hi_blend_investable_by_region">
-					<in>With_Hi_Blend_Investment</in>
-					<in>Not_Considering_Investment</in>
-					<in>Considering_Investment</in>
-				</var>
-				<var name="NPV_Investment_RP">
-					<in>NPV_Taxes_RP</in>
-					<in>Initial_Equity_Investment_RP</in>
-					<in>PV_Loan_Payment_RP</in>
-					<in>NPV_Net_Inc_Revs</in>
-				</var>
-				<var name="Initial_Equity_Investment_RP">
-					<in>FCI_Repurposing_Midgrade</in>
-					<in>Equity_Fraction</in>
-				</var>
-				<var name="With_Hi_Blend_Investment">
-					<in>initial_with_hi_blend_invest</in>
-				</var>
-				<var name="investing_in_HiBlend">
-					<in>completing_consideration</in>
-					<in>investment_hit_rate</in>
-				</var>
-				<var name="putting_on_the_table">
-					<in>rate_of_putting_on_table</in>
-					<in>Not_Considering_Investment</in>
-				</var>
-				<var name="investment_hit_rate">
-					<in>NPV_Investment</in>
-					<in>NPV_Threshold_for_Investment</in>
-				</var>
-				<var name="Not_Considering_Investment">
-					<in>initial_not_considering_Invest</in>
-				</var>
-				<var name="taking_off_the_table">
-					<in>completing_consideration</in>
-					<in>investment_hit_rate</in>
-				</var>
-				<var name="completing_consideration">
-					<in>dwell_time_for_considering_investment</in>
-					<in>Considering_Investment</in>
-				</var>
-				<var name="initial_not_considering_repurpose">
-					<in>initial_repurposable_stations</in>
-					<in>initial_with_hi_blend_repurposed</in>
-					<in>initial_considering_repurpose</in>
-				</var>
-				<var name="initial_considering_repurpose">
-					<in>initial_frac_stations_considering_repurpose</in>
-					<in>initial_repurposable_stations</in>
-				</var>
-				<var name="initial_with_hi_blend_repurposed">
-					<in>initial_repurposable_stations</in>
-					<in>initial_frac_stations_with_repurposed_tankage</in>
-				</var>
-				<var name="initial_not_considering_Invest">
-					<in>initial_with_hi_blend_invest</in>
-					<in>initial_considering_invest</in>
-					<in>initial_non_repurposable_stations</in>
-				</var>
-				<var name="initial_considering_invest">
-					<in>initial_frac_stations_considering_invest</in>
-					<in>initial_non_repurposable_stations</in>
-				</var>
-				<var name="initial_with_hi_blend_invest">
-					<in>initial_non_repurposable_stations</in>
-					<in>initial_frac_stations_with_hi_blend_invest</in>
-				</var>
-				<var name="total_initial_stations_by_region">
-					<in>total_initial_stations</in>
-					<in>regional_dispensing_station_distn</in>
-				</var>
-				<var name="initial_repurposable_stations">
-					<in>initial_frac_ALL_stations_with_repurposable_tankage</in>
-					<in>total_initial_stations_by_region</in>
-				</var>
-				<var name="initial_non_repurposable_stations">
-					<in>initial_repurposable_stations</in>
-					<in>total_initial_stations_by_region</in>
-				</var>
-				<var name="total_stations_by_region">
-					<in>total_RP_by_region</in>
-					<in>total_hi_blend_investable_by_region</in>
-				</var>
-				<var name="Loan_Principal_RP">
-					<in>Frac_Tankage_Debt_Financed</in>
-					<in>FCI_Repurposing_Midgrade</in>
-				</var>
-				<var name="Annual_Loan_Payment_RP">
-					<in>Loan_Principal_RP</in>
-					<in>discount_factor_Loan_Payment_RP</in>
-				</var>
-				<var name="Cume_Loan_Payment_RP">
-					<in>term_of_loan</in>
-					<in>Annual_Loan_Payment_RP</in>
-				</var>
-				<var name="Cume_Interest_Payment_RP">
-					<in>Cume_Loan_Payment_RP</in>
-					<in>Loan_Principal_RP</in>
-				</var>
-				<var name="Rough_Estimate_Annual_Interest_RP">
-					<in>Cume_Interest_Payment_RP</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Taxable_Income_2_RP">
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-					<in>estimated_depreciation_expense_RP</in>
-					<in>Rough_Estimate_Annual_Interest_RP</in>
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-				</var>
-				<var name="Expected_Taxable_Income_1_RP">
-					<in>estimated_depreciation_expense_RP</in>
-					<in>Rough_Estimate_Annual_Interest_RP</in>
-					<in>Total_Net_Expected_Incremental_Revenues</in>
-				</var>
-				<var name="Expected_Tax_2_RP">
-					<in>Expected_Tax_Rate</in>
-					<in>Expected_Taxable_Income_2_RP</in>
-				</var>
-				<var name="Expected_Tax_1_RP">
-					<in>Expected_Taxable_Income_1_RP</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="NPV_Taxes_1_RP">
-					<in>Expected_Tax_1_RP</in>
-					<in>discount_factor_1</in>
-				</var>
-				<var name="NPV_Taxes_2_RP">
-					<in>discount_factor_2</in>
-					<in>discount_factor_1</in>
-					<in>Expected_Tax_2_RP</in>
-				</var>
-				<var name="discount_factor_Loan_Payment_RP">
-					<in>term_of_loan</in>
-					<in>debt_interest_rate_as_frac</in>
-				</var>
-				<var name="NPV_Taxes_RP">
-					<in>NPV_Taxes_2_RP</in>
-					<in>NPV_Taxes_1_RP</in>
-					<in>NPV_Taxes_3</in>
-				</var>
-				<var name="PV_Loan_Payment_RP">
-					<in>discount_factor_loan</in>
-					<in>Annual_Loan_Payment_RP</in>
-				</var>
-				<var name="impact_station_coverage_on_incremental_traffic">
-					<in>Station_Coverage</in>
-				</var>
-				<var name="Expected_Share_Current_Traffic_to_higher_blends">
-					<in>Expected_Share_Current_Traffic_to_Hi_Blend</in>
-				</var>
-				<var name="volumetric_offset_for_investment">
-					<in>Hi_Blend_Volumetric_Offset</in>
-				</var>
-				<var name="alt_fuel_pump_price">
-					<in>Hi_Blend_Pump_Price</in>
-				</var>
-				<var name="alt_fuel_POU_cost">
-					<in>Expected_Hi_Blend_Cost_after_Subz</in>
-				</var>
-			</isee:dependencies>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3521,28 +3013,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="8" isee:page_rows="4" isee:scroll_x="2318" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="4" isee:page_rows="3" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="67" height="55"/>
 					</module>
@@ -3554,7 +3054,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3571,1137 +3071,1137 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
-				<connector uid="2576" angle="0">
+				<connector uid="2602" angle="0">
 					<from>
-						<alias uid="2577"/>
+						<alias uid="2603"/>
 					</from>
 					<to>Expected_Taxable_Income_2_RP</to>
 				</connector>
-				<connector uid="2578" angle="270">
+				<connector uid="2604" angle="270">
 					<from>
-						<alias uid="2579"/>
+						<alias uid="2605"/>
 					</from>
 					<to>Loan_Principal</to>
 				</connector>
-				<connector uid="2580" angle="144.462">
+				<connector uid="2606" angle="144.462">
 					<from>
-						<alias uid="2581"/>
+						<alias uid="2607"/>
 					</from>
 					<to>FCI_New_Tankage_Equip</to>
 				</connector>
-				<connector uid="2582" color="#C8C8C8" angle="226.736">
+				<connector uid="2608" color="#C8C8C8" angle="226.736">
 					<from>Considering_RP</from>
 					<to>total_RP_by_region</to>
 				</connector>
-				<connector uid="2583" color="white" angle="26.5651">
+				<connector uid="2609" color="white" angle="26.5651">
 					<from>alt_fuel_pump_price</from>
 					<to>Expected_Inc_Hi_Blend_Rev</to>
 				</connector>
-				<connector uid="2584" color="#E0E0E0" angle="90">
+				<connector uid="2610" color="#E0E0E0" angle="90">
 					<from>
-						<alias uid="2585"/>
+						<alias uid="2611"/>
 					</from>
 					<to>Expected_Inc_Hi_Blend_Volume_Inc_Visits</to>
 				</connector>
-				<connector uid="2586" angle="35.5377">
+				<connector uid="2612" angle="35.5377">
 					<from>
-						<alias uid="2587"/>
+						<alias uid="2613"/>
 					</from>
 					<to>Expected_Inc_Hi_Blend_Visits</to>
 				</connector>
-				<connector uid="2588" angle="276.34">
-					<from>
-						<alias uid="2589"/>
-					</from>
-					<to>discount_factor_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2590" angle="310.601">
-					<from>Total_Net_Expected_Incremental_Revenues</from>
-					<to>Expected_Taxable_Income_3</to>
-				</connector>
-				<connector uid="2591" angle="180">
-					<from>
-						<alias uid="2592"/>
-					</from>
-					<to>Max_share_market_Hi_Blend_Gas_Equivalent</to>
-				</connector>
-				<connector uid="2593" angle="173.66">
-					<from>
-						<alias uid="2594"/>
-					</from>
-					<to>length_of_period_1</to>
-				</connector>
-				<connector uid="2595" angle="26.5651">
-					<from>Expected_Inc_Hi_Blend_Volume_Current_Traffic</from>
-					<to>Expected_Inc_Hi_Blend_Volume</to>
-				</connector>
-				<connector uid="2596" angle="0">
-					<from>NPV_Taxes_2_RP</from>
-					<to>NPV_Taxes_RP</to>
-				</connector>
-				<connector uid="2597" angle="32.0054">
-					<from>initial_with_hi_blend_invest</from>
-					<to>initial_not_considering_Invest</to>
-				</connector>
-				<connector uid="2598" angle="35.5377">
-					<from>
-						<alias uid="2599"/>
-					</from>
-					<to>FCI_Repurposing_Midgrade</to>
-				</connector>
-				<connector uid="2600" angle="90">
-					<from>
-						<alias uid="2601"/>
-					</from>
-					<to>Loan_Principal_RP</to>
-				</connector>
-				<connector uid="2602" color="#C8C8C8" angle="327.995">
-					<from>
-						<alias uid="2603"/>
-					</from>
-					<to>Initial_Equity_Investment_RP</to>
-				</connector>
-				<connector uid="2604" color="#E0E0E0" angle="90">
-					<from>
-						<alias uid="2585"/>
-					</from>
-					<to>Expected_Inc_Hi_Blend_Volume_Current_Traffic</to>
-				</connector>
-				<connector uid="2605" angle="277.125">
-					<from>investment_hit_rate_RP</from>
-					<to>repurposing_to_HiBlend</to>
-				</connector>
-				<connector uid="2606" angle="276.34">
-					<from>
-						<alias uid="2607"/>
-					</from>
-					<to>NPV_Taxes_1</to>
-				</connector>
-				<connector uid="2608" angle="45">
-					<from>Net_Exp_Inc_Gas_Rev</from>
-					<to>Total_Net_Expected_Incremental_Revenues</to>
-				</connector>
-				<connector uid="2609" angle="0">
-					<from>Expected_Inc_Hi_Blend_Volume_Inc_Visits</from>
-					<to>Expected_Inc_Hi_Blend_Volume</to>
-				</connector>
-				<connector uid="2610" angle="270">
-					<from>NPV_Taxes_RP</from>
-					<to>NPV_Investment_RP</to>
-				</connector>
-				<connector uid="2611" angle="90">
-					<from>Frac_Tankage_Debt_Financed</from>
-					<to>Loan_Principal</to>
-				</connector>
-				<connector uid="2612" angle="32.0054">
-					<from>completing_consideration</from>
-					<to>investing_in_HiBlend</to>
-				</connector>
-				<connector uid="2613" angle="0">
-					<from>Expected_Inc_Hi_Blend_Visits</from>
-					<to>Expected_Inc_Hi_Blend_Volume_Inc_Visits</to>
-				</connector>
-				<connector uid="2614" angle="270">
+				<connector uid="2614" angle="276.34">
 					<from>
 						<alias uid="2615"/>
 					</from>
-					<to>initial_repurposable_stations</to>
+					<to>discount_factor_Loan_Payment_RP</to>
 				</connector>
-				<connector uid="2616" angle="220.601">
-					<from>
-						<alias uid="2589"/>
-					</from>
-					<to>Cume_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2617" angle="6.34019">
-					<from>Expected_Incremental_Traffic</from>
-					<to>Net_Expected_Inc_Other_Rev</to>
-				</connector>
-				<connector uid="2618" angle="327.995">
-					<from>
-						<alias uid="2619"/>
-					</from>
-					<to>discount_factor_2</to>
-				</connector>
-				<connector uid="2620" angle="90">
-					<from>
-						<alias uid="2621"/>
-					</from>
-					<to>impact_station_coverage_on_incremental_traffic</to>
-				</connector>
-				<connector uid="2622" angle="0">
-					<from>Expected_Taxable_Income_3</from>
-					<to>Expected_Tax_3</to>
-				</connector>
-				<connector uid="2623" angle="20.556">
-					<from>Initial_Equity_Investment_RP</from>
-					<to>NPV_Investment_RP</to>
-				</connector>
-				<connector uid="2624" angle="0">
-					<from>
-						<alias uid="2625"/>
-					</from>
-					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
-				</connector>
-				<connector uid="2626" color="#C8C8C8" angle="265.365">
-					<from>
-						<alias uid="2627"/>
-					</from>
-					<to>putting_on_the_table</to>
-				</connector>
-				<connector uid="2628" angle="40.6013">
-					<from>volumetric_offset_for_investment</from>
-					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
-				</connector>
-				<connector uid="2629" color="#E0E0E0" angle="270">
-					<from>
-						<alias uid="2585"/>
-					</from>
-					<to>Current_Gas_Volume</to>
-				</connector>
-				<connector uid="2630" angle="54.4623">
-					<from>NPV_Taxes_1_RP</from>
-					<to>NPV_Taxes_RP</to>
-				</connector>
-				<connector uid="2631" angle="0">
-					<from>Current_Gas_Volume</from>
-					<to>Expected_Inc_Gas_Volume_Current_Traffic</to>
-				</connector>
-				<connector uid="2632" angle="341.565">
-					<from>
-						<alias uid="2619"/>
-					</from>
-					<to>discount_factor_3</to>
-				</connector>
-				<connector uid="2633" angle="0">
-					<from>
-						<alias uid="2634"/>
-					</from>
-					<to>Expected_Taxable_Income_2</to>
-				</connector>
-				<connector uid="2635" angle="90">
-					<from>
-						<alias uid="2636"/>
-					</from>
-					<to>Expected_Tax_2_RP</to>
-				</connector>
-				<connector uid="2637" angle="275.711">
-					<from>length_of_period_2</from>
-					<to>discount_factor_2</to>
-				</connector>
-				<connector uid="2638" angle="270">
-					<from>length_of_period_1</from>
-					<to>discount_factor_1</to>
-				</connector>
-				<connector uid="2639" color="white" angle="0">
-					<from>alt_fuel_POU_cost</from>
-					<to>Expected_Inc_Hi_Blend_Cost</to>
-				</connector>
-				<connector uid="2640" angle="180">
-					<from>
-						<alias uid="2641"/>
-					</from>
-					<to>initial_considering_repurpose</to>
-				</connector>
-				<connector uid="2642" angle="0">
-					<from>
-						<alias uid="2643"/>
-					</from>
-					<to>Net_Expected_Other_Revenue_per_Visit</to>
-				</connector>
-				<connector uid="2644" color="white" angle="90">
-					<from>
-						<alias uid="2603"/>
-					</from>
-					<to>estimated_depreciation_expense_RP</to>
-				</connector>
-				<connector uid="2645" angle="113.962">
-					<from>completing_consideration_repurpose</from>
-					<to>taking_off_table_RP</to>
-				</connector>
-				<connector uid="2646" angle="180">
-					<from>regional_sales_vol_gas_eq_per_mo</from>
-					<to>avg_per_station_vol_gas_eq_per_mo</to>
-				</connector>
-				<connector uid="2647" angle="310.601">
-					<from>Loan_Principal</from>
-					<to>Annual_Loan_Payment</to>
-				</connector>
-				<connector uid="2648" angle="90">
-					<from>annual_station_traffic</from>
-					<to>Expected_Incremental_Traffic</to>
-				</connector>
-				<connector uid="2649" color="#C8C8C8" angle="125.538">
-					<from>
-						<alias uid="2650"/>
-					</from>
-					<to>completing_consideration</to>
-				</connector>
-				<connector uid="2651" angle="0">
-					<from>Expected_Tax_3</from>
-					<to>NPV_Taxes_3</to>
-				</connector>
-				<connector uid="2652" angle="0">
-					<from>
-						<alias uid="2653"/>
-					</from>
-					<to>PV_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2654" angle="282.529">
-					<from>NPV_Taxes</from>
-					<to>NPV_Investment</to>
-				</connector>
-				<connector uid="2655" angle="0">
-					<from>Expected_Taxable_Income_1</from>
-					<to>Expected_Tax_1</to>
-				</connector>
-				<connector uid="2656" angle="90">
-					<from>Rough_Estimate_Annual_Interest</from>
-					<to>Expected_Taxable_Income_1</to>
-				</connector>
-				<connector uid="2657" angle="49.3987">
-					<from>
-						<alias uid="2619"/>
-					</from>
-					<to>discount_factor_loan</to>
-				</connector>
-				<connector uid="2658" angle="0">
-					<from>Expected_Taxable_Income_1_RP</from>
-					<to>Expected_Tax_1_RP</to>
-				</connector>
-				<connector uid="2659" angle="270">
+				<connector uid="2616" angle="310.601">
 					<from>Total_Net_Expected_Incremental_Revenues</from>
-					<to>Expected_Taxable_Income_1</to>
+					<to>Expected_Taxable_Income_3</to>
 				</connector>
-				<connector uid="2660" angle="45">
+				<connector uid="2617" angle="180">
 					<from>
-						<alias uid="2661"/>
-					</from>
-					<to>Initial_Equity_Investment_RP</to>
-				</connector>
-				<connector uid="2662" angle="290.556">
-					<from>Total_Net_Expected_Incremental_Revenues</from>
-					<to>Expected_Taxable_Income_2</to>
-				</connector>
-				<connector uid="2663" angle="0">
-					<from>total_stations_by_region</from>
-					<to>Station_Coverage</to>
-				</connector>
-				<connector uid="2664" angle="6.34019">
-					<from>
-						<alias uid="2665"/>
-					</from>
-					<to>FCI_Repurposing_Midgrade</to>
-				</connector>
-				<connector uid="2666" angle="198.435">
-					<from>
-						<alias uid="2667"/>
-					</from>
-					<to>FCI_Repurposing_Midgrade</to>
-				</connector>
-				<connector uid="2668" angle="180">
-					<from>
-						<alias uid="2669"/>
-					</from>
-					<to>Actual_User_Weighted_Hi_Blend_Share</to>
-				</connector>
-				<connector uid="2670" angle="0">
-					<from>PV_Loan_Payment_RP</from>
-					<to>NPV_Investment_RP</to>
-				</connector>
-				<connector uid="2671" angle="270">
-					<from>total_RP_by_region</from>
-					<to>total_stations_by_region</to>
-				</connector>
-				<connector uid="2672" angle="0">
-					<from>Expected_Tax_1_RP</from>
-					<to>NPV_Taxes_1_RP</to>
-				</connector>
-				<connector uid="2673" angle="0">
-					<from>initial_repurposable_stations</from>
-					<to>initial_not_considering_repurpose</to>
-				</connector>
-				<connector uid="2674" angle="339.444">
-					<from>estimated_depreciation_expense_RP</from>
-					<to>Expected_Taxable_Income_1_RP</to>
-				</connector>
-				<connector uid="2675" color="#C8C8C8" angle="90">
-					<from>With_Hi_Blend_Investment</from>
-					<to>total_with_hi_blend_by_region</to>
-				</connector>
-				<connector uid="2676" angle="327.995">
-					<from>Loan_Principal_RP</from>
-					<to>Annual_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2677" angle="302.005">
-					<from>NPV_Net_Inc_Revs</from>
-					<to>NPV_Investment</to>
-				</connector>
-				<connector uid="2678" color="#C8C8C8" angle="95.4038">
-					<from>
-						<alias uid="2679"/>
-					</from>
-					<to>putting_on_table_RP</to>
-				</connector>
-				<connector uid="2680" color="#C8C8C8" angle="26.5651">
-					<from>Annual_Loan_Payment</from>
-					<to>PV_Loan_Payment</to>
-				</connector>
-				<connector uid="2681" angle="82.875">
-					<from>investment_hit_rate</from>
-					<to>investing_in_HiBlend</to>
-				</connector>
-				<connector uid="2682" angle="270">
-					<from>FCI_Repurposing_Midgrade</from>
-					<to>Per_Station_Repurpose_Subs</to>
-				</connector>
-				<connector uid="2683" color="#C8C8C8" angle="229.399">
-					<from>
-						<alias uid="2684"/>
-					</from>
-					<to>completing_consideration_repurpose</to>
-				</connector>
-				<connector uid="2685" color="#C8C8C8" angle="153.435">
-					<from>With_Hi_Blend_Investment</from>
-					<to>total_hi_blend_investable_by_region</to>
-				</connector>
-				<connector uid="2686" angle="327.995">
-					<from>initial_repurposable_stations</from>
-					<to>initial_with_hi_blend_repurposed</to>
-				</connector>
-				<connector uid="2687" angle="180">
-					<from>
-						<alias uid="2688"/>
-					</from>
-					<to>investment_hit_rate</to>
-				</connector>
-				<connector uid="2689" angle="90">
-					<from>Cume_Interest_Payment_RP</from>
-					<to>Rough_Estimate_Annual_Interest_RP</to>
-				</connector>
-				<connector uid="2690" angle="90">
-					<from>Annual_Loan_Payment_RP</from>
-					<to>Cume_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2691" angle="327.995">
-					<from>initial_non_repurposable_stations</from>
-					<to>initial_with_hi_blend_invest</to>
-				</connector>
-				<connector uid="2692" angle="330.945">
-					<from>NPV_Taxes_3</from>
-					<to>NPV_Taxes</to>
-				</connector>
-				<connector uid="2693" angle="0">
-					<from>
-						<alias uid="2694"/>
-					</from>
-					<to>total_initial_stations_by_region</to>
-				</connector>
-				<connector uid="2695" angle="18.4349">
-					<from>
-						<alias uid="2696"/>
-					</from>
-					<to>alt_fuel_pump_price</to>
-				</connector>
-				<connector uid="2697" angle="130.601">
-					<from>
-						<alias uid="2607"/>
-					</from>
-					<to>NPV_Taxes_2</to>
-				</connector>
-				<connector uid="2698" angle="90">
-					<from>
-						<alias uid="2699"/>
-					</from>
-					<to>discount_factor_Loan_Payment</to>
-				</connector>
-				<connector uid="2700" angle="159.444">
-					<from>
-						<alias uid="2589"/>
-					</from>
-					<to>Rough_Estimate_Annual_Interest_RP</to>
-				</connector>
-				<connector uid="2701" angle="297.897">
-					<from>Considering_Investment</from>
-					<to>completing_consideration</to>
-				</connector>
-				<connector uid="2702" angle="327.995">
-					<from>estimated_depreciation_expense</from>
-					<to>Expected_Taxable_Income_1</to>
-				</connector>
-				<connector uid="2703" angle="180">
-					<from>
-						<alias uid="2704"/>
-					</from>
-					<to>regional_sales_vol_gas_eq_per_mo</to>
-				</connector>
-				<connector uid="2705" angle="90">
-					<from>
-						<alias uid="2579"/>
-					</from>
-					<to>estimated_depreciation_expense</to>
-				</connector>
-				<connector uid="2706" angle="18.4349">
-					<from>Expected_Gas_Volume_from_Current_Traffic_after_invest</from>
-					<to>Expected_Inc_Gas_Volume_Current_Traffic</to>
-				</connector>
-				<connector uid="2707" angle="90">
-					<from>Equity_Fraction</from>
-					<to>Frac_Tankage_Debt_Financed</to>
-				</connector>
-				<connector uid="2708" angle="0">
-					<from>Expected_Inc_Hi_Blend_Cost</from>
-					<to>Net_Expected_Hi_Blend_Inc_Rev</to>
-				</connector>
-				<connector uid="2709" angle="0">
-					<from>Equity_Fraction</from>
-					<to>Initial_Equity_Investment</to>
-				</connector>
-				<connector uid="2710" angle="0">
-					<from>Expected_Tax_1</from>
-					<to>NPV_Taxes_1</to>
-				</connector>
-				<connector uid="2711" angle="161.565">
-					<from>investment_hit_rate_RP</from>
-					<to>taking_off_table_RP</to>
-				</connector>
-				<connector uid="2712" angle="90">
-					<from>Expected_Share_Current_Traffic_to_Hi_Blend</from>
-					<to>Expected_Share_Current_Traffic_to_higher_blends</to>
-				</connector>
-				<connector uid="2713" angle="90">
-					<from>
-						<alias uid="2589"/>
-					</from>
-					<to>Expected_Taxable_Income_2_RP</to>
-				</connector>
-				<connector uid="2714" angle="90">
-					<from>
-						<alias uid="2704"/>
+						<alias uid="2618"/>
 					</from>
 					<to>Max_share_market_Hi_Blend_Gas_Equivalent</to>
 				</connector>
-				<connector uid="2715" angle="270">
+				<connector uid="2619" angle="173.66">
 					<from>
-						<alias uid="2716"/>
-					</from>
-					<to>NPV_Taxes_1_RP</to>
-				</connector>
-				<connector uid="2717" angle="26.5651">
-					<from>
-						<alias uid="2585"/>
-					</from>
-					<to>Expected_Inc_Gas_Volume_Inc_Visits</to>
-				</connector>
-				<connector uid="2718" angle="341.565">
-					<from>Expected_Incremental_Traffic</from>
-					<to>Expected_Inc_Gas_Visits</to>
-				</connector>
-				<connector uid="2719" angle="315">
-					<from>
-						<alias uid="2587"/>
-					</from>
-					<to>Expected_Inc_Gas_Visits</to>
-				</connector>
-				<connector uid="2720" color="white" angle="270">
-					<from>
-						<alias uid="2603"/>
-					</from>
-					<to>Loan_Principal_RP</to>
-				</connector>
-				<connector uid="2721" color="#C8C8C8" angle="270">
-					<from>With_Hi_Blend_RP</from>
-					<to>total_with_hi_blend_by_region</to>
-				</connector>
-				<connector uid="2722" angle="90">
-					<from>Cume_Loan_Payment_RP</from>
-					<to>Cume_Interest_Payment_RP</to>
-				</connector>
-				<connector uid="2723" angle="90">
-					<from>Annual_Loan_Payment</from>
-					<to>Cume_Loan_Payment</to>
-				</connector>
-				<connector uid="2724" angle="147.995">
-					<from>
-						<alias uid="2725"/>
-					</from>
-					<to>investment_hit_rate_RP</to>
-				</connector>
-				<connector uid="2726" angle="69.444">
-					<from>Rough_Estimate_Annual_Interest</from>
-					<to>Expected_Taxable_Income_2</to>
-				</connector>
-				<connector uid="2727" angle="12.5288">
-					<from>Net_Expected_Hi_Blend_Inc_Rev</from>
-					<to>Total_Net_Expected_Incremental_Revenues</to>
-				</connector>
-				<connector uid="2728" angle="180">
-					<from>
-						<alias uid="2729"/>
-					</from>
-					<to>initial_considering_invest</to>
-				</connector>
-				<connector uid="2730" angle="149.226">
-					<from>
-						<alias uid="2731"/>
-					</from>
-					<to>avg_per_station_vol_gas_eq_per_mo</to>
-				</connector>
-				<connector uid="2732" color="white" angle="327.995">
-					<from>Expected_Inc_Gas_Volume_Inc_Visits</from>
-					<to>Expected_Inc_Gas_Volume</to>
-				</connector>
-				<connector uid="2733" angle="52.5946">
-					<from>Considering_RP</from>
-					<to>completing_consideration_repurpose</to>
-				</connector>
-				<connector uid="2734" angle="270">
-					<from>
-						<alias uid="2735"/>
-					</from>
-					<to>total_initial_stations_by_region</to>
-				</connector>
-				<connector uid="2736" angle="0">
-					<from>Expected_Tax_2</from>
-					<to>NPV_Taxes_2</to>
-				</connector>
-				<connector uid="2737" angle="206.565">
-					<from>total_with_hi_blend_by_region</from>
-					<to>Station_Coverage</to>
-				</connector>
-				<connector uid="2738" color="white" angle="12.5288">
-					<from>implementation_time</from>
-					<to>FCI_New_Tankage_Equip</to>
-				</connector>
-				<connector uid="2739" angle="0">
-					<from>Expected_Taxable_Income_2_RP</from>
-					<to>Expected_Tax_2_RP</to>
-				</connector>
-				<connector uid="2740" angle="90">
-					<from>
-						<alias uid="2741"/>
-					</from>
-					<to>NPV_Net_Inc_Revs</to>
-				</connector>
-				<connector uid="2742" angle="90">
-					<from>total_hi_blend_investable_by_region</from>
-					<to>total_stations_by_region</to>
-				</connector>
-				<connector uid="2743" angle="220.601">
-					<from>
-						<alias uid="2744"/>
-					</from>
-					<to>Cume_Loan_Payment</to>
-				</connector>
-				<connector uid="2745" color="#C8C8C8" angle="20.556">
-					<from>Annual_Loan_Payment_RP</from>
-					<to>PV_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2746" angle="90">
-					<from>initial_considering_invest</from>
-					<to>initial_not_considering_Invest</to>
-				</connector>
-				<connector uid="2747" angle="90">
-					<from>Actual_User_Weighted_Hi_Blend_Share</from>
-					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
-				</connector>
-				<connector uid="2748" angle="12.5288">
-					<from>Expected_Share_Current_Traffic_to_higher_blends</from>
-					<to>Expected_Gas_Visits_from_Current_Traffic</to>
-				</connector>
-				<connector uid="2749" angle="0">
-					<from>
-						<alias uid="2750"/>
-					</from>
-					<to>Per_Station_FCI_Subs</to>
-				</connector>
-				<connector uid="2751" angle="90">
-					<from>Cume_Loan_Payment</from>
-					<to>Cume_Interest_Payment</to>
-				</connector>
-				<connector uid="2752" angle="26.5651">
-					<from>
-						<alias uid="2753"/>
-					</from>
-					<to>FCI_New_Tankage_Equip</to>
-				</connector>
-				<connector uid="2754" angle="310.601">
-					<from>
-						<alias uid="2579"/>
-					</from>
-					<to>Initial_Equity_Investment</to>
-				</connector>
-				<connector uid="2755" angle="180">
-					<from>discount_factor_Loan_Payment</from>
-					<to>Annual_Loan_Payment</to>
-				</connector>
-				<connector uid="2756" angle="125.538">
-					<from>
-						<alias uid="2757"/>
-					</from>
-					<to>NPV_Taxes_3</to>
-				</connector>
-				<connector uid="2758" color="white" angle="353.66">
-					<from>implementation_time</from>
-					<to>FCI_Repurposing_Midgrade</to>
-				</connector>
-				<connector uid="2759" angle="0">
-					<from>Expected_Gas_Visits_from_Current_Traffic</from>
-					<to>Expected_Gas_Volume_from_Current_Traffic_after_invest</to>
-				</connector>
-				<connector uid="2760" angle="315">
-					<from>
-						<alias uid="2761"/>
-					</from>
-					<to>NPV_Investment_RP</to>
-				</connector>
-				<connector uid="2762" angle="270">
-					<from>initial_repurposable_stations</from>
-					<to>initial_non_repurposable_stations</to>
-				</connector>
-				<connector uid="2763" angle="26.5651">
-					<from>
-						<alias uid="2764"/>
-					</from>
-					<to>Net_Expected_Other_Revenue_per_Visit</to>
-				</connector>
-				<connector uid="2765" angle="234.462">
-					<from>
-						<alias uid="2766"/>
-					</from>
-					<to>annual_station_traffic</to>
-				</connector>
-				<connector uid="2767" color="#C8C8C8" angle="64.7989">
-					<from>Not_Considering_Investment</from>
-					<to>total_hi_blend_investable_by_region</to>
-				</connector>
-				<connector uid="2768" color="white" angle="0">
-					<from>Expected_Inc_Gas_Visits</from>
-					<to>Expected_Inc_Gas_Volume_Inc_Visits</to>
-				</connector>
-				<connector uid="2769" angle="0">
-					<from>initial_non_repurposable_stations</from>
-					<to>initial_not_considering_Invest</to>
-				</connector>
-				<connector uid="2770" angle="0">
-					<from>annual_station_traffic</from>
-					<to>Current_Gas_Volume</to>
-				</connector>
-				<connector uid="2771" angle="0">
-					<from>Total_Net_Expected_Incremental_Revenues</from>
-					<to>NPV_Net_Inc_Revs</to>
-				</connector>
-				<connector uid="2772" angle="270">
-					<from>
-						<alias uid="2744"/>
-					</from>
-					<to>discount_factor_Loan_Payment</to>
-				</connector>
-				<connector uid="2773" angle="233.13">
-					<from>completing_consideration</from>
-					<to>taking_off_the_table</to>
-				</connector>
-				<connector uid="2774" angle="270">
-					<from>
-						<alias uid="2775"/>
-					</from>
-					<to>NPV_Taxes_2_RP</to>
-				</connector>
-				<connector uid="2776" angle="270">
-					<from>
-						<alias uid="2777"/>
-					</from>
-					<to>NPV_Taxes_RP</to>
-				</connector>
-				<connector uid="2778" angle="0">
-					<from>Loan_Principal_RP</from>
-					<to>Cume_Interest_Payment_RP</to>
-				</connector>
-				<connector uid="2779" angle="243.435">
-					<from>
-						<alias uid="2757"/>
-					</from>
-					<to>NPV_Taxes_2</to>
-				</connector>
-				<connector uid="2780" angle="90">
-					<from>Expected_Inc_Hi_Blend_Rev</from>
-					<to>Net_Expected_Hi_Blend_Inc_Rev</to>
-				</connector>
-				<connector uid="2781" color="#E0E0E0" angle="270">
-					<from>
-						<alias uid="2585"/>
-					</from>
-					<to>Expected_Gas_Volume_from_Current_Traffic_after_invest</to>
-				</connector>
-				<connector uid="2782" angle="12.5288">
-					<from>estimated_depreciation_expense_RP</from>
-					<to>Expected_Taxable_Income_2_RP</to>
-				</connector>
-				<connector uid="2783" angle="270">
-					<from>
-						<alias uid="2634"/>
-					</from>
-					<to>estimated_depreciation_expense</to>
-				</connector>
-				<connector uid="2784" angle="0">
-					<from>NPV_Taxes_2</from>
-					<to>NPV_Taxes</to>
-				</connector>
-				<connector uid="2785" angle="63.4349">
-					<from>Rough_Estimate_Annual_Interest_RP</from>
-					<to>Expected_Taxable_Income_2_RP</to>
-				</connector>
-				<connector uid="2786" angle="32.0054">
-					<from>initial_with_hi_blend_repurposed</from>
-					<to>initial_not_considering_repurpose</to>
-				</connector>
-				<connector uid="2787" angle="90">
-					<from>
-						<alias uid="2788"/>
-					</from>
-					<to>Expected_Tax_2</to>
-				</connector>
-				<connector uid="2789" angle="341.565">
-					<from>initial_non_repurposable_stations</from>
-					<to>initial_considering_invest</to>
-				</connector>
-				<connector uid="2790" angle="57.9946">
-					<from>Expected_Inc_Gas_Volume_Current_Traffic</from>
-					<to>Expected_Inc_Gas_Volume</to>
-				</connector>
-				<connector uid="2791" angle="341.565">
-					<from>initial_repurposable_stations</from>
-					<to>initial_considering_repurpose</to>
-				</connector>
-				<connector uid="2792" color="#C8C8C8" angle="127.405">
-					<from>Considering_Investment</from>
-					<to>total_hi_blend_investable_by_region</to>
-				</connector>
-				<connector uid="2793" angle="180">
-					<from>discount_factor_Loan_Payment_RP</from>
-					<to>Annual_Loan_Payment_RP</to>
-				</connector>
-				<connector uid="2794" angle="180">
-					<from>
-						<alias uid="2795"/>
-					</from>
-					<to>discount_factor_loan</to>
-				</connector>
-				<connector uid="2796" angle="116.565">
-					<from>
-						<alias uid="2788"/>
-					</from>
-					<to>Expected_Tax_3</to>
-				</connector>
-				<connector uid="2797" angle="153.435">
-					<from>Max_share_market_Hi_Blend_Gas_Equivalent</from>
-					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
-				</connector>
-				<connector uid="2798" angle="180">
-					<from>
-						<alias uid="2799"/>
-					</from>
-					<to>initial_with_hi_blend_repurposed</to>
-				</connector>
-				<connector uid="2800" angle="90">
-					<from>
-						<alias uid="2716"/>
-					</from>
-					<to>NPV_Taxes_2_RP</to>
-				</connector>
-				<connector uid="2801" angle="0">
-					<from>
-						<alias uid="2802"/>
-					</from>
-					<to>volumetric_offset_for_investment</to>
-				</connector>
-				<connector uid="2803" angle="6.34019">
-					<from>PV_Loan_Payment</from>
-					<to>NPV_Investment</to>
-				</connector>
-				<connector uid="2804" angle="35.5377">
-					<from>
-						<alias uid="2805"/>
-					</from>
-					<to>Expected_Taxable_Income_2_RP</to>
-				</connector>
-				<connector uid="2806" angle="347.471">
-					<from>
-						<alias uid="2750"/>
-					</from>
-					<to>FCI_New_Tankage_Equip</to>
-				</connector>
-				<connector uid="2807" angle="90">
-					<from>Cume_Interest_Payment</from>
-					<to>Rough_Estimate_Annual_Interest</to>
-				</connector>
-				<connector uid="2808" angle="339.444">
-					<from>
-						<alias uid="2753"/>
-					</from>
-					<to>FCI_Repurposing_Midgrade</to>
-				</connector>
-				<connector uid="2809" angle="0">
-					<from>
-						<alias uid="2599"/>
-					</from>
-					<to>Per_Station_Repurpose_Subs</to>
-				</connector>
-				<connector uid="2810" angle="32.0054">
-					<from>
-						<alias uid="2795"/>
+						<alias uid="2620"/>
 					</from>
 					<to>length_of_period_1</to>
 				</connector>
-				<connector uid="2811" angle="20.556">
-					<from>estimated_depreciation_expense</from>
-					<to>Expected_Taxable_Income_2</to>
+				<connector uid="2621" angle="26.5651">
+					<from>Expected_Inc_Hi_Blend_Volume_Current_Traffic</from>
+					<to>Expected_Inc_Hi_Blend_Volume</to>
 				</connector>
-				<connector uid="2812" angle="270">
+				<connector uid="2622" angle="0">
+					<from>NPV_Taxes_2_RP</from>
+					<to>NPV_Taxes_RP</to>
+				</connector>
+				<connector uid="2623" angle="32.0054">
+					<from>initial_with_hi_blend_invest</from>
+					<to>initial_not_considering_Invest</to>
+				</connector>
+				<connector uid="2624" angle="35.5377">
 					<from>
-						<alias uid="2813"/>
+						<alias uid="2625"/>
 					</from>
-					<to>regional_sales_vol_gas_eq_per_mo</to>
+					<to>FCI_Repurposing_Midgrade</to>
 				</connector>
-				<connector uid="2814" angle="0">
+				<connector uid="2626" angle="90">
 					<from>
-						<alias uid="2619"/>
+						<alias uid="2627"/>
 					</from>
-					<to>discount_factor_1</to>
+					<to>Loan_Principal_RP</to>
 				</connector>
-				<connector uid="2815" angle="77.4712">
-					<from>NPV_Taxes_1</from>
-					<to>NPV_Taxes</to>
-				</connector>
-				<connector uid="2816" angle="90">
+				<connector uid="2628" color="#C8C8C8" angle="327.995">
 					<from>
-						<alias uid="2744"/>
+						<alias uid="2629"/>
 					</from>
-					<to>Expected_Taxable_Income_2</to>
+					<to>Initial_Equity_Investment_RP</to>
 				</connector>
-				<connector uid="2817" angle="180">
+				<connector uid="2630" color="#E0E0E0" angle="90">
 					<from>
-						<alias uid="2818"/>
+						<alias uid="2611"/>
 					</from>
-					<to>investment_hit_rate_RP</to>
-				</connector>
-				<connector uid="2819" angle="347.471">
-					<from>completing_consideration_repurpose</from>
-					<to>repurposing_to_HiBlend</to>
-				</connector>
-				<connector uid="2820" color="white" angle="90">
-					<from>
-						<alias uid="2821"/>
-					</from>
-					<to>Net_Exp_Inc_Gas_Rev</to>
-				</connector>
-				<connector uid="2822" angle="270">
-					<from>
-						<alias uid="2577"/>
-					</from>
-					<to>estimated_depreciation_expense_RP</to>
-				</connector>
-				<connector uid="2823" angle="0">
-					<from>Expected_Tax_2_RP</from>
-					<to>NPV_Taxes_2_RP</to>
-				</connector>
-				<connector uid="2824" angle="0">
-					<from>Net_Expected_Other_Revenue_per_Visit</from>
-					<to>Net_Expected_Inc_Other_Rev</to>
-				</connector>
-				<connector uid="2825" angle="353.66">
-					<from>annual_station_traffic</from>
-					<to>Expected_Gas_Visits_from_Current_Traffic</to>
-				</connector>
-				<connector uid="2826" color="#C8C8C8" angle="202.249">
-					<from>With_Hi_Blend_RP</from>
-					<to>total_RP_by_region</to>
-				</connector>
-				<connector uid="2827" angle="90">
-					<from>mnthly_station_traffic</from>
-					<to>annual_station_traffic</to>
-				</connector>
-				<connector uid="2828" angle="90">
-					<from>Max_share_market_Hi_Blend_Gas_Equivalent</from>
-					<to>Actual_User_Weighted_Hi_Blend_Share</to>
-				</connector>
-				<connector uid="2829" angle="90">
-					<from>Rough_Estimate_Annual_Interest_RP</from>
-					<to>Expected_Taxable_Income_1_RP</to>
-				</connector>
-				<connector uid="2830" angle="116.565">
-					<from>impact_station_coverage_on_incremental_traffic</from>
-					<to>Expected_Incremental_Traffic</to>
-				</connector>
-				<connector uid="2831" angle="180">
-					<from>
-						<alias uid="2832"/>
-					</from>
-					<to>mnthly_station_traffic</to>
-				</connector>
-				<connector uid="2833" angle="40.6013">
-					<from>Initial_Equity_Investment</from>
-					<to>NPV_Investment</to>
-				</connector>
-				<connector uid="2834" color="#C8C8C8" angle="297.897">
-					<from>Not_Considering_RP</from>
-					<to>total_RP_by_region</to>
-				</connector>
-				<connector uid="2835" angle="26.5651">
-					<from>Expected_Higher_Blend_Visits_from_Current_Traffic</from>
 					<to>Expected_Inc_Hi_Blend_Volume_Current_Traffic</to>
 				</connector>
-				<connector uid="2836" angle="153.435">
+				<connector uid="2631" angle="277.125">
+					<from>investment_hit_rate_RP</from>
+					<to>repurposing_to_HiBlend</to>
+				</connector>
+				<connector uid="2632" angle="276.34">
 					<from>
-						<alias uid="2744"/>
+						<alias uid="2633"/>
 					</from>
-					<to>Rough_Estimate_Annual_Interest</to>
+					<to>NPV_Taxes_1</to>
 				</connector>
-				<connector uid="2837" angle="188.13">
-					<from>investment_hit_rate</from>
-					<to>taking_off_the_table</to>
-				</connector>
-				<connector uid="2838" angle="90">
-					<from>FCI_New_Tankage_Equip</from>
-					<to>Per_Station_FCI_Subs</to>
-				</connector>
-				<connector uid="2839" angle="215.538">
-					<from>
-						<alias uid="2741"/>
-					</from>
-					<to>NPV_Taxes_3</to>
-				</connector>
-				<connector uid="2840" angle="0">
-					<from>
-						<alias uid="2841"/>
-					</from>
-					<to>FCI_New_Tankage_Equip</to>
-				</connector>
-				<connector uid="2842" angle="0">
-					<from>Expected_Incremental_Traffic</from>
-					<to>Expected_Inc_Hi_Blend_Visits</to>
-				</connector>
-				<connector uid="2843" angle="0">
-					<from>
-						<alias uid="2844"/>
-					</from>
-					<to>PV_Loan_Payment</to>
-				</connector>
-				<connector uid="2845" angle="90">
-					<from>Expected_Inc_Hi_Blend_Volume</from>
-					<to>Expected_Inc_Hi_Blend_Cost</to>
-				</connector>
-				<connector uid="2846" angle="6.34019">
-					<from>
-						<alias uid="2594"/>
-					</from>
-					<to>length_of_period_2</to>
-				</connector>
-				<connector uid="2847" angle="270">
-					<from>
-						<alias uid="2788"/>
-					</from>
-					<to>Expected_Tax_1</to>
-				</connector>
-				<connector uid="2848" angle="32.0054">
-					<from>Expected_Inc_Gas_Volume</from>
-					<to>Net_Exp_Inc_Gas_Rev</to>
-				</connector>
-				<connector uid="2849" angle="270">
-					<from>
-						<alias uid="2850"/>
-					</from>
-					<to>Expected_Incremental_Traffic</to>
-				</connector>
-				<connector uid="2851" angle="0">
-					<from>Net_Expected_Inc_Other_Rev</from>
+				<connector uid="2634" angle="45">
+					<from>Net_Exp_Inc_Gas_Rev</from>
 					<to>Total_Net_Expected_Incremental_Revenues</to>
 				</connector>
-				<connector uid="2852" angle="26.5651">
-					<from>
-						<alias uid="2853"/>
-					</from>
-					<to>discount_factor_Loan_Payment_RP</to>
+				<connector uid="2635" angle="0">
+					<from>Expected_Inc_Hi_Blend_Volume_Inc_Visits</from>
+					<to>Expected_Inc_Hi_Blend_Volume</to>
 				</connector>
-				<connector uid="2854" angle="270">
+				<connector uid="2636" angle="270">
+					<from>NPV_Taxes_RP</from>
+					<to>NPV_Investment_RP</to>
+				</connector>
+				<connector uid="2637" angle="90">
+					<from>Frac_Tankage_Debt_Financed</from>
+					<to>Loan_Principal</to>
+				</connector>
+				<connector uid="2638" angle="32.0054">
+					<from>completing_consideration</from>
+					<to>investing_in_HiBlend</to>
+				</connector>
+				<connector uid="2639" angle="0">
+					<from>Expected_Inc_Hi_Blend_Visits</from>
+					<to>Expected_Inc_Hi_Blend_Volume_Inc_Visits</to>
+				</connector>
+				<connector uid="2640" angle="270">
 					<from>
-						<alias uid="2855"/>
+						<alias uid="2641"/>
+					</from>
+					<to>initial_repurposable_stations</to>
+				</connector>
+				<connector uid="2642" angle="220.601">
+					<from>
+						<alias uid="2615"/>
+					</from>
+					<to>Cume_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2643" angle="6.34019">
+					<from>Expected_Incremental_Traffic</from>
+					<to>Net_Expected_Inc_Other_Rev</to>
+				</connector>
+				<connector uid="2644" angle="327.995">
+					<from>
+						<alias uid="2645"/>
+					</from>
+					<to>discount_factor_2</to>
+				</connector>
+				<connector uid="2646" angle="90">
+					<from>
+						<alias uid="2647"/>
+					</from>
+					<to>impact_station_coverage_on_incremental_traffic</to>
+				</connector>
+				<connector uid="2648" angle="0">
+					<from>Expected_Taxable_Income_3</from>
+					<to>Expected_Tax_3</to>
+				</connector>
+				<connector uid="2649" angle="20.556">
+					<from>Initial_Equity_Investment_RP</from>
+					<to>NPV_Investment_RP</to>
+				</connector>
+				<connector uid="2650" angle="0">
+					<from>
+						<alias uid="2651"/>
+					</from>
+					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
+				</connector>
+				<connector uid="2652" color="#C8C8C8" angle="265.365">
+					<from>
+						<alias uid="2653"/>
+					</from>
+					<to>putting_on_the_table</to>
+				</connector>
+				<connector uid="2654" angle="40.6013">
+					<from>volumetric_offset_for_investment</from>
+					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
+				</connector>
+				<connector uid="2655" color="#E0E0E0" angle="270">
+					<from>
+						<alias uid="2611"/>
+					</from>
+					<to>Current_Gas_Volume</to>
+				</connector>
+				<connector uid="2656" angle="54.4623">
+					<from>NPV_Taxes_1_RP</from>
+					<to>NPV_Taxes_RP</to>
+				</connector>
+				<connector uid="2657" angle="0">
+					<from>Current_Gas_Volume</from>
+					<to>Expected_Inc_Gas_Volume_Current_Traffic</to>
+				</connector>
+				<connector uid="2658" angle="341.565">
+					<from>
+						<alias uid="2645"/>
 					</from>
 					<to>discount_factor_3</to>
 				</connector>
-				<connector uid="2856" angle="220.601">
+				<connector uid="2659" angle="0">
 					<from>
-						<alias uid="2857"/>
+						<alias uid="2660"/>
+					</from>
+					<to>Expected_Taxable_Income_2</to>
+				</connector>
+				<connector uid="2661" angle="90">
+					<from>
+						<alias uid="2662"/>
+					</from>
+					<to>Expected_Tax_2_RP</to>
+				</connector>
+				<connector uid="2663" angle="275.711">
+					<from>length_of_period_2</from>
+					<to>discount_factor_2</to>
+				</connector>
+				<connector uid="2664" angle="270">
+					<from>length_of_period_1</from>
+					<to>discount_factor_1</to>
+				</connector>
+				<connector uid="2665" color="white" angle="0">
+					<from>alt_fuel_POU_cost</from>
+					<to>Expected_Inc_Hi_Blend_Cost</to>
+				</connector>
+				<connector uid="2666" angle="180">
+					<from>
+						<alias uid="2667"/>
+					</from>
+					<to>initial_considering_repurpose</to>
+				</connector>
+				<connector uid="2668" angle="0">
+					<from>
+						<alias uid="2669"/>
+					</from>
+					<to>Net_Expected_Other_Revenue_per_Visit</to>
+				</connector>
+				<connector uid="2670" color="white" angle="90">
+					<from>
+						<alias uid="2629"/>
+					</from>
+					<to>estimated_depreciation_expense_RP</to>
+				</connector>
+				<connector uid="2671" angle="113.962">
+					<from>completing_consideration_repurpose</from>
+					<to>taking_off_table_RP</to>
+				</connector>
+				<connector uid="2672" angle="180">
+					<from>regional_sales_vol_gas_eq_per_mo</from>
+					<to>avg_per_station_vol_gas_eq_per_mo</to>
+				</connector>
+				<connector uid="2673" angle="310.601">
+					<from>Loan_Principal</from>
+					<to>Annual_Loan_Payment</to>
+				</connector>
+				<connector uid="2674" angle="90">
+					<from>annual_station_traffic</from>
+					<to>Expected_Incremental_Traffic</to>
+				</connector>
+				<connector uid="2675" color="#C8C8C8" angle="125.538">
+					<from>
+						<alias uid="2676"/>
+					</from>
+					<to>completing_consideration</to>
+				</connector>
+				<connector uid="2677" angle="0">
+					<from>Expected_Tax_3</from>
+					<to>NPV_Taxes_3</to>
+				</connector>
+				<connector uid="2678" angle="0">
+					<from>
+						<alias uid="2679"/>
+					</from>
+					<to>PV_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2680" angle="282.529">
+					<from>NPV_Taxes</from>
+					<to>NPV_Investment</to>
+				</connector>
+				<connector uid="2681" angle="0">
+					<from>Expected_Taxable_Income_1</from>
+					<to>Expected_Tax_1</to>
+				</connector>
+				<connector uid="2682" angle="90">
+					<from>Rough_Estimate_Annual_Interest</from>
+					<to>Expected_Taxable_Income_1</to>
+				</connector>
+				<connector uid="2683" angle="49.3987">
+					<from>
+						<alias uid="2645"/>
+					</from>
+					<to>discount_factor_loan</to>
+				</connector>
+				<connector uid="2684" angle="0">
+					<from>Expected_Taxable_Income_1_RP</from>
+					<to>Expected_Tax_1_RP</to>
+				</connector>
+				<connector uid="2685" angle="270">
+					<from>Total_Net_Expected_Incremental_Revenues</from>
+					<to>Expected_Taxable_Income_1</to>
+				</connector>
+				<connector uid="2686" angle="45">
+					<from>
+						<alias uid="2687"/>
+					</from>
+					<to>Initial_Equity_Investment_RP</to>
+				</connector>
+				<connector uid="2688" angle="290.556">
+					<from>Total_Net_Expected_Incremental_Revenues</from>
+					<to>Expected_Taxable_Income_2</to>
+				</connector>
+				<connector uid="2689" angle="0">
+					<from>total_stations_by_region</from>
+					<to>Station_Coverage</to>
+				</connector>
+				<connector uid="2690" angle="6.34019">
+					<from>
+						<alias uid="2691"/>
+					</from>
+					<to>FCI_Repurposing_Midgrade</to>
+				</connector>
+				<connector uid="2692" angle="198.435">
+					<from>
+						<alias uid="2693"/>
+					</from>
+					<to>FCI_Repurposing_Midgrade</to>
+				</connector>
+				<connector uid="2694" angle="180">
+					<from>
+						<alias uid="2695"/>
+					</from>
+					<to>Actual_User_Weighted_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="2696" angle="0">
+					<from>PV_Loan_Payment_RP</from>
+					<to>NPV_Investment_RP</to>
+				</connector>
+				<connector uid="2697" angle="270">
+					<from>total_RP_by_region</from>
+					<to>total_stations_by_region</to>
+				</connector>
+				<connector uid="2698" angle="0">
+					<from>Expected_Tax_1_RP</from>
+					<to>NPV_Taxes_1_RP</to>
+				</connector>
+				<connector uid="2699" angle="0">
+					<from>initial_repurposable_stations</from>
+					<to>initial_not_considering_repurpose</to>
+				</connector>
+				<connector uid="2700" angle="339.444">
+					<from>estimated_depreciation_expense_RP</from>
+					<to>Expected_Taxable_Income_1_RP</to>
+				</connector>
+				<connector uid="2701" color="#C8C8C8" angle="90">
+					<from>With_Hi_Blend_Investment</from>
+					<to>total_with_hi_blend_by_region</to>
+				</connector>
+				<connector uid="2702" angle="327.995">
+					<from>Loan_Principal_RP</from>
+					<to>Annual_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2703" angle="302.005">
+					<from>NPV_Net_Inc_Revs</from>
+					<to>NPV_Investment</to>
+				</connector>
+				<connector uid="2704" color="#C8C8C8" angle="95.4038">
+					<from>
+						<alias uid="2705"/>
+					</from>
+					<to>putting_on_table_RP</to>
+				</connector>
+				<connector uid="2706" color="#C8C8C8" angle="26.5651">
+					<from>Annual_Loan_Payment</from>
+					<to>PV_Loan_Payment</to>
+				</connector>
+				<connector uid="2707" angle="82.875">
+					<from>investment_hit_rate</from>
+					<to>investing_in_HiBlend</to>
+				</connector>
+				<connector uid="2708" angle="270">
+					<from>FCI_Repurposing_Midgrade</from>
+					<to>Per_Station_Repurpose_Subs</to>
+				</connector>
+				<connector uid="2709" color="#C8C8C8" angle="229.399">
+					<from>
+						<alias uid="2710"/>
+					</from>
+					<to>completing_consideration_repurpose</to>
+				</connector>
+				<connector uid="2711" color="#C8C8C8" angle="153.435">
+					<from>With_Hi_Blend_Investment</from>
+					<to>total_hi_blend_investable_by_region</to>
+				</connector>
+				<connector uid="2712" angle="327.995">
+					<from>initial_repurposable_stations</from>
+					<to>initial_with_hi_blend_repurposed</to>
+				</connector>
+				<connector uid="2713" angle="180">
+					<from>
+						<alias uid="2714"/>
 					</from>
 					<to>investment_hit_rate</to>
 				</connector>
-				<connector uid="2858" angle="0">
-					<from>Expected_Taxable_Income_2</from>
-					<to>Expected_Tax_2</to>
+				<connector uid="2715" angle="90">
+					<from>Cume_Interest_Payment_RP</from>
+					<to>Rough_Estimate_Annual_Interest_RP</to>
 				</connector>
-				<connector uid="2859" angle="180">
-					<from>
-						<alias uid="2860"/>
-					</from>
+				<connector uid="2716" angle="90">
+					<from>Annual_Loan_Payment_RP</from>
+					<to>Cume_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2717" angle="327.995">
+					<from>initial_non_repurposable_stations</from>
 					<to>initial_with_hi_blend_invest</to>
 				</connector>
-				<connector uid="2861" angle="90">
-					<from>Expected_Share_Current_Traffic_to_higher_blends</from>
-					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
+				<connector uid="2718" angle="330.945">
+					<from>NPV_Taxes_3</from>
+					<to>NPV_Taxes</to>
 				</connector>
-				<connector uid="2862" angle="343.301">
+				<connector uid="2719" angle="0">
 					<from>
-						<alias uid="2795"/>
+						<alias uid="2720"/>
 					</from>
-					<to>length_of_period_2</to>
+					<to>total_initial_stations_by_region</to>
 				</connector>
-				<connector uid="2863" angle="20.556">
+				<connector uid="2721" angle="18.4349">
 					<from>
-						<alias uid="2864"/>
+						<alias uid="2722"/>
 					</from>
-					<to>alt_fuel_POU_cost</to>
+					<to>alt_fuel_pump_price</to>
 				</connector>
-				<connector uid="2865" angle="12.5288">
-					<from>annual_station_traffic</from>
-					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
-				</connector>
-				<connector uid="2866" angle="90">
+				<connector uid="2723" angle="130.601">
 					<from>
-						<alias uid="2867"/>
+						<alias uid="2633"/>
+					</from>
+					<to>NPV_Taxes_2</to>
+				</connector>
+				<connector uid="2724" angle="90">
+					<from>
+						<alias uid="2725"/>
+					</from>
+					<to>discount_factor_Loan_Payment</to>
+				</connector>
+				<connector uid="2726" angle="159.444">
+					<from>
+						<alias uid="2615"/>
+					</from>
+					<to>Rough_Estimate_Annual_Interest_RP</to>
+				</connector>
+				<connector uid="2727" angle="297.897">
+					<from>Considering_Investment</from>
+					<to>completing_consideration</to>
+				</connector>
+				<connector uid="2728" angle="327.995">
+					<from>estimated_depreciation_expense</from>
+					<to>Expected_Taxable_Income_1</to>
+				</connector>
+				<connector uid="2729" angle="180">
+					<from>
+						<alias uid="2730"/>
+					</from>
+					<to>regional_sales_vol_gas_eq_per_mo</to>
+				</connector>
+				<connector uid="2731" angle="90">
+					<from>
+						<alias uid="2605"/>
+					</from>
+					<to>estimated_depreciation_expense</to>
+				</connector>
+				<connector uid="2732" angle="18.4349">
+					<from>Expected_Gas_Volume_from_Current_Traffic_after_invest</from>
+					<to>Expected_Inc_Gas_Volume_Current_Traffic</to>
+				</connector>
+				<connector uid="2733" angle="90">
+					<from>Equity_Fraction</from>
+					<to>Frac_Tankage_Debt_Financed</to>
+				</connector>
+				<connector uid="2734" angle="0">
+					<from>Expected_Inc_Hi_Blend_Cost</from>
+					<to>Net_Expected_Hi_Blend_Inc_Rev</to>
+				</connector>
+				<connector uid="2735" angle="0">
+					<from>Equity_Fraction</from>
+					<to>Initial_Equity_Investment</to>
+				</connector>
+				<connector uid="2736" angle="0">
+					<from>Expected_Tax_1</from>
+					<to>NPV_Taxes_1</to>
+				</connector>
+				<connector uid="2737" angle="161.565">
+					<from>investment_hit_rate_RP</from>
+					<to>taking_off_table_RP</to>
+				</connector>
+				<connector uid="2738" angle="90">
+					<from>Expected_Share_Current_Traffic_to_Hi_Blend</from>
+					<to>Expected_Share_Current_Traffic_to_higher_blends</to>
+				</connector>
+				<connector uid="2739" angle="90">
+					<from>
+						<alias uid="2615"/>
+					</from>
+					<to>Expected_Taxable_Income_2_RP</to>
+				</connector>
+				<connector uid="2740" angle="90">
+					<from>
+						<alias uid="2730"/>
+					</from>
+					<to>Max_share_market_Hi_Blend_Gas_Equivalent</to>
+				</connector>
+				<connector uid="2741" angle="270">
+					<from>
+						<alias uid="2742"/>
+					</from>
+					<to>NPV_Taxes_1_RP</to>
+				</connector>
+				<connector uid="2743" angle="26.5651">
+					<from>
+						<alias uid="2611"/>
+					</from>
+					<to>Expected_Inc_Gas_Volume_Inc_Visits</to>
+				</connector>
+				<connector uid="2744" angle="341.565">
+					<from>Expected_Incremental_Traffic</from>
+					<to>Expected_Inc_Gas_Visits</to>
+				</connector>
+				<connector uid="2745" angle="315">
+					<from>
+						<alias uid="2613"/>
+					</from>
+					<to>Expected_Inc_Gas_Visits</to>
+				</connector>
+				<connector uid="2746" color="white" angle="270">
+					<from>
+						<alias uid="2629"/>
+					</from>
+					<to>Loan_Principal_RP</to>
+				</connector>
+				<connector uid="2747" color="#C8C8C8" angle="270">
+					<from>With_Hi_Blend_RP</from>
+					<to>total_with_hi_blend_by_region</to>
+				</connector>
+				<connector uid="2748" angle="90">
+					<from>Cume_Loan_Payment_RP</from>
+					<to>Cume_Interest_Payment_RP</to>
+				</connector>
+				<connector uid="2749" angle="90">
+					<from>Annual_Loan_Payment</from>
+					<to>Cume_Loan_Payment</to>
+				</connector>
+				<connector uid="2750" angle="147.995">
+					<from>
+						<alias uid="2751"/>
+					</from>
+					<to>investment_hit_rate_RP</to>
+				</connector>
+				<connector uid="2752" angle="69.444">
+					<from>Rough_Estimate_Annual_Interest</from>
+					<to>Expected_Taxable_Income_2</to>
+				</connector>
+				<connector uid="2753" angle="12.5288">
+					<from>Net_Expected_Hi_Blend_Inc_Rev</from>
+					<to>Total_Net_Expected_Incremental_Revenues</to>
+				</connector>
+				<connector uid="2754" angle="180">
+					<from>
+						<alias uid="2755"/>
+					</from>
+					<to>initial_considering_invest</to>
+				</connector>
+				<connector uid="2756" angle="149.226">
+					<from>
+						<alias uid="2757"/>
 					</from>
 					<to>avg_per_station_vol_gas_eq_per_mo</to>
 				</connector>
+				<connector uid="2758" color="white" angle="327.995">
+					<from>Expected_Inc_Gas_Volume_Inc_Visits</from>
+					<to>Expected_Inc_Gas_Volume</to>
+				</connector>
+				<connector uid="2759" angle="52.5946">
+					<from>Considering_RP</from>
+					<to>completing_consideration_repurpose</to>
+				</connector>
+				<connector uid="2760" angle="270">
+					<from>
+						<alias uid="2761"/>
+					</from>
+					<to>total_initial_stations_by_region</to>
+				</connector>
+				<connector uid="2762" angle="0">
+					<from>Expected_Tax_2</from>
+					<to>NPV_Taxes_2</to>
+				</connector>
+				<connector uid="2763" angle="206.565">
+					<from>total_with_hi_blend_by_region</from>
+					<to>Station_Coverage</to>
+				</connector>
+				<connector uid="2764" color="white" angle="12.5288">
+					<from>implementation_time</from>
+					<to>FCI_New_Tankage_Equip</to>
+				</connector>
+				<connector uid="2765" angle="0">
+					<from>Expected_Taxable_Income_2_RP</from>
+					<to>Expected_Tax_2_RP</to>
+				</connector>
+				<connector uid="2766" angle="90">
+					<from>
+						<alias uid="2767"/>
+					</from>
+					<to>NPV_Net_Inc_Revs</to>
+				</connector>
+				<connector uid="2768" angle="90">
+					<from>total_hi_blend_investable_by_region</from>
+					<to>total_stations_by_region</to>
+				</connector>
+				<connector uid="2769" angle="220.601">
+					<from>
+						<alias uid="2770"/>
+					</from>
+					<to>Cume_Loan_Payment</to>
+				</connector>
+				<connector uid="2771" color="#C8C8C8" angle="20.556">
+					<from>Annual_Loan_Payment_RP</from>
+					<to>PV_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2772" angle="90">
+					<from>initial_considering_invest</from>
+					<to>initial_not_considering_Invest</to>
+				</connector>
+				<connector uid="2773" angle="90">
+					<from>Actual_User_Weighted_Hi_Blend_Share</from>
+					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
+				</connector>
+				<connector uid="2774" angle="12.5288">
+					<from>Expected_Share_Current_Traffic_to_higher_blends</from>
+					<to>Expected_Gas_Visits_from_Current_Traffic</to>
+				</connector>
+				<connector uid="2775" angle="0">
+					<from>
+						<alias uid="2776"/>
+					</from>
+					<to>Per_Station_FCI_Subs</to>
+				</connector>
+				<connector uid="2777" angle="90">
+					<from>Cume_Loan_Payment</from>
+					<to>Cume_Interest_Payment</to>
+				</connector>
+				<connector uid="2778" angle="26.5651">
+					<from>
+						<alias uid="2779"/>
+					</from>
+					<to>FCI_New_Tankage_Equip</to>
+				</connector>
+				<connector uid="2780" angle="310.601">
+					<from>
+						<alias uid="2605"/>
+					</from>
+					<to>Initial_Equity_Investment</to>
+				</connector>
+				<connector uid="2781" angle="180">
+					<from>discount_factor_Loan_Payment</from>
+					<to>Annual_Loan_Payment</to>
+				</connector>
+				<connector uid="2782" angle="125.538">
+					<from>
+						<alias uid="2783"/>
+					</from>
+					<to>NPV_Taxes_3</to>
+				</connector>
+				<connector uid="2784" color="white" angle="353.66">
+					<from>implementation_time</from>
+					<to>FCI_Repurposing_Midgrade</to>
+				</connector>
+				<connector uid="2785" angle="0">
+					<from>Expected_Gas_Visits_from_Current_Traffic</from>
+					<to>Expected_Gas_Volume_from_Current_Traffic_after_invest</to>
+				</connector>
+				<connector uid="2786" angle="315">
+					<from>
+						<alias uid="2787"/>
+					</from>
+					<to>NPV_Investment_RP</to>
+				</connector>
+				<connector uid="2788" angle="270">
+					<from>initial_repurposable_stations</from>
+					<to>initial_non_repurposable_stations</to>
+				</connector>
+				<connector uid="2789" angle="26.5651">
+					<from>
+						<alias uid="2790"/>
+					</from>
+					<to>Net_Expected_Other_Revenue_per_Visit</to>
+				</connector>
+				<connector uid="2791" angle="234.462">
+					<from>
+						<alias uid="2792"/>
+					</from>
+					<to>annual_station_traffic</to>
+				</connector>
+				<connector uid="2793" color="#C8C8C8" angle="64.7989">
+					<from>Not_Considering_Investment</from>
+					<to>total_hi_blend_investable_by_region</to>
+				</connector>
+				<connector uid="2794" color="white" angle="0">
+					<from>Expected_Inc_Gas_Visits</from>
+					<to>Expected_Inc_Gas_Volume_Inc_Visits</to>
+				</connector>
+				<connector uid="2795" angle="0">
+					<from>initial_non_repurposable_stations</from>
+					<to>initial_not_considering_Invest</to>
+				</connector>
+				<connector uid="2796" angle="0">
+					<from>annual_station_traffic</from>
+					<to>Current_Gas_Volume</to>
+				</connector>
+				<connector uid="2797" angle="0">
+					<from>Total_Net_Expected_Incremental_Revenues</from>
+					<to>NPV_Net_Inc_Revs</to>
+				</connector>
+				<connector uid="2798" angle="270">
+					<from>
+						<alias uid="2770"/>
+					</from>
+					<to>discount_factor_Loan_Payment</to>
+				</connector>
+				<connector uid="2799" angle="233.13">
+					<from>completing_consideration</from>
+					<to>taking_off_the_table</to>
+				</connector>
+				<connector uid="2800" angle="270">
+					<from>
+						<alias uid="2801"/>
+					</from>
+					<to>NPV_Taxes_2_RP</to>
+				</connector>
+				<connector uid="2802" angle="270">
+					<from>
+						<alias uid="2803"/>
+					</from>
+					<to>NPV_Taxes_RP</to>
+				</connector>
+				<connector uid="2804" angle="0">
+					<from>Loan_Principal_RP</from>
+					<to>Cume_Interest_Payment_RP</to>
+				</connector>
+				<connector uid="2805" angle="243.435">
+					<from>
+						<alias uid="2783"/>
+					</from>
+					<to>NPV_Taxes_2</to>
+				</connector>
+				<connector uid="2806" angle="90">
+					<from>Expected_Inc_Hi_Blend_Rev</from>
+					<to>Net_Expected_Hi_Blend_Inc_Rev</to>
+				</connector>
+				<connector uid="2807" color="#E0E0E0" angle="270">
+					<from>
+						<alias uid="2611"/>
+					</from>
+					<to>Expected_Gas_Volume_from_Current_Traffic_after_invest</to>
+				</connector>
+				<connector uid="2808" angle="12.5288">
+					<from>estimated_depreciation_expense_RP</from>
+					<to>Expected_Taxable_Income_2_RP</to>
+				</connector>
+				<connector uid="2809" angle="270">
+					<from>
+						<alias uid="2660"/>
+					</from>
+					<to>estimated_depreciation_expense</to>
+				</connector>
+				<connector uid="2810" angle="0">
+					<from>NPV_Taxes_2</from>
+					<to>NPV_Taxes</to>
+				</connector>
+				<connector uid="2811" angle="63.4349">
+					<from>Rough_Estimate_Annual_Interest_RP</from>
+					<to>Expected_Taxable_Income_2_RP</to>
+				</connector>
+				<connector uid="2812" angle="32.0054">
+					<from>initial_with_hi_blend_repurposed</from>
+					<to>initial_not_considering_repurpose</to>
+				</connector>
+				<connector uid="2813" angle="90">
+					<from>
+						<alias uid="2814"/>
+					</from>
+					<to>Expected_Tax_2</to>
+				</connector>
+				<connector uid="2815" angle="341.565">
+					<from>initial_non_repurposable_stations</from>
+					<to>initial_considering_invest</to>
+				</connector>
+				<connector uid="2816" angle="57.9946">
+					<from>Expected_Inc_Gas_Volume_Current_Traffic</from>
+					<to>Expected_Inc_Gas_Volume</to>
+				</connector>
+				<connector uid="2817" angle="341.565">
+					<from>initial_repurposable_stations</from>
+					<to>initial_considering_repurpose</to>
+				</connector>
+				<connector uid="2818" color="#C8C8C8" angle="127.405">
+					<from>Considering_Investment</from>
+					<to>total_hi_blend_investable_by_region</to>
+				</connector>
+				<connector uid="2819" angle="180">
+					<from>discount_factor_Loan_Payment_RP</from>
+					<to>Annual_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2820" angle="180">
+					<from>
+						<alias uid="2821"/>
+					</from>
+					<to>discount_factor_loan</to>
+				</connector>
+				<connector uid="2822" angle="116.565">
+					<from>
+						<alias uid="2814"/>
+					</from>
+					<to>Expected_Tax_3</to>
+				</connector>
+				<connector uid="2823" angle="153.435">
+					<from>Max_share_market_Hi_Blend_Gas_Equivalent</from>
+					<to>Expected_Share_Current_Traffic_to_Hi_Blend</to>
+				</connector>
+				<connector uid="2824" angle="180">
+					<from>
+						<alias uid="2825"/>
+					</from>
+					<to>initial_with_hi_blend_repurposed</to>
+				</connector>
+				<connector uid="2826" angle="90">
+					<from>
+						<alias uid="2742"/>
+					</from>
+					<to>NPV_Taxes_2_RP</to>
+				</connector>
+				<connector uid="2827" angle="0">
+					<from>
+						<alias uid="2828"/>
+					</from>
+					<to>volumetric_offset_for_investment</to>
+				</connector>
+				<connector uid="2829" angle="6.34019">
+					<from>PV_Loan_Payment</from>
+					<to>NPV_Investment</to>
+				</connector>
+				<connector uid="2830" angle="35.5377">
+					<from>
+						<alias uid="2831"/>
+					</from>
+					<to>Expected_Taxable_Income_2_RP</to>
+				</connector>
+				<connector uid="2832" angle="347.471">
+					<from>
+						<alias uid="2776"/>
+					</from>
+					<to>FCI_New_Tankage_Equip</to>
+				</connector>
+				<connector uid="2833" angle="90">
+					<from>Cume_Interest_Payment</from>
+					<to>Rough_Estimate_Annual_Interest</to>
+				</connector>
+				<connector uid="2834" angle="339.444">
+					<from>
+						<alias uid="2779"/>
+					</from>
+					<to>FCI_Repurposing_Midgrade</to>
+				</connector>
+				<connector uid="2835" angle="0">
+					<from>
+						<alias uid="2625"/>
+					</from>
+					<to>Per_Station_Repurpose_Subs</to>
+				</connector>
+				<connector uid="2836" angle="32.0054">
+					<from>
+						<alias uid="2821"/>
+					</from>
+					<to>length_of_period_1</to>
+				</connector>
+				<connector uid="2837" angle="20.556">
+					<from>estimated_depreciation_expense</from>
+					<to>Expected_Taxable_Income_2</to>
+				</connector>
+				<connector uid="2838" angle="270">
+					<from>
+						<alias uid="2839"/>
+					</from>
+					<to>regional_sales_vol_gas_eq_per_mo</to>
+				</connector>
+				<connector uid="2840" angle="0">
+					<from>
+						<alias uid="2645"/>
+					</from>
+					<to>discount_factor_1</to>
+				</connector>
+				<connector uid="2841" angle="77.4712">
+					<from>NPV_Taxes_1</from>
+					<to>NPV_Taxes</to>
+				</connector>
+				<connector uid="2842" angle="90">
+					<from>
+						<alias uid="2770"/>
+					</from>
+					<to>Expected_Taxable_Income_2</to>
+				</connector>
+				<connector uid="2843" angle="180">
+					<from>
+						<alias uid="2844"/>
+					</from>
+					<to>investment_hit_rate_RP</to>
+				</connector>
+				<connector uid="2845" angle="347.471">
+					<from>completing_consideration_repurpose</from>
+					<to>repurposing_to_HiBlend</to>
+				</connector>
+				<connector uid="2846" color="white" angle="90">
+					<from>
+						<alias uid="2847"/>
+					</from>
+					<to>Net_Exp_Inc_Gas_Rev</to>
+				</connector>
+				<connector uid="2848" angle="270">
+					<from>
+						<alias uid="2603"/>
+					</from>
+					<to>estimated_depreciation_expense_RP</to>
+				</connector>
+				<connector uid="2849" angle="0">
+					<from>Expected_Tax_2_RP</from>
+					<to>NPV_Taxes_2_RP</to>
+				</connector>
+				<connector uid="2850" angle="0">
+					<from>Net_Expected_Other_Revenue_per_Visit</from>
+					<to>Net_Expected_Inc_Other_Rev</to>
+				</connector>
+				<connector uid="2851" angle="353.66">
+					<from>annual_station_traffic</from>
+					<to>Expected_Gas_Visits_from_Current_Traffic</to>
+				</connector>
+				<connector uid="2852" color="#C8C8C8" angle="202.249">
+					<from>With_Hi_Blend_RP</from>
+					<to>total_RP_by_region</to>
+				</connector>
+				<connector uid="2853" angle="90">
+					<from>mnthly_station_traffic</from>
+					<to>annual_station_traffic</to>
+				</connector>
+				<connector uid="2854" angle="90">
+					<from>Max_share_market_Hi_Blend_Gas_Equivalent</from>
+					<to>Actual_User_Weighted_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="2855" angle="90">
+					<from>Rough_Estimate_Annual_Interest_RP</from>
+					<to>Expected_Taxable_Income_1_RP</to>
+				</connector>
+				<connector uid="2856" angle="116.565">
+					<from>impact_station_coverage_on_incremental_traffic</from>
+					<to>Expected_Incremental_Traffic</to>
+				</connector>
+				<connector uid="2857" angle="180">
+					<from>
+						<alias uid="2858"/>
+					</from>
+					<to>mnthly_station_traffic</to>
+				</connector>
+				<connector uid="2859" angle="40.6013">
+					<from>Initial_Equity_Investment</from>
+					<to>NPV_Investment</to>
+				</connector>
+				<connector uid="2860" color="#C8C8C8" angle="297.897">
+					<from>Not_Considering_RP</from>
+					<to>total_RP_by_region</to>
+				</connector>
+				<connector uid="2861" angle="26.5651">
+					<from>Expected_Higher_Blend_Visits_from_Current_Traffic</from>
+					<to>Expected_Inc_Hi_Blend_Volume_Current_Traffic</to>
+				</connector>
+				<connector uid="2862" angle="153.435">
+					<from>
+						<alias uid="2770"/>
+					</from>
+					<to>Rough_Estimate_Annual_Interest</to>
+				</connector>
+				<connector uid="2863" angle="188.13">
+					<from>investment_hit_rate</from>
+					<to>taking_off_the_table</to>
+				</connector>
+				<connector uid="2864" angle="90">
+					<from>FCI_New_Tankage_Equip</from>
+					<to>Per_Station_FCI_Subs</to>
+				</connector>
+				<connector uid="2865" angle="215.538">
+					<from>
+						<alias uid="2767"/>
+					</from>
+					<to>NPV_Taxes_3</to>
+				</connector>
+				<connector uid="2866" angle="0">
+					<from>
+						<alias uid="2867"/>
+					</from>
+					<to>FCI_New_Tankage_Equip</to>
+				</connector>
 				<connector uid="2868" angle="0">
+					<from>Expected_Incremental_Traffic</from>
+					<to>Expected_Inc_Hi_Blend_Visits</to>
+				</connector>
+				<connector uid="2869" angle="0">
+					<from>
+						<alias uid="2870"/>
+					</from>
+					<to>PV_Loan_Payment</to>
+				</connector>
+				<connector uid="2871" angle="90">
+					<from>Expected_Inc_Hi_Blend_Volume</from>
+					<to>Expected_Inc_Hi_Blend_Cost</to>
+				</connector>
+				<connector uid="2872" angle="6.34019">
+					<from>
+						<alias uid="2620"/>
+					</from>
+					<to>length_of_period_2</to>
+				</connector>
+				<connector uid="2873" angle="270">
+					<from>
+						<alias uid="2814"/>
+					</from>
+					<to>Expected_Tax_1</to>
+				</connector>
+				<connector uid="2874" angle="32.0054">
+					<from>Expected_Inc_Gas_Volume</from>
+					<to>Net_Exp_Inc_Gas_Rev</to>
+				</connector>
+				<connector uid="2875" angle="270">
+					<from>
+						<alias uid="2876"/>
+					</from>
+					<to>Expected_Incremental_Traffic</to>
+				</connector>
+				<connector uid="2877" angle="0">
+					<from>Net_Expected_Inc_Other_Rev</from>
+					<to>Total_Net_Expected_Incremental_Revenues</to>
+				</connector>
+				<connector uid="2878" angle="26.5651">
+					<from>
+						<alias uid="2879"/>
+					</from>
+					<to>discount_factor_Loan_Payment_RP</to>
+				</connector>
+				<connector uid="2880" angle="270">
+					<from>
+						<alias uid="2881"/>
+					</from>
+					<to>discount_factor_3</to>
+				</connector>
+				<connector uid="2882" angle="220.601">
+					<from>
+						<alias uid="2883"/>
+					</from>
+					<to>investment_hit_rate</to>
+				</connector>
+				<connector uid="2884" angle="0">
+					<from>Expected_Taxable_Income_2</from>
+					<to>Expected_Tax_2</to>
+				</connector>
+				<connector uid="2885" angle="180">
+					<from>
+						<alias uid="2886"/>
+					</from>
+					<to>initial_with_hi_blend_invest</to>
+				</connector>
+				<connector uid="2887" angle="90">
+					<from>Expected_Share_Current_Traffic_to_higher_blends</from>
+					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
+				</connector>
+				<connector uid="2888" angle="343.301">
+					<from>
+						<alias uid="2821"/>
+					</from>
+					<to>length_of_period_2</to>
+				</connector>
+				<connector uid="2889" angle="17.3067">
+					<from>
+						<alias uid="2890"/>
+					</from>
+					<to>alt_fuel_POU_cost</to>
+				</connector>
+				<connector uid="2891" angle="12.5288">
+					<from>annual_station_traffic</from>
+					<to>Expected_Higher_Blend_Visits_from_Current_Traffic</to>
+				</connector>
+				<connector uid="2892" angle="90">
+					<from>
+						<alias uid="2893"/>
+					</from>
+					<to>avg_per_station_vol_gas_eq_per_mo</to>
+				</connector>
+				<connector uid="2894" angle="0">
 					<from>Loan_Principal</from>
 					<to>Cume_Interest_Payment</to>
 				</connector>
-				<connector uid="2869" angle="90">
+				<connector uid="2895" angle="90">
 					<from>initial_considering_repurpose</from>
 					<to>initial_not_considering_repurpose</to>
 				</connector>
-				<connector uid="2870" angle="0">
+				<connector uid="2896" angle="0">
 					<from>Expected_Inc_Hi_Blend_Volume</from>
 					<to>Expected_Inc_Hi_Blend_Rev</to>
 				</connector>
-				<connector uid="2871" angle="270">
+				<connector uid="2897" angle="270">
 					<from>
-						<alias uid="2636"/>
+						<alias uid="2662"/>
 					</from>
 					<to>Expected_Tax_1_RP</to>
 				</connector>
-				<connector uid="2872" angle="270">
+				<connector uid="2898" angle="270">
 					<from>
-						<alias uid="2805"/>
+						<alias uid="2831"/>
 					</from>
 					<to>Expected_Taxable_Income_1_RP</to>
 				</connector>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2873" x="3282.5" y="1204" width="260" height="58">FCI for new tankage and equip, repurposed tankage and equip</text_box>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2874" x="1791.5" y="1316" width="260" height="58">Discount Factor Calculations</text_box>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2875" x="2509.5" y="1199" width="260" height="58">NPV Calc for Repurposing</text_box>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2876" x="880.5" y="46" width="258" height="34">Repurposing Old Tanks</text_box>
-				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2877" x="861.5" y="1108" width="258" height="34">Installing new tankage</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2899" x="3282.5" y="1204" width="260" height="58">FCI for new tankage and equip, repurposed tankage and equip</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2900" x="1791.5" y="1316" width="260" height="58">Discount Factor Calculations</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2901" x="2509.5" y="1199" width="260" height="58">NPV Calc for Repurposing</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2902" x="880.5" y="46" width="258" height="34">Repurposing Old Tanks</text_box>
+				<text_box color="black" padding="5" border_width="thin" border_style="solid" appearance="transparent" uid="2903" x="861.5" y="1108" width="258" height="34">Installing new tankage</text_box>
 				<stock color="black" font_color="black" label_angle="79.6704" x="1206.5" y="252" name="Considering RP"/>
 				<stock color="black" font_color="black" x="1415.5" y="255" name="With Hi Blend RP"/>
 				<flow color="black" font_color="black" label_angle="250.78" x="1305" y="249" name="repurposing to HiBlend">
@@ -4736,8 +4236,8 @@ COMMENTS: </doc>
 				<aux color="#65183E" font_color="#65183E" label_angle="278.976" x="1260.5" y="477" name="Station Coverage"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="0.895594" x="580" y="1268" name="Hi Blend Pump Price"/>
 				<aux color="black" font_color="black" label_angle="263.415" x="1943.5" y="1086" name="regional sales vol gas eq per mo"/>
-				<aux x="553" y="981" name="Frac FCI subs"/>
-				<aux x="553" y="922" name="FCI subs switch"/>
+				<aux x="525" y="982" name="Frac FCI subs"/>
+				<aux x="523" y="920" name="FCI subs switch"/>
 				<aux color="red" font_color="red" x="3404.5" y="1411" name="implementation time"/>
 				<aux x="557" y="1031" name="Repurpose subs switch"/>
 				<aux color="black" font_color="black" label_side="right" label_angle="315" x="3747.5" y="1339" name="FCI New Tankage Equip"/>
@@ -4749,7 +4249,7 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="456" y="1108" name="repurp subs stop time"/>
 				<aux color="red" font_color="red" x="69" y="700" name="Expected FCI New Tankage and Equip"/>
 				<aux color="red" font_color="red" x="59" y="802" name="depreciation period"/>
-				<aux color="black" font_color="black" label_angle="358.983" x="1415.5" y="397" name="total with hi blend\nby region"/>
+				<aux color="black" font_color="black" label_angle="358.983" x="1415.5" y="397" name="total with hi blend by region"/>
 				<stock color="black" font_color="black" label_angle="82.075" x="1206.5" y="912" name="Considering Investment"/>
 				<aux color="#008F44" font_color="#008F44" label_side="right" x="2283.5" y="104" name="Net Expected Other Revenue per Visit"/>
 				<aux color="black" font_color="black" label_angle="115.599" x="2943.5" y="526" name="Expected Inc Gas Volume"/>
@@ -4824,7 +4324,7 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="65" y="647" name="Expected FCI Repurposing Midgrade"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="356.628" x="223" y="1242" name="Total User Wtd HiBlend Share from Fuel Use"/>
 				<aux color="red" font_color="red" label_angle="278.691" x="220" y="890" name="Share Current HiBlend CapableTraffic to Hi Blend Weighting Factor"/>
-				<aux color="black" font_color="black" label_angle="83.4153" x="1091.5" y="759" name="total hi blend investable\nby region"/>
+				<aux color="black" font_color="black" label_angle="83.4153" x="1091.5" y="759" name="total hi blend investable by region"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="143.325" x="3187.5" y="1535" name="NPV Investment RP"/>
 				<aux color="black" font_color="black" label_angle="347.769" x="2894.5" y="1650" name="Initial Equity Investment RP"/>
 				<stock color="black" font_color="black" x="1415.5" y="915" name="With Hi Blend Investment"/>
@@ -4859,13 +4359,13 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" x="1300" y="1633" name="initial with hi blend invest"/>
 				<aux color="black" font_color="black" x="906" y="1356" name="total initial stations by region"/>
 				<aux color="red" font_color="red" x="358" y="830" name="initial frac ALL stations with repurposable tankage"/>
-				<aux color="black" font_color="black" label_angle="100.865" x="1108" y="1356" name="initial repurposable\nstations"/>
-				<aux color="black" font_color="black" label_angle="241.8" x="1108" y="1514" name="initial non repurposable\nstations"/>
+				<aux color="black" font_color="black" label_angle="100.865" x="1108" y="1356" name="initial repurposable stations"/>
+				<aux color="black" font_color="black" label_angle="241.8" x="1108" y="1514" name="initial non repurposable stations"/>
 				<aux color="red" font_color="red" x="358" y="950" name="initial frac stations with repurposed tankage"/>
 				<aux color="red" font_color="red" x="358" y="890" name="initial frac stations considering repurpose"/>
 				<aux color="red" font_color="red" x="358" y="1070" name="initial frac stations with hi blend invest"/>
 				<aux color="red" font_color="red" x="358" y="1010" name="initial frac stations considering invest"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="241.8" x="1091.5" y="477" name="total stations by\nregion"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="241.8" x="1091.5" y="477" name="total stations by region"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="354.319" x="63" y="1242" name="Total Potential Fuel Consn Gasoline from VM"/>
 				<aux color="black" font_color="black" label_angle="115.599" x="2558.5" y="1539" name="Loan Principal RP"/>
 				<aux color="black" font_color="black" label_angle="216.675" x="2713.5" y="1641" name="Annual Loan Payment RP"/>
@@ -4882,573 +4382,563 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="53.7315" x="3187.5" y="1288" name="NPV Taxes RP"/>
 				<aux color="black" font_color="black" label_angle="344.14" x="2984.5" y="1535" name="PV Loan Payment RP"/>
 				<aux color="black" font_color="black" label_angle="2.5963" x="1850.5" y="368" name="impact station coverage on incremental traffic"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="358.11" x="64" y="1348" name="VM regional vehicle penetration by tech"/>
 				<aux color="black" font_color="black" label_angle="203.229" x="2388.5" y="723" name="Expected Share Current Traffic to higher blends"/>
 				<aux color="black" font_color="black" label_angle="109.295" x="2311.5" y="592" name="volumetric offset for investment"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="304" y="1323" name="IP avg per gal markup"/>
 				<aux color="black" font_color="black" label_angle="1.03621" x="3040.5" y="340" name="alt fuel pump price"/>
 				<aux color="black" font_color="black" label_angle="36.6747" x="2758.5" y="189" name="alt fuel POU cost"/>
 				<group locked="true" color="#008F44" font_color="#008F44" x="7" y="1572" width="745" height="161" name="Outputs to Other Modules 2">
-					<item uid="2878"/>
+					<item uid="2904"/>
 				</group>
-				<group locked="true" color="blue" font_color="blue" x="6" y="1202" width="732" height="226" name="Inputs from Other Modules 2">
-					<item uid="2879"/>
-				</group>
+				<group locked="true" color="blue" font_color="blue" x="6" y="1202" width="732" height="226" name="Inputs from Other Modules 2"/>
 				<group locked="true" x="3" y="623" width="733" height="549" name="Input Data and Initializations 1">
-					<item uid="2880"/>
+					<item uid="2905"/>
 				</group>
 				<group isee:name_image="true" locked="true" color="black" font_color="black" x="1739.5" y="37" width="2268" height="1721" name="Pro Forma Financials and NPV Calculations">
-					<item uid="2635"/>
-					<item uid="2690"/>
-					<item uid="2744"/>
-					<item uid="2726"/>
-					<item uid="2680"/>
-					<item uid="2669"/>
-					<item uid="2875"/>
-					<item uid="2613"/>
-					<item uid="2617"/>
-					<item uid="2696"/>
-					<item uid="2823"/>
-					<item uid="2861"/>
-					<item uid="2655"/>
-					<item uid="2772"/>
-					<item uid="2623"/>
-					<item uid="2845"/>
-					<item uid="2849"/>
-					<item uid="2831"/>
-					<item uid="2624"/>
-					<item uid="2621"/>
-					<item uid="2864"/>
-					<item uid="2759"/>
-					<item uid="2606"/>
-					<item uid="2702"/>
-					<item uid="2708"/>
-					<item uid="2750"/>
-					<item uid="2607"/>
-					<item uid="2794"/>
-					<item uid="2832"/>
-					<item uid="2718"/>
-					<item uid="2610"/>
-					<item uid="2763"/>
-					<item uid="2822"/>
-					<item uid="2660"/>
-					<item uid="2833"/>
-					<item uid="2628"/>
-					<item uid="2644"/>
-					<item uid="2844"/>
-					<item uid="2736"/>
-					<item uid="2853"/>
-					<item uid="2603"/>
-					<item uid="2586"/>
-					<item uid="2638"/>
-					<item uid="2815"/>
-					<item uid="2756"/>
-					<item uid="2829"/>
-					<item uid="2651"/>
-					<item uid="2808"/>
-					<item uid="2668"/>
-					<item uid="2662"/>
-					<item uid="2755"/>
-					<item uid="2761"/>
-					<item uid="2873"/>
-					<item uid="2865"/>
-					<item uid="2600"/>
-					<item uid="2802"/>
-					<item uid="2643"/>
-					<item uid="2723"/>
-					<item uid="2722"/>
-					<item uid="2730"/>
-					<item uid="2828"/>
-					<item uid="2616"/>
-					<item uid="2580"/>
-					<item uid="2809"/>
-					<item uid="2784"/>
-					<item uid="2712"/>
-					<item uid="2788"/>
-					<item uid="2622"/>
-					<item uid="2760"/>
-					<item uid="2821"/>
-					<item uid="2747"/>
-					<item uid="2591"/>
-					<item uid="2836"/>
-					<item uid="2595"/>
-					<item uid="2727"/>
-					<item uid="2589"/>
-					<item uid="2787"/>
-					<item uid="2703"/>
-					<item uid="2634"/>
-					<item uid="2764"/>
-					<item uid="2846"/>
-					<item uid="2608"/>
-					<item uid="2740"/>
-					<item uid="2854"/>
-					<item uid="2838"/>
-					<item uid="2778"/>
-					<item uid="2868"/>
-					<item uid="2611"/>
-					<item uid="2697"/>
-					<item uid="2632"/>
-					<item uid="2824"/>
-					<item uid="2739"/>
-					<item uid="2795"/>
-					<item uid="2594"/>
-					<item uid="2766"/>
-					<item uid="2765"/>
-					<item uid="2664"/>
-					<item uid="2806"/>
-					<item uid="2803"/>
-					<item uid="2758"/>
-					<item uid="2704"/>
-					<item uid="2797"/>
-					<item uid="2745"/>
-					<item uid="2714"/>
-					<item uid="2743"/>
-					<item uid="2699"/>
-					<item uid="2816"/>
-					<item uid="2629"/>
-					<item uid="2625"/>
-					<item uid="2847"/>
-					<item uid="2841"/>
-					<item uid="2770"/>
-					<item uid="2825"/>
-					<item uid="2577"/>
-					<item uid="2862"/>
-					<item uid="2689"/>
-					<item uid="2674"/>
-					<item uid="2717"/>
-					<item uid="2738"/>
-					<item uid="2870"/>
-					<item uid="2814"/>
-					<item uid="2659"/>
-					<item uid="2874"/>
-					<item uid="2672"/>
-					<item uid="2771"/>
-					<item uid="2855"/>
-					<item uid="2715"/>
-					<item uid="2851"/>
-					<item uid="2719"/>
-					<item uid="2779"/>
-					<item uid="2584"/>
-					<item uid="2579"/>
-					<item uid="2848"/>
-					<item uid="2598"/>
-					<item uid="2842"/>
-					<item uid="2810"/>
-					<item uid="2774"/>
-					<item uid="2867"/>
-					<item uid="2793"/>
-					<item uid="2581"/>
-					<item uid="2578"/>
-					<item uid="2827"/>
-					<item uid="2682"/>
-					<item uid="2850"/>
-					<item uid="2656"/>
-					<item uid="2637"/>
-					<item uid="2804"/>
-					<item uid="2866"/>
-					<item uid="2776"/>
-					<item uid="2790"/>
-					<item uid="2661"/>
-					<item uid="2609"/>
-					<item uid="2665"/>
-					<item uid="2593"/>
-					<item uid="2801"/>
-					<item uid="2710"/>
-					<item uid="2642"/>
-					<item uid="2858"/>
-					<item uid="2752"/>
-					<item uid="2583"/>
-					<item uid="2633"/>
-					<item uid="2840"/>
-					<item uid="2785"/>
-					<item uid="2585"/>
-					<item uid="2805"/>
-					<item uid="2619"/>
-					<item uid="2604"/>
-					<item uid="2830"/>
-					<item uid="2667"/>
-					<item uid="2636"/>
-					<item uid="2677"/>
-					<item uid="2782"/>
-					<item uid="2852"/>
-					<item uid="2654"/>
-					<item uid="2713"/>
-					<item uid="2576"/>
-					<item uid="2601"/>
-					<item uid="2807"/>
-					<item uid="2811"/>
-					<item uid="2700"/>
-					<item uid="2706"/>
-					<item uid="2705"/>
-					<item uid="2666"/>
-					<item uid="2732"/>
-					<item uid="2720"/>
-					<item uid="2749"/>
-					<item uid="2647"/>
-					<item uid="2653"/>
-					<item uid="2596"/>
-					<item uid="2757"/>
-					<item uid="2780"/>
-					<item uid="2676"/>
-					<item uid="2707"/>
-					<item uid="2716"/>
-					<item uid="2748"/>
-					<item uid="2753"/>
-					<item uid="2646"/>
-					<item uid="2796"/>
-					<item uid="2731"/>
-					<item uid="2658"/>
-					<item uid="2777"/>
-					<item uid="2692"/>
-					<item uid="2820"/>
-					<item uid="2783"/>
-					<item uid="2588"/>
-					<item uid="2800"/>
-					<item uid="2587"/>
+					<item uid="2673"/>
+					<item uid="2694"/>
+					<item uid="2626"/>
 					<item uid="2813"/>
-					<item uid="2709"/>
-					<item uid="2698"/>
-					<item uid="2843"/>
-					<item uid="2590"/>
-					<item uid="2652"/>
-					<item uid="2618"/>
-					<item uid="2741"/>
-					<item uid="2775"/>
-					<item uid="2630"/>
-					<item uid="2872"/>
-					<item uid="2648"/>
-					<item uid="2812"/>
-					<item uid="2602"/>
-					<item uid="2592"/>
-					<item uid="2754"/>
-					<item uid="2631"/>
 					<item uid="2620"/>
-					<item uid="2835"/>
-					<item uid="2599"/>
-					<item uid="2839"/>
-					<item uid="2768"/>
-					<item uid="2657"/>
-					<item uid="2751"/>
-					<item uid="2639"/>
-					<item uid="2781"/>
+					<item uid="2816"/>
+					<item uid="2774"/>
+					<item uid="2726"/>
+					<item uid="2716"/>
+					<item uid="2752"/>
 					<item uid="2670"/>
+					<item uid="2630"/>
+					<item uid="2868"/>
+					<item uid="2782"/>
+					<item uid="2702"/>
+					<item uid="2695"/>
+					<item uid="2835"/>
+					<item uid="2827"/>
+					<item uid="2896"/>
+					<item uid="2785"/>
+					<item uid="2865"/>
+					<item uid="2779"/>
+					<item uid="2724"/>
+					<item uid="2619"/>
+					<item uid="2698"/>
+					<item uid="2677"/>
+					<item uid="2850"/>
+					<item uid="2654"/>
+					<item uid="2632"/>
+					<item uid="2735"/>
+					<item uid="2836"/>
+					<item uid="2607"/>
+					<item uid="2611"/>
+					<item uid="2823"/>
+					<item uid="2730"/>
+					<item uid="2766"/>
+					<item uid="2822"/>
+					<item uid="2847"/>
+					<item uid="2872"/>
+					<item uid="2851"/>
+					<item uid="2890"/>
+					<item uid="2636"/>
+					<item uid="2864"/>
+					<item uid="2656"/>
+					<item uid="2767"/>
+					<item uid="2645"/>
+					<item uid="2876"/>
+					<item uid="2846"/>
+					<item uid="2805"/>
+					<item uid="2762"/>
+					<item uid="2659"/>
+					<item uid="2683"/>
+					<item uid="2828"/>
+					<item uid="2740"/>
+					<item uid="2614"/>
+					<item uid="2879"/>
+					<item uid="2821"/>
+					<item uid="2743"/>
+					<item uid="2637"/>
+					<item uid="2679"/>
+					<item uid="2739"/>
+					<item uid="2873"/>
+					<item uid="2681"/>
+					<item uid="2644"/>
+					<item uid="2771"/>
+					<item uid="2639"/>
+					<item uid="2783"/>
+					<item uid="2786"/>
+					<item uid="2833"/>
+					<item uid="2792"/>
+					<item uid="2660"/>
+					<item uid="2690"/>
+					<item uid="2829"/>
+					<item uid="2692"/>
+					<item uid="2728"/>
+					<item uid="2842"/>
+					<item uid="2881"/>
+					<item uid="2834"/>
+					<item uid="2649"/>
+					<item uid="2837"/>
+					<item uid="2789"/>
+					<item uid="2749"/>
+					<item uid="2731"/>
+					<item uid="2867"/>
+					<item uid="2602"/>
+					<item uid="2773"/>
+					<item uid="2722"/>
+					<item uid="2635"/>
+					<item uid="2894"/>
+					<item uid="2723"/>
+					<item uid="2643"/>
+					<item uid="2858"/>
+					<item uid="2806"/>
+					<item uid="2758"/>
+					<item uid="2618"/>
+					<item uid="2757"/>
+					<item uid="2790"/>
+					<item uid="2745"/>
+					<item uid="2884"/>
+					<item uid="2680"/>
+					<item uid="2742"/>
+					<item uid="2776"/>
+					<item uid="2616"/>
+					<item uid="2662"/>
+					<item uid="2802"/>
+					<item uid="2831"/>
+					<item uid="2684"/>
+					<item uid="2808"/>
+					<item uid="2613"/>
+					<item uid="2744"/>
+					<item uid="2810"/>
+					<item uid="2655"/>
+					<item uid="2741"/>
+					<item uid="2651"/>
+					<item uid="2877"/>
+					<item uid="2797"/>
+					<item uid="2718"/>
+					<item uid="2664"/>
+					<item uid="2800"/>
+					<item uid="2811"/>
+					<item uid="2647"/>
+					<item uid="2830"/>
+					<item uid="2729"/>
+					<item uid="2878"/>
+					<item uid="2715"/>
+					<item uid="2738"/>
+					<item uid="2803"/>
+					<item uid="2674"/>
+					<item uid="2661"/>
+					<item uid="2669"/>
+					<item uid="2627"/>
+					<item uid="2736"/>
+					<item uid="2838"/>
+					<item uid="2688"/>
+					<item uid="2855"/>
+					<item uid="2625"/>
+					<item uid="2819"/>
+					<item uid="2650"/>
+					<item uid="2657"/>
+					<item uid="2634"/>
+					<item uid="2706"/>
+					<item uid="2733"/>
+					<item uid="2900"/>
+					<item uid="2848"/>
+					<item uid="2609"/>
+					<item uid="2663"/>
+					<item uid="2849"/>
+					<item uid="2826"/>
+					<item uid="2753"/>
 					<item uid="2871"/>
+					<item uid="2604"/>
+					<item uid="2621"/>
+					<item uid="2856"/>
+					<item uid="2820"/>
+					<item uid="2888"/>
+					<item uid="2853"/>
+					<item uid="2893"/>
+					<item uid="2665"/>
+					<item uid="2606"/>
+					<item uid="2880"/>
+					<item uid="2781"/>
+					<item uid="2617"/>
+					<item uid="2770"/>
+					<item uid="2648"/>
+					<item uid="2857"/>
+					<item uid="2732"/>
+					<item uid="2765"/>
+					<item uid="2734"/>
+					<item uid="2624"/>
+					<item uid="2622"/>
+					<item uid="2703"/>
+					<item uid="2629"/>
+					<item uid="2646"/>
+					<item uid="2693"/>
+					<item uid="2691"/>
+					<item uid="2804"/>
+					<item uid="2746"/>
+					<item uid="2814"/>
+					<item uid="2764"/>
+					<item uid="2875"/>
+					<item uid="2809"/>
+					<item uid="2628"/>
+					<item uid="2891"/>
+					<item uid="2778"/>
+					<item uid="2859"/>
+					<item uid="2899"/>
+					<item uid="2898"/>
+					<item uid="2791"/>
+					<item uid="2682"/>
+					<item uid="2696"/>
+					<item uid="2775"/>
+					<item uid="2832"/>
+					<item uid="2841"/>
+					<item uid="2780"/>
+					<item uid="2801"/>
+					<item uid="2605"/>
+					<item uid="2672"/>
+					<item uid="2642"/>
+					<item uid="2839"/>
+					<item uid="2807"/>
+					<item uid="2687"/>
+					<item uid="2840"/>
+					<item uid="2787"/>
+					<item uid="2794"/>
+					<item uid="2854"/>
+					<item uid="2678"/>
+					<item uid="2658"/>
+					<item uid="2892"/>
+					<item uid="2769"/>
+					<item uid="2612"/>
+					<item uid="2784"/>
+					<item uid="2796"/>
+					<item uid="2874"/>
+					<item uid="2862"/>
+					<item uid="2603"/>
+					<item uid="2748"/>
+					<item uid="2798"/>
+					<item uid="2870"/>
+					<item uid="2686"/>
+					<item uid="2777"/>
+					<item uid="2901"/>
+					<item uid="2756"/>
+					<item uid="2610"/>
+					<item uid="2685"/>
+					<item uid="2615"/>
+					<item uid="2708"/>
+					<item uid="2866"/>
+					<item uid="2668"/>
+					<item uid="2897"/>
+					<item uid="2887"/>
+					<item uid="2700"/>
+					<item uid="2725"/>
+					<item uid="2869"/>
+					<item uid="2861"/>
+					<item uid="2633"/>
 				</group>
 				<group isee:name_image="true" locked="true" color="black" font_color="black" x="786" y="31" width="891" height="1133" name="Station Adoption Logic">
-					<item uid="2856"/>
-					<item uid="2876"/>
-					<item uid="2826"/>
-					<item uid="2711"/>
-					<item uid="2671"/>
-					<item uid="2626"/>
-					<item uid="2837"/>
-					<item uid="2681"/>
-					<item uid="2650"/>
-					<item uid="2687"/>
-					<item uid="2818"/>
-					<item uid="2663"/>
-					<item uid="2645"/>
-					<item uid="2684"/>
-					<item uid="2724"/>
-					<item uid="2834"/>
-					<item uid="2582"/>
-					<item uid="2877"/>
-					<item uid="2725"/>
-					<item uid="2767"/>
-					<item uid="2721"/>
-					<item uid="2675"/>
-					<item uid="2701"/>
-					<item uid="2792"/>
-					<item uid="2649"/>
-					<item uid="2683"/>
-					<item uid="2612"/>
-					<item uid="2733"/>
-					<item uid="2742"/>
-					<item uid="2857"/>
-					<item uid="2678"/>
-					<item uid="2685"/>
-					<item uid="2688"/>
-					<item uid="2679"/>
-					<item uid="2881"/>
-					<item uid="2605"/>
-					<item uid="2773"/>
+					<item uid="2727"/>
+					<item uid="2714"/>
+					<item uid="2844"/>
 					<item uid="2737"/>
-					<item uid="2819"/>
-					<item uid="2817"/>
-					<item uid="2627"/>
+					<item uid="2793"/>
+					<item uid="2882"/>
+					<item uid="2852"/>
+					<item uid="2903"/>
+					<item uid="2751"/>
+					<item uid="2705"/>
+					<item uid="2676"/>
+					<item uid="2608"/>
+					<item uid="2883"/>
+					<item uid="2818"/>
+					<item uid="2689"/>
+					<item uid="2710"/>
+					<item uid="2799"/>
+					<item uid="2697"/>
+					<item uid="2750"/>
+					<item uid="2843"/>
+					<item uid="2860"/>
+					<item uid="2631"/>
+					<item uid="2713"/>
+					<item uid="2709"/>
+					<item uid="2671"/>
+					<item uid="2652"/>
+					<item uid="2768"/>
+					<item uid="2675"/>
+					<item uid="2747"/>
+					<item uid="2902"/>
+					<item uid="2653"/>
+					<item uid="2638"/>
+					<item uid="2845"/>
+					<item uid="2701"/>
+					<item uid="2707"/>
+					<item uid="2704"/>
+					<item uid="2711"/>
+					<item uid="2863"/>
+					<item uid="2759"/>
+					<item uid="2763"/>
 				</group>
 				<group isee:name_image="true" locked="true" color="black" font_color="black" x="774" y="1210" width="754" height="543" name="Station Initialization Logic">
-					<item uid="2869"/>
-					<item uid="2798"/>
-					<item uid="2691"/>
-					<item uid="2729"/>
-					<item uid="2735"/>
-					<item uid="2686"/>
 					<item uid="2640"/>
-					<item uid="2746"/>
-					<item uid="2673"/>
-					<item uid="2597"/>
-					<item uid="2694"/>
-					<item uid="2786"/>
-					<item uid="2791"/>
-					<item uid="2859"/>
-					<item uid="2762"/>
-					<item uid="2799"/>
-					<item uid="2728"/>
-					<item uid="2693"/>
-					<item uid="2860"/>
-					<item uid="2734"/>
-					<item uid="2614"/>
+					<item uid="2754"/>
+					<item uid="2719"/>
+					<item uid="2817"/>
+					<item uid="2885"/>
+					<item uid="2886"/>
 					<item uid="2641"/>
-					<item uid="2789"/>
-					<item uid="2769"/>
-					<item uid="2615"/>
+					<item uid="2717"/>
+					<item uid="2812"/>
+					<item uid="2667"/>
+					<item uid="2815"/>
+					<item uid="2755"/>
+					<item uid="2795"/>
+					<item uid="2824"/>
+					<item uid="2760"/>
+					<item uid="2699"/>
+					<item uid="2720"/>
+					<item uid="2666"/>
+					<item uid="2788"/>
+					<item uid="2772"/>
+					<item uid="2895"/>
+					<item uid="2623"/>
+					<item uid="2761"/>
+					<item uid="2712"/>
+					<item uid="2825"/>
 				</group>
-				<connector uid="2882" angle="350.538">
+				<connector uid="2906" angle="350.538">
 					<from>total_initial_stations_by_region</from>
 					<to>initial_repurposable_stations</to>
 				</connector>
-				<connector uid="2883" angle="328.241">
+				<connector uid="2907" angle="328.241">
 					<from>total_initial_stations_by_region</from>
 					<to>initial_non_repurposable_stations</to>
 				</connector>
-				<connector uid="2884" angle="90">
+				<connector uid="2908" angle="90">
 					<from>avg_per_station_vol_gas_eq_per_mo</from>
 					<to>mnthly_station_traffic</to>
 				</connector>
-				<connector uid="2885" angle="318.576">
+				<connector uid="2909" angle="318.576">
 					<from>Not_Considering_RP</from>
 					<to>putting_on_table_RP</to>
 				</connector>
-				<connector uid="2886" angle="307.405">
+				<connector uid="2910" angle="307.405">
 					<from>Not_Considering_Investment</from>
 					<to>putting_on_the_table</to>
 				</connector>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="2887" x="7" y="8.5" width="701" height="51">Biomass Scenario Dispensing Station Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="2888" x="11" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="2889" x="384" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="2890" x="11" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="2891" x="384" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="2892" x="11" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="2893" x="384" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="2818" x="1498.5" y="64" width="18" height="18">
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="2911" x="7" y="8.5" width="701" height="51">Biomass Scenario Dispensing Station Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="2912" x="11" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="2913" x="384" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="2914" x="11" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="2915" x="384" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="2916" x="11" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="2917" x="384" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="2844" x="1498.5" y="64" width="18" height="18">
 					<of>NPV_Investment_RP</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2601" x="2549.5" y="1641" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2627" x="2549.5" y="1641" width="18" height="18">
 					<of>Frac_Tankage_Debt_Financed</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="2867" x="1798.5" y="1123" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="2893" x="1798.5" y="1123" width="18" height="18">
 					<of>total_stations_by_region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2860" x="1448" y="1624" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2886" x="1448" y="1624" width="18" height="18">
 					<of>initial_frac_stations_with_hi_blend_invest</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2581" x="3813.5" y="1385" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2607" x="3813.5" y="1385" width="18" height="18">
 					<of>FCI_subs_stop_time</of>
 				</alias>
-				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" label_angle="175.627" uid="2699" x="3548.5" y="890" width="18" height="18">
+				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" label_angle="175.627" uid="2725" x="3548.5" y="890" width="18" height="18">
 					<of>debt_interest_rate_as_frac</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2775" x="3080.5" y="1199" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2801" x="3080.5" y="1199" width="18" height="18">
 					<of>discount_factor_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2813" x="1934.5" y="1020" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2839" x="1934.5" y="1020" width="18" height="18">
 					<of>months_per_year</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2636" x="2951.5" y="1338" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2662" x="2951.5" y="1338" width="18" height="18">
 					<of>Expected_Tax_Rate</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="202.198" uid="2696" x="2930.5" y="370" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="202.198" uid="2722" x="2930.5" y="370" width="18" height="18">
 					<of>Hi_Blend_Pump_Price</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2653" x="2860.5" y="1526" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2679" x="2860.5" y="1526" width="18" height="18">
 					<of>discount_factor_loan</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2643" x="2154.5" y="95" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2669" x="2154.5" y="95" width="18" height="18">
 					<of>Gross_Expected_Other_Rev_per_visit</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2880" x="656" y="1043" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2905" x="656" y="1043" width="18" height="18">
 					<of>Equity_Fraction</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="306.549" uid="2650" x="1299.5" y="1061" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="306.549" uid="2676" x="1299.5" y="1061" width="18" height="18">
 					<of>dwell_time_for_considering_investment</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2795" x="1951.5" y="1483" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2821" x="1951.5" y="1483" width="18" height="18">
 					<of>term_of_loan</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="143.325" uid="2761" x="3117.5" y="1468" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="143.325" uid="2787" x="3117.5" y="1468" width="18" height="18">
 					<of>NPV_Net_Inc_Revs</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="265.472" uid="2625" x="2205.5" y="801" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="265.472" uid="2651" x="2205.5" y="801" width="18" height="18">
 					<of>Share_Current_HiBlend_CapableTraffic_to_Hi_Blend_Weighting_Factor</of>
 				</alias>
-				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" uid="2853" x="2694.5" y="1693" width="18" height="18">
+				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" uid="2879" x="2694.5" y="1693" width="18" height="18">
 					<of>debt_interest_rate_as_frac</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2832" x="1942.5" y="842" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2858" x="1942.5" y="842" width="18" height="18">
 					<of>Volume_Per_Visit</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="104.888" uid="2735" x="897" y="1268" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="104.888" uid="2761" x="897" y="1268" width="18" height="18">
 					<of>regional_dispensing_station_distn</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="183.788" uid="2805" x="2704.5" y="1352" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="183.788" uid="2831" x="2704.5" y="1352" width="18" height="18">
 					<of>Total_Net_Expected_Incremental_Revenues</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="7.35456" uid="2627" x="1106.5" y="829" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="7.35456" uid="2653" x="1106.5" y="829" width="18" height="18">
 					<of>rate_of_putting_on_table</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="top" uid="2766" x="1853.5" y="537" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="top" uid="2792" x="1853.5" y="537" width="18" height="18">
 					<of>months_per_year</of>
 				</alias>
-				<alias color="blue" background="white" font_style="italic" uid="2841" x="3501.5" y="1330" width="18" height="18">
+				<alias color="blue" background="white" font_style="italic" uid="2867" x="3501.5" y="1330" width="18" height="18">
 					<shape type="circle" radius="18"/>
 					<of>FCI_subs_switch</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="29.2938" uid="2850" x="1798.5" y="142" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="29.2938" uid="2876" x="1798.5" y="142" width="18" height="18">
 					<of>Incremental_Traffic_Fraction</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="315" uid="2667" x="3832.5" y="1440" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="315" uid="2693" x="3832.5" y="1440" width="18" height="18">
 					<of>repurp_subs_stop_time</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2669" x="2532.5" y="866" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2695" x="2532.5" y="866" width="18" height="18">
 					<of>Total_User_Wtd_HiBlend_Share_from_Fuel_Use</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2607" x="3787.5" y="424" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2633" x="3787.5" y="424" width="18" height="18">
 					<of>discount_factor_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2857" x="1498.5" y="1038" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2883" x="1498.5" y="1038" width="18" height="18">
 					<of>NPV_Threshold_for_Investment</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2741" x="3800.5" y="157" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2767" x="3800.5" y="157" width="18" height="18">
 					<of>discount_factor_3</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2594" x="2130.5" y="1442" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2620" x="2130.5" y="1442" width="18" height="18">
 					<of>depreciation_period</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="96.1849" uid="2694" x="820" y="1347" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="96.1849" uid="2720" x="820" y="1347" width="18" height="18">
 					<of>total_initial_stations</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2716" x="3080.5" y="1351" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2742" x="3080.5" y="1351" width="18" height="18">
 					<of>discount_factor_1</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2577" x="2549.5" y="1279" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2603" x="2549.5" y="1279" width="18" height="18">
 					<of>depreciation_period</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2757" x="3776.5" y="280" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2783" x="3776.5" y="280" width="18" height="18">
 					<of>discount_factor_2</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2661" x="2839.5" y="1687" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2687" x="2839.5" y="1687" width="18" height="18">
 					<of>Equity_Fraction</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2855" x="2338.5" y="1424" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2881" x="2338.5" y="1424" width="18" height="18">
 					<of>total_project_length</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2744" x="3548.5" y="657" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2770" x="3548.5" y="657" width="18" height="18">
 					<of>term_of_loan</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="263.154" uid="2864" x="2611.5" y="224" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="263.154" uid="2890" x="2611.5" y="223" width="18" height="18">
 					<of>Expected_Hi_Blend_Cost_after_Subz</of>
 				</alias>
-				<alias color="blue" background="white" font_style="italic" uid="2753" x="3580.5" y="1398" width="18" height="18">
+				<alias color="blue" background="white" font_style="italic" uid="2779" x="3580.5" y="1398" width="18" height="18">
 					<shape type="circle" radius="18"/>
 					<of>Frac_FCI_subs</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="2621" x="1841.5" y="404" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="2647" x="1841.5" y="404" width="18" height="18">
 					<of>Station_Coverage</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2579" x="3318.5" y="574" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2605" x="3318.5" y="574" width="18" height="18">
 					<of>FCI_New_Tankage_Equip</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="69.993" uid="2704" x="2379.5" y="1077" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="69.993" uid="2730" x="2379.5" y="1077" width="18" height="18">
 					<of>Total_Potential_Fuel_Consn_Gasoline_from_VM</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2725" x="1493.5" y="132" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2751" x="1493.5" y="132" width="18" height="18">
 					<of>NPV_Threshold_for_Investment</of>
 				</alias>
-				<alias color="blue" background="white" font_style="italic" uid="2665" x="3567.5" y="1488" width="18" height="18">
+				<alias color="blue" background="white" font_style="italic" uid="2691" x="3567.5" y="1488" width="18" height="18">
 					<shape type="circle" radius="18"/>
 					<of>Repurpose_subs_switch</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2729" x="1444" y="1569" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2755" x="1444" y="1569" width="18" height="18">
 					<of>initial_frac_stations_considering_invest</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2750" x="3544.5" y="1273" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2776" x="3544.5" y="1273" width="18" height="18">
 					<of>Expected_FCI_New_Tankage_and_Equip</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2802" x="2164.5" y="583" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2828" x="2164.5" y="583" width="18" height="18">
 					<of>Hi_Blend_Volumetric_Offset</of>
 				</alias>
-				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" uid="2619" x="1843.5" y="1529" width="18" height="18">
+				<alias color="#FF7F00" font_style="italic" font_color="#FF7F00" uid="2645" x="1843.5" y="1529" width="18" height="18">
 					<of>reqd_rate_of_return</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2634" x="3318.5" y="342" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2660" x="3318.5" y="342" width="18" height="18">
 					<of>depreciation_period</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2599" x="3622.5" y="1551" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2625" x="3622.5" y="1551" width="18" height="18">
 					<of>Expected_FCI_Repurposing_Midgrade</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="5.8428" uid="2615" x="1099" y="1262" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="5.8428" uid="2641" x="1099" y="1262" width="18" height="18">
 					<of>initial_frac_ALL_stations_with_repurposable_tankage</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2799" x="1447" y="1463" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2825" x="1447" y="1463" width="18" height="18">
 					<of>initial_frac_stations_with_repurposed_tankage</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="2688" x="1531.5" y="1122" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="2714" x="1531.5" y="1122" width="18" height="18">
 					<of>NPV_Investment</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2641" x="1444" y="1404" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2667" x="1444" y="1404" width="18" height="18">
 					<of>initial_frac_stations_considering_repurpose</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2592" x="2512.5" y="950" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2618" x="2512.5" y="950" width="18" height="18">
 					<of>Total_potential_hi_blend_consn_from_VM</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2731" x="1887.5" y="1130" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2757" x="1887.5" y="1130" width="18" height="18">
 					<of>one_station</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2777" x="3178.5" y="1197" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2803" x="3178.5" y="1197" width="18" height="18">
 					<of>NPV_Taxes_3</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2589" x="2805.5" y="1507" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2615" x="2805.5" y="1507" width="18" height="18">
 					<of>term_of_loan</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2879" x="571" y="1365" width="18" height="18">
-					<of>Total_Potential_Fuel_Consn_Gasoline_from_VM</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2585" x="2684.5" y="520" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2611" x="2684.5" y="520" width="18" height="18">
 					<of>Volume_Per_Visit</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2821" x="3121.5" y="493" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2847" x="3121.5" y="493" width="18" height="18">
 					<of>IP_avg_per_gal_markup</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2788" x="3659.5" y="421" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2814" x="3659.5" y="421" width="18" height="18">
 					<of>Expected_Tax_Rate</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="315.712" uid="2684" x="1316.5" y="88" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="315.712" uid="2710" x="1316.5" y="88" width="18" height="18">
 					<of>dwell_time_for_considering_investment</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2603" x="2549.5" y="1441" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2629" x="2549.5" y="1441" width="18" height="18">
 					<of>FCI_Repurposing_Midgrade</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="2679" x="1107.5" y="317" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="2705" x="1107.5" y="317" width="18" height="18">
 					<of>rate_of_putting_on_table</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="355.909" uid="2587" x="2218.5" y="348" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="355.909" uid="2613" x="2218.5" y="348" width="18" height="18">
 					<of>Expected_Share_Inc_Traffic_to_Hi_Blend</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="2881" x="1164.5" y="614" width="18" height="18">
-					<of>VM_regional_vehicle_penetration_by_tech</of>
-				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="2844" x="3636.5" y="696" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="2870" x="3636.5" y="696" width="18" height="18">
 					<of>discount_factor_loan</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="2878" x="57" y="1605" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="2904" x="57" y="1605" width="18" height="18">
 					<of>Station_Coverage</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="2764" x="2151.5" y="148" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="2790" x="2151.5" y="148" width="18" height="18">
 					<of>Margin_on_Other_Rev</of>
 				</alias>
 			</view>
-			<view isee:show_pages="true" background="white" page_width="1012" type="interface" home_view="true" page_height="696">
+			<view background="white" page_width="1012" type="interface" page_height="696" home_view="true" isee:show_pages="true">
 				<style/>
 			</view>
 			<isee:templates/>

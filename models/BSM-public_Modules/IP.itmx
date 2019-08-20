@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
 	<header>
-		<smile version="1.0" namespace="std, isee" uses_arrays="1"/>
+		<smile version="1.0" namespace="std, isee" uses_arrays="2"/>
 		<name>IP</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
+		<dim name="Gen">
+			<elem name="One"/>
+			<elem name="OnePointFive"/>
+		</dim>
+		<dim name="Product">
+			<elem name="Primary"/>
+			<elem name="Co1"/>
+			<elem name="Co2"/>
+		</dim>
 		<dim name="Region">
 			<elem name="NE"/>
 			<elem name="A"/>
@@ -25,18 +38,20 @@
 			<elem name="M"/>
 			<elem name="P"/>
 		</dim>
-		<dim name="CtoATech">
-			<elem name="BC"/>
-			<elem name="TC"/>
-		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -225,13 +240,6 @@
 	<model name="IP">
 		<variables>
 			<aux name="Utilized Regional Production Capacity CM" access="input">
-				<doc>DEFINITION: module interface to SE.Output gpy by region
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -239,13 +247,6 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="FFV Lo Blend Consn" access="input">
-				<doc>DEFINITION: module interface to FU.FFV Lo Blend Consn
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -288,17 +289,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF target_regional_inventory[Region] &lt;= 1e6THEN 1ELSE Regional_EtOH_Inventory[Region]/target_regional_inventory[Region]</eqn>
+				<eqn>IF target_regional_inventory[Region] &lt;= 1e6
+THEN 1
+ELSE Regional_EtOH_Inventory[Region]/target_regional_inventory[Region]</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Total Desired Hi Blend Consn" access="input">
-				<doc>DEFINITION: module interface to FU.Total Desired Hi Blend Consn
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -306,13 +302,6 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Potential Lo Blend Consn Non FFV" access="input">
-				<doc>DEFINITION: module interface to V.regional potential lo blend consn non FFV non RSPV
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -330,7 +319,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>((FFV_Lo_Blend_Consn[Region] + Potential_Lo_Blend_Consn_Non_FFV[Region]+ est_regional_non_LDV_gas_consn) * Lo_blend_coefficient[Region] ) * impact_of_price_on_ramp_up</eqn>
+				<eqn>((FFV_Lo_Blend_Consn +  Potential_Lo_Blend_Consn_Non_FFV +  est_regional_non_LDV_gas_consn) * Lo_blend_coefficient[Region] ) * impact_of_price_on_ramp_up</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Hi Blend Pump Price" access="output">
@@ -420,7 +409,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Expected PoU Hi Blend Cost after Subz" access="output">
-				<doc>DEFINITION: Expected cost of &quot;renewable super premium&quot; fuels at point of use
+				<doc>DEFINITION: Expected cost of Hi Blend (i.e., E85) fuels at point of use, after applying any end-user subsidy
 
 UNITS: USD per gallon
 
@@ -449,7 +438,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Baseline EtOH POP price" access="output">
-				<doc>DEFINITION: Point of production price for ethanol in the initial year
+				<doc>DEFINITION: Point of production price for ethanol in the initial year of the simulation
 
 UNITS: USD per gallon
 
@@ -464,7 +453,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: scalar | Internal Calculation | module interface 
+TYPE: scalar | Internal Calculation | module interface
 
 COMMENTS: </doc>
 				<eqn>EtOH_POP_Price_Index*
@@ -540,7 +529,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Regional distn storage cost">
-				<doc>DEFINITION: Per region per gallon cost of moving/storing EtOH, incl any subsidy
+				<doc>DEFINITION: Per region per gallon cost of moving/storing EtOH in the distribution network, incl any subsidy
 
 UNITS: USD per gallon
 
@@ -831,7 +820,7 @@ COMMENTS: </doc>
 				</element>
 				<units>USD per gallon</units>
 			</aux>
-			<aux name="in region\ndistn storage cost">
+			<aux name="in region distn storage cost">
 				<doc>DEFINITION: Cost of moving and storing EtOH within the region
 
 UNITS: USD per gallon
@@ -904,7 +893,7 @@ ELSE 0</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="region specific import cost">
-				<doc>DEFINITION: Cost of bringing  EtOH into the region, expressed as weighted value based on fraction of total ethanol production that is imported into the region
+				<doc>DEFINITION: Cost of bringing  EtOH into the region from another region, expressed as weighted value based on fraction of total ethanol production that is imported into the region
 
 UNITS: USD per gallon
 
@@ -977,13 +966,6 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</flow>
 			<aux name="B capacity" access="input">
-				<doc>DEFINITION: module interface to CB.Output Capacity
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1004,13 +986,6 @@ STEP(addl_gas_tax_amt,gas_tax_stop_time))</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Gasoline POD price before tax" access="input">
-				<doc>DEFINITION: module interface to OI.Gasoline POD price before tax
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1192,17 +1167,39 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>0.15</eqn>
+				<element subscript="NE">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.15</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Imports by Region" access="input">
-				<doc>DEFINITION: module interface to I.EtOH Import from x US
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1210,7 +1207,7 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="spread in EtOH frac chg from prodn consn">
-				<doc>DEFINITION: controls the responsiveness of price to imbalances in production/consumption.  Value of 1 implies that largest fractional change in price is 0.5/yr
+				<doc>DEFINITION: controls the responsiveness of price to imbalances in production/consumption.  Value of 1 implies that largest fractional change in price from this variable is 0.5/yr
 
 UNITS: per year
 
@@ -1221,7 +1218,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="offset in frac chg from EtOH prodn consn">
-				<doc>DEFINITION: sets the maximum fractional change in price to 1/2 of overall spread.
+				<doc>DEFINITION: sets the maximum fractional change in price to 1/2 of overall spread term
 
 UNITS: per year
 
@@ -1276,7 +1273,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="offset in frac chg from EtOH inv">
-				<doc>DEFINITION: sets the maximum fractional change in price to 1/2 of overall spread.
+				<doc>DEFINITION: sets the maximum fractional change in price to 1/2 of overall spread term
 
 UNITS: per year
 
@@ -1287,7 +1284,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="EtOH logistic price response curve from prodn consn">
-				<doc>DEFINITION: translates distance (in number of doublings or halvings) of production from desired consumption, into a logistics function that is used to drive changes in price
+				<doc>DEFINITION: translates distance (in number of doublings or halvings) of production from desired consumption, into a logistic function that is used to drive changes in price
 
 UNITS: Unitless
 
@@ -1298,7 +1295,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="EtOH logistic price response curve from inventory">
-				<doc>DEFINITION: translates distance (in number of doublings or halvings) of inventory from target levels, into a logistics function that is used to drive changes in price
+				<doc>DEFINITION: translates distance (in number of doublings or halvings) of inventory from target levels, into a logistic function that is used to drive changes in price
 
 UNITS: Unitless
 
@@ -1334,7 +1331,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="aaa EtOH Consn">
-				<doc>DEFINITION: Sums desired ethanol consumption across all regions
+				<doc>DEFINITION: Sums desired ethanol consumption across all regions, for all sources of ethanol use
 
 UNITS: gallons per year
 
@@ -1378,7 +1375,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="POU Subsidy PassOn to Eng User">
-				<doc>DEFINITION: per-gallon hi blend subsidy that is passed on to consumer (vs taken by dispensing station owner
+				<doc>DEFINITION: per-gallon hi blend subsidy that is passed on to consumer (vs taken by dispensing station owner)
 
 UNITS: USD per gallon
 
@@ -1470,15 +1467,9 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="CtoA Output GPY by Region" access="input">
-				<doc>DEFINITION: module interface to CE.Output gpy by Region
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>0</eqn>
 				<units>gallons per year</units>
@@ -1495,7 +1486,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="Desired B inv coverage">
-				<doc>DEFINITION: years worth of avg cons&apos;n desired to be held in aggregate system inventory
+				<doc>DEFINITION: years worth of avg cons&apos;n desired of bio-butanol to be held in aggregate system inventory
 
 UNITS: years
 
@@ -1561,11 +1552,40 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>0.1</eqn>
+				<element subscript="NE">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.1</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="K Bio B">
-				<doc>DEFINITION: logit weighting factor for non-economic factors for bio butanol
+				<doc>DEFINITION: logit weighting factor for non-economic factors for bio butanol used as alternative to ethanol in low-blend fuel.
 
 UNITS: Unitless
 
@@ -1605,7 +1625,7 @@ UNITS: Unitless
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>EXP(k_B - B_attr_weighting*B_industrial_price_scenario)</eqn>
+				<eqn>EXP(k_B - B_attr_weighting*B_industrial_price_input)</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="nominal attr Bio B industrial">
@@ -1645,7 +1665,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="nominal attr EtOH Lo blend">
-				<doc>DEFINITION: attractiveness of EtOH in lo blend uses, based on pricing
+				<doc>DEFINITION: attractiveness of EtOH in lo blend uses, relative to butanol, based on pricing
 
 UNITS: Unitless
 
@@ -1667,7 +1687,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="k EtOH Lo blend">
-				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness of lo blend EtOH uses
+				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness of lo blend EtOH uses relative to butanol uses
 
 UNITS: Unitless
 
@@ -1678,7 +1698,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="lo blend attr weighting">
-				<doc>DEFINITION: Weighting factor for logit function calculation
+				<doc>DEFINITION: Weighting factor for logit function calculation for competition of butanol and ethanol in lo-blend.
 
 UNITS: gallons per dollar
 
@@ -1689,7 +1709,7 @@ COMMENTS: </doc>
 				<units>gallons per dollar</units>
 			</aux>
 			<aux name="nominal attr B lo blend">
-				<doc>DEFINITION: attractiveness of purchasing bio-butanol as low-blend substitute
+				<doc>DEFINITION: attractiveness of purchasing bio-butanol as low-blend substitute for EtOH
 
 UNITS: Unitless
 
@@ -1735,7 +1755,7 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Total Desired EtOH consn Low Blend">
-				<doc>DEFINITION: By region, total desired (i.e., before considering any inventory constraints) consumption of EtOH from low blend fuels
+				<doc>DEFINITION: By region, total desired (i.e., before considering any inventory constraints) consumption of EtOH in low blend fuels
 
 UNITS: gallons per year
 
@@ -1756,18 +1776,11 @@ UNITS: USD per gallon
 TYPE: scalar | internal calculation | sector interface | module interface
 
 COMMENTS: </doc>
-				<eqn>INIT(B_industrial_price_scenario) * (B_POP_Price_Index
+				<eqn>INIT(B_industrial_price_input) * (B_POP_Price_Index
 /one_hundred_percent) + OI_C_Tax_SE_1</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C to B Output GPY by Region" access="input">
-				<doc>DEFINITION: module interface to CB.Actual Output gpy
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1810,7 +1823,36 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>0.15</eqn>
+				<element subscript="NE">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.15</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.15</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="offset in frac chg from B prodn cons">
@@ -2047,15 +2089,15 @@ COMMENTS: </doc>
 				<eqn>Expected_EtOH_displacement_by_B_low_blend[Region] * (actual_rel_to_expected_B_fuel_consn)</eqn>
 				<units>gallons per year</units>
 			</aux>
-			<aux name="aaa EtOH Import">
-				<doc>DEFINITION: Sums ethanol import into all regions
+			<aux name="aaa EtOH net exports">
+				<doc>DEFINITION: Sums ethanol exports, net of imports across all US regions, from/to the US
 
 UNITS: gallons per year
 
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>SUM(Imports_by_Region)</eqn>
+				<eqn>SUM(EtOH_export_x_US)</eqn>
 				<scale min="0" max="30000000000"/>
 				<units>gallons per year</units>
 			</aux>
@@ -2104,7 +2146,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>B_capacity[Region] / lo_blend_coeff_rel_to_b_blend_coeff[Region]</eqn>
+				<eqn>(B_capacity[Region] / lo_blend_coeff_rel_to_b_blend_coeff[Region])</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="lo blend coeff rel to b blend coeff">
@@ -2222,7 +2264,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: scalar | graphical function | internal calculation 
+TYPE: scalar | graphical function | internal calculation
 
 COMMENTS: </doc>
 				<eqn>B_inventory_ratio</eqn>
@@ -2271,7 +2313,7 @@ COMMENTS: </doc>
 				<units>percent/yr</units>
 			</flow>
 			<aux name="B inventory ratio">
-				<doc>DEFINITION:  ratio of bio-butanol inventory to desired or target levels
+				<doc>DEFINITION: ratio of bio-butanol inventory to desired or target levels
 
 UNITS: Unitless
 
@@ -2292,7 +2334,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Total_Potential_EtOH_consn_Low_Blend[Region]*Desired_EtOH_inv_coverage</eqn>
+				<eqn>Initial_Regional_EtOH_Inventory</eqn>
 				<inflow>regional_EtOH_production</inflow>
 				<inflow>import</inflow>
 				<outflow>regional_EtOH_consumption</outflow>
@@ -2315,7 +2357,7 @@ COMMENTS: </doc>
 				<eqn>regional_prodn_consn_gap[Region]+desired_EtOH_inv_adj[Region]</eqn>
 				<units>gallons per year</units>
 			</aux>
-			<flow name="regional EtOH consumption" access="output">
+			<flow name="regional EtOH consumption">
 				<doc>DEFINITION: By region, total end cons&apos;n of   EtOH
 
 UNITS: gallons per year
@@ -2338,13 +2380,13 @@ UNITS: Unitless
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>IF SUM(Total_Desired_EtOH_consn) &gt; 0 THEN
-SUM(regional_EtOH_production)/SUM(Total_Desired_EtOH_consn)
+				<eqn>IF (SUM(Total_Desired_EtOH_consn) + SUM(EtOH_export_x_US))  &gt; 0 THEN
+SUM(regional_EtOH_production)/(SUM(Total_Desired_EtOH_consn) + SUM(EtOH_export_x_US)) 
 ELSE 0</eqn>
 				<units>Unitless</units>
 			</aux>
-			<flow name="regional EtOH production" access="output">
-				<doc>DEFINITION: By region, total prod&apos;n of EtOH (incl import)
+			<flow name="regional EtOH production">
+				<doc>DEFINITION: By region, total domestic prod&apos;n of EtOH
 
 UNITS: gallons per year
 
@@ -2354,12 +2396,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>Utilized_Regional_Production_Capacity_CM[Region] + Imports_by_Region[Region] + CtoA_Output_GPY_by_Region[Region]</eqn>
+				<eqn>Utilized_Regional_Production_Capacity_CM[Region] +  CtoA_Output_GPY_by_Region[Region,Primary]</eqn>
 				<non_negative/>
 				<units>gallons per year</units>
 			</flow>
 			<flow name="export">
-				<doc>DEFINITION: By region, total export of  EtOH to other regions
+				<doc>DEFINITION: By region, total inter-regional export of  EtOH to other regions
 
 UNITS: gallons per year
 
@@ -2412,7 +2454,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>avg_des_regional_EtOH_consn[Region]*Desired_EtOH_inv_coverage</eqn>
+				<eqn>(avg_des_regional_EtOH_consn[Region] + EtOH_export_x_US) * Desired_EtOH_inv_coverage</eqn>
 				<units>gallons</units>
 			</aux>
 			<aux name="avg des regional EtOH consn">
@@ -2437,7 +2479,7 @@ UNITS: years
 TYPE: scalar | constant | assumed value
 
 COMMENTS: </doc>
-				<eqn>0.6</eqn>
+				<eqn>0.06</eqn>
 				<units>years</units>
 			</aux>
 			<aux name="regional inventory overage">
@@ -2563,11 +2605,11 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>regional_EtOH_production[Region]-avg_des_regional_EtOH_consn[Region]</eqn>
+				<eqn>regional_EtOH_production[Region]-(avg_des_regional_EtOH_consn[Region] + EtOH_export_x_US)</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="desired ETOH inv adj time">
-				<doc>DEFINITION: time, in years, to adjust regional overages/shortages in inventories
+				<doc>DEFINITION: time, in years, to adjust regional overages/shortages in regional inventories
 
 UNITS: years
 
@@ -2665,7 +2707,9 @@ UNITS: Unitless
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>IF SUM(target_regional_inventory) &gt; 0 THENSUM(Regional_EtOH_Inventory)/SUM(target_regional_inventory)ELSE 0</eqn>
+				<eqn>IF SUM(target_regional_inventory) &gt; 0 THEN
+SUM(Regional_EtOH_Inventory)/SUM(target_regional_inventory)
+ELSE 0</eqn>
 				<units>Unitless</units>
 			</aux>
 			<stock name="EtOH POP Price Index">
@@ -2703,12 +2747,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>total_export_import_flux*distn_import_by_region[Region]</eqn>
+				<eqn>SUM(export) * distn_import_by_region[Region]</eqn>
 				<non_negative/>
 				<units>gallons per year</units>
 			</flow>
 			<stock name="InterRegion Transit">
-				<doc>DEFINITION: Dummy&apos; stock that always should be 0Éenabler for inter-regional import/export (movement) of ethanol. Note that stock can take on negative values--this prevents non-negative logic from confusing inter-region transport flows
+				<doc>DEFINITION: Dummy stock that is an enabler for inter-regional import/export (movement) of ethanol. Note that stock can take on negative values--this prevents non-negative logic from confusing inter-region transport flows
 
 UNITS: gallons
 
@@ -2721,24 +2765,13 @@ COMMENTS: </doc>
 				<units>gallons</units>
 			</stock>
 			<aux name="OI C Tax SE" access="input">
-				<doc>DEFINITION: module interface to OI.C tax delta SE
-
-UNITS: USD per gallon
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>0</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="OI C Tax CE" access="input">
-				<doc>DEFINITION: module interface to OI.C tax delta CE
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
@@ -2750,9 +2783,12 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: scalar | Internal Calculation | module interface 
+TYPE: scalar | Internal Calculation | module interface
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>EtOH_POP_price + OI_C_Tax_SE</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2771,15 +2807,9 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="CtoA Output GPY by technology" access="input">
-				<doc>DEFINITION: module interface to CE.Output gpy by Technology
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>0</eqn>
 				<units>gallons per year</units>
@@ -2792,13 +2822,13 @@ UNITS: gallons per year
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>SUM(CtoA_Output_GPY_by_technology) + SUM(Utilized_Regional_Production_Capacity_CM) +SUM(Imports_by_Region)</eqn>
+				<eqn>SUM(CtoA_Output_GPY_by_technology) + SUM(Output_gpy_by_Technology) +SUM(Imports_by_Region)</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="CE share total EtOH influx">
-				<doc>DEFINITION: calculates share of total influx of ethanol into the system that is owing to cellulose to ethanol producers in each region
+				<doc>DEFINITION: calculates share of total influx of ethanol into the system that is owing to cellulose ethanol production in each region
 
-UNITS: Unitless
+UNITS: unitless
 
 TYPE: array | internal calculation
 
@@ -2806,7 +2836,7 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoATech"/>
 				</dimensions>
-				<eqn>IF total_EtOH_influx &gt; 0 THEN CtoA_Output_GPY_by_technology/total_EtOH_influx ELSE 00</eqn>
+				<eqn>IF total_EtOH_influx &gt; 0 THEN CtoA_Output_GPY_by_technology[CtoATech,Primary]/total_EtOH_influx ELSE 00</eqn>
 				<units>unitless</units>
 			</aux>
 			<aux name="import share total EtOH influx">
@@ -2828,7 +2858,10 @@ UNITS: Unitless
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
-				<eqn>IF total_EtOH_influx &gt; 0 THEN SUM(Utilized_Regional_Production_Capacity_CM[*])/total_EtOH_influx ELSE 1
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
+				<eqn>IF total_EtOH_influx &gt; 0 THEN Output_gpy_by_Technology/total_EtOH_influx ELSE 1
 
 {use of 1 in else clause prevents inconsistent results downstream when no production}</eqn>
 				<units>Unitless</units>
@@ -2855,6 +2888,9 @@ UNITS: USD per gallon
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>SE_EtOH_POP_price * SE_share_total_EtOH_influx</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2877,17 +2913,10 @@ UNITS: USD per gallon
 TYPE: scalar | Sector Interface
 
 COMMENTS: </doc>
-				<eqn>import_share_wtd_PoP_price_input + SE_share_wtd_PoP_price_input + SUM(CE_share_wtd_PoP_price_input)</eqn>
+				<eqn>import_share_wtd_PoP_price_input + SUM(SE_share_wtd_PoP_price_input) + SUM(CE_share_wtd_PoP_price_input)</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="OI C Tax SE 1" access="input">
-				<doc>DEFINITION: module interface to OI.C tax delta B
-
-UNITS: USD per gallon
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<eqn>0</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2967,23 +2996,26 @@ COMMENTS: </doc>
 			</aux>
 			<group name="Outputs to Other Modules 3" run="false">
 				<entity name="avg_per_gal_markup"/>
+				<entity name="B_gasoline_price_sensitivity_factor"/>
 			</group>
 			<group name="Non Spreadsheet Inputs from Other Modules 3" run="false">
-				<entity name="Utilized_Regional_Production_Capacity_CM"/>
 				<entity name="FFV_Lo_Blend_Consn"/>
 				<entity name="Total_Desired_Hi_Blend_Consn"/>
-				<entity name="Potential_Lo_Blend_Consn_Non_FFV"/>
 				<entity name="OI_C_Tax_SE"/>
 				<entity name="OI_C_Tax_CE"/>
 				<entity name="OI_C_Tax_SE_1"/>
+				<entity name="est_regional_non_LDV_gas_consn"/>
 				<entity name="Regular_Premium_Gas_Spread_as_frac"/>
+				<entity name="Utilized_Regional_Production_Capacity_CM"/>
 				<entity name="B_capacity"/>
 				<entity name="Gasoline_POD_price_before_tax"/>
 				<entity name="Imports_by_Region"/>
 				<entity name="CtoA_Output_GPY_by_Region"/>
 				<entity name="C_to_B_Output_GPY_by_Region"/>
 				<entity name="CtoA_Output_GPY_by_technology"/>
-				<entity name="est_regional_non_LDV_gas_consn"/>
+				<entity name="Potential_Lo_Blend_Consn_Non_FFV"/>
+				<entity name="Output_gpy_by_Technology"/>
+				<entity name="EtOH_export_from_US_fraction"/>
 			</group>
 			<group name="EtOH Butanol competition" run="false">
 				<entity name="nominal_attr_EtOH_Lo_blend"/>
@@ -3005,34 +3037,34 @@ COMMENTS: </doc>
 				<entity name="Rollup_potential_EtOH_consn_Low_Blend"/>
 			</group>
 			<group name="EtOH POD and POU Pricing" run="false">
-				<entity name="Expected_PoU_Hi_Blend_Cost_after_Subz"/>
-				<entity name="Expected_Hi_Blend_POU_Delivered_Cost"/>
-				<entity name="Hi_Blend_POU_Subsidy"/>
-				<entity name="Gas_Price_Coupling_Pricing_Rule"/>
-				<entity name="hi_blend_use_wtd_pump_price_input"/>
-				<entity name="region_specific_import_cost"/>
-				<entity name="Hi_Blend_usage_weighting_factors"/>
-				<entity name="EtOH_POD_price"/>
-				<entity name="Hi_Blend_Gas_equivalent_price"/>
-				<entity name="chg_avg_frac_tot_prodn_import"/>
-				<entity name="Gasoline_POD_price"/>
-				<entity name="avg_Hi_Blend_Pump_Price"/>
-				<entity name="Hi_Blend_POD_price"/>
-				<entity name="Old_Logic_Hi_Blend_Pump_Price"/>
 				<entity name="frac_prodn_imported"/>
-				<entity name="Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn"/>
-				<entity name="Avg_Gasoline_Pump_Price"/>
-				<entity name="avg_Premium_Pump_Price"/>
-				<entity name="Regional_distn_storage_cost"/>
-				<entity name="Hi_Blend_Volumetric_Offset"/>
-				<entity name="New_Logic_Hi_Blend_Pump_Price"/>
-				<entity name="POU_Subsidy_PassOn_to_Eng_User"/>
-				<entity name="Addl_Gasoline_Tax"/>
-				<entity name="avg_frac_total_prodn_imported"/>
-				<entity name="Gasoline_Pump_Price"/>
-				<entity name="Hi_Blend_Pump_Price"/>
-				<entity name="Cost_Plus_pricing_rule"/>
 				<entity name="distn_storage_subsidy"/>
+				<entity name="Expected_PoU_Hi_Blend_Cost_after_Subz"/>
+				<entity name="New_Logic_Hi_Blend_Pump_Price"/>
+				<entity name="Hi_Blend_usage_weighting_factors"/>
+				<entity name="Hi_Blend_Volumetric_Offset"/>
+				<entity name="region_specific_import_cost"/>
+				<entity name="Addl_Gasoline_Tax"/>
+				<entity name="avg_Premium_Pump_Price"/>
+				<entity name="Hi_Blend_Pump_Price"/>
+				<entity name="Gasoline_POD_price"/>
+				<entity name="Old_Logic_Hi_Blend_Pump_Price"/>
+				<entity name="avg_frac_total_prodn_imported"/>
+				<entity name="Avg_Gasoline_Pump_Price"/>
+				<entity name="Gas_Price_Coupling_Pricing_Rule"/>
+				<entity name="Hi_Blend_POD_price"/>
+				<entity name="Expected_Hi_Blend_POU_Delivered_Cost"/>
+				<entity name="Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn"/>
+				<entity name="chg_avg_frac_tot_prodn_import"/>
+				<entity name="Cost_Plus_pricing_rule"/>
+				<entity name="hi_blend_use_wtd_pump_price_input"/>
+				<entity name="Hi_Blend_POU_Subsidy"/>
+				<entity name="Regional_distn_storage_cost"/>
+				<entity name="POU_Subsidy_PassOn_to_Eng_User"/>
+				<entity name="Gasoline_Pump_Price"/>
+				<entity name="Hi_Blend_Gas_equivalent_price"/>
+				<entity name="avg_Hi_Blend_Pump_Price"/>
+				<entity name="EtOH_POD_price"/>
 			</group>
 			<group name="Data Inputs and Initializations" run="false">
 				<entity name="avging_time_for_consn"/>
@@ -3055,6 +3087,7 @@ COMMENTS: </doc>
 				<entity name="BTU_peer_gal_ethanol"/>
 				<entity name="implementation_time"/>
 				<entity name="spread_in_EtOH_frac_chg_from_prodn_consn"/>
+				<entity name="Initial_Regional_EtOH_Inventory"/>
 				<entity name="Hi_blend_Coefficient"/>
 				<entity name="one_hundred_percent"/>
 				<entity name="Hi_Blend_Tax"/>
@@ -3084,34 +3117,40 @@ COMMENTS: </doc>
 				<entity name="B_industrial_price_scenario"/>
 			</group>
 			<group name="Butanol Inventory and Pricing" run="false">
-				<entity name="total_desired_B_fuel_consn"/>
-				<entity name="nominal_attr_Bio_B_industrial"/>
-				<entity name="B_prodn_consn_ratio"/>
-				<entity name="desired_B_industrial_consn"/>
-				<entity name="B_production"/>
-				<entity name="target_B_inventory"/>
-				<entity name="total_desired_B_consn"/>
-				<entity name="frac_chg_B_price_prodn_consn"/>
-				<entity name="Desired_B_inv_coverage"/>
+				<entity name="AVG_Desired_B_consn"/>
 				<entity name="inventory_constraint_on_B_consn"/>
 				<entity name="offset_in_frac_chg_from_B_inv"/>
-				<entity name="B_price_input_from_inv_ratio"/>
-				<entity name="B_industrial_consn"/>
-				<entity name="nominal_attr_B_industrial"/>
-				<entity name="B_Inventory"/>
-				<entity name="B_inventory_ratio"/>
-				<entity name="frac_chg_B_price_inv"/>
-				<entity name="B_fuel_consn"/>
-				<entity name="B_logistic_price_response_curve_from_prodn_consn"/>
-				<entity name="AVG_Desired_B_consn"/>
-				<entity name="offset_in_frac_chg_from_B_prodn_cons"/>
-				<entity name="B_POP_price"/>
-				<entity name="frac_change_in_B_price"/>
-				<entity name="B_price_input_from_prodn_consn"/>
-				<entity name="B_POP_Price_Index"/>
-				<entity name="chg_B_price_index"/>
 				<entity name="RAT_Bio_B_industrial"/>
+				<entity name="B_POD_price"/>
+				<entity name="B_fuel_consn"/>
+				<entity name="B_inventory_ratio"/>
+				<entity name="delta_in_gasoline_input_cost"/>
+				<entity name="B_price_input_from_prodn_consn"/>
+				<entity name="avg_gasoline_input_cost_PoD"/>
 				<entity name="B_logistic_price_response_curve_from_inv"/>
+				<entity name="frac_chg_B_price_inv"/>
+				<entity name="B_logistic_price_response_curve_from_prodn_consn"/>
+				<entity name="total_desired_B_consn"/>
+				<entity name="frac_chg_B_price_prodn_consn"/>
+				<entity name="B_production"/>
+				<entity name="target_B_inventory"/>
+				<entity name="B_prodn_consn_ratio"/>
+				<entity name="chg_B_price_index"/>
+				<entity name="offset_in_frac_chg_from_B_prodn_cons"/>
+				<entity name="total_desired_B_fuel_consn"/>
+				<entity name="nominal_attr_Bio_B_industrial"/>
+				<entity name="B_POP_price"/>
+				<entity name="B_distn_storage_cost"/>
+				<entity name="frac_change_in_B_price"/>
+				<entity name="desired_B_industrial_consn"/>
+				<entity name="B_industrial_consn"/>
+				<entity name="Desired_B_inv_coverage"/>
+				<entity name="B_Inventory"/>
+				<entity name="B_POP_Price_Index"/>
+				<entity name="nominal_attr_B_industrial"/>
+				<entity name="B_industrial_price_multiplier"/>
+				<entity name="B_price_input_from_inv_ratio"/>
+				<entity name="B_industrial_price_input"/>
 			</group>
 			<group name="EtOH PoP Pricing" run="false">
 				<entity name="EtOH_price_input_from_prodn_consn"/>
@@ -3140,20 +3179,18 @@ COMMENTS: </doc>
 			<group name="EtOH Inventory Dynamics" run="false">
 				<entity name="aaa_Starch_EtOH_prodn"/>
 				<entity name="aaa_C_EtOH_prodn"/>
-				<entity name="aaa_EtOH_Import"/>
+				<entity name="aaa_EtOH_net_exports"/>
 				<entity name="regional_EtOH_production"/>
 				<entity name="regional_inventory_overage"/>
 				<entity name="Regional_EtOH_Inventory"/>
 				<entity name="regional_EtOH_consumption"/>
 				<entity name="target_regional_inventory"/>
 				<entity name="EtOH_export_x_US"/>
-				<entity name="inventory_overage"/>
+				<entity name="EtOH_Export_from_US"/>
 				<entity name="regional_inventory_ratio"/>
 				<entity name="aggregate_prodn_consn_ratio"/>
 				<entity name="regional_inventory_constraint_on_ETOH_consn"/>
 				<entity name="aggregate_inventory_ratio"/>
-				<entity name="Inventory_Export_Factor"/>
-				<entity name="export_time"/>
 				<entity name="desired_EtOH_inv_adj"/>
 				<entity name="regional_prodn_consn_gap"/>
 				<entity name="export"/>
@@ -3168,12 +3205,12 @@ COMMENTS: </doc>
 				<entity name="total_des_regional_EtOH_adj"/>
 				<entity name="avg_des_regional_EtOH_consn"/>
 				<entity name="desired_export_by_region"/>
-				<entity name="Total_Desired_EtOH_consn_Hi_Blend"/>
 				<entity name="desired_import_by_region"/>
 				<entity name="Total_Desired_EtOH_consn"/>
+				<entity name="Total_Desired_EtOH_consn_Hi_Blend"/>
 			</group>
 			<flow name="EtOH export x US">
-				<doc>DEFINITION: represents export of ethanol to outside of US. Export represented simply as a fraction of inventory overage
+				<doc>DEFINITION: represents flow of export (net of imports) of ethanol to outside of US.
 
 UNITS: gallons per year
 
@@ -3183,14 +3220,13 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>inventory_overage / export_time</eqn>
-				<non_negative/>
+				<eqn>EtOH_Export_from_US  - Imports_by_Region</eqn>
 				<units>gallons per year</units>
 			</flow>
-			<aux name="inventory overage">
-				<doc>DEFINITION: gap between threshold level of ethanol inventory and actual inventory. When actual is above threshold, export ensues
+			<aux name="EtOH Export from US">
+				<doc>DEFINITION: calculates ethanol exports from US as total desired exports (calculated in I module) and apportioned based on relative regional inventories
 
-UNITS: gallons
+UNITS: gallons per year
 
 TYPE: array | internal calculation
 
@@ -3198,541 +3234,189 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
-				<eqn>IF (Regional_EtOH_Inventory - target_regional_inventory * Inventory_Export_Factor) &gt; 0 THEN (Regional_EtOH_Inventory - target_regional_inventory * Inventory_Export_Factor) ELSE 0</eqn>
-				<units>gallons</units>
-			</aux>
-			<aux name="Inventory Export Factor">
-				<doc>DEFINITION: fraction of target regional  inventory, that sets threshold for exports of EtOH to outside of US
-
-UNITS: unitless
-
-TYPE: constant | scenario input
-
-COMMENTS: </doc>
-				<eqn>0.9</eqn>
-				<units>unitless</units>
-			</aux>
-			<aux name="export time">
-				<doc>DEFINITION: time to export any inventory overage of EtOH
-
-UNITS: years
-
-TYPE: constant | scenario input
-
-COMMENTS: </doc>
-				<eqn>1</eqn>
-				<units>Years</units>
+				<eqn>IF SUM(Regional_EtOH_Inventory) &gt;0 THEN EtOH_export_from_US_fraction * (Regional_EtOH_Inventory/SUM(Regional_EtOH_Inventory)) ELSE 0</eqn>
+				<units>gallons per year</units>
 			</aux>
 			<aux name="est regional non LDV gas consn" access="input">
-				<doc>DEFINITION: module interface to V.estimated_regional_non_LDV_gasoline_consn_2015
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
 				<eqn>0</eqn>
 				<units>gallons per year</units>
 			</aux>
-			<isee:dependencies>
-				<var name="Total_Desired_EtOH_consn_Hi_Blend">
-					<in>Total_Desired_Hi_Blend_Consn</in>
-					<in>Hi_blend_Coefficient</in>
-				</var>
-				<var name="regional_inventory_ratio">
-					<in>target_regional_inventory</in>
-					<in>Regional_EtOH_Inventory</in>
-				</var>
-				<var name="Total_Potential_EtOH_consn_Low_Blend">
-					<in>FFV_Lo_Blend_Consn</in>
-					<in>impact_of_price_on_ramp_up</in>
-					<in>Lo_blend_coefficient</in>
-					<in>Potential_Lo_Blend_Consn_Non_FFV</in>
-					<in>est_regional_non_LDV_gas_consn</in>
-				</var>
-				<var name="Hi_Blend_Pump_Price">
-					<in>POU_Subsidy_PassOn_to_Eng_User</in>
-					<in>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</in>
-				</var>
-				<var name="Lo_blend_coefficient">
-					<in>E15_weighting_factor</in>
-					<in>E10_coefficient</in>
-					<in>E15_coefficient</in>
-				</var>
-				<var name="Gasoline_Pump_Price">
-					<in>PoD_to_PoU_Delivery_Cost</in>
-					<in>Addl_Gasoline_Tax</in>
-					<in>Gasoline_POD_price</in>
-					<in>avg_per_gal_markup</in>
-				</var>
-				<var name="Expected_PoU_Hi_Blend_Cost_after_Subz">
-					<in>Hi_Blend_POU_Subsidy</in>
-					<in>Expected_Hi_Blend_POU_Delivered_Cost</in>
-				</var>
-				<var name="Expected_Hi_Blend_POU_Delivered_Cost">
-					<in>PoD_to_PoU_Delivery_Cost</in>
-					<in>Hi_Blend_POD_price</in>
-				</var>
-				<var name="EtOH_POP_price">
-					<in>one_hundred_percent</in>
-					<in>EtOH_POP_Price_Index</in>
-					<in>Baseline_EtOH_POP_price</in>
-				</var>
-				<var name="EtOH_POD_price">
-					<in>Regional_distn_storage_cost</in>
-					<in>Composite_EtOH_POP_price</in>
-				</var>
-				<var name="Regional_distn_storage_cost">
-					<in>distn_storage_subsidy</in>
-					<in>region_specific_import_cost</in>
-					<in>in_region_distn_storage_cost</in>
-				</var>
-				<var name="distn_storage_subsidy">
-					<in>EtOH_Distn_Storage_Subsidy_Amount</in>
-					<in>EtOH_Distn_Storage_Subsidy_Switch</in>
-					<in>DistStor_subs_stop_time</in>
-					<in>implementation_time</in>
-				</var>
-				<var name="Hi_Blend_POD_price">
-					<in>fuel_excise_tax</in>
-					<in>Hi_blend_Coefficient</in>
-					<in>Gasoline_POD_price_before_tax</in>
-					<in>EtOH_POD_price</in>
-				</var>
-				<var name="Hi_Blend_Volumetric_Offset">
-					<in>BTU_per_gal_gasoline</in>
-					<in>Hi_blend_Coefficient</in>
-					<in>BTU_peer_gal_ethanol</in>
-				</var>
-				<var name="Hi_Blend_Gas_equivalent_price">
-					<in>Hi_Blend_Volumetric_Offset</in>
-					<in>Hi_Blend_Pump_Price</in>
-				</var>
-				<var name="Gasoline_POD_price">
-					<in>fuel_excise_tax</in>
-					<in>Gasoline_POD_price_before_tax</in>
-				</var>
-				<var name="Hi_Blend_POU_Subsidy">
-					<in>hi_blend_PoU_subsidy_amt</in>
-					<in>hi_blend_PoU_subsidy_switch</in>
-					<in>implementation_time</in>
-					<in>HiBlend_subs_stop_time</in>
-				</var>
-				<var name="frac_prodn_imported">
-					<in>import</in>
-					<in>regional_EtOH_production</in>
-				</var>
-				<var name="region_specific_import_cost">
-					<in>avg_frac_total_prodn_imported</in>
-					<in>x_region_import_cost</in>
-				</var>
-				<var name="chg_avg_frac_tot_prodn_import">
-					<in>frac_prodn_imported</in>
-					<in>avg_frac_total_prodn_imported</in>
-					<in>import_avg_adj_time</in>
-				</var>
-				<var name="Addl_Gasoline_Tax">
-					<in>gas_tax_stop_time</in>
-					<in>addl_gas_tax_amt</in>
-					<in>gas_tax_switch</in>
-					<in>implementation_time</in>
-				</var>
-				<var name="offset_in_frac_chg_from_EtOH_prodn_consn">
-					<in>spread_in_EtOH_frac_chg_from_prodn_consn</in>
-				</var>
-				<var name="frac_chg_EtOH_price_prodn_consn">
-					<in>EtOH_logistic_price_response_curve_from_prodn_consn</in>
-					<in>offset_in_frac_chg_from_EtOH_prodn_consn</in>
-					<in>spread_in_EtOH_frac_chg_from_prodn_consn</in>
-				</var>
-				<var name="frac_chg_EtOH_price_inv">
-					<in>offset_in_frac_chg_from_EtOH_inv</in>
-					<in>EtOH_logistic_price_response_curve_from_inventory</in>
-					<in>spread_in_EtOH_frac_chg_from_inventory</in>
-				</var>
-				<var name="EtOH_price_input_from_prodn_consn">
-					<in>aggregate_prodn_consn_ratio</in>
-				</var>
-				<var name="EtOH_price_input_from_inventory_index">
-					<in>aggregate_inventory_ratio</in>
-				</var>
-				<var name="offset_in_frac_chg_from_EtOH_inv">
-					<in>spread_in_EtOH_frac_chg_from_inventory</in>
-				</var>
-				<var name="EtOH_logistic_price_response_curve_from_prodn_consn">
-					<in>EtOH_price_input_from_prodn_consn</in>
-				</var>
-				<var name="EtOH_logistic_price_response_curve_from_inventory">
-					<in>EtOH_price_input_from_inventory_index</in>
-				</var>
-				<var name="frac_change_in_EtOH_price">
-					<in>frac_chg_EtOH_price_inv</in>
-					<in>frac_chg_EtOH_price_prodn_consn</in>
-				</var>
-				<var name="Cost_Plus_pricing_rule">
-					<in>EtOH_POD_price</in>
-					<in>c_Cost_Plus_Markup_Coeff</in>
-				</var>
-				<var name="aaa_EtOH_Consn">
-					<in>Total_Desired_EtOH_consn</in>
-				</var>
-				<var name="POU_Subsidy_PassOn_to_Eng_User">
-					<in>Pct_Hi_Blend_Subsidy_Accruing_to_End_User</in>
-					<in>Hi_Blend_POU_Subsidy</in>
-				</var>
-				<var name="Old_Logic_Hi_Blend_Pump_Price">
-					<in>avg_per_gal_markup</in>
-					<in>Expected_Hi_Blend_POU_Delivered_Cost</in>
-				</var>
-				<var name="Gas_Price_Coupling_Pricing_Rule">
-					<in>Gasoline_Pump_Price</in>
-					<in>b_Hi_Plend_Price_coupling_Coeff</in>
-				</var>
-				<var name="Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn">
-					<in>New_hi_blend_pricing_structure_switch</in>
-					<in>New_Logic_Hi_Blend_Pump_Price</in>
-					<in>Old_Logic_Hi_Blend_Pump_Price</in>
-				</var>
-				<var name="New_Logic_Hi_Blend_Pump_Price">
-					<in>Gas_Price_Coupling_Pricing_Rule</in>
-					<in>Cost_Plus_pricing_rule</in>
-					<in>f_Hi_Blend_Gasoline_Price_Coupling_Weighting_Factor</in>
-				</var>
-				<var name="AVG_Desired_B_consn">
-					<in>total_desired_B_consn</in>
-					<in>avging_time_for_consn</in>
-				</var>
-				<var name="B_industrial_consn">
-					<in>desired_B_industrial_consn</in>
-					<in>inventory_constraint_on_B_consn</in>
-				</var>
-				<var name="desired_B_industrial_consn">
-					<in>RAT_Bio_B_industrial</in>
-					<in>B_industrial_demand_scenario</in>
-				</var>
-				<var name="total_desired_B_consn">
-					<in>total_desired_B_fuel_consn</in>
-					<in>desired_B_industrial_consn</in>
-				</var>
-				<var name="nominal_attr_B_industrial">
-					<in>B_attr_weighting</in>
-					<in>B_industrial_price_scenario</in>
-					<in>k_B</in>
-				</var>
-				<var name="nominal_attr_Bio_B_industrial">
-					<in>B_attr_weighting</in>
-					<in>K_Bio_B</in>
-					<in>B_POP_price</in>
-				</var>
-				<var name="expected_consn_B_in_lo_blend">
-					<in>lo_blend_coeff_rel_to_b_blend_coeff</in>
-					<in>Expected_EtOH_displacement_by_B_low_blend</in>
-				</var>
-				<var name="RAT_Bio_B_industrial">
-					<in>nominal_attr_Bio_B_industrial</in>
-					<in>nominal_attr_B_industrial</in>
-				</var>
-				<var name="nominal_attr_EtOH_Lo_blend">
-					<in>Composite_EtOH_POP_price</in>
-					<in>k_EtOH_Lo_blend</in>
-					<in>lo_blend_attr_weighting</in>
-				</var>
-				<var name="nominal_attr_B_lo_blend">
-					<in>lo_blend_attr_weighting</in>
-					<in>K_B_Lo_Blend</in>
-					<in>B_POP_price</in>
-				</var>
-				<var name="RAT_B_Lo_blend">
-					<in>nominal_attr_EtOH_Lo_blend</in>
-					<in>nominal_attr_B_lo_blend</in>
-				</var>
-				<var name="aaa_Starch_EtOH_prodn">
-					<in>Utilized_Regional_Production_Capacity_CM</in>
-				</var>
-				<var name="aaa_C_EtOH_prodn">
-					<in>CtoA_Output_GPY_by_Region</in>
-				</var>
-				<var name="Total_Desired_EtOH_consn_Low_Blend">
-					<in>Actual_EtOH_displacement_by_B_lo_blend</in>
-					<in>Total_Potential_EtOH_consn_Low_Blend</in>
-				</var>
-				<var name="B_POP_price">
-					<in>B_industrial_price_scenario</in>
-					<in>B_POP_Price_Index</in>
-					<in>OI_C_Tax_SE_1</in>
-					<in>one_hundred_percent</in>
-				</var>
-				<var name="Expected_EtOH_displacement_by_B_low_blend">
-					<in>Expected_Frac_EtOH_displaced_by_B</in>
-					<in>Total_Potential_EtOH_consn_Low_Blend</in>
-				</var>
-				<var name="offset_in_frac_chg_from_B_prodn_cons">
-					<in>spread_in_B_frac_chg_from_prodn_consn</in>
-				</var>
-				<var name="frac_chg_B_price_prodn_consn">
-					<in>offset_in_frac_chg_from_B_prodn_cons</in>
-					<in>spread_in_B_frac_chg_from_prodn_consn</in>
-					<in>B_logistic_price_response_curve_from_prodn_consn</in>
-				</var>
-				<var name="frac_chg_B_price_inv">
-					<in>offset_in_frac_chg_from_B_inv</in>
-					<in>spread_in_B_frac_chg_from_inv</in>
-					<in>B_logistic_price_response_curve_from_inv</in>
-				</var>
-				<var name="B_price_input_from_prodn_consn">
-					<in>B_prodn_consn_ratio</in>
-				</var>
-				<var name="B_price_input_from_inv_ratio">
-					<in>B_inventory_ratio</in>
-				</var>
-				<var name="offset_in_frac_chg_from_B_inv">
-					<in>spread_in_B_frac_chg_from_inv</in>
-				</var>
-				<var name="B_logistic_price_response_curve_from_prodn_consn">
-					<in>B_price_input_from_prodn_consn</in>
-				</var>
-				<var name="B_logistic_price_response_curve_from_inv">
-					<in>B_price_input_from_inv_ratio</in>
-				</var>
-				<var name="frac_change_in_B_price">
-					<in>frac_chg_B_price_prodn_consn</in>
-					<in>frac_chg_B_price_inv</in>
-				</var>
-				<var name="Actual_EtOH_displacement_by_B_lo_blend">
-					<in>actual_rel_to_expected_B_fuel_consn</in>
-					<in>Expected_EtOH_displacement_by_B_low_blend</in>
-				</var>
-				<var name="aaa_EtOH_Import">
-					<in>Imports_by_Region</in>
-				</var>
-				<var name="B_fuel_consn">
-					<in>total_desired_B_fuel_consn</in>
-					<in>inventory_constraint_on_B_consn</in>
-				</var>
-				<var name="Expected_Frac_EtOH_displaced_by_B">
-					<in>RAT_B_Lo_blend</in>
-					<in>Maximum_share_of_potential_EtOH_consn_Low_Blend_to_B</in>
-				</var>
-				<var name="rollup_potential_EtoH_lo_blend_displacement_B">
-					<in>rough_estimate_potential_EtoH_lo_blend_displacement_B</in>
-				</var>
-				<var name="rough_estimate_potential_EtoH_lo_blend_displacement_B">
-					<in>lo_blend_coeff_rel_to_b_blend_coeff</in>
-					<in>B_capacity</in>
-				</var>
-				<var name="lo_blend_coeff_rel_to_b_blend_coeff">
-					<in>Lo_blend_coefficient</in>
-					<in>B_low_Blend_Coeff</in>
-				</var>
-				<var name="B_production">
-					<in>C_to_B_Output_GPY_by_Region</in>
-				</var>
-				<var name="Maximum_share_of_potential_EtOH_consn_Low_Blend_to_B">
-					<in>Rollup_potential_EtOH_consn_Low_Blend</in>
-					<in>rollup_potential_EtoH_lo_blend_displacement_B</in>
-				</var>
-				<var name="total_desired_B_fuel_consn">
-					<in>expected_consn_B_in_lo_blend</in>
-				</var>
-				<var name="rollup_expected_consn_B">
-					<in>expected_consn_B_in_lo_blend</in>
-				</var>
-				<var name="Rollup_potential_EtOH_consn_Low_Blend">
-					<in>Total_Potential_EtOH_consn_Low_Blend</in>
-				</var>
-				<var name="actual_rel_to_expected_B_fuel_consn">
-					<in>rollup_expected_consn_B</in>
-					<in>B_fuel_consn</in>
-				</var>
-				<var name="impact_of_price_on_ramp_up">
-					<in>EtOH_POP_Price_Index</in>
-				</var>
-				<var name="target_B_inventory">
-					<in>AVG_Desired_B_consn</in>
-					<in>Desired_B_inv_coverage</in>
-				</var>
-				<var name="inventory_constraint_on_B_consn">
-					<in>B_inventory_ratio</in>
-				</var>
-				<var name="B_prodn_consn_ratio">
-					<in>total_desired_B_consn</in>
-					<in>B_production</in>
-				</var>
-				<var name="chg_B_price_index">
-					<in>B_POP_Price_Index</in>
-					<in>frac_change_in_B_price</in>
-				</var>
-				<var name="B_inventory_ratio">
-					<in>B_Inventory</in>
-					<in>target_B_inventory</in>
-				</var>
-				<var name="Regional_EtOH_Inventory">
-					<in>Total_Potential_EtOH_consn_Low_Blend</in>
-					<in>Desired_EtOH_inv_coverage</in>
-				</var>
-				<var name="total_des_regional_EtOH_adj">
-					<in>desired_EtOH_inv_adj</in>
-					<in>regional_prodn_consn_gap</in>
-				</var>
-				<var name="regional_EtOH_consumption">
-					<in>Total_Desired_EtOH_consn</in>
-					<in>regional_inventory_constraint_on_ETOH_consn</in>
-				</var>
-				<var name="aggregate_prodn_consn_ratio">
-					<in>Total_Desired_EtOH_consn</in>
-					<in>regional_EtOH_production</in>
-				</var>
-				<var name="regional_EtOH_production">
-					<in>Imports_by_Region</in>
-					<in>CtoA_Output_GPY_by_Region</in>
-					<in>Utilized_Regional_Production_Capacity_CM</in>
-				</var>
-				<var name="export">
-					<in>total_export_import_flux</in>
-					<in>distn_export_by_region</in>
-				</var>
-				<var name="desired_import_by_region">
-					<in>total_des_regional_EtOH_adj</in>
-				</var>
-				<var name="Total_Desired_EtOH_consn">
-					<in>Total_Desired_EtOH_consn_Hi_Blend</in>
-					<in>Total_Desired_EtOH_consn_Low_Blend</in>
-				</var>
-				<var name="target_regional_inventory">
-					<in>Desired_EtOH_inv_coverage</in>
-					<in>avg_des_regional_EtOH_consn</in>
-				</var>
-				<var name="avg_des_regional_EtOH_consn">
-					<in>Total_Desired_EtOH_consn</in>
-					<in>avging_time_for_consn</in>
-				</var>
-				<var name="regional_inventory_overage">
-					<in>Regional_EtOH_Inventory</in>
-					<in>target_regional_inventory</in>
-				</var>
-				<var name="desired_EtOH_inv_adj">
-					<in>regional_inventory_overage</in>
-					<in>desired_ETOH_inv_adj_time</in>
-				</var>
-				<var name="regional_inventory_constraint_on_ETOH_consn">
-					<in>regional_inventory_ratio</in>
-				</var>
-				<var name="regional_prodn_consn_gap">
-					<in>regional_EtOH_production</in>
-					<in>avg_des_regional_EtOH_consn</in>
-				</var>
-				<var name="desired_export_by_region">
-					<in>total_des_regional_EtOH_adj</in>
-				</var>
-				<var name="total_export_import_flux">
-					<in>rollup_desired_export_across_regions</in>
-					<in>rollup_desired_import_across_regions</in>
-				</var>
-				<var name="distn_import_by_region">
-					<in>desired_import_by_region</in>
-					<in>rollup_desired_import_across_regions</in>
-				</var>
-				<var name="rollup_desired_export_across_regions">
-					<in>desired_export_by_region</in>
-				</var>
-				<var name="rollup_desired_import_across_regions">
-					<in>desired_import_by_region</in>
-				</var>
-				<var name="distn_export_by_region">
-					<in>rollup_desired_export_across_regions</in>
-					<in>desired_export_by_region</in>
-				</var>
-				<var name="aggregate_inventory_ratio">
-					<in>target_regional_inventory</in>
-					<in>Regional_EtOH_Inventory</in>
-				</var>
-				<var name="chg_EtOH_price_index">
-					<in>EtOH_POP_Price_Index</in>
-					<in>frac_change_in_EtOH_price</in>
-				</var>
-				<var name="import">
-					<in>distn_import_by_region</in>
-					<in>total_export_import_flux</in>
-				</var>
-				<var name="SE_EtOH_POP_price">
-					<in>EtOH_POP_price</in>
-					<in>OI_C_Tax_SE</in>
-				</var>
-				<var name="CE_EtOH_POP_price">
-					<in>EtOH_POP_price</in>
-					<in>OI_C_Tax_CE</in>
-				</var>
-				<var name="total_EtOH_influx">
-					<in>CtoA_Output_GPY_by_technology</in>
-					<in>Imports_by_Region</in>
-					<in>Utilized_Regional_Production_Capacity_CM</in>
-				</var>
-				<var name="CE_share_total_EtOH_influx">
-					<in>CtoA_Output_GPY_by_technology</in>
-					<in>total_EtOH_influx</in>
-				</var>
-				<var name="import_share_total_EtOH_influx">
-					<in>total_EtOH_influx</in>
-					<in>Imports_by_Region</in>
-				</var>
-				<var name="SE_share_total_EtOH_influx">
-					<in>total_EtOH_influx</in>
-					<in>Utilized_Regional_Production_Capacity_CM</in>
-				</var>
-				<var name="CE_share_wtd_PoP_price_input">
-					<in>CE_EtOH_POP_price</in>
-					<in>CE_share_total_EtOH_influx</in>
-				</var>
-				<var name="SE_share_wtd_PoP_price_input">
-					<in>SE_EtOH_POP_price</in>
-					<in>SE_share_total_EtOH_influx</in>
-				</var>
-				<var name="import_share_wtd_PoP_price_input">
-					<in>import_share_total_EtOH_influx</in>
-					<in>EtOH_POP_price</in>
-				</var>
-				<var name="Composite_EtOH_POP_price">
-					<in>SE_share_wtd_PoP_price_input</in>
-					<in>import_share_wtd_PoP_price_input</in>
-					<in>CE_share_wtd_PoP_price_input</in>
-				</var>
-				<var name="Avg_Gasoline_Pump_Price">
-					<in>Gasoline_Pump_Price</in>
-				</var>
-				<var name="avg_Premium_Pump_Price">
-					<in>Avg_Gasoline_Pump_Price</in>
-					<in>Regular_Premium_Gas_Spread_as_frac</in>
-				</var>
-				<var name="Hi_Blend_usage_weighting_factors">
-					<in>Total_Desired_Hi_Blend_Consn</in>
-				</var>
-				<var name="avg_Hi_Blend_Pump_Price">
-					<in>hi_blend_use_wtd_pump_price_input</in>
-				</var>
-				<var name="hi_blend_use_wtd_pump_price_input">
-					<in>Hi_Blend_usage_weighting_factors</in>
-					<in>Hi_Blend_Pump_Price</in>
-				</var>
-				<var name="EtOH_export_x_US">
-					<in>inventory_overage</in>
-					<in>export_time</in>
-				</var>
-				<var name="inventory_overage">
-					<in>Regional_EtOH_Inventory</in>
-					<in>target_regional_inventory</in>
-					<in>Inventory_Export_Factor</in>
-				</var>
-			</isee:dependencies>
+			<aux name="B distn storage cost">
+				<doc>DEFINITION: Nominal price/gallon for hi blend equivalent at point of distribution (PoD)
+
+UNITS: USD per gallon
+
+TYPE: module interface
+
+COMMENTS: assume excise tax appears at PoD</doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>0.25</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>0.25</eqn>
+				</element>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="B POD price">
+				<doc>DEFINITION: Nominal price/gallon for hi blend equivalent at point of distribution (PoD)
+
+UNITS: USD per gallon
+
+TYPE: module interface
+
+COMMENTS: assume excise tax appears at PoD</doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<eqn>B_POP_price + B_distn_storage_cost</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="B gasoline price sensitivity factor">
+				<doc>DEFINITION: relates changes in gasoline cost to changes in petroleum-derived butanol prices
+
+UNITS: unitless
+
+TYPE: constant | scenario input
+
+COMMENTS: </doc>
+				<eqn>0</eqn>
+				<units>unitless</units>
+			</aux>
+			<aux name="delta in gasoline input cost">
+				<doc>DEFINITION: Calculates change in pre-tax POD cost of gasoline, relative to initial value.
+
+UNITS: Unitless
+
+TYPE: internal calculation
+
+COMMENTS: input to price-coupling multiplier logic for PCPA for ag products</doc>
+				<eqn>(avg_gasoline_input_cost_PoD - INIT(avg_gasoline_input_cost_PoD) )/ INIT(avg_gasoline_input_cost_PoD)</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="avg gasoline input cost PoD">
+				<doc>DEFINITION: Calculates avg across regions  pre-tax POD cost of gasoline
+
+UNITS: USD per gallon
+
+TYPE: internal calculation
+
+COMMENTS: Note use of arraymean to convert arrayed by region vbl into scalar.  Input array may be better represented as a scalar.</doc>
+				<eqn>MEAN(Gasoline_POD_price_before_tax)</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="B industrial price input">
+				<doc>DEFINITION: Calculates change in pre-tax POD cost of gasoline, relative to initial value.
+
+UNITS: USD per gallon
+
+TYPE: internal calculation
+
+COMMENTS: input to price-coupling multiplier logic for PCPA for ag products</doc>
+				<eqn>B_industrial_price_scenario * B_industrial_price_multiplier</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="B industrial price multiplier">
+				<doc>DEFINITION: scales change in gasoline price input to a multiplier that is applied to butanol industrial price, in order to capture industrial price coupling
+
+UNITS: Unitless
+
+TYPE: Internal Calculation
+
+COMMENTS: </doc>
+				<eqn>1 + (delta_in_gasoline_input_cost *B_gasoline_price_sensitivity_factor)</eqn>
+				<units>Unitless</units>
+			</aux>
+			<aux name="Output gpy by Technology" access="input">
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
+				<eqn>SUM(Actual_Output_gpy[*,Gen])</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="EtOH export from US fraction" access="input">
+				<eqn>0</eqn>
+				<units>gallons per year</units>
+			</aux>
+			<aux name="Initial Regional EtOH Inventory">
+				<doc>DEFINITION: assumed initial value for regional EtOH Inventories.
+
+UNITS: Gallons
+
+TYPE: array | constant
+
+COMMENTS: developed via simulations to put system in initial balance</doc>
+				<dimensions>
+					<dim name="Region"/>
+				</dimensions>
+				<element subscript="NE">
+					<eqn>130e6</eqn>
+				</element>
+				<element subscript="A">
+					<eqn>70e6</eqn>
+				</element>
+				<element subscript="SE">
+					<eqn>90e6</eqn>
+				</element>
+				<element subscript="DS">
+					<eqn>15e6</eqn>
+				</element>
+				<element subscript="CB">
+					<eqn>245e6</eqn>
+				</element>
+				<element subscript="LS">
+					<eqn>70e6</eqn>
+				</element>
+				<element subscript="NP">
+					<eqn>131e6</eqn>
+				</element>
+				<element subscript="SP">
+					<eqn>65e6</eqn>
+				</element>
+				<element subscript="M">
+					<eqn>50e6</eqn>
+				</element>
+				<element subscript="P">
+					<eqn>100e6</eqn>
+				</element>
+				<units>Gallons</units>
+			</aux>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3749,28 +3433,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="7" isee:page_rows="5" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="5" isee:page_rows="4" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="55" height="45"/>
 					</module>
@@ -3782,7 +3474,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3799,1139 +3491,1097 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
-				<connector uid="4585" angle="173.66">
+				<connector uid="4586" angle="173.66">
 					<from>
-						<alias uid="4586"/>
+						<alias uid="4587"/>
 					</from>
 					<to>EtOH_POP_price</to>
 				</connector>
-				<connector uid="4587" angle="339.444">
+				<connector uid="4588" angle="339.444">
 					<from>target_regional_inventory</from>
 					<to>aggregate_inventory_ratio</to>
 				</connector>
-				<connector uid="4588" angle="159.444">
+				<connector uid="4589" angle="159.444">
 					<from>E15_weighting_factor</from>
 					<to>Lo_blend_coefficient</to>
 				</connector>
-				<connector uid="4589" angle="90">
+				<connector uid="4590" angle="90">
 					<from>offset_in_frac_chg_from_EtOH_inv</from>
 					<to>frac_chg_EtOH_price_inv</to>
 				</connector>
-				<connector uid="4590" angle="116.565">
+				<connector uid="4591" angle="116.565">
 					<from>total_des_regional_EtOH_adj</from>
 					<to>desired_export_by_region</to>
 				</connector>
-				<connector uid="4591" angle="324.462">
+				<connector uid="4592" angle="324.462">
 					<from>EtOH_POD_price</from>
 					<to>Cost_Plus_pricing_rule</to>
 				</connector>
-				<connector uid="4592" angle="0">
+				<connector uid="4593" angle="0">
 					<from>
-						<alias uid="4593"/>
+						<alias uid="4594"/>
 					</from>
 					<to>lo_blend_coeff_rel_to_b_blend_coeff</to>
 				</connector>
-				<connector uid="4594" color="#C8C8C8" angle="290.556">
+				<connector uid="4595" color="#C8C8C8" angle="290.556">
 					<from>target_regional_inventory</from>
 					<to>regional_inventory_ratio</to>
 				</connector>
-				<connector uid="4595" angle="159.444">
+				<connector uid="4596" angle="159.444">
 					<from>
-						<alias uid="4596"/>
+						<alias uid="4597"/>
 					</from>
 					<to>Hi_Blend_Volumetric_Offset</to>
 				</connector>
-				<connector uid="4597" angle="180">
+				<connector uid="4598" angle="180">
 					<from>hi_blend_use_wtd_pump_price_input</from>
 					<to>avg_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4598" color="white" angle="206.565">
+				<connector uid="4599" color="white" angle="206.565">
 					<from>Composite_EtOH_POP_price</from>
 					<to>nominal_attr_EtOH_Lo_blend</to>
 				</connector>
-				<connector uid="4599" angle="347.471">
+				<connector uid="4600" angle="347.471">
 					<from>
-						<alias uid="4600"/>
+						<alias uid="4601"/>
 					</from>
 					<to>frac_prodn_imported</to>
 				</connector>
-				<connector uid="4601" angle="180">
+				<connector uid="4602" angle="180">
 					<from>
-						<alias uid="4602"/>
+						<alias uid="4603"/>
 					</from>
 					<to>Hi_Blend_Volumetric_Offset</to>
 				</connector>
-				<connector uid="4603" angle="243.435">
+				<connector uid="4604" angle="243.435">
 					<from>Total_Desired_EtOH_consn</from>
 					<to>avg_des_regional_EtOH_consn</to>
 				</connector>
-				<connector uid="4604" angle="0">
+				<connector uid="4605" angle="0">
 					<from>distn_storage_subsidy</from>
 					<to>Regional_distn_storage_cost</to>
 				</connector>
-				<connector uid="4605" angle="342.218">
-					<from>
-						<alias uid="4606"/>
-					</from>
-					<to>regional_EtOH_production</to>
-				</connector>
-				<connector uid="4607" angle="339.444">
+				<connector uid="4606" angle="339.444">
 					<from>B_prodn_consn_ratio</from>
 					<to>B_price_input_from_prodn_consn</to>
 				</connector>
-				<connector uid="4608" angle="0">
+				<connector uid="4607" angle="0">
 					<from>EtOH_POP_Price_Index</from>
 					<to>EtOH_POP_price</to>
 				</connector>
-				<connector uid="4609" angle="251.565">
+				<connector uid="4608" angle="251.565">
 					<from>
-						<alias uid="4610"/>
+						<alias uid="4609"/>
 					</from>
 					<to>Old_Logic_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4611" angle="90">
+				<connector uid="4610" angle="90">
 					<from>
-						<alias uid="4612"/>
+						<alias uid="4611"/>
 					</from>
 					<to>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</to>
 				</connector>
-				<connector uid="4613" angle="49.3987">
+				<connector uid="4612" angle="49.3987">
 					<from>total_des_regional_EtOH_adj</from>
 					<to>desired_import_by_region</to>
 				</connector>
-				<connector uid="4614" angle="0">
+				<connector uid="4613" angle="0">
 					<from>
-						<alias uid="4615"/>
+						<alias uid="4614"/>
 					</from>
 					<to>nominal_attr_EtOH_Lo_blend</to>
 				</connector>
-				<connector uid="4616" angle="180">
+				<connector uid="4615" angle="180">
 					<from>total_desired_B_consn</from>
 					<to>AVG_Desired_B_consn</to>
 				</connector>
-				<connector uid="4617" color="white" angle="270">
+				<connector uid="4616" color="white" angle="270">
 					<from>CE_EtOH_POP_price</from>
 					<to>CE_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4618" color="white" angle="20.556">
+				<connector uid="4617" color="white" angle="20.556">
 					<from>
-						<alias uid="4619"/>
+						<alias uid="4618"/>
 					</from>
 					<to>Gasoline_Pump_Price</to>
 				</connector>
-				<connector uid="4620" angle="270">
+				<connector uid="4619" angle="157.708">
 					<from>
-						<alias uid="4621"/>
+						<alias uid="4620"/>
 					</from>
 					<to>total_desired_B_fuel_consn</to>
 				</connector>
-				<connector uid="4622" angle="270">
+				<connector uid="4621" angle="270">
 					<from>
-						<alias uid="4623"/>
+						<alias uid="4622"/>
 					</from>
 					<to>nominal_attr_B_lo_blend</to>
 				</connector>
-				<connector uid="4624" angle="0">
+				<connector uid="4623" angle="0">
 					<from>
-						<alias uid="4625"/>
+						<alias uid="4624"/>
 					</from>
 					<to>distn_storage_subsidy</to>
 				</connector>
-				<connector uid="4626" angle="80.5377">
+				<connector uid="4625" angle="80.5377">
 					<from>Total_Desired_EtOH_consn</from>
 					<to>regional_EtOH_consumption</to>
 				</connector>
-				<connector uid="4627" angle="90">
+				<connector uid="4626" angle="90">
 					<from>
-						<alias uid="4628"/>
+						<alias uid="4627"/>
 					</from>
 					<to>avg_des_regional_EtOH_consn</to>
 				</connector>
-				<connector uid="4629" angle="153.435">
+				<connector uid="4628" angle="153.435">
 					<from>E10_coefficient</from>
 					<to>Lo_blend_coefficient</to>
 				</connector>
-				<connector uid="4630" angle="333.435">
+				<connector uid="4629" angle="333.435">
 					<from>
-						<alias uid="4631"/>
+						<alias uid="4630"/>
 					</from>
 					<to>offset_in_frac_chg_from_EtOH_prodn_consn</to>
 				</connector>
-				<connector uid="4632" angle="77.4712">
+				<connector uid="4631" angle="33.257">
 					<from>Total_Desired_EtOH_consn_Hi_Blend</from>
 					<to>Total_Desired_EtOH_consn</to>
 				</connector>
-				<connector uid="4633" angle="15.2551">
+				<connector uid="4632" angle="15.2551">
 					<from>Rollup_potential_EtOH_consn_Low_Blend</from>
 					<to>Maximum_share_of_potential_EtOH_consn_Low_Blend_to_B</to>
 				</connector>
-				<connector uid="4634" angle="150.255">
+				<connector uid="4633" angle="180">
 					<from>distn_import_by_region</from>
 					<to>import</to>
 				</connector>
-				<connector uid="4635" angle="219.806">
+				<connector uid="4634" angle="219.806">
 					<from>desired_B_industrial_consn</from>
 					<to>B_industrial_consn</to>
 				</connector>
-				<connector uid="4636" angle="269.801">
+				<connector uid="4635" angle="269.801">
 					<from>
-						<alias uid="4637"/>
+						<alias uid="4636"/>
 					</from>
 					<to>B_production</to>
 				</connector>
-				<connector uid="4638" color="white" angle="270">
+				<connector uid="4637" color="white" angle="270">
 					<from>SE_EtOH_POP_price</from>
 					<to>SE_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4639" angle="108.435">
+				<connector uid="4638" angle="71.5651">
 					<from>
-						<alias uid="4640"/>
+						<alias uid="4639"/>
 					</from>
-					<to>B_POP_price</to>
+					<to>B_industrial_price_input</to>
 				</connector>
-				<connector uid="4641" color="white" angle="0">
+				<connector uid="4640" color="white" angle="0">
 					<from>CE_share_total_EtOH_influx</from>
 					<to>CE_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4642" angle="90">
+				<connector uid="4641" angle="90">
 					<from>Regional_distn_storage_cost</from>
 					<to>EtOH_POD_price</to>
 				</connector>
-				<connector uid="4643" angle="180">
+				<connector uid="4642" angle="180">
 					<from>
-						<alias uid="4644"/>
+						<alias uid="4643"/>
 					</from>
 					<to>nominal_attr_B_lo_blend</to>
 				</connector>
-				<connector uid="4645" angle="180">
+				<connector uid="4644" angle="180">
 					<from>Hi_Blend_usage_weighting_factors</from>
 					<to>hi_blend_use_wtd_pump_price_input</to>
 				</connector>
-				<connector uid="4646" angle="0">
+				<connector uid="4645" angle="0">
 					<from>B_price_input_from_inv_ratio</from>
 					<to>B_logistic_price_response_curve_from_inv</to>
 				</connector>
-				<connector uid="4647" angle="102.529">
+				<connector uid="4646" angle="102.529">
 					<from>
-						<alias uid="4648"/>
+						<alias uid="4647"/>
 					</from>
 					<to>Addl_Gasoline_Tax</to>
 				</connector>
-				<connector uid="4649" angle="180">
+				<connector uid="4648" angle="180">
 					<from>Hi_Blend_Volumetric_Offset</from>
 					<to>Hi_Blend_Gas_equivalent_price</to>
 				</connector>
-				<connector uid="4650" angle="90">
+				<connector uid="4649" angle="90">
 					<from>
-						<alias uid="4651"/>
+						<alias uid="4650"/>
 					</from>
 					<to>nominal_attr_Bio_B_industrial</to>
 				</connector>
-				<connector uid="4652" angle="22.0791">
+				<connector uid="4651" angle="22.0791">
 					<from>frac_prodn_imported</from>
 					<to>chg_avg_frac_tot_prodn_import</to>
 				</connector>
-				<connector uid="4653" angle="6.34019">
+				<connector uid="4652" angle="6.34019">
 					<from>
-						<alias uid="4654"/>
+						<alias uid="4653"/>
 					</from>
 					<to>frac_prodn_imported</to>
 				</connector>
-				<connector uid="4655" color="white" angle="0">
+				<connector uid="4654" color="white" angle="0">
 					<from>import_share_total_EtOH_influx</from>
 					<to>import_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4656" angle="293.962">
+				<connector uid="4655" angle="334.744">
 					<from>
-						<alias uid="4651"/>
+						<alias uid="4650"/>
 					</from>
 					<to>nominal_attr_B_industrial</to>
 				</connector>
-				<connector uid="4657" angle="270">
+				<connector uid="4656" angle="270">
 					<from>nominal_attr_EtOH_Lo_blend</from>
 					<to>RAT_B_Lo_blend</to>
 				</connector>
-				<connector uid="4658" angle="270">
+				<connector uid="4657" angle="270">
 					<from>Gasoline_Pump_Price</from>
 					<to>Gas_Price_Coupling_Pricing_Rule</to>
 				</connector>
-				<connector uid="4659" angle="116.565">
+				<connector uid="4658" angle="116.565">
 					<from>actual_rel_to_expected_B_fuel_consn</from>
 					<to>Actual_EtOH_displacement_by_B_lo_blend</to>
 				</connector>
-				<connector uid="4660" angle="180">
+				<connector uid="4659" angle="180">
 					<from>
-						<alias uid="4661"/>
+						<alias uid="4660"/>
 					</from>
 					<to>POU_Subsidy_PassOn_to_Eng_User</to>
 				</connector>
-				<connector uid="4662" angle="220.601">
+				<connector uid="4661" angle="220.601">
 					<from>RAT_B_Lo_blend</from>
 					<to>Expected_Frac_EtOH_displaced_by_B</to>
 				</connector>
-				<connector uid="4663" angle="6.34019">
+				<connector uid="4662" angle="6.34019">
 					<from>
-						<alias uid="4664"/>
+						<alias uid="4663"/>
 					</from>
 					<to>offset_in_frac_chg_from_B_inv</to>
 				</connector>
-				<connector uid="4665" angle="180">
+				<connector uid="4664" angle="180">
 					<from>Expected_Frac_EtOH_displaced_by_B</from>
 					<to>Expected_EtOH_displacement_by_B_low_blend</to>
 				</connector>
-				<connector uid="4666" color="white" angle="29.7449">
+				<connector uid="4665" color="white" angle="29.7449">
 					<from>Gasoline_Pump_Price</from>
 					<to>Avg_Gasoline_Pump_Price</to>
 				</connector>
-				<connector uid="4667" angle="0">
+				<connector uid="4666" angle="0">
 					<from>regional_inventory_ratio</from>
 					<to>regional_inventory_constraint_on_ETOH_consn</to>
 				</connector>
-				<connector uid="4668" angle="339.444">
+				<connector uid="4667" angle="339.444">
 					<from>regional_inventory_constraint_on_ETOH_consn</from>
 					<to>regional_EtOH_consumption</to>
 				</connector>
-				<connector uid="4669" angle="68.1986">
+				<connector uid="4668" angle="68.1986">
 					<from>Total_Desired_EtOH_consn</from>
 					<to>aggregate_prodn_consn_ratio</to>
 				</connector>
-				<connector uid="4670" angle="0">
+				<connector uid="4669" angle="0">
 					<from>rollup_potential_EtoH_lo_blend_displacement_B</from>
 					<to>Maximum_share_of_potential_EtOH_consn_Low_Blend_to_B</to>
 				</connector>
-				<connector uid="4671" color="white" angle="20.556">
+				<connector uid="4670" color="white" angle="20.556">
 					<from>total_EtOH_influx</from>
 					<to>SE_share_total_EtOH_influx</to>
 				</connector>
-				<connector uid="4672" color="white" angle="319.399">
+				<connector uid="4671" color="white" angle="319.399">
 					<from>total_EtOH_influx</from>
 					<to>import_share_total_EtOH_influx</to>
 				</connector>
-				<connector uid="4673" color="white" angle="270">
+				<connector uid="4672" color="white" angle="270">
 					<from>
-						<alias uid="4674"/>
+						<alias uid="4673"/>
 					</from>
 					<to>Hi_Blend_POD_price</to>
 				</connector>
-				<connector uid="4675" angle="0">
+				<connector uid="4674" angle="0">
 					<from>aggregate_inventory_ratio</from>
 					<to>EtOH_price_input_from_inventory_index</to>
 				</connector>
-				<connector uid="4676" angle="180">
+				<connector uid="4675" angle="180">
 					<from>Total_Desired_EtOH_consn_Low_Blend</from>
 					<to>Total_Desired_EtOH_consn</to>
 				</connector>
-				<connector uid="4677" angle="0">
+				<connector uid="4676" angle="0">
 					<from>New_Logic_Hi_Blend_Pump_Price</from>
 					<to>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</to>
 				</connector>
-				<connector uid="4678" color="white" angle="315">
+				<connector uid="4677" color="white" angle="315">
 					<from>Hi_Blend_Pump_Price</from>
 					<to>hi_blend_use_wtd_pump_price_input</to>
 				</connector>
-				<connector uid="4679" angle="90">
+				<connector uid="4678" angle="90">
 					<from>avg_frac_total_prodn_imported</from>
 					<to>region_specific_import_cost</to>
 				</connector>
-				<connector uid="4680" color="white" angle="0">
-					<from>
-						<alias uid="4681"/>
-					</from>
-					<to>SE_share_total_EtOH_influx</to>
-				</connector>
-				<connector uid="4682" angle="270">
+				<connector uid="4679" angle="270">
 					<from>POU_Subsidy_PassOn_to_Eng_User</from>
 					<to>Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4683" angle="206.565">
+				<connector uid="4680" angle="206.565">
 					<from>B_POP_Price_Index</from>
 					<to>chg_B_price_index</to>
 				</connector>
-				<connector uid="4684" angle="102.529">
+				<connector uid="4681" angle="102.529">
 					<from>desired_export_by_region</from>
 					<to>rollup_desired_export_across_regions</to>
 				</connector>
-				<connector uid="4685" angle="139.399">
+				<connector uid="4682" angle="90">
 					<from>
-						<alias uid="4686"/>
+						<alias uid="4683"/>
 					</from>
 					<to>Total_Desired_EtOH_consn_Hi_Blend</to>
 				</connector>
-				<connector uid="4687" angle="0.394457">
+				<connector uid="4684" angle="0.394457">
 					<from>frac_change_in_B_price</from>
 					<to>chg_B_price_index</to>
 				</connector>
-				<connector uid="4688" angle="180">
+				<connector uid="4685" angle="180">
 					<from>
-						<alias uid="4689"/>
+						<alias uid="4686"/>
 					</from>
 					<to>Addl_Gasoline_Tax</to>
 				</connector>
-				<connector uid="4690" angle="202.249">
+				<connector uid="4687" angle="202.249">
 					<from>EtOH_POP_Price_Index</from>
 					<to>chg_EtOH_price_index</to>
 				</connector>
-				<connector uid="4691" angle="186.34">
+				<connector uid="4688" angle="186.34">
 					<from>E15_coefficient</from>
 					<to>Lo_blend_coefficient</to>
 				</connector>
-				<connector uid="4692" angle="110.556">
+				<connector uid="4689" angle="110.556">
 					<from>AVG_Desired_B_consn</from>
 					<to>target_B_inventory</to>
 				</connector>
-				<connector uid="4693" angle="0">
+				<connector uid="4690" angle="0">
 					<from>Avg_Gasoline_Pump_Price</from>
 					<to>avg_Premium_Pump_Price</to>
 				</connector>
-				<connector uid="4694" angle="270">
+				<connector uid="4691" angle="270">
 					<from>offset_in_frac_chg_from_B_inv</from>
 					<to>frac_chg_B_price_inv</to>
 				</connector>
-				<connector uid="4695" angle="220.601">
+				<connector uid="4692" angle="220.601">
 					<from>Gas_Price_Coupling_Pricing_Rule</from>
 					<to>New_Logic_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4696" angle="36.8699">
-					<from>total_export_import_flux</from>
-					<to>import</to>
-				</connector>
-				<connector uid="4697" color="white" angle="270">
+				<connector uid="4693" color="white" angle="270">
 					<from>SE_share_wtd_PoP_price_input</from>
 					<to>Composite_EtOH_POP_price</to>
 				</connector>
-				<connector uid="4698" angle="0">
+				<connector uid="4694" angle="0">
 					<from>EtOH_logistic_price_response_curve_from_inventory</from>
 					<to>frac_chg_EtOH_price_inv</to>
 				</connector>
-				<connector uid="4699" angle="0">
+				<connector uid="4695" angle="0">
 					<from>EtOH_price_input_from_inventory_index</from>
 					<to>EtOH_logistic_price_response_curve_from_inventory</to>
 				</connector>
-				<connector uid="4700" angle="0">
+				<connector uid="4696" angle="0">
 					<from>B_POP_Price_Index</from>
 					<to>B_POP_price</to>
 				</connector>
-				<connector uid="4701" angle="180">
+				<connector uid="4697" angle="180">
 					<from>expected_consn_B_in_lo_blend</from>
 					<to>rollup_expected_consn_B</to>
 				</connector>
-				<connector uid="4702" angle="270">
+				<connector uid="4698" angle="270">
 					<from>
-						<alias uid="4703"/>
+						<alias uid="4699"/>
 					</from>
 					<to>EtOH_POP_price</to>
 				</connector>
-				<connector uid="4704" angle="32.0054">
+				<connector uid="4700" angle="32.0054">
 					<from>
-						<alias uid="4705"/>
+						<alias uid="4701"/>
 					</from>
 					<to>lo_blend_coeff_rel_to_b_blend_coeff</to>
 				</connector>
-				<connector uid="4706" color="white" angle="315">
+				<connector uid="4702" color="white" angle="315">
 					<from>EtOH_POP_price</from>
 					<to>import_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4707" angle="270">
-					<from>
-						<alias uid="4640"/>
-					</from>
-					<to>nominal_attr_B_industrial</to>
-				</connector>
-				<connector uid="4708" angle="180">
+				<connector uid="4703" angle="180">
 					<from>Expected_EtOH_displacement_by_B_low_blend</from>
 					<to>Actual_EtOH_displacement_by_B_lo_blend</to>
 				</connector>
-				<connector uid="4709" angle="327.995">
+				<connector uid="4704" angle="327.995">
 					<from>
-						<alias uid="4664"/>
+						<alias uid="4663"/>
 					</from>
 					<to>frac_chg_B_price_inv</to>
 				</connector>
-				<connector uid="4710" color="white" angle="90">
+				<connector uid="4705" color="white" angle="90">
 					<from>
-						<alias uid="4674"/>
+						<alias uid="4673"/>
 					</from>
 					<to>Gasoline_POD_price</to>
 				</connector>
-				<connector uid="4711" angle="90">
+				<connector uid="4706" angle="90">
 					<from>frac_chg_B_price_prodn_consn</from>
 					<to>frac_change_in_B_price</to>
 				</connector>
-				<connector uid="4712" angle="18.1081">
+				<connector uid="4707" angle="18.0098">
 					<from>
-						<alias uid="4713"/>
+						<alias uid="4708"/>
 					</from>
 					<to>regional_EtOH_production</to>
 				</connector>
-				<connector uid="4714" angle="79.992">
+				<connector uid="4709" angle="79.992">
 					<from>Regional_EtOH_Inventory</from>
 					<to>regional_inventory_ratio</to>
 				</connector>
-				<connector uid="4715" angle="0">
+				<connector uid="4710" angle="0">
 					<from>frac_chg_EtOH_price_inv</from>
 					<to>frac_change_in_EtOH_price</to>
 				</connector>
-				<connector uid="4716" angle="305.538">
+				<connector uid="4711" angle="305.538">
 					<from>
-						<alias uid="4717"/>
+						<alias uid="4712"/>
 					</from>
 					<to>nominal_attr_Bio_B_industrial</to>
 				</connector>
-				<connector uid="4718" color="white" angle="0">
+				<connector uid="4713" color="white" angle="0">
 					<from>SE_share_total_EtOH_influx</from>
 					<to>SE_share_wtd_PoP_price_input</to>
 				</connector>
-				<connector uid="4719" angle="0">
+				<connector uid="4714" angle="0">
 					<from>
-						<alias uid="4720"/>
+						<alias uid="4715"/>
 					</from>
 					<to>Cost_Plus_pricing_rule</to>
 				</connector>
-				<connector uid="4721" angle="20.556">
+				<connector uid="4716" angle="20.556">
 					<from>desired_import_by_region</from>
 					<to>distn_import_by_region</to>
 				</connector>
-				<connector uid="4722" angle="333.435">
+				<connector uid="4717" angle="333.435">
 					<from>Cost_Plus_pricing_rule</from>
 					<to>New_Logic_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4723" angle="153.435">
+				<connector uid="4718" angle="153.435">
+					<from>
+						<alias uid="4719"/>
+					</from>
+					<to>Total_Potential_EtOH_consn_Low_Blend</to>
+				</connector>
+				<connector uid="4720" angle="0">
+					<from>
+						<alias uid="4721"/>
+					</from>
+					<to>target_regional_inventory</to>
+				</connector>
+				<connector uid="4722" color="white" angle="270">
+					<from>
+						<alias uid="4618"/>
+					</from>
+					<to>Expected_Hi_Blend_POU_Delivered_Cost</to>
+				</connector>
+				<connector uid="4723" angle="18.4349">
 					<from>
 						<alias uid="4724"/>
 					</from>
-					<to>Total_Potential_EtOH_consn_Low_Blend</to>
-				</connector>
-				<connector uid="4725" angle="0">
-					<from>
-						<alias uid="4726"/>
-					</from>
-					<to>target_regional_inventory</to>
-				</connector>
-				<connector uid="4727" color="white" angle="270">
-					<from>
-						<alias uid="4619"/>
-					</from>
-					<to>Expected_Hi_Blend_POU_Delivered_Cost</to>
-				</connector>
-				<connector uid="4728" angle="18.4349">
-					<from>
-						<alias uid="4729"/>
-					</from>
 					<to>distn_storage_subsidy</to>
 				</connector>
-				<connector uid="4730" angle="180">
+				<connector uid="4725" angle="180">
 					<from>Addl_Gasoline_Tax</from>
 					<to>Gasoline_Pump_Price</to>
 				</connector>
-				<connector uid="4731" angle="266.997">
+				<connector uid="4726" angle="11.836">
 					<from>total_desired_B_fuel_consn</from>
 					<to>B_fuel_consn</to>
 				</connector>
-				<connector uid="4732" color="white" angle="180">
+				<connector uid="4727" color="white" angle="180">
 					<from>
-						<alias uid="4733"/>
+						<alias uid="4728"/>
 					</from>
 					<to>total_EtOH_influx</to>
 				</connector>
-				<connector uid="4734" angle="90">
+				<connector uid="4729" angle="90">
 					<from>B_Inventory</from>
 					<to>B_inventory_ratio</to>
 				</connector>
-				<connector uid="4735" angle="77.4712">
+				<connector uid="4730" angle="77.4712">
 					<from>desired_import_by_region</from>
 					<to>rollup_desired_import_across_regions</to>
 				</connector>
-				<connector uid="4736" angle="90">
+				<connector uid="4731" angle="90">
 					<from>
-						<alias uid="4737"/>
+						<alias uid="4732"/>
 					</from>
 					<to>aaa_C_EtOH_prodn</to>
 				</connector>
-				<connector uid="4738" color="white" angle="77.4712">
+				<connector uid="4733" color="white" angle="77.4712">
 					<from>B_POP_price</from>
 					<to>nominal_attr_B_lo_blend</to>
 				</connector>
-				<connector uid="4739" angle="341.565">
+				<connector uid="4734" angle="341.565">
 					<from>avg_des_regional_EtOH_consn</from>
 					<to>target_regional_inventory</to>
 				</connector>
-				<connector uid="4740" angle="266.961">
+				<connector uid="4735" angle="269.976">
 					<from>inventory_constraint_on_B_consn</from>
 					<to>B_industrial_consn</to>
 				</connector>
-				<connector uid="4741" angle="180">
+				<connector uid="4736" angle="180">
 					<from>Hi_Blend_POU_Subsidy</from>
 					<to>Expected_PoU_Hi_Blend_Cost_after_Subz</to>
 				</connector>
-				<connector uid="4742" angle="159.444">
+				<connector uid="4737" angle="159.444">
 					<from>
-						<alias uid="4743"/>
+						<alias uid="4738"/>
 					</from>
 					<to>Addl_Gasoline_Tax</to>
 				</connector>
-				<connector uid="4744" color="white" angle="270">
+				<connector uid="4739" color="white" angle="270">
 					<from>EtOH_POP_price</from>
 					<to>CE_EtOH_POP_price</to>
 				</connector>
-				<connector uid="4745" angle="90">
+				<connector uid="4740" angle="90">
 					<from>lo_blend_coeff_rel_to_b_blend_coeff</from>
 					<to>expected_consn_B_in_lo_blend</to>
 				</connector>
-				<connector uid="4746" angle="180">
+				<connector uid="4741" angle="180">
 					<from>impact_of_price_on_ramp_up</from>
 					<to>Total_Potential_EtOH_consn_Low_Blend</to>
 				</connector>
-				<connector uid="4747" angle="116.565">
+				<connector uid="4742" angle="116.565">
 					<from>Maximum_share_of_potential_EtOH_consn_Low_Blend_to_B</from>
 					<to>Expected_Frac_EtOH_displaced_by_B</to>
 				</connector>
-				<connector uid="4748" angle="215.538">
+				<connector uid="4743" angle="243.254">
 					<from>nominal_attr_Bio_B_industrial</from>
 					<to>RAT_Bio_B_industrial</to>
 				</connector>
-				<connector uid="4749" angle="0">
+				<connector uid="4744" angle="0">
 					<from>rough_estimate_potential_EtoH_lo_blend_displacement_B</from>
 					<to>rollup_potential_EtoH_lo_blend_displacement_B</to>
 				</connector>
-				<connector uid="4750" angle="95.989">
+				<connector uid="4745" angle="270">
 					<from>inventory_constraint_on_B_consn</from>
 					<to>B_fuel_consn</to>
 				</connector>
-				<connector uid="4751" angle="206.565">
+				<connector uid="4746" angle="206.565">
 					<from>
-						<alias uid="4752"/>
+						<alias uid="4747"/>
 					</from>
 					<to>offset_in_frac_chg_from_EtOH_inv</to>
 				</connector>
-				<connector uid="4753" color="white" angle="0">
+				<connector uid="4748" color="white" angle="0">
 					<from>Hi_Blend_POD_price</from>
 					<to>Expected_Hi_Blend_POU_Delivered_Cost</to>
 				</connector>
-				<connector uid="4754" angle="180">
+				<connector uid="4749" angle="180">
 					<from>rollup_expected_consn_B</from>
 					<to>actual_rel_to_expected_B_fuel_consn</to>
 				</connector>
-				<connector uid="4755" angle="180">
+				<connector uid="4750" angle="180">
 					<from>
-						<alias uid="4756"/>
+						<alias uid="4751"/>
 					</from>
 					<to>impact_of_price_on_ramp_up</to>
 				</connector>
-				<connector uid="4757" angle="180">
+				<connector uid="4752" angle="179.707">
 					<from>nominal_attr_B_industrial</from>
 					<to>RAT_Bio_B_industrial</to>
 				</connector>
-				<connector uid="4758" angle="203.962">
+				<connector uid="4753" angle="203.962">
 					<from>regional_inventory_overage</from>
 					<to>desired_EtOH_inv_adj</to>
 				</connector>
-				<connector uid="4759" angle="180">
+				<connector uid="4754" angle="180">
 					<from>nominal_attr_B_lo_blend</from>
 					<to>RAT_B_Lo_blend</to>
 				</connector>
-				<connector uid="4760" angle="125.538">
+				<connector uid="4755" angle="125.538">
 					<from>
-						<alias uid="4761"/>
+						<alias uid="4756"/>
 					</from>
 					<to>Gas_Price_Coupling_Pricing_Rule</to>
 				</connector>
-				<connector uid="4762" angle="0">
+				<connector uid="4757" angle="0">
 					<from>frac_chg_B_price_inv</from>
 					<to>frac_change_in_B_price</to>
 				</connector>
-				<connector uid="4763" angle="90">
+				<connector uid="4758" angle="90">
 					<from>frac_chg_EtOH_price_prodn_consn</from>
 					<to>frac_change_in_EtOH_price</to>
 				</connector>
-				<connector uid="4764" angle="90">
+				<connector uid="4759" angle="90">
 					<from>
-						<alias uid="4765"/>
+						<alias uid="4760"/>
 					</from>
 					<to>avg_Premium_Pump_Price</to>
 				</connector>
-				<connector uid="4766" angle="239.744">
+				<connector uid="4761" angle="249.051">
 					<from>regional_EtOH_production</from>
 					<to>regional_prodn_consn_gap</to>
 				</connector>
-				<connector uid="4767" color="#C8C8C8" angle="125.838">
+				<connector uid="4762" color="#C8C8C8" angle="158.199">
 					<from>Regional_EtOH_Inventory</from>
 					<to>regional_inventory_overage</to>
 				</connector>
-				<connector uid="4768" angle="180">
+				<connector uid="4763" angle="180">
 					<from>target_regional_inventory</from>
 					<to>regional_inventory_overage</to>
 				</connector>
-				<connector uid="4769" angle="135">
+				<connector uid="4764" angle="135">
 					<from>rollup_desired_export_across_regions</from>
 					<to>distn_export_by_region</to>
 				</connector>
-				<connector uid="4770" angle="90">
+				<connector uid="4765" angle="90">
 					<from>
-						<alias uid="4771"/>
+						<alias uid="4766"/>
 					</from>
 					<to>aaa_Starch_EtOH_prodn</to>
 				</connector>
-				<connector uid="4772" angle="90">
+				<connector uid="4767" angle="90">
 					<from>
-						<alias uid="4773"/>
+						<alias uid="4768"/>
 					</from>
 					<to>Hi_Blend_POD_price</to>
 				</connector>
-				<connector uid="4774" angle="215.538">
+				<connector uid="4769" angle="215.538">
 					<from>
-						<alias uid="4775"/>
+						<alias uid="4770"/>
 					</from>
 					<to>distn_storage_subsidy</to>
 				</connector>
-				<connector uid="4776" angle="228.814">
+				<connector uid="4771" angle="228.814">
 					<from>avg_frac_total_prodn_imported</from>
 					<to>chg_avg_frac_tot_prodn_import</to>
 				</connector>
-				<connector uid="4777" angle="180">
+				<connector uid="4772" angle="180">
 					<from>offset_in_frac_chg_from_B_prodn_cons</from>
 					<to>frac_chg_B_price_prodn_consn</to>
 				</connector>
-				<connector uid="4778" angle="339.444">
+				<connector uid="4773" angle="339.444">
 					<from>
-						<alias uid="4779"/>
+						<alias uid="4774"/>
 					</from>
 					<to>EtOH_POD_price</to>
 				</connector>
-				<connector uid="4780" color="white" angle="180">
+				<connector uid="4775" color="white" angle="180">
 					<from>
-						<alias uid="4781"/>
+						<alias uid="4776"/>
 					</from>
 					<to>Hi_Blend_usage_weighting_factors</to>
 				</connector>
-				<connector uid="4782" angle="90">
-					<from>
-						<alias uid="4783"/>
-					</from>
-					<to>aaa_EtOH_Import</to>
-				</connector>
-				<connector uid="4784" angle="7.45249">
+				<connector uid="4777" angle="7.45249">
 					<from>frac_change_in_EtOH_price</from>
 					<to>chg_EtOH_price_index</to>
 				</connector>
-				<connector uid="4785" angle="0">
+				<connector uid="4778" angle="0">
 					<from>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</from>
 					<to>Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4786" angle="153.435">
+				<connector uid="4779" angle="156.975">
 					<from>
-						<alias uid="4787"/>
+						<alias uid="4780"/>
 					</from>
 					<to>B_POP_price</to>
 				</connector>
-				<connector uid="4788" angle="270">
+				<connector uid="4781" angle="242.992">
 					<from>B_POP_price</from>
 					<to>nominal_attr_Bio_B_industrial</to>
 				</connector>
-				<connector uid="4789" color="white" angle="192.529">
+				<connector uid="4782" color="white" angle="192.529">
 					<from>import_share_wtd_PoP_price_input</from>
 					<to>Composite_EtOH_POP_price</to>
 				</connector>
-				<connector uid="4790" color="white" angle="0">
+				<connector uid="4783" color="white" angle="0">
 					<from>
-						<alias uid="4791"/>
+						<alias uid="4784"/>
 					</from>
 					<to>Gasoline_POD_price</to>
 				</connector>
-				<connector uid="4792" color="white" angle="90">
+				<connector uid="4785" color="white" angle="90">
 					<from>
-						<alias uid="4793"/>
+						<alias uid="4786"/>
 					</from>
 					<to>total_EtOH_influx</to>
 				</connector>
-				<connector uid="4794" angle="0">
+				<connector uid="4787" angle="0">
 					<from>lo_blend_coeff_rel_to_b_blend_coeff</from>
 					<to>rough_estimate_potential_EtoH_lo_blend_displacement_B</to>
 				</connector>
-				<connector uid="4795" angle="159.444">
+				<connector uid="4788" angle="159.444">
 					<from>
-						<alias uid="4796"/>
+						<alias uid="4789"/>
 					</from>
 					<to>Hi_Blend_POU_Subsidy</to>
 				</connector>
-				<connector uid="4797" angle="18.4349">
+				<connector uid="4790" angle="18.4349">
 					<from>Desired_B_inv_coverage</from>
 					<to>target_B_inventory</to>
 				</connector>
-				<connector uid="4798" angle="345.964">
+				<connector uid="4791" angle="345.964">
 					<from>rollup_desired_export_across_regions</from>
 					<to>total_export_import_flux</to>
 				</connector>
-				<connector uid="4799" angle="315">
+				<connector uid="4792" angle="315">
 					<from>Total_Potential_EtOH_consn_Low_Blend</from>
 					<to>Rollup_potential_EtOH_consn_Low_Blend</to>
 				</connector>
-				<connector uid="4800" angle="270">
+				<connector uid="4793" angle="270">
 					<from>Hi_Blend_POU_Subsidy</from>
 					<to>POU_Subsidy_PassOn_to_Eng_User</to>
 				</connector>
-				<connector uid="4801" angle="22.7256">
+				<connector uid="4794" angle="44.5559">
 					<from>regional_EtOH_production</from>
 					<to>aggregate_prodn_consn_ratio</to>
 				</connector>
-				<connector uid="4802" angle="180">
+				<connector uid="4795" angle="180">
 					<from>
-						<alias uid="4593"/>
+						<alias uid="4594"/>
 					</from>
 					<to>Total_Potential_EtOH_consn_Low_Blend</to>
 				</connector>
-				<connector uid="4803" color="white" angle="215.538">
+				<connector uid="4796" color="white" angle="215.538">
 					<from>CE_share_wtd_PoP_price_input</from>
 					<to>Composite_EtOH_POP_price</to>
 				</connector>
-				<connector uid="4804" angle="346.895">
+				<connector uid="4797" angle="346.895">
 					<from>
-						<alias uid="4805"/>
+						<alias uid="4798"/>
 					</from>
 					<to>chg_avg_frac_tot_prodn_import</to>
 				</connector>
-				<connector uid="4806" angle="147.995">
+				<connector uid="4799" angle="147.995">
 					<from>desired_export_by_region</from>
 					<to>distn_export_by_region</to>
 				</connector>
-				<connector uid="4807" angle="302.005">
+				<connector uid="4800" angle="302.005">
 					<from>desired_EtOH_inv_adj</from>
 					<to>total_des_regional_EtOH_adj</to>
 				</connector>
-				<connector uid="4808" angle="0">
+				<connector uid="4801" angle="0">
 					<from>EtOH_logistic_price_response_curve_from_prodn_consn</from>
 					<to>frac_chg_EtOH_price_prodn_consn</to>
 				</connector>
-				<connector uid="4809" angle="135">
+				<connector uid="4802" angle="230.064">
 					<from>total_desired_B_fuel_consn</from>
 					<to>total_desired_B_consn</to>
 				</connector>
-				<connector uid="4810" angle="90">
+				<connector uid="4803" angle="90">
 					<from>
-						<alias uid="4811"/>
+						<alias uid="4804"/>
 					</from>
 					<to>New_Logic_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4812" angle="270">
+				<connector uid="4805" angle="270">
 					<from>
-						<alias uid="4813"/>
+						<alias uid="4806"/>
 					</from>
 					<to>distn_storage_subsidy</to>
 				</connector>
-				<connector uid="4814" angle="77.4712">
+				<connector uid="4807" angle="77.4712">
 					<from>
-						<alias uid="4815"/>
+						<alias uid="4808"/>
 					</from>
 					<to>AVG_Desired_B_consn</to>
 				</connector>
-				<connector uid="4816" angle="180">
+				<connector uid="4809" angle="180">
 					<from>Actual_EtOH_displacement_by_B_lo_blend</from>
 					<to>Total_Desired_EtOH_consn_Low_Blend</to>
 				</connector>
-				<connector uid="4817" color="white" angle="206.565">
+				<connector uid="4810" color="white" angle="206.565">
 					<from>EtOH_POP_price</from>
 					<to>SE_EtOH_POP_price</to>
 				</connector>
-				<connector uid="4818" angle="153.435">
+				<connector uid="4811" angle="153.435">
 					<from>
-						<alias uid="4819"/>
+						<alias uid="4812"/>
 					</from>
 					<to>frac_chg_B_price_prodn_consn</to>
 				</connector>
-				<connector uid="4820" color="white" angle="0">
+				<connector uid="4813" color="white" angle="0">
 					<from>
-						<alias uid="4793"/>
+						<alias uid="4786"/>
 					</from>
 					<to>import_share_total_EtOH_influx</to>
 				</connector>
-				<connector uid="4821" angle="296.565">
+				<connector uid="4814" angle="296.565">
 					<from>Expected_Hi_Blend_POU_Delivered_Cost</from>
 					<to>Old_Logic_Hi_Blend_Pump_Price</to>
 				</connector>
-				<connector uid="4822" angle="20.556">
+				<connector uid="4815" angle="20.556">
 					<from>region_specific_import_cost</from>
 					<to>Regional_distn_storage_cost</to>
 				</connector>
-				<connector uid="4823" angle="180">
+				<connector uid="4816" angle="180">
 					<from>RAT_Bio_B_industrial</from>
 					<to>desired_B_industrial_consn</to>
 				</connector>
-				<connector uid="4824" color="white" angle="0">
+				<connector uid="4817" color="white" angle="0">
 					<from>Gasoline_POD_price</from>
 					<to>Gasoline_Pump_Price</to>
 				</connector>
-				<connector uid="4825" angle="167.471">
-					<from>
-						<alias uid="4826"/>
-					</from>
-					<to>Total_Potential_EtOH_consn_Low_Blend</to>
-				</connector>
-				<connector uid="4827" angle="139.399">
-					<from>
-						<alias uid="4828"/>
-					</from>
-					<to>Addl_Gasoline_Tax</to>
-				</connector>
-				<connector uid="4829" angle="180">
-					<from>
-						<alias uid="4830"/>
-					</from>
-					<to>Hi_Blend_POU_Subsidy</to>
-				</connector>
-				<connector uid="4831" angle="180">
-					<from>
-						<alias uid="4623"/>
-					</from>
-					<to>nominal_attr_EtOH_Lo_blend</to>
-				</connector>
-				<connector uid="4832" color="white" angle="0">
-					<from>Expected_Hi_Blend_POU_Delivered_Cost</from>
-					<to>Expected_PoU_Hi_Blend_Cost_after_Subz</to>
-				</connector>
-				<connector uid="4833" angle="270">
-					<from>
-						<alias uid="4834"/>
-					</from>
-					<to>desired_B_industrial_consn</to>
-				</connector>
-				<connector uid="4835" color="white" angle="206.565">
-					<from>
-						<alias uid="4733"/>
-					</from>
-					<to>CE_share_total_EtOH_influx</to>
-				</connector>
-				<connector uid="4836" angle="324.462">
-					<from>Expected_EtOH_displacement_by_B_low_blend</from>
-					<to>expected_consn_B_in_lo_blend</to>
-				</connector>
-				<connector uid="4837" angle="32.0054">
-					<from>
-						<alias uid="4838"/>
-					</from>
-					<to>Total_Desired_EtOH_consn_Hi_Blend</to>
-				</connector>
-				<connector uid="4839" angle="147.995">
-					<from>total_export_import_flux</from>
-					<to>export</to>
-				</connector>
-				<connector uid="4840" angle="301.179">
-					<from>
-						<alias uid="4841"/>
-					</from>
-					<to>regional_EtOH_production</to>
-				</connector>
-				<connector uid="4842" angle="0">
-					<from>aggregate_prodn_consn_ratio</from>
-					<to>EtOH_price_input_from_prodn_consn</to>
-				</connector>
-				<connector uid="4843" color="white" angle="0">
-					<from>
-						<alias uid="4844"/>
-					</from>
-					<to>CE_EtOH_POP_price</to>
-				</connector>
-				<connector uid="4845" angle="0">
-					<from>B_logistic_price_response_curve_from_prodn_consn</from>
-					<to>frac_chg_B_price_prodn_consn</to>
-				</connector>
-				<connector uid="4846" angle="296.565">
-					<from>B_inventory_ratio</from>
-					<to>inventory_constraint_on_B_consn</to>
-				</connector>
-				<connector uid="4847" angle="315">
-					<from>regional_prodn_consn_gap</from>
-					<to>total_des_regional_EtOH_adj</to>
-				</connector>
-				<connector uid="4848" angle="26.5651">
-					<from>distn_export_by_region</from>
-					<to>export</to>
-				</connector>
-				<connector uid="4849" angle="0">
-					<from>EtOH_price_input_from_prodn_consn</from>
-					<to>EtOH_logistic_price_response_curve_from_prodn_consn</to>
-				</connector>
-				<connector uid="4850" color="white" angle="71.5651">
-					<from>
-						<alias uid="4610"/>
-					</from>
-					<to>Gasoline_Pump_Price</to>
-				</connector>
-				<connector uid="4851" angle="180">
-					<from>desired_B_industrial_consn</from>
-					<to>total_desired_B_consn</to>
-				</connector>
-				<connector uid="4852" color="white" angle="0">
-					<from>Hi_Blend_Pump_Price</from>
-					<to>Hi_Blend_Gas_equivalent_price</to>
-				</connector>
-				<connector uid="4853" angle="220.601">
-					<from>
-						<alias uid="4854"/>
-					</from>
-					<to>Hi_Blend_Volumetric_Offset</to>
-				</connector>
-				<connector uid="4855" angle="0">
-					<from>
-						<alias uid="4856"/>
-					</from>
-					<to>desired_EtOH_inv_adj</to>
-				</connector>
-				<connector uid="4857" angle="0">
-					<from>B_logistic_price_response_curve_from_inv</from>
-					<to>frac_chg_B_price_inv</to>
-				</connector>
-				<connector uid="4858" angle="90">
-					<from>
-						<alias uid="4859"/>
-					</from>
-					<to>actual_rel_to_expected_B_fuel_consn</to>
-				</connector>
-				<connector uid="4860" angle="90">
-					<from>total_desired_B_consn</from>
-					<to>B_prodn_consn_ratio</to>
-				</connector>
-				<connector uid="4861" color="white" angle="270">
-					<from>
-						<alias uid="4681"/>
-					</from>
-					<to>total_EtOH_influx</to>
-				</connector>
-				<connector uid="4862" angle="180">
-					<from>
-						<alias uid="4863"/>
-					</from>
-					<to>B_POP_price</to>
-				</connector>
-				<connector uid="4864" color="white" angle="327.995">
-					<from>
-						<alias uid="4791"/>
-					</from>
-					<to>Hi_Blend_POD_price</to>
-				</connector>
-				<connector uid="4865" angle="167.471">
-					<from>
-						<alias uid="4752"/>
-					</from>
-					<to>frac_chg_EtOH_price_inv</to>
-				</connector>
-				<connector uid="4866" angle="57.9946">
-					<from>Total_Potential_EtOH_consn_Low_Blend</from>
-					<to>Expected_EtOH_displacement_by_B_low_blend</to>
-				</connector>
-				<connector uid="4867" angle="319.399">
-					<from>Old_Logic_Hi_Blend_Pump_Price</from>
-					<to>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</to>
-				</connector>
-				<connector uid="4868" angle="276.34">
-					<from>B_production</from>
-					<to>B_prodn_consn_ratio</to>
-				</connector>
-				<connector uid="4869" angle="206.565">
-					<from>
-						<alias uid="4828"/>
-					</from>
-					<to>Hi_Blend_POU_Subsidy</to>
-				</connector>
-				<connector uid="4870" angle="0">
-					<from>EtOH_POD_price</from>
-					<to>Hi_Blend_POD_price</to>
-				</connector>
-				<connector uid="4871" angle="90">
-					<from>offset_in_frac_chg_from_EtOH_prodn_consn</from>
-					<to>frac_chg_EtOH_price_prodn_consn</to>
-				</connector>
-				<connector uid="4872" angle="180">
-					<from>rollup_desired_import_across_regions</from>
-					<to>total_export_import_flux</to>
-				</connector>
-				<connector uid="4873" angle="63.4349">
+				<connector uid="4818" angle="167.471">
 					<from>
 						<alias uid="4819"/>
 					</from>
-					<to>offset_in_frac_chg_from_B_prodn_cons</to>
+					<to>Total_Potential_EtOH_consn_Low_Blend</to>
 				</connector>
-				<connector uid="4874" angle="121.43">
-					<from>Total_Desired_EtOH_consn</from>
-					<to>aaa_EtOH_Consn</to>
-				</connector>
-				<connector uid="4875" angle="172.875">
-					<from>avg_des_regional_EtOH_consn</from>
-					<to>regional_prodn_consn_gap</to>
-				</connector>
-				<connector uid="4876" color="white" angle="0">
+				<connector uid="4820" angle="139.399">
 					<from>
-						<alias uid="4877"/>
+						<alias uid="4821"/>
 					</from>
-					<to>SE_EtOH_POP_price</to>
+					<to>Addl_Gasoline_Tax</to>
 				</connector>
-				<connector uid="4878" angle="0">
-					<from>B_inventory_ratio</from>
-					<to>B_price_input_from_inv_ratio</to>
-				</connector>
-				<connector uid="4879" angle="53.1301">
-					<from>target_B_inventory</from>
-					<to>B_inventory_ratio</to>
-				</connector>
-				<connector uid="4880" color="#C8C8C8" angle="90">
-					<from>Regional_EtOH_Inventory</from>
-					<to>aggregate_inventory_ratio</to>
-				</connector>
-				<connector uid="4881" angle="0">
+				<connector uid="4822" angle="180">
 					<from>
-						<alias uid="4882"/>
-					</from>
-					<to>region_specific_import_cost</to>
-				</connector>
-				<connector uid="4883" angle="90">
-					<from>Total_Potential_EtOH_consn_Low_Blend</from>
-					<to>Total_Desired_EtOH_consn_Low_Blend</to>
-				</connector>
-				<connector uid="4884" angle="77.4712">
-					<from>
-						<alias uid="4885"/>
-					</from>
-					<to>nominal_attr_B_industrial</to>
-				</connector>
-				<connector uid="4886" angle="144.462">
-					<from>
-						<alias uid="4887"/>
+						<alias uid="4823"/>
 					</from>
 					<to>Hi_Blend_POU_Subsidy</to>
 				</connector>
-				<connector uid="4888" angle="45">
+				<connector uid="4824" angle="180">
+					<from>
+						<alias uid="4622"/>
+					</from>
+					<to>nominal_attr_EtOH_Lo_blend</to>
+				</connector>
+				<connector uid="4825" color="white" angle="0">
+					<from>Expected_Hi_Blend_POU_Delivered_Cost</from>
+					<to>Expected_PoU_Hi_Blend_Cost_after_Subz</to>
+				</connector>
+				<connector uid="4826" angle="270">
+					<from>
+						<alias uid="4827"/>
+					</from>
+					<to>desired_B_industrial_consn</to>
+				</connector>
+				<connector uid="4828" color="white" angle="206.565">
+					<from>
+						<alias uid="4728"/>
+					</from>
+					<to>CE_share_total_EtOH_influx</to>
+				</connector>
+				<connector uid="4829" angle="324.462">
+					<from>Expected_EtOH_displacement_by_B_low_blend</from>
+					<to>expected_consn_B_in_lo_blend</to>
+				</connector>
+				<connector uid="4830" angle="0">
+					<from>
+						<alias uid="4831"/>
+					</from>
+					<to>Total_Desired_EtOH_consn_Hi_Blend</to>
+				</connector>
+				<connector uid="4832" angle="147.995">
+					<from>total_export_import_flux</from>
+					<to>export</to>
+				</connector>
+				<connector uid="4833" angle="334.453">
+					<from>
+						<alias uid="4834"/>
+					</from>
+					<to>regional_EtOH_production</to>
+				</connector>
+				<connector uid="4835" angle="0">
+					<from>aggregate_prodn_consn_ratio</from>
+					<to>EtOH_price_input_from_prodn_consn</to>
+				</connector>
+				<connector uid="4836" color="white" angle="0">
+					<from>
+						<alias uid="4837"/>
+					</from>
+					<to>CE_EtOH_POP_price</to>
+				</connector>
+				<connector uid="4838" angle="0">
+					<from>B_logistic_price_response_curve_from_prodn_consn</from>
+					<to>frac_chg_B_price_prodn_consn</to>
+				</connector>
+				<connector uid="4839" angle="26.6939">
+					<from>B_inventory_ratio</from>
+					<to>inventory_constraint_on_B_consn</to>
+				</connector>
+				<connector uid="4840" angle="315">
+					<from>regional_prodn_consn_gap</from>
+					<to>total_des_regional_EtOH_adj</to>
+				</connector>
+				<connector uid="4841" angle="26.5651">
+					<from>distn_export_by_region</from>
+					<to>export</to>
+				</connector>
+				<connector uid="4842" angle="0">
+					<from>EtOH_price_input_from_prodn_consn</from>
+					<to>EtOH_logistic_price_response_curve_from_prodn_consn</to>
+				</connector>
+				<connector uid="4843" color="white" angle="71.5651">
+					<from>
+						<alias uid="4609"/>
+					</from>
+					<to>Gasoline_Pump_Price</to>
+				</connector>
+				<connector uid="4844" angle="180">
+					<from>desired_B_industrial_consn</from>
+					<to>total_desired_B_consn</to>
+				</connector>
+				<connector uid="4845" color="white" angle="0">
+					<from>Hi_Blend_Pump_Price</from>
+					<to>Hi_Blend_Gas_equivalent_price</to>
+				</connector>
+				<connector uid="4846" angle="220.601">
+					<from>
+						<alias uid="4847"/>
+					</from>
+					<to>Hi_Blend_Volumetric_Offset</to>
+				</connector>
+				<connector uid="4848" angle="0">
+					<from>
+						<alias uid="4849"/>
+					</from>
+					<to>desired_EtOH_inv_adj</to>
+				</connector>
+				<connector uid="4850" angle="0">
+					<from>B_logistic_price_response_curve_from_inv</from>
+					<to>frac_chg_B_price_inv</to>
+				</connector>
+				<connector uid="4851" angle="90">
+					<from>
+						<alias uid="4852"/>
+					</from>
+					<to>actual_rel_to_expected_B_fuel_consn</to>
+				</connector>
+				<connector uid="4853" angle="90">
+					<from>total_desired_B_consn</from>
+					<to>B_prodn_consn_ratio</to>
+				</connector>
+				<connector uid="4854" angle="180">
+					<from>
+						<alias uid="4855"/>
+					</from>
+					<to>B_POP_price</to>
+				</connector>
+				<connector uid="4856" color="white" angle="327.995">
+					<from>
+						<alias uid="4784"/>
+					</from>
+					<to>Hi_Blend_POD_price</to>
+				</connector>
+				<connector uid="4857" angle="167.471">
+					<from>
+						<alias uid="4747"/>
+					</from>
+					<to>frac_chg_EtOH_price_inv</to>
+				</connector>
+				<connector uid="4858" angle="57.9946">
+					<from>Total_Potential_EtOH_consn_Low_Blend</from>
+					<to>Expected_EtOH_displacement_by_B_low_blend</to>
+				</connector>
+				<connector uid="4859" angle="319.399">
+					<from>Old_Logic_Hi_Blend_Pump_Price</from>
+					<to>Hi_Blend_Pump_Price_Before_Applying_POU_Subsidy_PassOn</to>
+				</connector>
+				<connector uid="4860" angle="276.34">
+					<from>B_production</from>
+					<to>B_prodn_consn_ratio</to>
+				</connector>
+				<connector uid="4861" angle="206.565">
+					<from>
+						<alias uid="4821"/>
+					</from>
+					<to>Hi_Blend_POU_Subsidy</to>
+				</connector>
+				<connector uid="4862" angle="0">
+					<from>EtOH_POD_price</from>
+					<to>Hi_Blend_POD_price</to>
+				</connector>
+				<connector uid="4863" angle="90">
+					<from>offset_in_frac_chg_from_EtOH_prodn_consn</from>
+					<to>frac_chg_EtOH_price_prodn_consn</to>
+				</connector>
+				<connector uid="4864" angle="180">
+					<from>rollup_desired_import_across_regions</from>
+					<to>total_export_import_flux</to>
+				</connector>
+				<connector uid="4865" angle="71.5651">
+					<from>
+						<alias uid="4812"/>
+					</from>
+					<to>offset_in_frac_chg_from_B_prodn_cons</to>
+				</connector>
+				<connector uid="4866" angle="121.43">
+					<from>Total_Desired_EtOH_consn</from>
+					<to>aaa_EtOH_Consn</to>
+				</connector>
+				<connector uid="4867" angle="172.875">
+					<from>avg_des_regional_EtOH_consn</from>
+					<to>regional_prodn_consn_gap</to>
+				</connector>
+				<connector uid="4868" color="white" angle="0">
+					<from>
+						<alias uid="4869"/>
+					</from>
+					<to>SE_EtOH_POP_price</to>
+				</connector>
+				<connector uid="4870" angle="0">
+					<from>B_inventory_ratio</from>
+					<to>B_price_input_from_inv_ratio</to>
+				</connector>
+				<connector uid="4871" angle="53.1301">
+					<from>target_B_inventory</from>
+					<to>B_inventory_ratio</to>
+				</connector>
+				<connector uid="4872" color="#C8C8C8" angle="90">
+					<from>Regional_EtOH_Inventory</from>
+					<to>aggregate_inventory_ratio</to>
+				</connector>
+				<connector uid="4873" angle="0">
+					<from>
+						<alias uid="4874"/>
+					</from>
+					<to>region_specific_import_cost</to>
+				</connector>
+				<connector uid="4875" angle="90">
+					<from>Total_Potential_EtOH_consn_Low_Blend</from>
+					<to>Total_Desired_EtOH_consn_Low_Blend</to>
+				</connector>
+				<connector uid="4876" angle="77.4712">
+					<from>
+						<alias uid="4877"/>
+					</from>
+					<to>nominal_attr_B_industrial</to>
+				</connector>
+				<connector uid="4878" angle="144.462">
+					<from>
+						<alias uid="4879"/>
+					</from>
+					<to>Hi_Blend_POU_Subsidy</to>
+				</connector>
+				<connector uid="4880" angle="45">
 					<from>rollup_desired_import_across_regions</from>
 					<to>distn_import_by_region</to>
 				</connector>
-				<connector uid="4889" angle="0">
+				<connector uid="4881" angle="0">
 					<from>B_price_input_from_prodn_consn</from>
 					<to>B_logistic_price_response_curve_from_prodn_consn</to>
 				</connector>
-				<connector uid="4890" color="white" angle="333.435">
+				<connector uid="4882" color="white" angle="333.435">
 					<from>total_EtOH_influx</from>
 					<to>CE_share_total_EtOH_influx</to>
 				</connector>
-				<connector uid="4891" angle="26.5651">
+				<connector uid="4883" angle="26.5651">
 					<from>
-						<alias uid="4631"/>
+						<alias uid="4630"/>
 					</from>
 					<to>frac_chg_EtOH_price_prodn_consn</to>
 				</connector>
-				<stacked_container uid="4892" x="2834" y="91" width="492" height="282" minimized="true">
-					<graph background="#FFFFC9" isee:graph_area_color="#FFFFC9" x="3080" y="232" type="time_series" isee:time_precision="1" isee:time_scale_by="1" show_grid="true" include_units_in_legend="false" plot_numbers="true" isee:label_pie_slices="false" num_x_grid_lines="5" num_y_grid_lines="5" num_x_labels="5" num_y_labels="3" title="Untitled" isee:stacked_area_alpha="0.1" to="2041" from="2011" left_axis_multi_scale="true" left_axis_auto_scale="true" right_axis_multi_scale="true" right_axis_auto_scale="true">
-						<plot color="blue" pen_width="1" index="0" show_y_axis="true">
-							<format precision="1" scale_by="1"/>
-							<entity name="EtOH_POP_Price_Index"/>
-						</plot>
-					</graph>
-				</stacked_container>
-				<aux color="blue" font_style="italic" font_weight="bold" x="269" y="1932" name="Utilized Regional Production Capacity CM"/>
+				<aux color="blue" font_style="italic" font_weight="bold" x="417" y="1880.33" name="Utilized Regional Production Capacity CM"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="257.875" x="91" y="1876" name="FFV Lo Blend Consn"/>
 				<aux color="red" font_color="red" x="174" y="667" name="avging time for consn"/>
-				<aux color="black" font_color="black" label_angle="79.1352" x="1726" y="1005" name="Total Desired EtOH consn Hi Blend"/>
+				<aux color="black" font_color="black" label_angle="79.1352" x="1583.67" y="1189.5" name="Total Desired EtOH consn Hi Blend"/>
 				<aux color="black" font_color="black" label_angle="75.284" x="1459" y="277" name="regional inventory ratio"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="243.801" x="95" y="1929" name="Total Desired Hi Blend Consn"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="283.63" x="268" y="1875" name="Potential Lo Blend Consn Non FFV"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="243.801" x="91" y="1929" name="Total Desired Hi Blend Consn"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="283.63" x="200.667" y="2129.67" name="Potential Lo Blend Consn Non FFV"/>
 				<aux color="black" font_color="black" label_angle="20.5856" x="1994" y="1059" name="Total Potential EtOH consn Low Blend"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="298.127" x="4098" y="612" name="Hi Blend Pump Price"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="64.4014" x="536" y="670" name="Lo blend coefficient"/>
@@ -4957,7 +4607,7 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" label_angle="94.5279" x="292" y="836" name="spread in EtOH frac chg from inventory"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="92.7392" x="3636" y="79" name="Gasoline POD price"/>
 				<aux color="red" font_color="red" label_angle="276.585" x="78" y="867" name="No Infas in region distn storage cost"/>
-				<aux color="red" font_color="red" label_angle="276.585" x="80" y="807" name="in region\ndistn storage cost"/>
+				<aux color="red" font_color="red" label_angle="276.585" x="80" y="807" name="in region distn storage cost"/>
 				<aux color="black" font_color="black" label_angle="128.206" x="4098" y="256" name="Hi Blend POU Subsidy"/>
 				<aux color="black" font_color="black" label_angle="313.281" x="2968" y="578" name="frac prodn imported"/>
 				<aux color="black" font_color="black" label_angle="130.195" x="3123" y="452" name="region specific import cost"/>
@@ -5009,25 +4659,25 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="187.36" x="3875" y="612" name="New Logic Hi Blend Pump Price"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="582" y="1924" name="CtoA Output GPY by Region"/>
 				<aux color="red" font_color="red" label_angle="101.815" x="387" y="720" name="spread in B frac chg from inv"/>
-				<aux color="red" font_color="red" label_angle="78.185" x="1556" y="1611" name="Desired B inv coverage"/>
-				<aux color="black" font_color="black" label_angle="184.843" x="1616" y="1924" name="AVG Desired B consn"/>
-				<flow color="black" font_color="black" x="2019" y="2143" name="B industrial consn">
+				<aux color="red" font_color="red" label_angle="78.185" x="1571" y="2061.5" name="Desired B inv coverage"/>
+				<aux color="black" font_color="black" label_angle="184.843" x="1606" y="2332.5" name="AVG Desired B consn"/>
+				<flow color="black" font_color="black" x="2009" y="2551.5" name="B industrial consn">
 					<pts>
-						<pt x="1893" y="1829.5"/>
-						<pt x="1893" y="2143"/>
-						<pt x="2169" y="2143"/>
+						<pt x="1883" y="2238"/>
+						<pt x="1883" y="2551.5"/>
+						<pt x="2159" y="2551.5"/>
 					</pts>
 				</flow>
 				<aux color="red" font_color="red" x="650" y="1073" name="B industrial demand scenario"/>
-				<aux color="black" font_color="black" x="2328" y="2085" name="desired B industrial consn"/>
+				<aux color="black" font_color="black" x="2318" y="2493.5" name="desired B industrial consn"/>
 				<aux color="red" font_color="red" label_angle="2.31716" x="644" y="757" name="E10 coefficient"/>
 				<aux color="red" font_color="red" label_angle="284.716" x="451" y="739" name="K Bio B"/>
-				<aux color="black" font_color="black" label_angle="293.149" x="1926" y="2085" name="total desired B consn"/>
+				<aux color="black" font_color="black" label_angle="293.149" x="1916" y="2493.5" name="total desired B consn"/>
 				<aux color="red" font_color="red" x="650" y="1136" name="B industrial price scenario"/>
-				<aux color="black" font_color="black" label_angle="284.716" x="2948" y="2085" name="nominal attr B industrial"/>
-				<aux color="black" font_color="black" label_angle="284.716" x="2878" y="1898" name="nominal attr Bio B industrial"/>
+				<aux color="black" font_color="black" label_angle="284.716" x="2856.33" y="2494.67" name="nominal attr B industrial"/>
+				<aux color="black" font_color="black" label_angle="284.716" x="2723.5" y="2304" name="nominal attr Bio B industrial"/>
 				<aux color="black" font_color="black" label_angle="3.87957" x="2385" y="899" name="expected consn B in lo blend"/>
-				<aux x="2638" y="2085" name="RAT Bio B industrial"/>
+				<aux x="2628" y="2493.5" name="RAT Bio B industrial"/>
 				<aux color="black" font_color="black" label_side="top" x="2344" y="618" name="nominal attr EtOH Lo blend"/>
 				<aux color="red" font_color="red" label_angle="263.815" x="384" y="811" name="K B Lo Blend"/>
 				<aux color="red" font_color="red" x="395" y="919" name="k EtOH Lo blend"/>
@@ -5037,77 +4687,77 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="246.851" x="956" y="95" name="aaa Starch EtOH prodn"/>
 				<aux color="black" font_color="black" x="1077" y="87" name="aaa C EtOH prodn"/>
 				<aux color="black" font_color="black" label_angle="96.5847" x="1994" y="757" name="Total Desired EtOH consn Low Blend"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="78.185" x="2878" y="1612" name="B POP price"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="78.185" x="2868" y="2020.5" name="B POP price"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="579" y="1873" name="C to B Output GPY by Region"/>
 				<aux color="red" font_color="red" x="274" y="712" name="spread in B frac chg from prodn consn"/>
 				<aux color="black" font_color="black" label_angle="56.4348" x="2194" y="757" name="Expected EtOH displacement by B low blend"/>
 				<aux color="red" font_color="red" label_angle="2.39083" x="649" y="670" name="E15 coefficient"/>
-				<aux color="black" font_color="black" label_side="right" x="2658" y="1713" name="offset in frac chg from B prodn cons"/>
-				<aux color="black" font_color="black" label_angle="15.7488" x="2560" y="1713" name="frac chg B price prodn consn"/>
-				<aux color="black" font_color="black" label_angle="237.461" x="2432" y="1613" name="frac chg B price inv"/>
-				<aux color="black" font_color="black" label_angle="60.139" x="2279" y="1713" name="B price input from prodn consn"/>
-				<aux color="black" font_color="black" label_angle="43.5051" x="2193" y="1613" name="B price input from inv ratio"/>
-				<aux color="black" font_color="black" label_angle="57.4606" x="2432" y="1546" name="offset in frac chg from B inv"/>
-				<aux color="black" font_color="black" label_angle="247.24" x="2387" y="1713" name="B logistic price response curve from prodn consn"/>
-				<aux color="black" font_color="black" label_angle="304.535" x="2280" y="1613" name="B logistic price response curve from inv"/>
-				<aux color="black" font_color="black" x="2560" y="1613" name="frac change in B price"/>
-				<stock color="black" font_color="black" label_angle="96.3313" x="1886" y="1812" name="B Inventory"/>
+				<aux color="black" font_color="black" label_side="right" x="2648" y="2121.5" name="offset in frac chg from B prodn cons"/>
+				<aux color="black" font_color="black" label_angle="15.7488" x="2550" y="2121.5" name="frac chg B price prodn consn"/>
+				<aux color="black" font_color="black" label_angle="237.461" x="2422" y="2021.5" name="frac chg B price inv"/>
+				<aux color="black" font_color="black" label_angle="60.139" x="2269" y="2121.5" name="B price input from prodn consn"/>
+				<aux color="black" font_color="black" label_angle="43.5051" x="2183" y="2021.5" name="B price input from inv ratio"/>
+				<aux color="black" font_color="black" label_angle="57.4606" x="2422" y="1954.5" name="offset in frac chg from B inv"/>
+				<aux color="black" font_color="black" label_angle="247.24" x="2377" y="2121.5" name="B logistic price response curve from prodn consn"/>
+				<aux color="black" font_color="black" label_angle="304.535" x="2270" y="2021.5" name="B logistic price response curve from inv"/>
+				<aux color="black" font_color="black" x="2550" y="2021.5" name="frac change in B price"/>
+				<stock color="black" font_color="black" label_angle="96.3313" x="1876" y="2220.5" name="B Inventory"/>
 				<aux color="red" font_color="red" x="539" y="740" name="k B"/>
 				<aux color="red" font_color="red" label_side="left" x="610" y="790" name="B attr weighting"/>
 				<aux color="red" font_color="red" label_angle="1.95557" x="634" y="711" name="E15 weighting factor"/>
 				<aux color="black" font_color="black" label_angle="283.124" x="2077" y="757" name="Actual EtOH displacement by B lo blend"/>
-				<aux color="black" font_color="black" x="854" y="87" name="aaa EtOH Import"/>
-				<flow color="black" font_color="black" label_angle="21.6089" x="2019.25" y="1805" name="B fuel consn">
+				<aux color="black" font_color="black" x="854" y="87" name="aaa EtOH net exports"/>
+				<flow color="black" font_color="black" label_angle="21.6089" x="2009.25" y="2213.5" name="B fuel consn">
 					<pts>
-						<pt x="1908.5" y="1805"/>
-						<pt x="2154" y="1805"/>
+						<pt x="1898.5" y="2213.5"/>
+						<pt x="2144" y="2213.5"/>
 					</pts>
 				</flow>
 				<aux color="black" font_color="black" label_angle="44.2884" x="2347" y="757" name="Expected Frac EtOH displaced by B"/>
 				<aux color="blue" label_angle="114.998" x="2640" y="1059" name="rollup potential EtoH lo blend displacement B"/>
 				<aux color="black" font_color="black" label_angle="230.235" x="2538" y="1059" name="rough estimate potential EtoH lo blend displacement B"/>
 				<aux color="blue" label_angle="294.998" x="2386" y="1059" name="lo blend coeff rel to b blend coeff"/>
-				<flow color="black" font_color="black" x="1766.75" y="1806" name="B production">
+				<flow color="black" font_color="black" x="1756.75" y="2214.5" name="B production">
 					<pts>
-						<pt x="1670" y="1806"/>
-						<pt x="1863.5" y="1806"/>
+						<pt x="1660" y="2214.5"/>
+						<pt x="1853.5" y="2214.5"/>
 					</pts>
 				</flow>
 				<aux color="black" font_color="black" label_angle="204.179" x="2713" y="1059" name="Maximum share of potential EtOH consn Low Blend to B"/>
-				<aux color="black" font_color="black" label_angle="66.8512" x="2031" y="1581" name="total desired B fuel consn"/>
+				<aux color="black" font_color="black" label_angle="66.8512" x="1488.5" y="1900.33" name="total desired B fuel consn"/>
 				<aux color="black" font_color="black" label_angle="64.4014" x="2278" y="899" name="rollup expected consn B"/>
 				<aux color="black" font_color="black" label_angle="161.308" x="2558" y="1148" name="Rollup potential EtOH consn Low Blend"/>
 				<aux color="black" font_color="black" label_angle="321.06" x="2176" y="899" name="actual rel to expected B fuel consn"/>
 				<aux color="black" font_color="black" x="2120" y="1328" name="impact of price on ramp up"/>
-				<aux color="black" font_color="black" label_angle="200.546" x="1722" y="1671" name="target B inventory"/>
-				<aux color="black" font_color="black" label_angle="5.57345" x="2031" y="1917" name="inventory constraint on B consn"/>
-				<aux color="black" font_color="black" label_angle="57.4606" x="1926" y="2013" name="B prodn consn ratio"/>
-				<stock color="black" font_color="black" label_angle="78.0558" x="2778" y="1612" name="B POP Price Index"/>
-				<flow color="black" font_color="black" label_angle="139.48" x="2705.25" y="1612" name="chg B price index">
+				<aux color="black" font_color="black" label_angle="200.546" x="1712" y="2079.5" name="target B inventory"/>
+				<aux color="black" font_color="black" label_angle="5.57345" x="2009.25" y="1954.5" name="inventory constraint on B consn"/>
+				<aux color="black" font_color="black" label_angle="57.4606" x="1916" y="2421.5" name="B prodn consn ratio"/>
+				<stock color="black" font_color="black" label_angle="78.0558" x="2768" y="2020.5" name="B POP Price Index"/>
+				<flow color="black" font_color="black" label_angle="139.48" x="2695.25" y="2020.5" name="chg B price index">
 					<pts>
-						<pt x="2643" y="1612"/>
-						<pt x="2755.5" y="1612"/>
+						<pt x="2633" y="2020.5"/>
+						<pt x="2745.5" y="2020.5"/>
 					</pts>
 				</flow>
-				<aux color="black" font_color="black" label_angle="224.591" x="1886" y="1613" name="B inventory ratio"/>
-				<stock color="black" font_color="black" label_angle="164.214" x="1375" y="362" name="Regional EtOH Inventory"/>
+				<aux color="black" font_color="black" label_angle="224.591" x="1876" y="2021.5" name="B inventory ratio"/>
+				<stock color="black" font_color="black" label_angle="164.214" x="1377" y="361" name="Regional EtOH Inventory"/>
 				<aux color="black" font_color="black" label_angle="359.211" x="1396" y="879" name="total des regional EtOH adj"/>
-				<flow color="black" font_color="black" label_angle="104.683" x="1634.25" y="361" name="regional EtOH consumption">
+				<flow color="black" font_color="black" label_angle="104.683" x="1635.25" y="361" name="regional EtOH consumption">
 					<pts>
-						<pt x="1397.5" y="361"/>
+						<pt x="1399.5" y="361"/>
 						<pt x="1895" y="361"/>
 					</pts>
 				</flow>
 				<aux color="black" font_color="black" label_angle="115.599" x="1513" y="212" name="aggregate prodn consn ratio"/>
-				<flow color="black" font_color="black" label_angle="350.848" x="1157.25" y="361" name="regional EtOH production">
+				<flow color="black" font_color="black" label_side="right" label_angle="315" x="1158.25" y="361" name="regional EtOH production">
 					<pts>
 						<pt x="962" y="361"/>
-						<pt x="1352.5" y="361"/>
+						<pt x="1354.5" y="361"/>
 					</pts>
 				</flow>
-				<flow color="black" font_color="black" label_angle="146.505" x="1357" y="439" name="export">
+				<flow color="black" font_color="black" label_angle="146.505" x="1357" y="438.5" name="export">
 					<pts>
-						<pt x="1357" y="379.5"/>
+						<pt x="1357" y="378.5"/>
 						<pt x="1357" y="510.5"/>
 					</pts>
 				</flow>
@@ -5123,7 +4773,7 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="80" y="713" name="desired ETOH inv adj time"/>
 				<aux color="black" font_color="black" label_angle="14.7256" x="1188" y="777" name="desired export by region"/>
 				<aux color="black" font_color="black" label_angle="190.088" x="1377" y="595" name="total export import flux"/>
-				<aux color="black" font_color="black" label_angle="36.6747" x="1507" y="445" name="distn import by region"/>
+				<aux color="black" font_color="black" label_angle="36.6747" x="1503" y="450.5" name="distn import by region"/>
 				<aux color="black" font_color="black" label_angle="238.307" x="1254" y="663" name="rollup desired export across regions"/>
 				<aux color="black" font_color="black" label_angle="226.76" x="1506" y="672" name="rollup desired import across regions"/>
 				<aux color="black" font_color="black" label_angle="109.991" x="1257" y="445" name="distn export by region"/>
@@ -5135,18 +4785,18 @@ COMMENTS: </doc>
 						<pt x="2549.5" y="93"/>
 					</pts>
 				</flow>
-				<flow color="black" font_color="black" label_angle="47.4" x="1396" y="451" name="import">
+				<flow color="black" font_color="black" label_angle="47.4" x="1395" y="450.5" name="import">
 					<pts>
-						<pt x="1396" y="510.5"/>
-						<pt x="1396" y="379.5"/>
+						<pt x="1395" y="510.5"/>
+						<pt x="1395" y="378.5"/>
 					</pts>
 				</flow>
 				<stock color="black" font_color="black" label_side="center" x="1377" y="528" name="InterRegion Transit"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="201" y="2012" name="OI C Tax SE"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="290" y="2014" name="OI C Tax CE"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="272.5" y="1884.33" name="OI C Tax SE"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="272.5" y="1942.33" name="OI C Tax CE"/>
 				<aux color="white" font_color="white" label_angle="330.706" x="2559" y="158" name="SE EtOH POP price"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="83.8151" x="2699" y="213" name="CE EtOH POP price"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="522" y="2012" name="CtoA Output GPY by technology"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="582" y="2058.75" name="CtoA Output GPY by technology"/>
 				<aux color="black" font_color="black" x="2240" y="358" name="total EtOH influx"/>
 				<aux color="black" font_color="black" x="2331" y="404" name="CE share total EtOH influx"/>
 				<aux color="black" font_color="black" x="2366" y="472" name="import share total EtOH influx"/>
@@ -5155,566 +4805,646 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" x="2559" y="310" name="SE share wtd PoP price input"/>
 				<aux color="black" font_color="black" label_angle="241.8" x="2742" y="472" name="import share wtd PoP price input"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="177.67" x="2559" y="510" name="Composite EtOH POP price"/>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="375" y="2017" name="OI C Tax SE 1"/>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="274.5" y="1994" name="OI C Tax SE 1"/>
 				<aux color="black" font_color="black" x="4275" y="44" name="Avg Gasoline Pump Price"/>
-				<aux color="red" font_color="red" label_angle="259.135" x="671" y="2005" name="Regular Premium Gas Spread as frac"/>
+				<aux color="red" font_color="red" label_angle="259.135" x="693.5" y="2012" name="Regular Premium Gas Spread as frac"/>
 				<aux color="black" font_color="black" x="4392" y="44" name="avg Premium Pump Price"/>
 				<aux color="black" font_color="black" label_angle="92.0024" x="4295" y="687" name="Hi Blend usage weighting factors"/>
 				<aux color="black" font_color="black" x="4107" y="687" name="avg Hi Blend Pump Price"/>
 				<aux color="black" font_color="black" label_angle="92.0024" x="4172" y="687" name="hi blend use wtd pump price input"/>
 				<group locked="true" color="#008F44" font_color="#008F44" x="13" y="1508" width="741" height="281" name="Outputs to Other Modules 3">
+					<item uid="4884"/>
+					<item uid="4885"/>
+					<item uid="4886"/>
+					<item uid="4887"/>
+					<item uid="4888"/>
+					<item uid="4889"/>
+					<item uid="4890"/>
+					<item uid="4891"/>
+					<item uid="4892"/>
 					<item uid="4893"/>
-					<item uid="4894"/>
-					<item uid="4895"/>
-					<item uid="4896"/>
-					<item uid="4897"/>
-					<item uid="4898"/>
-					<item uid="4899"/>
-					<item uid="4900"/>
-					<item uid="4901"/>
-					<item uid="4902"/>
 				</group>
 				<group locked="false" color="blue" font_color="blue" x="4" y="1848" width="752" height="447.5" name="Non Spreadsheet Inputs from Other Modules 3"/>
 				<group locked="false" color="black" font_color="black" x="1937" y="563" width="858" height="801" name="EtOH Butanol competition">
-					<item uid="4615"/>
-					<item uid="4644"/>
-					<item uid="4623"/>
-					<item uid="4593"/>
-					<item uid="4859"/>
-					<item uid="4903"/>
-					<item uid="4724"/>
-					<item uid="4826"/>
-					<item uid="4904"/>
-					<item uid="4705"/>
-					<item uid="4756"/>
+					<item uid="4614"/>
+					<item uid="4643"/>
+					<item uid="4622"/>
+					<item uid="4594"/>
+					<item uid="4852"/>
+					<item uid="4894"/>
+					<item uid="4719"/>
+					<item uid="4819"/>
+					<item uid="4895"/>
+					<item uid="4701"/>
+					<item uid="4751"/>
 				</group>
 				<group locked="true" color="black" font_color="black" x="2794" y="23" width="1806" height="725" name="EtOH POD and POU Pricing">
+					<item uid="4676"/>
+					<item uid="4767"/>
+					<item uid="4617"/>
 					<item uid="4660"/>
-					<item uid="4730"/>
-					<item uid="4796"/>
-					<item uid="4743"/>
-					<item uid="4648"/>
-					<item uid="4679"/>
-					<item uid="4760"/>
-					<item uid="4710"/>
-					<item uid="4678"/>
-					<item uid="4828"/>
-					<item uid="4775"/>
-					<item uid="4652"/>
-					<item uid="4773"/>
-					<item uid="4804"/>
-					<item uid="4905"/>
-					<item uid="4805"/>
-					<item uid="4761"/>
-					<item uid="4688"/>
-					<item uid="4604"/>
-					<item uid="4821"/>
-					<item uid="4727"/>
-					<item uid="4645"/>
-					<item uid="4852"/>
-					<item uid="4772"/>
-					<item uid="4599"/>
-					<item uid="4619"/>
+					<item uid="4685"/>
+					<item uid="4738"/>
+					<item uid="4798"/>
+					<item uid="4769"/>
+					<item uid="4878"/>
 					<item uid="4673"/>
-					<item uid="4693"/>
-					<item uid="4742"/>
-					<item uid="4591"/>
-					<item uid="4892"/>
-					<item uid="4595"/>
-					<item uid="4869"/>
-					<item uid="4612"/>
-					<item uid="4654"/>
-					<item uid="4741"/>
-					<item uid="4677"/>
-					<item uid="4610"/>
-					<item uid="4832"/>
-					<item uid="4830"/>
-					<item uid="4729"/>
-					<item uid="4853"/>
-					<item uid="4850"/>
-					<item uid="4810"/>
-					<item uid="4609"/>
-					<item uid="4824"/>
-					<item uid="4618"/>
-					<item uid="4867"/>
-					<item uid="4658"/>
-					<item uid="4790"/>
-					<item uid="4695"/>
-					<item uid="4774"/>
-					<item uid="4812"/>
-					<item uid="4765"/>
-					<item uid="4780"/>
-					<item uid="4596"/>
-					<item uid="4719"/>
-					<item uid="4642"/>
-					<item uid="4795"/>
-					<item uid="4753"/>
-					<item uid="4728"/>
-					<item uid="4720"/>
-					<item uid="4781"/>
-					<item uid="4827"/>
-					<item uid="4779"/>
-					<item uid="4886"/>
-					<item uid="4625"/>
-					<item uid="4776"/>
-					<item uid="4661"/>
-					<item uid="4785"/>
-					<item uid="4689"/>
-					<item uid="4881"/>
-					<item uid="4813"/>
-					<item uid="4624"/>
-					<item uid="4649"/>
-					<item uid="4666"/>
-					<item uid="4597"/>
-					<item uid="4722"/>
-					<item uid="4854"/>
-					<item uid="4764"/>
-					<item uid="4822"/>
-					<item uid="4811"/>
-					<item uid="4870"/>
-					<item uid="4682"/>
-					<item uid="4791"/>
-					<item uid="4653"/>
-					<item uid="4778"/>
-					<item uid="4887"/>
-					<item uid="4601"/>
-					<item uid="4647"/>
-					<item uid="4611"/>
 					<item uid="4602"/>
+					<item uid="4618"/>
+					<item uid="4856"/>
+					<item uid="4806"/>
+					<item uid="4717"/>
+					<item uid="4653"/>
+					<item uid="4793"/>
+					<item uid="4845"/>
+					<item uid="4690"/>
+					<item uid="4879"/>
+					<item uid="4652"/>
+					<item uid="4715"/>
+					<item uid="4723"/>
+					<item uid="4820"/>
+					<item uid="4896"/>
+					<item uid="4692"/>
+					<item uid="4797"/>
+					<item uid="4783"/>
+					<item uid="4624"/>
+					<item uid="4705"/>
+					<item uid="4736"/>
+					<item uid="4847"/>
+					<item uid="4686"/>
+					<item uid="4648"/>
+					<item uid="4677"/>
+					<item uid="4596"/>
+					<item uid="4822"/>
+					<item uid="4778"/>
+					<item uid="4623"/>
+					<item uid="4815"/>
+					<item uid="4737"/>
+					<item uid="4775"/>
+					<item uid="4874"/>
+					<item uid="4647"/>
+					<item uid="4672"/>
+					<item uid="4608"/>
+					<item uid="4597"/>
+					<item uid="4821"/>
+					<item uid="4724"/>
+					<item uid="4603"/>
+					<item uid="4873"/>
+					<item uid="4665"/>
+					<item uid="4646"/>
+					<item uid="4659"/>
+					<item uid="4756"/>
+					<item uid="4641"/>
+					<item uid="4773"/>
+					<item uid="4598"/>
+					<item uid="4803"/>
+					<item uid="4748"/>
+					<item uid="4784"/>
+					<item uid="4657"/>
+					<item uid="4610"/>
+					<item uid="4846"/>
+					<item uid="4644"/>
+					<item uid="4804"/>
+					<item uid="4861"/>
+					<item uid="4805"/>
+					<item uid="4678"/>
+					<item uid="4759"/>
+					<item uid="4611"/>
+					<item uid="4601"/>
+					<item uid="4725"/>
+					<item uid="4814"/>
+					<item uid="4862"/>
+					<item uid="4679"/>
+					<item uid="4776"/>
+					<item uid="4817"/>
+					<item uid="4789"/>
+					<item uid="4714"/>
+					<item uid="4843"/>
+					<item uid="4760"/>
+					<item uid="4651"/>
+					<item uid="4770"/>
+					<item uid="4609"/>
+					<item uid="4774"/>
+					<item uid="4605"/>
+					<item uid="4722"/>
+					<item uid="4592"/>
+					<item uid="4788"/>
+					<item uid="4771"/>
+					<item uid="4755"/>
+					<item uid="4823"/>
+					<item uid="4825"/>
+					<item uid="4768"/>
 					<item uid="4600"/>
-					<item uid="4864"/>
-					<item uid="4829"/>
-					<item uid="4800"/>
-					<item uid="4674"/>
-					<item uid="4882"/>
+					<item uid="4859"/>
 				</group>
 				<group locked="false" x="2" y="624" width="753" height="749" name="Data Inputs and Initializations"/>
-				<group locked="true" color="white" font_color="white" x="1376" y="1401" width="1744" height="879" name="Butanol Inventory and Pricing">
-					<item uid="4860"/>
-					<item uid="4823"/>
-					<item uid="4889"/>
-					<item uid="4797"/>
-					<item uid="4873"/>
-					<item uid="4635"/>
-					<item uid="4777"/>
-					<item uid="4863"/>
-					<item uid="4651"/>
-					<item uid="4717"/>
-					<item uid="4851"/>
-					<item uid="4709"/>
-					<item uid="4757"/>
-					<item uid="4846"/>
-					<item uid="4862"/>
-					<item uid="4664"/>
-					<item uid="4607"/>
-					<item uid="4740"/>
-					<item uid="4738"/>
-					<item uid="4687"/>
-					<item uid="4636"/>
-					<item uid="4694"/>
-					<item uid="4620"/>
-					<item uid="4833"/>
-					<item uid="4815"/>
-					<item uid="4700"/>
+				<group locked="true" color="white" font_color="white" x="1366" y="1809.5" width="1744" height="879" name="Butanol Inventory and Pricing">
+					<item uid="4689"/>
 					<item uid="4711"/>
-					<item uid="4646"/>
+					<item uid="4757"/>
+					<item uid="4684"/>
+					<item uid="4855"/>
+					<item uid="4691"/>
+					<item uid="4839"/>
+					<item uid="4844"/>
+					<item uid="4870"/>
+					<item uid="4606"/>
+					<item uid="4811"/>
+					<item uid="4662"/>
 					<item uid="4650"/>
-					<item uid="4868"/>
-					<item uid="4879"/>
-					<item uid="4788"/>
-					<item uid="4885"/>
-					<item uid="4640"/>
-					<item uid="4748"/>
-					<item uid="4616"/>
-					<item uid="4787"/>
-					<item uid="4845"/>
-					<item uid="4878"/>
-					<item uid="4834"/>
-					<item uid="4637"/>
-					<item uid="4809"/>
-					<item uid="4819"/>
-					<item uid="4716"/>
-					<item uid="4750"/>
-					<item uid="4786"/>
-					<item uid="4707"/>
-					<item uid="4857"/>
-					<item uid="4814"/>
-					<item uid="4818"/>
-					<item uid="4692"/>
-					<item uid="4683"/>
-					<item uid="4884"/>
-					<item uid="4656"/>
-					<item uid="4734"/>
-					<item uid="4621"/>
+					<item uid="4619"/>
+					<item uid="4877"/>
+					<item uid="4772"/>
+					<item uid="4735"/>
+					<item uid="4790"/>
+					<item uid="4655"/>
+					<item uid="4680"/>
+					<item uid="4780"/>
 					<item uid="4639"/>
-					<item uid="4762"/>
+					<item uid="4876"/>
 					<item uid="4663"/>
-					<item uid="4731"/>
+					<item uid="4871"/>
+					<item uid="4816"/>
+					<item uid="4733"/>
+					<item uid="4638"/>
+					<item uid="4865"/>
+					<item uid="4807"/>
+					<item uid="4649"/>
+					<item uid="4645"/>
+					<item uid="4752"/>
+					<item uid="4853"/>
+					<item uid="4729"/>
+					<item uid="4897"/>
+					<item uid="4854"/>
+					<item uid="4712"/>
+					<item uid="4850"/>
+					<item uid="4745"/>
+					<item uid="4838"/>
+					<item uid="4743"/>
+					<item uid="4620"/>
+					<item uid="4898"/>
+					<item uid="4636"/>
+					<item uid="4634"/>
+					<item uid="4826"/>
+					<item uid="4704"/>
+					<item uid="4696"/>
+					<item uid="4860"/>
+					<item uid="4808"/>
+					<item uid="4635"/>
+					<item uid="4615"/>
+					<item uid="4881"/>
+					<item uid="4827"/>
+					<item uid="4812"/>
+					<item uid="4726"/>
+					<item uid="4899"/>
+					<item uid="4802"/>
+					<item uid="4706"/>
+					<item uid="4779"/>
+					<item uid="4781"/>
 				</group>
 				<group locked="false" color="black" font_color="black" x="1938" y="22" width="857" height="522" name="EtOH PoP Pricing">
-					<item uid="4631"/>
-					<item uid="4752"/>
-					<item uid="4681"/>
-					<item uid="4877"/>
-					<item uid="4733"/>
-					<item uid="4703"/>
-					<item uid="4586"/>
-					<item uid="4844"/>
-					<item uid="4793"/>
+					<item uid="4900"/>
+					<item uid="4630"/>
+					<item uid="4747"/>
+					<item uid="4869"/>
+					<item uid="4728"/>
+					<item uid="4699"/>
+					<item uid="4587"/>
+					<item uid="4837"/>
+					<item uid="4786"/>
 				</group>
-				<group locked="false" color="black" font_color="black" x="785" y="25" width="1153" height="1051" name="EtOH Inventory Dynamics">
-					<item uid="4771"/>
-					<item uid="4606"/>
-					<item uid="4783"/>
-					<item uid="4737"/>
-					<item uid="4726"/>
-					<item uid="4906"/>
-					<item uid="4907"/>
-					<item uid="4841"/>
-					<item uid="4856"/>
-					<item uid="4713"/>
-					<item uid="4628"/>
-					<item uid="4838"/>
-					<item uid="4686"/>
+				<group locked="false" color="black" font_color="black" x="781.75" y="25" width="1154.25" height="1337.25" name="EtOH Inventory Dynamics">
+					<item uid="4901"/>
+					<item uid="4834"/>
+					<item uid="4766"/>
+					<item uid="4732"/>
+					<item uid="4721"/>
+					<item uid="4902"/>
+					<item uid="4903"/>
+					<item uid="4849"/>
+					<item uid="4904"/>
+					<item uid="4708"/>
+					<item uid="4627"/>
+					<item uid="4831"/>
+					<item uid="4683"/>
 				</group>
-				<connector uid="4908" angle="268.431">
+				<connector uid="4905" angle="295.402">
 					<from>
-						<alias uid="4903"/>
+						<alias uid="4894"/>
 					</from>
 					<to>rough_estimate_potential_EtoH_lo_blend_displacement_B</to>
 				</connector>
-				<connector uid="4909" angle="94.7636">
+				<connector uid="4906" angle="94.7636">
 					<from>
-						<alias uid="4905"/>
+						<alias uid="4896"/>
 					</from>
 					<to>Regional_distn_storage_cost</to>
 				</connector>
-				<flow color="black" font_color="black" label_side="left" label_angle="225" x="1298.5" y="185" name="EtOH export x US">
+				<flow color="black" font_color="black" label_side="left" label_angle="225" x="1299.5" y="178" name="EtOH export x US">
 					<pts>
-						<pt x="1369" y="344.5"/>
-						<pt x="1369" y="185"/>
-						<pt x="1204" y="185"/>
+						<pt x="1371" y="343.5"/>
+						<pt x="1371" y="178"/>
+						<pt x="1204" y="178"/>
 					</pts>
 				</flow>
-				<aux color="black" font_color="black" label_side="left" x="1345.5" y="125" name="inventory overage"/>
-				<connector uid="4910" angle="130.236">
+				<aux color="black" font_color="black" label_side="left" x="1299.5" y="230" name="EtOH Export from US"/>
+				<connector uid="4907" angle="120.609">
 					<from>Regional_EtOH_Inventory</from>
-					<to>inventory_overage</to>
+					<to>EtOH_Export_from_US</to>
 				</connector>
-				<connector uid="4911" angle="271.637">
-					<from>target_regional_inventory</from>
-					<to>inventory_overage</to>
-				</connector>
-				<aux color="red" font_color="red" x="1693" y="161" name="Inventory Export Factor"/>
-				<connector uid="4912" angle="149.036">
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="263.649" x="205.167" y="2068" name="est regional non LDV gas consn"/>
+				<connector uid="4908" angle="163.163">
 					<from>
-						<alias uid="4906"/>
-					</from>
-					<to>inventory_overage</to>
-				</connector>
-				<connector uid="4913" angle="199.708">
-					<from>inventory_overage</from>
-					<to>EtOH_export_x_US</to>
-				</connector>
-				<aux color="red" font_color="red" x="1606.5" y="161" name="export time"/>
-				<connector uid="4914" angle="28.0725">
-					<from>
-						<alias uid="4907"/>
-					</from>
-					<to>EtOH_export_x_US</to>
-				</connector>
-				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="263.649" x="569" y="2076" name="est regional non LDV gas consn"/>
-				<connector uid="4915" angle="169.695">
-					<from>
-						<alias uid="4904"/>
+						<alias uid="4895"/>
 					</from>
 					<to>Total_Potential_EtOH_consn_Low_Blend</to>
 				</connector>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="4916" x="10" y="29.5" width="701" height="51">Biomass Scenario Downstream Inventory/Pricing Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="4917" x="14" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="4918" x="387" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="4919" x="14" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="4920" x="387" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="4921" x="14" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="4922" x="387" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
-				<text_box color="black" font_size="16pt" padding="5" appearance="transparent" uid="4923" x="13" y="411" width="701" height="51">Ethanol | Butanol | Inventory | Prices</text_box>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4896" x="655" y="1534" width="18" height="18">
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="4909" x="10" y="29.5" width="701" height="51">Biomass Scenario Downstream Inventory/Pricing Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="4910" x="14" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="4911" x="387" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="4912" x="14" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="4913" x="387" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="4914" x="14" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="4915" x="387" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<text_box color="black" font_size="16pt" padding="5" appearance="transparent" uid="4916" x="13" y="403.5" width="701" height="51">Ethanol | Butanol | Inventory | Prices</text_box>
+				<aux color="#AA0000" font_color="#AA0000" label_angle="258.185" x="2777.83" y="1910.83" name="B distn storage cost"/>
+				<aux color="#005500" font_color="#005500" label_angle="258.185" x="2949.83" y="1936.5" name="B POD price"/>
+				<connector uid="4917" angle="46.5952">
+					<from>B_POP_price</from>
+					<to>B_POD_price</to>
+				</connector>
+				<connector uid="4918" angle="270.302">
+					<from>
+						<alias uid="4898"/>
+					</from>
+					<to>B_POD_price</to>
+				</connector>
+				<aux color="red" font_color="red" x="579" y="1701.5" name="B gasoline price sensitivity factor"/>
+				<connector uid="4919" angle="180.669">
+					<from>avg_gasoline_input_cost_PoD</from>
+					<to>delta_in_gasoline_input_cost</to>
+				</connector>
+				<aux color="black" font_color="black" label_angle="83.8151" x="2976" y="2154.5" name="delta in gasoline input cost"/>
+				<aux color="black" font_color="black" label_side="bottom" x="3047.33" y="2153.67" name="avg gasoline input cost PoD"/>
+				<connector uid="4920" angle="272.291">
+					<from>
+						<alias uid="4899"/>
+					</from>
+					<to>avg_gasoline_input_cost_PoD</to>
+				</connector>
+				<aux color="black" font_color="black" label_angle="83.8151" x="2858.67" y="2213.5" name="B industrial price input"/>
+				<connector uid="4921" angle="278.82">
+					<from>delta_in_gasoline_input_cost</from>
+					<to>B_industrial_price_multiplier</to>
+				</connector>
+				<connector uid="4922" angle="90">
+					<from>
+						<alias uid="4897"/>
+					</from>
+					<to>B_industrial_price_multiplier</to>
+				</connector>
+				<aux color="black" font_color="black" x="2976" y="2213.5" name="B industrial price multiplier"/>
+				<connector uid="4923" angle="180">
+					<from>B_industrial_price_multiplier</from>
+					<to>B_industrial_price_input</to>
+				</connector>
+				<connector uid="4924" angle="87.2314">
+					<from>B_industrial_price_input</from>
+					<to>B_POP_price</to>
+				</connector>
+				<connector uid="4925" angle="269.525">
+					<from>B_industrial_price_input</from>
+					<to>nominal_attr_B_industrial</to>
+				</connector>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="42.4045" x="73" y="2155" name="Output gpy by Technology"/>
+				<connector uid="4926" angle="270">
+					<from>
+						<alias uid="4900"/>
+					</from>
+					<to>total_EtOH_influx</to>
+				</connector>
+				<connector uid="4927" angle="0">
+					<from>
+						<alias uid="4900"/>
+					</from>
+					<to>SE_share_total_EtOH_influx</to>
+				</connector>
+				<connector uid="4928" angle="342.072">
+					<from>
+						<alias uid="4902"/>
+					</from>
+					<to>EtOH_export_x_US</to>
+				</connector>
+				<aux color="#5500FF" font_style="italic" font_weight="bold" font_color="#5500FF" label_angle="96.1849" x="664" y="2147.67" name="EtOH export from US fraction"/>
+				<connector uid="4929" angle="16.7296">
+					<from>
+						<alias uid="4903"/>
+					</from>
+					<to>EtOH_Export_from_US</to>
+				</connector>
+				<connector uid="4930" angle="90">
+					<from>
+						<alias uid="4901"/>
+					</from>
+					<to>aaa_EtOH_net_exports</to>
+				</connector>
+				<connector uid="4931" angle="13.4587">
+					<from>EtOH_export_x_US</from>
+					<to>aggregate_prodn_consn_ratio</to>
+				</connector>
+				<connector uid="4932" angle="30.6064">
+					<from>EtOH_export_x_US</from>
+					<to>target_regional_inventory</to>
+				</connector>
+				<connector uid="4933" angle="90">
+					<from>EtOH_Export_from_US</from>
+					<to>EtOH_export_x_US</to>
+				</connector>
+				<aux color="red" font_color="red" x="196" y="942.5" name="Initial Regional EtOH Inventory"/>
+				<connector uid="4934" angle="357.23">
+					<from>export</from>
+					<to>import</to>
+				</connector>
+				<connector uid="4935" angle="265.236">
+					<from>
+						<alias uid="4904"/>
+					</from>
+					<to>regional_prodn_consn_gap</to>
+				</connector>
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4889" x="655" y="1534" width="18" height="18">
 					<of>regional_EtOH_consumption</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4733" x="2428" y="349" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4728" x="2428" y="349" width="18" height="18">
 					<of>CtoA_Output_GPY_by_technology</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4664" x="2361" y="1557" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4663" x="2351" y="1965.5" width="18" height="18">
 					<of>spread_in_B_frac_chg_from_inv</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="169.918" uid="4628" x="1402" y="1043" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="169.918" uid="4627" x="1402" y="1043" width="18" height="18">
 					<of>avging_time_for_consn</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" label_angle="179.206" uid="4681" x="2231" y="301" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" label_side="left" label_angle="135" uid="4834" x="1030" y="295" width="18" height="18">
 					<of>Utilized_Regional_Production_Capacity_CM</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" label_angle="23.9401" uid="4841" x="1095" y="264" width="18" height="18">
-					<of>Utilized_Regional_Production_Capacity_CM</of>
-				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4897" x="199" y="1586" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4884" x="199" y="1586" width="18" height="18">
 					<of>EtOH_POP_price</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="132.239" uid="4703" x="2690" y="47" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="132.239" uid="4699" x="2690" y="47" width="18" height="18">
 					<of>Baseline_EtOH_POP_price</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_side="right" uid="4724" x="2051" y="1164" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_side="right" uid="4719" x="2063" y="1161.5" width="18" height="18">
 					<of>FFV_Lo_Blend_Consn</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" label_side="left" uid="4606" x="1036" y="316" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" label_side="left" uid="4902" x="1245" y="137" width="18" height="18">
 					<of>Imports_by_Region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4640" x="2939" y="1840" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4639" x="2823.17" y="2277" width="18" height="18">
 					<of>B_industrial_price_scenario</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4689" x="4206" y="70" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4686" x="4206" y="70" width="18" height="18">
 					<of>addl_gas_tax_amt</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" uid="4924" x="3333" y="769" width="18" height="18">
-					<of>Gasoline_POD_price_before_tax</of>
-				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4894" x="472" y="1525" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4892" x="472" y="1525" width="18" height="18">
 					<of>EtOH_POD_price</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4761" x="4026" y="531" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4756" x="4026" y="531" width="18" height="18">
 					<of>b_Hi_Plend_Price_coupling_Coeff</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4729" x="2843" y="413" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4724" x="2843" y="413" width="18" height="18">
 					<of>EtOH_Distn_Storage_Subsidy_Switch</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4781" x="4433" y="678" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4776" x="4433" y="678" width="18" height="18">
 					<of>Total_Desired_Hi_Blend_Consn</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4720" x="3651" y="551" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4715" x="3651" y="551" width="18" height="18">
 					<of>c_Cost_Plus_Markup_Coeff</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="233" uid="4686" x="1767" y="1029" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="233" uid="4683" x="1574.67" y="1249.5" width="18" height="18">
 					<of>Total_Desired_Hi_Blend_Consn</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="101.815" uid="4600" x="2831" y="545" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="101.815" uid="4601" x="2831" y="545" width="18" height="18">
 					<of>import</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="37.8463" uid="4826" x="2073" y="1231" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="37.8463" uid="4819" x="2081" y="1221" width="18" height="18">
 					<of>Potential_Lo_Blend_Consn_Non_FFV</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="3.09982" uid="4830" x="4202" y="247" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="3.09982" uid="4823" x="4202" y="247" width="18" height="18">
 					<of>hi_blend_PoU_subsidy_switch</of>
 				</alias>
-				<alias color="red" background="white" font_style="italic" font_color="red" label_angle="83.8151" uid="4586" x="2737" y="85" width="18" height="18">
+				<alias color="red" background="white" font_style="italic" font_color="red" label_angle="83.8151" uid="4587" x="2737" y="85" width="18" height="18">
 					<shape type="circle" radius="18"/>
 					<of>one_hundred_percent</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4819" x="2629" y="1764" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4812" x="2619" y="2172.5" width="18" height="18">
 					<of>spread_in_B_frac_chg_from_prodn_consn</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="4898" x="169" y="1716" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="4886" x="169" y="1716" width="18" height="18">
 					<of>Hi_Blend_POU_Subsidy</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4815" x="1575" y="1987" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4808" x="1565" y="2395.5" width="18" height="18">
 					<of>avging_time_for_consn</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4805" x="2906" y="500" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4798" x="2906" y="500" width="18" height="18">
 					<of>import_avg_adj_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4596" x="4543" y="658" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4597" x="4543" y="658" width="18" height="18">
 					<of>BTU_per_gal_gasoline</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4737" x="1068" y="155" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4732" x="1068" y="155" width="18" height="18">
 					<of>CtoA_Output_GPY_by_Region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4631" x="2285" y="225" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4630" x="2285" y="225" width="18" height="18">
 					<of>spread_in_EtOH_frac_chg_from_prodn_consn</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="258.185" uid="4593" x="2131" y="1050" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="258.185" uid="4594" x="2131" y="1050" width="18" height="18">
 					<of>Lo_blend_coefficient</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="4893" x="280" y="1717" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="4885" x="280" y="1717" width="18" height="18">
 					<of>distn_storage_subsidy</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4713" x="977" y="408" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4708" x="977" y="408" width="18" height="18">
 					<of>CtoA_Output_GPY_by_Region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4602" x="4547" y="609" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4603" x="4547" y="609" width="18" height="18">
 					<of>Hi_blend_Coefficient</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4787" x="2949" y="1637" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4780" x="2939" y="2045.5" width="18" height="18">
 					<of>OI_C_Tax_SE_1</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" uid="4793" x="2231" y="463" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" uid="4786" x="2231" y="463" width="18" height="18">
 					<of>Imports_by_Region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4644" x="2680" y="662" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4643" x="2680" y="662" width="18" height="18">
 					<of>K_B_Lo_Blend</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4612" x="3992" y="674" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4611" x="3992" y="674" width="18" height="18">
 					<of>New_hi_blend_pricing_structure_switch</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4717" x="2794" y="1850" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4712" x="2639.5" y="2256" width="18" height="18">
 					<of>K_Bio_B</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="261.024" uid="4838" x="1639" y="1025" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="261.024" uid="4831" x="1477" y="1180.5" width="18" height="18">
 					<of>Hi_blend_Coefficient</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4752" x="2277" y="127" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4747" x="2277" y="127" width="18" height="18">
 					<of>spread_in_EtOH_frac_chg_from_inventory</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4651" x="2869" y="2017" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4650" x="2714.5" y="2423" width="18" height="18">
 					<of>B_attr_weighting</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" label_angle="61.2327" uid="4791" x="3361" y="70" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" label_angle="61.2327" uid="4784" x="3361" y="70" width="18" height="18">
 					<of>Gasoline_POD_price_before_tax</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="7.35456" uid="4887" x="4212" y="332" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="7.35456" uid="4879" x="4212" y="332" width="18" height="18">
 					<of>HiBlend_subs_stop_time</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4899" x="332" y="1523" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4890" x="332" y="1523" width="18" height="18">
 					<of>Hi_Blend_Gas_equivalent_price</of>
 				</alias>
-				<alias color="#FF007F" font_style="italic" font_color="#FF007F" label_angle="92.7392" uid="4619" x="3737" y="162" width="18" height="18">
+				<alias color="#FF007F" font_style="italic" font_color="#FF007F" label_angle="92.7392" uid="4618" x="3737" y="162" width="18" height="18">
 					<of>PoD_to_PoU_Delivery_Cost</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4705" x="2285" y="1106" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4701" x="2285" y="1106" width="18" height="18">
 					<of>B_low_Blend_Coeff</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="6.76093" uid="4796" x="4199" y="291" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="6.76093" uid="4789" x="4199" y="291" width="18" height="18">
 					<of>hi_blend_PoU_subsidy_amt</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4925" x="3578" y="910" width="18" height="18">
-					<of>PoD_to_PoU_Delivery_Cost</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4885" x="2896" y="2143" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4877" x="2804.33" y="2552.67" width="18" height="18">
 					<of>k_B</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4625" x="2843" y="352" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4624" x="2843" y="352" width="18" height="18">
 					<of>EtOH_Distn_Storage_Subsidy_Amount</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4926" x="3332" y="824" width="18" height="18">
-					<of>fuel_excise_tax</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="278.976" uid="4856" x="820" y="669" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="278.976" uid="4849" x="820" y="669" width="18" height="18">
 					<of>desired_ETOH_inv_adj_time</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4895" x="88" y="1525" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4887" x="88" y="1525" width="18" height="18">
 					<of>Hi_Blend_Pump_Price</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4877" x="2474" y="149" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4869" x="2474" y="149" width="18" height="18">
 					<of>OI_C_Tax_SE</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4844" x="2620" y="204" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4837" x="2620" y="204" width="18" height="18">
 					<of>OI_C_Tax_CE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4882" x="3001" y="443" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4874" x="3001" y="443" width="18" height="18">
 					<of>x_region_import_cost</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4615" x="2261" y="609" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4614" x="2261" y="609" width="18" height="18">
 					<of>k_EtOH_Lo_blend</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="7.23904" uid="4775" x="3130" y="290" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="7.23904" uid="4770" x="3130" y="290" width="18" height="18">
 					<of>DistStor_subs_stop_time</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="69.5126" uid="4637" x="1758" y="1725" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="69.5126" uid="4636" x="1748" y="2133.5" width="18" height="18">
 					<of>C_to_B_Output_GPY_by_Region</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4834" x="2319" y="1907" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4827" x="2309" y="2315.5" width="18" height="18">
 					<of>B_industrial_demand_scenario</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4902" x="200" y="1521" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4891" x="200" y="1521" width="18" height="18">
 					<of>Expected_PoU_Hi_Blend_Cost_after_Subz</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="104.716" uid="4726" x="1204" y="57" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="104.716" uid="4721" x="1204" y="57" width="18" height="18">
 					<of>Desired_EtOH_inv_coverage</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" uid="4783" x="845" y="145" width="18" height="18">
-					<of>Imports_by_Region</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="4905" x="3365" y="461" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="4896" x="3365" y="461" width="18" height="18">
 					<of>in_region_distn_storage_cost</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4743" x="4209" y="128" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4738" x="4209" y="128" width="18" height="18">
 					<of>gas_tax_switch</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="red" label_angle="171.57" uid="4610" x="3965" y="163" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="red" label_angle="171.57" uid="4609" x="3965" y="163" width="18" height="18">
 					<of>avg_per_gal_markup</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="4901" x="387" y="1718" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="4893" x="387" y="1718" width="18" height="18">
 					<of>Addl_Gasoline_Tax</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" uid="4771" x="947" y="144" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" uid="4766" x="947" y="144" width="18" height="18">
 					<of>Utilized_Regional_Production_Capacity_CM</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4811" x="3866" y="670" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4804" x="3866" y="670" width="18" height="18">
 					<of>f_Hi_Blend_Gasoline_Price_Coupling_Weighting_Factor</of>
 				</alias>
-				<alias color="red" background="white" font_style="italic" font_color="red" label_angle="83.8151" uid="4863" x="2985" y="1603" width="18" height="18">
+				<alias color="red" background="white" font_style="italic" font_color="red" label_angle="83.8151" uid="4855" x="2975" y="2011.5" width="18" height="18">
 					<shape type="circle" radius="18"/>
 					<of>one_hundred_percent</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4661" x="4252" y="382" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4660" x="4252" y="382" width="18" height="18">
 					<of>Pct_Hi_Blend_Subsidy_Accruing_to_End_User</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4623" x="2594" y="609" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4622" x="2594" y="609" width="18" height="18">
 					<of>lo_blend_attr_weighting</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4900" x="87" y="1577" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4888" x="87" y="1577" width="18" height="18">
 					<of>Gasoline_Pump_Price</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4648" x="4088" y="165" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4647" x="4088" y="165" width="18" height="18">
 					<of>gas_tax_stop_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4828" x="4208" y="187" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4821" x="4208" y="187" width="18" height="18">
 					<of>implementation_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4854" x="4485" y="532" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4847" x="4485" y="532" width="18" height="18">
 					<of>BTU_peer_gal_ethanol</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="20.0219" uid="4813" x="3041" y="232" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="20.0219" uid="4806" x="3041" y="232" width="18" height="18">
 					<of>implementation_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4773" x="3627" y="347" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4768" x="3627" y="347" width="18" height="18">
 					<of>Hi_blend_Coefficient</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="4859" x="2167" y="990" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="4852" x="2167" y="990" width="18" height="18">
 					<of>B_fuel_consn</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="4621" x="2022" y="1470" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="black" uid="4620" x="1596.58" y="1939.33" width="18" height="18">
 					<of>expected_consn_B_in_lo_blend</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="black" uid="4756" x="2207.5" y="1310.5" width="45" height="35">
+				<alias color="blue" font_style="italic" font_color="black" uid="4751" x="2207.5" y="1310.5" width="45" height="35">
 					<of>EtOH_POP_Price_Index</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="top" uid="4654" x="2834" y="584" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_side="top" uid="4653" x="2834" y="584" width="18" height="18">
 					<of>regional_EtOH_production</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="4779" x="3029" y="106" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="4774" x="3029" y="106" width="18" height="18">
 					<of>Composite_EtOH_POP_price</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="4927" x="3342" y="890" width="18" height="18">
-					<of>EtOH_POD_price</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4765" x="4383" y="89" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4760" x="4383" y="89" width="18" height="18">
 					<of>Regular_Premium_Gas_Spread_as_frac</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4674" x="3627" y="132" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4673" x="3627" y="132" width="18" height="18">
 					<of>fuel_excise_tax</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4903" x="2531" y="977" width="18" height="18">
+				<alias color="blue" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4894" x="2494.33" y="977" width="18" height="18">
 					<of>B_capacity</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4906" x="1374" y="143" width="18" height="18">
-					<of>Inventory_Export_Factor</of>
-				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4907" x="1263" y="231" width="18" height="18">
-					<of>export_time</of>
-				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4904" x="2136" y="1103" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4895" x="2156" y="1101.75" width="18" height="18">
 					<of>est_regional_non_LDV_gas_consn</of>
 				</alias>
+				<alias color="#AA0000" font_style="italic" font_color="#AA0000" uid="4898" x="2940.83" y="1856.83" width="18" height="18">
+					<of>B_distn_storage_cost</of>
+				</alias>
+				<alias color="blue" font_style="italic" font_weight="bold" uid="4899" x="3038.33" y="2068.67" width="18" height="18">
+					<of>Gasoline_POD_price_before_tax</of>
+				</alias>
+				<alias color="red" font_style="italic" font_color="red" uid="4897" x="2967" y="2263.5" width="18" height="18">
+					<of>B_gasoline_price_sensitivity_factor</of>
+				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_side="left" uid="4900" x="2231" y="301" width="18" height="18">
+					<of>Output_gpy_by_Technology</of>
+				</alias>
+				<alias color="#5500FF" font_style="italic" font_weight="bold" font_color="#5500FF" uid="4903" x="1204" y="247" width="18" height="18">
+					<of>EtOH_export_from_US_fraction</of>
+				</alias>
+				<alias color="black" font_style="italic" font_color="black" uid="4901" x="845" y="155" width="18" height="18">
+					<of>EtOH_export_x_US</of>
+				</alias>
+				<alias color="black" font_style="italic" font_color="black" uid="4904" x="984" y="609" width="18" height="18">
+					<of>EtOH_export_x_US</of>
+				</alias>
 			</view>
-			<view isee:show_pages="true" background="white" page_width="1012" type="interface" home_view="true" page_height="696">
+			<view background="white" page_width="1012" type="interface" page_height="696" home_view="true" isee:show_pages="true">
 				<style/>
 			</view>
 			<isee:templates/>

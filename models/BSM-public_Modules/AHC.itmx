@@ -5,11 +5,11 @@
 		<name>AHC</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
@@ -18,10 +18,6 @@
 			<elem name="Feedstock"/>
 			<elem name="FCI"/>
 			<elem name="Loan"/>
-		</dim>
-		<dim name="PECrop">
-			<elem name="Herbaceous"/>
-			<elem name="Woody"/>
 		</dim>
 		<dim name="AlgalTech">
 			<elem name="Pond"/>
@@ -35,14 +31,24 @@
 			<elem name="Risk"/>
 			<elem name="DebtFrac"/>
 		</dim>
+		<dim name="PECrop">
+			<elem name="Herbaceous"/>
+			<elem name="Woody"/>
+		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -262,7 +268,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -274,7 +280,7 @@ Nominal_Plant_Utilization_Factors * (1-frac_contracted_capacity))
 				<units>Unitless</units>
 			</aux>
 			<aux name="Op Experience Per Year">
-				<doc>DEFINITION: Hours of experience generated per year of operation, for pre commercial scale operations
+				<doc>DEFINITION: Hours of experience generated per year of operation, for commercial scale operations
 
 UNITS: HoursPerProjectPerYr
 
@@ -289,13 +295,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_prodn_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -320,7 +331,7 @@ COMMENTS: </doc>
 				<units>ton per day</units>
 			</aux>
 			<aux name="Avg PY Pipeline">
-				<doc>DEFINITION: Tracks the average process yield of facilities that are on in design and construction
+				<doc>DEFINITION: Tracks the average process yield of facilities that are in design and construction
 
 UNITS: gal per ton
 
@@ -384,7 +395,7 @@ COMMENTS: </doc>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -457,13 +468,18 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<inflow>plant_planning</inflow>
 				<outflow>initiating</outflow>
 				<non_negative/>
@@ -474,7 +490,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -489,7 +505,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -518,7 +534,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -528,7 +544,7 @@ COMMENTS: </doc>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="est depreciation expense">
-				<doc>DEFINITION: Calculates depreciation expense for the &quot;next&quot; facility 
+				<doc>DEFINITION: Calculates depreciation expense for the &quot;next&quot; facility
 
 UNITS: US dollars per year
 
@@ -546,7 +562,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -575,7 +591,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -589,7 +605,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -628,18 +644,18 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>Debt_Interest_Rate_as_Pct/one_hundred_PCT</eqn>
 				<units>per year</units>
 			</aux>
 			<aux name="Regional FS Cost USD yr">
-				<doc>DEFINITION: Calculates Expected Cost in $/yr for &quot;next&quot; commercial facility
+				<doc>DEFINITION: Calculates Expected feedstock Cost in $/yr, for &quot;next&quot; commercial facility
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: region not used in this module (no regionality)</doc>
 				<dimensions>
@@ -720,7 +736,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -734,7 +750,7 @@ COMMENTS: </doc>
 
 UNITS: percent/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -748,7 +764,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -762,7 +778,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -828,7 +844,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -842,7 +858,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -852,11 +868,11 @@ COMMENTS: </doc>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="Rough Estimate Annual Interest">
-				<doc>DEFINITION: Calculates the average amount of interest paid per year, across the life of loan 
+				<doc>DEFINITION: Calculates the average amount of interest paid per year, across the life of loan
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -870,7 +886,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -888,7 +904,7 @@ ELSE
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -913,7 +929,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -927,7 +943,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -941,7 +957,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -955,7 +971,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -969,7 +985,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -983,7 +999,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -997,7 +1013,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1012,7 +1028,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1027,7 +1043,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1042,7 +1058,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia</doc>
 				<dimensions>
@@ -1057,7 +1073,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1083,7 +1099,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1097,7 +1113,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1111,7 +1127,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1126,7 +1142,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1140,7 +1156,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1155,7 +1171,7 @@ MIN(depreciation_period,term_of_loan)</eqn>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1169,7 +1185,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Standard financial calculation for annuity.  See, for example, Present Value entry in wikipedia. Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1184,7 +1200,7 @@ COMMENTS: Standard financial calculation for annuity.  See, for example, Present
 
 UNITS: USD per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1198,7 +1214,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: scalar | constant 
+TYPE: scalar | constant
 
 COMMENTS: </doc>
 				<eqn>1</eqn>
@@ -1209,7 +1225,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Accounts for number of days per year facilities are expected to be on line under full utilization</doc>
 				<dimensions>
@@ -1239,7 +1255,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1304,7 +1320,7 @@ COMMENTS: Default values determined through focus group expert opinion</doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1318,7 +1334,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Constant | Scenario Input 
+TYPE: Array | Constant | Scenario Input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1337,7 +1353,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1392,7 +1408,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1402,7 +1418,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="Mature Pilot Multipliers">
-				<doc>DEFINITION: Assumed value indicates the fraction of feedstock cost attribute that is realized at the fully mature stage of pilot effort
+				<doc>DEFINITION: Assumed values indicate the fraction of technoeconomic attributes that are realized at the fully mature stage of pilot effort
 
 UNITS: Unitless
 
@@ -1443,7 +1459,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>329</eqn>
+				<element subscript="Pond">
+					<eqn>329</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>329</eqn>
+				</element>
 				<units>DaysPerYr</units>
 			</aux>
 			<aux name="Avg Plant Output gal day">
@@ -1451,7 +1472,7 @@ COMMENTS: </doc>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1503,7 +1524,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1534,7 +1555,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0.025</eqn>
+				<element subscript="Pond">
+					<eqn>0.025</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0.025</eqn>
+				</element>
 				<units>billions-gal</units>
 			</aux>
 			<aux name="P Success">
@@ -1542,7 +1568,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: provides an output diagnostic metric only</doc>
 				<dimensions>
@@ -1578,7 +1604,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1591,9 +1617,9 @@ COMMENTS: </doc>
 			<flow name="completing D and C">
 				<doc>DEFINITION: Conveyor outflow that captures completion of design/construction phase of  commercial scale projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Flow is discretized because inflows to conveyor have been discretized</doc>
 				<dimensions>
@@ -1604,11 +1630,11 @@ COMMENTS: Flow is discretized because inflows to conveyor have been discretized<
 				<units>Projects per Year</units>
 			</flow>
 			<aux name="NPV rel to a million">
-				<doc>DEFINITION: Scales NPV of commercial scale project by normalizing by expected next plant output, which is expressed in million gallons per year. The calculation gives a measure of the net present value of the investment relative to expected annual production.
+				<doc>DEFINITION: Scales NPV of commercial scale project by normalizing by expected next plant output, which is expressed in gallons per year. The calculation gives a measure of the net present value of the investment relative to expected annual production.
 
 UNITS: US Dollars*Years/Gallons
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1628,7 +1654,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>3</eqn>
+				<element subscript="Pond">
+					<eqn>3</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>3</eqn>
+				</element>
 				<units>years</units>
 			</aux>
 			<stock name="Pilot Maturity">
@@ -1636,7 +1667,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1652,7 +1683,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1667,7 +1698,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1698,7 +1729,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>100</eqn>
+				<element subscript="Pond">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>100</eqn>
+				</element>
 				<units>hours</units>
 			</aux>
 			<stock name="Number of Doublings of Cume Output">
@@ -1706,7 +1742,7 @@ COMMENTS: </doc>
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1741,7 +1777,7 @@ ELSE 0</eqn>
 
 UNITS: billion GPY
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1756,7 +1792,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1771,7 +1807,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1783,11 +1819,11 @@ ELSE 0</eqn>
 				<units>per year</units>
 			</aux>
 			<stock name="Number of Doublings of Pilot Experience">
-				<doc>DEFINITION: Accumulates the number of doublings of cumulative pilot scale
+				<doc>DEFINITION: Accumulates the number of doublings of pilot scale experience
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1805,7 +1841,7 @@ LN(pilot_maturity_gap)/LN(Pilot_Progress_Ratios)</eqn>
 
 UNITS: USD per gallon
 
-TYPE: Array | Sector Interface 
+TYPE: Array | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1819,7 +1855,7 @@ COMMENTS: </doc>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1834,7 +1870,7 @@ COMMENTS: </doc>
 
 UNITS: ProjectGalPerTon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1851,7 +1887,7 @@ COMMENTS: </doc>
 
 UNITS: hour
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -1863,11 +1899,11 @@ COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 				<units>hour</units>
 			</stock>
 			<flow name="logging pilot experience">
-				<doc>DEFINITION: Calculates the influx of pre commercial experience
+				<doc>DEFINITION: Calculates the influx of experience at pilot scale
 
 UNITS: hr/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1882,7 +1918,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1897,7 +1933,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1951,7 +1987,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1975,7 +2011,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1997,9 +2033,9 @@ COMMENTS: </doc>
 			<flow name="completing PC development">
 				<doc>DEFINITION: Conveyor outflow that captures completion of development for pre commercial (PC) projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2014,7 +2050,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2029,7 +2065,7 @@ COMMENTS: </doc>
 
 UNITS: ProjectGalPerTon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2066,7 +2102,7 @@ COMMENTS: </doc>
 
 UNITS: gal per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2095,7 +2131,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2122,7 +2158,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2137,7 +2173,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2157,7 +2193,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>100</eqn>
+				<element subscript="Pond">
+					<eqn>100</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>100</eqn>
+				</element>
 				<units>hours</units>
 			</aux>
 			<stock name="Number of Doublings of PC Experience">
@@ -2165,7 +2206,7 @@ COMMENTS: </doc>
 
 UNITS: doubling
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2183,7 +2224,7 @@ LN(PC_maturity_gap)/LN(PC_Progress_Ratios)</eqn>
 
 UNITS: hour
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: Unit check fails due to presence of exponentiation operation.</doc>
 				<dimensions>
@@ -2196,11 +2237,11 @@ ELSE 0</eqn>
 				<units>hour</units>
 			</stock>
 			<flow name="logging PC experience">
-				<doc>DEFINITION: Calculates the influx of pilot scale experience
+				<doc>DEFINITION: Calculates the influx of pre-commercial scale experience
 
 UNITS: hr/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2215,7 +2256,7 @@ COMMENTS: </doc>
 
 UNITS: doubling/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2230,7 +2271,7 @@ COMMENTS: </doc>
 
 UNITS: per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2246,7 +2287,7 @@ ELSE 0</eqn>
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2280,7 +2321,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2292,7 +2333,7 @@ Early_Pilot_Multipliers[TechAttribute]*(1-Pilot_Maturity[AlgalTech])</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Mature PC Multipliers">
-				<doc>DEFINITION: Assumed value indicates the fraction of feedstock cost is realized at the fully mature stage of demo effort
+				<doc>DEFINITION: Assumed value indicates the fraction of mature industry performance attributes that are realized at the fully mature stage of pre-commercial effort
 
 UNITS: Unitless
 
@@ -2327,7 +2368,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2346,9 +2387,9 @@ COMMENTS: </doc>
 			<flow name="completing PC scale ops">
 				<doc>DEFINITION: Conveyor outflow that captures completion of operation for pre commercial (PC) projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2359,11 +2400,11 @@ COMMENTS: </doc>
 				<units>Projects per Year</units>
 			</flow>
 			<flow name="PY D and C to Startup">
-				<doc>DEFINITION: Co-flow of process yield associated withmovement of facilities from design and construction to on line status
+				<doc>DEFINITION: Co-flow of process yield associated with movement of facilities from design and construction to on line status
 
 UNITS: gal-projects/(ton-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2410,7 +2451,7 @@ COMMENTS: </doc>
 				<units>percent/yr</units>
 			</aux>
 			<aux name="Avg PY" access="output">
-				<doc>DEFINITION: Tracks the average process yield of facilities that are on line.  
+				<doc>DEFINITION: Tracks the average process yield of facilities that are on line.
 
 UNITS: gal per ton
 
@@ -2441,7 +2482,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2457,7 +2498,7 @@ Pilot_Multipliers[AlgalTech,TechAttribute]*(1-PC_Maturity[AlgalTech])</eqn>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2471,7 +2512,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2481,7 +2522,7 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Mature Commercial Multipliers">
-				<doc>DEFINITION: Values of 1 reflect concept that when industry is fully mature, investers will encounter mature industry values for technology attributes.
+				<doc>DEFINITION: Values of 1 reflect concept that when industry is fully mature, investors will encounter mature industry values for technology attributes.
 
 UNITS: Unitless
 
@@ -2527,7 +2568,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2541,7 +2582,7 @@ COMMENTS: </doc>
 
 UNITS: ton per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2553,13 +2594,6 @@ ELSE 0</eqn>
 				<units>ton per year</units>
 			</aux>
 			<aux name="invest attractiveness weighting" access="input">
-				<doc>DEFINITION: module interface to RA.invest attractiveness weighting
-
-UNITS: Gallons/(US Dollars*Years)
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<eqn>15</eqn>
 				<units>Gallons/(US Dollars*Years)</units>
 			</aux>
@@ -2568,7 +2602,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2596,7 +2630,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2610,7 +2644,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2640,7 +2674,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: part of nested logit calculation for allocation of investment to different pathways, regions</doc>
 				<dimensions>
@@ -2654,13 +2688,18 @@ COMMENTS: part of nested logit calculation for allocation of investment to diffe
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_Loan_guarantee_flux</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -2685,7 +2724,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: This is a component of a logit choice formulation.  Regionality is neutralized in this module</doc>
 				<dimensions>
@@ -2699,7 +2738,7 @@ COMMENTS: This is a component of a logit choice formulation.  Regionality is neu
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: region not used in this module (no regionality)</doc>
 				<dimensions>
@@ -2720,7 +2759,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="nominal regional distn new facilities">
-				<doc>DEFINITION: Calculates relative attractiveness of different commercial scale conversion options, by region.
+				<doc>DEFINITION: Calculates regional distribution of new facilities, based on their relative regional attractiveness
 
 UNITS: Unitless
 
@@ -2738,7 +2777,7 @@ COMMENTS: regions are not present in algae model.  This structure in place to be
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: region not used in this module (no regionality)</doc>
 				<dimensions>
@@ -2757,13 +2796,18 @@ ELSE
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_fs_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -2788,13 +2832,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<inflow>yrly_FCI_subs</inflow>
 				<non_negative/>
 				<units>US Dollars</units>
@@ -2819,7 +2868,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2876,7 +2925,7 @@ ELSE 0</eqn>
 
 UNITS: USD per ton
 
-TYPE: Array | Sector Interface 
+TYPE: Array | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2890,7 +2939,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2943,7 +2992,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2981,7 +3030,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: Array | Internal Calculation | Sector Interface 
+TYPE: Array | Internal Calculation | Sector Interface
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3010,7 +3059,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: not used in this module (no regionality)</doc>
 				<dimensions>
@@ -3099,7 +3148,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: this calculation is not used in this module, as the module is not segmented by region</doc>
 				<dimensions>
@@ -3115,7 +3164,7 @@ ELSE 0</eqn>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3131,7 +3180,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3170,7 +3219,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation | module interface 
+TYPE: scalar | Internal Calculation | module interface
 
 COMMENTS: </doc>
 				<eqn>SUM(Cume_Prodn_Subs) + SUM(Cume_FCI_Subs) + SUM(Cume_FS_Subs)</eqn>
@@ -3181,7 +3230,7 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>rollup_cumulative_subsidies - DELAY(rollup_cumulative_subsidies,1)</eqn>
@@ -3192,18 +3241,18 @@ COMMENTS: </doc>
 
 UNITS: US Dollars
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: </doc>
 				<eqn>SUM(Cume_Loan_Guarantee_Exposure)</eqn>
 				<units>US Dollars</units>
 			</aux>
 			<aux name="exp net op cost USD per yr">
-				<doc>DEFINITION: Calculates expected operating cost, net of power and coproduct sales, for the &quot;next&quot; facility 
+				<doc>DEFINITION: Calculates expected operating cost, net of power and coproduct sales, for the &quot;next&quot; facility
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3240,7 +3289,7 @@ COMMENTS: region not used in this module (no regionality)</doc>
 			<aux name="one project">
 				<doc>DEFINITION: one project
 
-UNITS: projects
+UNITS: Projects
 
 TYPE: scalar | constant |unit conversion
 
@@ -3253,7 +3302,7 @@ COMMENTS: </doc>
 
 UNITS: 1/doubling
 
-TYPE: scalar | Internal Calculation 
+TYPE: scalar | Internal Calculation
 
 COMMENTS: essentially a constant but expressed as a calculation to enable unit consistency</doc>
 				<eqn>LN(2)/Doubling</eqn>
@@ -3286,7 +3335,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3301,7 +3350,7 @@ est_depreciation_expense[AlgalTech] / Expected_Plant_Output[AlgalTech]</eqn>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3311,13 +3360,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="PoP Price" access="input">
-				<doc>DEFINITION: module interface to OI.CM Algae price input
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
@@ -3329,7 +3371,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3391,7 +3433,7 @@ ELSE 0</eqn>
 
 UNITS: ton per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3462,7 +3504,7 @@ COMMENTS: </doc>
 
 UNITS: USD per ton
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: there are a few intermediate calculations between this variable and feedstock cost inputs to investment and expected FS cost after subsidy.  These intermediate variables are in place to keep this model&apos;s structure in parallel as much as possible with other modules.</doc>
 				<dimensions>
@@ -3492,7 +3534,7 @@ ELSE 0</eqn>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3506,7 +3548,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3535,7 +3577,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: variable is mis-named.  Should be Loan Payment USD per gal</doc>
 				<dimensions>
@@ -3550,7 +3592,7 @@ Annual_Loan_Payment[AlgalTech] / Expected_Plant_Output[AlgalTech]</eqn>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3569,7 +3611,7 @@ exp_net_op_cost_USD_per_yr[AlgalTech] / Expected_Plant_Output[AlgalTech]</eqn>
 
 UNITS: million-ton/yr
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3583,7 +3625,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: region not used in this module (no regionality)</doc>
 				<dimensions>
@@ -3614,7 +3656,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3670,7 +3712,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3684,7 +3726,7 @@ COMMENTS: </doc>
 
 UNITS: gallons per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3698,7 +3740,7 @@ COMMENTS: </doc>
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3718,7 +3760,12 @@ COMMENTS: in other modules this is a module interface</doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<units>USD per ton</units>
 			</aux>
 			<aux name="Price Increase Due to RINs">
@@ -3750,13 +3797,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="startup spend constraint" access="input">
-				<doc>DEFINITION: module interface to RA.A to RR constraint from cume spend
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<eqn>1</eqn>
 				<units>Unitless</units>
 			</aux>
@@ -3843,7 +3883,7 @@ COMMENTS: </doc>
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3857,7 +3897,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3873,7 +3913,7 @@ ELSE 0</eqn>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3919,7 +3959,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3964,15 +4004,20 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="Pond">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>0</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<flow name="ORNOVOC influx">
-				<doc>DEFINITION: Calculates the state of the industry other rev net of vbl op cost, applying it to influx of full commercial-scale plantsinto design and construction.  Resultant downstream structure used to track the attribute for commercial facilities.
+				<doc>DEFINITION: Calculates the state of the industry other rev net of vbl op cost, applying it to influx of full commercial-scale plants into design and construction.  Resultant downstream structure used to track the attribute for commercial facilities.
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -3987,7 +4032,7 @@ scheduled_plant_initiation * start_schedule_ORNOVOC</eqn>
 
 UNITS: projects-usd/yr^2
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4012,7 +4057,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4024,13 +4069,6 @@ ELSE 0</eqn>
 				<units>US dollars per year</units>
 			</aux>
 			<aux name="Des C to EtOH yrly starts" access="input">
-				<doc>DEFINITION: module interface to RA.Des A to RR yrly starts
-
-UNITS: Projects per Year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
@@ -4042,7 +4080,7 @@ COMMENTS: </doc>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4057,7 +4095,7 @@ COMMENTS: </doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4107,7 +4145,7 @@ COMMENTS: </doc>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4123,7 +4161,7 @@ scheduled_plant_initiation * start_schedule_thruput_capacity</eqn>
 
 UNITS: projects-ton/(day-yr)
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4134,11 +4172,11 @@ COMMENTS: </doc>
 				<units>projects-ton/(day-yr)</units>
 			</flow>
 			<aux name="Avg FS Thruput Cap Pipeline">
-				<doc>DEFINITION: Tracks average potential feedstock throughput at full utilization and full maturity, for facilities that are currently in design and construction 
+				<doc>DEFINITION: Tracks average potential feedstock throughput at full utilization and full maturity, for facilities that are currently in design and construction
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4183,7 +4221,7 @@ NextPlant_Expected_Other_VBL_Op_Cost[AlgalTech]</eqn>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4280,7 +4318,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="Pond">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="op cost scale factor">
@@ -4294,7 +4337,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="Pond">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="NextPlant Expected FCI">
@@ -4327,7 +4375,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4353,11 +4401,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="L G exposure by pathway and region" flow_concept="true">
-				<doc>DEFINITION: Calculates annual loan guarantee expsure for new commercial scale operations
+				<doc>DEFINITION: Calculates annual loan guarantee exposure for new commercial scale operations
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: region not represented for algal pathways</doc>
 				<dimensions>
@@ -4371,7 +4419,7 @@ COMMENTS: region not represented for algal pathways</doc>
 
 UNITS: ton per day
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4434,7 +4482,18 @@ COMMENTS: constant is left in model to be consistent with other modules</doc>
 					<dim name="AlgalTech"/>
 					<dim name="PECrop"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="Pond, Herbaceous">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="Pond, Woody">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="PBR, Herbaceous">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="PBR, Woody">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="feedstock fractions">
@@ -4468,7 +4527,7 @@ COMMENTS: constant is left in model to be consistent with other modules</doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: for algae, constraint never comes into play as feedstock is assumed to be produced on site</doc>
 				<dimensions>
@@ -4496,7 +4555,7 @@ COMMENTS: for algae, constraint never comes into play as feedstock is assumed to
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4521,11 +4580,11 @@ Demo_Multipliers_FS[AlgalTech]*(1-Commercial_Maturity[AlgalTech])</eqn>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Pilot Multipliers FS">
-				<doc>DEFINITION: Translates pilot-scale maturity into a multiplier that characterizes the &quot;current&quot; state of feedstock production cost from the perspective of piloting AND demoing. Captured as weighted average, with weighting factor dynamically determined by indices of demo maturity. After winding through multiple learning curves, resultant multiplier is applied to mature industry values to define attributes of each technology.
+				<doc>DEFINITION: Translates pilot-scale maturity into a multiplier that characterizes the &quot;current&quot; state of feedstock production cost from the perspective of piloting. Captured as weighted average, with weighting factor dynamically determined by indices of demo maturity. After winding through multiple learning curves, resultant multiplier is applied to mature industry values to define attributes of each technology.
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4540,7 +4599,7 @@ Mature_Pilot_Multipliers_FS * (1-Pilot_Maturity[AlgalTech])</eqn>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4573,7 +4632,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Mature PC Multipliers FS">
-				<doc>DEFINITION: Assumed value indicates the fraction of different technology attributes that is realized at the fully mature stage of demo effort
+				<doc>DEFINITION: Assumed value indicates the fraction of mature industry performance attributes that are realized at the fully mature stage of pre-commercial effort
 
 UNITS: Unitless
 
@@ -4599,7 +4658,7 @@ COMMENTS: </doc>
 
 UNITS: US dollars per year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: this calculation is unique to algae module.  Other feedstock costs are calculated as part of feedstock supply modules</doc>
 				<dimensions>
@@ -4683,11 +4742,11 @@ COMMENTS: Graphical function should range between 0 and 1</doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="maturing industry scale factor">
-				<doc>DEFINITION: Calculates scale factor for thruput capacity as industry matures.  As weight factor moves from 0 to 1, this equation reutrns a value between the pioneer capacity scale factor and 1, which is then is applied to mature thruput capactity to determine the next plant&apos;s capacity.
+				<doc>DEFINITION: Calculates scale factor for thruput capacity as industry matures.  As weight factor moves from 0 to 1, this equation returns a value between the pioneer capacity scale factor and 1, which is then is applied to mature thruput capacity to determine the next plant&apos;s capacity.
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4701,7 +4760,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4743,7 +4802,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4786,7 +4845,7 @@ COMMENTS: important to define both start schedule and start schedule nameplate o
 
 UNITS: GPD
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4800,7 +4859,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4824,7 +4883,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4846,9 +4905,9 @@ COMMENTS: </doc>
 			<flow name="completing Pilot development">
 				<doc>DEFINITION: Conveyor outflow that captures completion of development for pilot projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4863,7 +4922,7 @@ COMMENTS: </doc>
 
 UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4878,7 +4937,7 @@ COMMENTS: </doc>
 
 UNITS: Projects
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -4897,9 +4956,9 @@ COMMENTS: </doc>
 			<flow name="completing Pilot scale ops">
 				<doc>DEFINITION: Conveyor outflow that captures completion of operation for pilot projects
 
-UNITS: projects per year
+UNITS: Projects per Year
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5016,11 +5075,11 @@ COMMENTS: </doc>
 				<units>hr/yr</units>
 			</aux>
 			<aux name="Startup Subs Volume Input">
-				<doc>DEFINITION: Calculates cumulative volume (for entire module or for specific pathways.  When this signal exceeds volume threshold, startup subsidy ends.
+				<doc>DEFINITION: Calculates cumulative volume (for entire module or for specific pathways).  When this signal exceeds volume threshold, startup subsidy ends.
 
 UNITS: billions-gal
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5032,7 +5091,7 @@ COMMENTS: </doc>
 			<aux name="Use Startup Subs Module Volume Input">
 				<doc>DEFINITION: 0-1 switch used to active module vs pathway based volume threshold for startup subsidy.  1 --&gt; module.  0 --&gt; pathways
 
-UNITS: Unitless
+UNITS: unitless
 
 TYPE: scalar |constant | scenario input
 
@@ -5045,7 +5104,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: not required for MFSP as feedstock costs are accounted for n op cost calculation</doc>
 				<dimensions>
@@ -5073,7 +5132,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5087,7 +5146,7 @@ COMMENTS: </doc>
 
 UNITS: USD per gallon
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5140,7 +5199,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Internal Calculation 
+TYPE: Array | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5483,13 +5542,6 @@ ELSE 0</eqn>
 				<entity name="Expected_FS_Prodn_Cost_USD_per_ton"/>
 			</group>
 			<aux name="Converter 1" access="input">
-				<doc>DEFINITION: module interface to OI.lcfs credit w transport Algae
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
@@ -5501,7 +5553,7 @@ COMMENTS: </doc>
 
 UNITS: years
 
-TYPE: Array | Constant | scenario input 
+TYPE: Array | Constant | scenario input
 
 COMMENTS: </doc>
 				<dimensions>
@@ -5534,889 +5586,13 @@ COMMENTS: </doc>
 				</element>
 				<units>years</units>
 			</aux>
-			<isee:dependencies>
-				<var name="Output_Capacity">
-					<in>OnLine</in>
-					<in>Avg_Plant_Output_gal_yr</in>
-					<in>one_project</in>
-				</var>
-				<var name="Plant_Utilization_Factors">
-					<in>contracted_utilization</in>
-					<in>frac_contracted_capacity</in>
-					<in>Feedstock_Constraint_on_Utilization</in>
-					<in>Nominal_Plant_Utilization_Factors</in>
-				</var>
-				<var name="Avg_PY_Pipeline">
-					<in>PY_in_In_Design_and_Cons</in>
-					<in>In_Design_and_Cons</in>
-				</var>
-				<var name="Output_gpy_by_Technology">
-					<in>Actual_Output_gpy</in>
-				</var>
-				<var name="increase_in_PY_commercial_industry">
-					<in>Industry_Process_Yield_Gap</in>
-					<in>OnLine</in>
-					<in>rate_of_industry_process_yield_adjustment</in>
-				</var>
-				<var name="plant_planning">
-					<in>endogenous_plant_planning</in>
-				</var>
-				<var name="initiating">
-					<in>number_of_plants_to_start</in>
-				</var>
-				<var name="State_of_Industry_Process_Yield">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_Process_Yield</in>
-				</var>
-				<var name="Initial_Equity_Investment">
-					<in>Expected_FCI_after_Subs</in>
-					<in>Equity_Fraction</in>
-				</var>
-				<var name="est_depreciation_expense">
-					<in>depreciation_period</in>
-					<in>Expected_FCI_after_Subs</in>
-				</var>
-				<var name="Expected_Equity_Fraction">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_Equity_Fraction</in>
-				</var>
-				<var name="Expected_FCI">
-					<in>fraction_of_Commercial_cost_growth_anticipated</in>
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>NextPlant_Expected_FCI</in>
-				</var>
-				<var name="Frac_Plant_Debt_Financed">
-					<in>Equity_Fraction</in>
-				</var>
-				<var name="Loan_Principal">
-					<in>Frac_Plant_Debt_Financed</in>
-					<in>Expected_FCI_after_Subs</in>
-				</var>
-				<var name="Annual_Loan_Payment">
-					<in>Loan_Principal</in>
-					<in>discount_factor_Loan_Payment</in>
-				</var>
-				<var name="debt_interest_rate_as_frac">
-					<in>one_hundred_PCT</in>
-					<in>Debt_Interest_Rate_as_Pct</in>
-				</var>
-				<var name="Regional_FS_Cost_USD_yr">
-					<in>Regional_FS_Cost_USD_per_gal</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Expected_Op_Cost">
-					<in>NextPlant_Expected_Other_VBL_Op_Cost</in>
-					<in>NextPlant_Expected_Fixed_Op_Cost</in>
-					<in>Regional_FS_Cost_USD_yr</in>
-				</var>
-				<var name="total_project_length">
-					<in>Years_in_D_and_C</in>
-					<in>Plant_Economic_Lifetime</in>
-				</var>
-				<var name="NPV_Revs_Net_of_Op_Cost">
-					<in>discount_factor</in>
-					<in>discount_factor_DC</in>
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-				</var>
-				<var name="Reqd_Rate_of_Return_as_PCT">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_Rate_of_Return_as_PCT</in>
-				</var>
-				<var name="Exp_Sales_Rev">
-					<in>Expected_Price_after_Subs</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Exp_Revs_Net_of_Op_Cost">
-					<in>Expected_Op_Cost</in>
-					<in>Total_Exp_Revs</in>
-				</var>
-				<var name="Total_Exp_Revs">
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-					<in>Exp_Sales_Rev</in>
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="Cume_Loan_Payment">
-					<in>Annual_Loan_Payment</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Cume_Interest_Payment">
-					<in>Cume_Loan_Payment</in>
-					<in>Loan_Principal</in>
-				</var>
-				<var name="Rough_Estimate_Annual_Interest">
-					<in>Cume_Interest_Payment</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="Expected_Taxable_Income_2">
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-					<in>term_of_loan</in>
-					<in>Rough_Estimate_Annual_Interest</in>
-					<in>depreciation_period</in>
-					<in>est_depreciation_expense</in>
-				</var>
-				<var name="Expected_Taxable_Income_1">
-					<in>est_depreciation_expense</in>
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-					<in>Rough_Estimate_Annual_Interest</in>
-				</var>
-				<var name="Expected_Tax_2">
-					<in>Expected_Taxable_Income_2</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="Expected_Tax_1">
-					<in>Expected_Taxable_Income_1</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="NPV_Taxes_1">
-					<in>discount_factor_1</in>
-					<in>discount_factor_DC</in>
-					<in>Expected_Tax_1</in>
-				</var>
-				<var name="NPV_Taxes_2">
-					<in>discount_factor_1</in>
-					<in>Expected_Tax_2</in>
-					<in>discount_factor_2</in>
-				</var>
-				<var name="NPV_Taxes">
-					<in>NPV_Taxes_2</in>
-					<in>NPV_Taxes_1</in>
-					<in>NPV_Taxes_3</in>
-				</var>
-				<var name="PV_Loan_Payment">
-					<in>discount_factor_DC</in>
-					<in>discount_factor_loan</in>
-					<in>Annual_Loan_Payment</in>
-				</var>
-				<var name="NPV_Investment">
-					<in>NPV_Taxes</in>
-					<in>NPV_Revs_Net_of_Op_Cost</in>
-					<in>Initial_Equity_Investment</in>
-					<in>PV_Loan_Payment</in>
-				</var>
-				<var name="discount_factor_Loan_Payment">
-					<in>debt_interest_rate_as_frac</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="discount_factor_DC">
-					<in>Reqd_Rate_of_Return</in>
-					<in>Years_in_D_and_C</in>
-				</var>
-				<var name="discount_factor">
-					<in>Reqd_Rate_of_Return</in>
-					<in>total_project_length</in>
-				</var>
-				<var name="discount_factor_2">
-					<in>length_of_period_2</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="Expected_Taxable_Income_3">
-					<in>Exp_Revs_Net_of_Op_Cost</in>
-				</var>
-				<var name="Expected_Tax_3">
-					<in>Expected_Taxable_Income_3</in>
-					<in>Expected_Tax_Rate</in>
-				</var>
-				<var name="discount_factor_loan">
-					<in>Reqd_Rate_of_Return</in>
-					<in>Years_in_D_and_C</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="NPV_Taxes_3">
-					<in>Expected_Tax_3</in>
-					<in>discount_factor</in>
-					<in>discount_factor_2</in>
-				</var>
-				<var name="length_of_period_1">
-					<in>depreciation_period</in>
-					<in>Years_in_D_and_C</in>
-					<in>term_of_loan</in>
-				</var>
-				<var name="length_of_period_2">
-					<in>depreciation_period</in>
-					<in>term_of_loan</in>
-					<in>Years_in_D_and_C</in>
-				</var>
-				<var name="discount_factor_1">
-					<in>length_of_period_1</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="Expected_Feedstock_Cost">
-					<in>Expected_Regional_Cellulosic_FS_cost_USD_per_ton</in>
-					<in>FLM_C_to_PreProcess_Cost</in>
-				</var>
-				<var name="Avg_Plant_Output_gal_yr">
-					<in>Days_per_Year_Online</in>
-					<in>Avg_Plant_Output_gal_day</in>
-				</var>
-				<var name="Commercial_Maturity">
-					<in>Initial_Indices_of_Commercial_Maturity</in>
-				</var>
-				<var name="learning_logic">
-					<in>commercial_maturity_gap</in>
-					<in>Progress_Ratios_Commercial</in>
-					<in>rate_of_doubling_industry_output_by_technology</in>
-				</var>
-				<var name="Avg_FS_Thruput_Pipeline_C">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Avg_FS_Thruput_Cap_Pipeline</in>
-				</var>
-				<var name="commercial_maturity_gap">
-					<in>one</in>
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Reqd_Rate_of_Return">
-					<in>one_hundred_PCT</in>
-					<in>Reqd_Rate_of_Return_as_PCT</in>
-				</var>
-				<var name="Avg_Plant_Output_gal_day">
-					<in>Avg_FS_throughput</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="P_Success">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Mature_Industry_P_Success</in>
-				</var>
-				<var name="retirements">
-					<in>Retirement_Fraction</in>
-					<in>OnLine</in>
-				</var>
-				<var name="NPV_rel_to_a_million">
-					<in>NPV_Investment</in>
-					<in>Expected_Plant_Output</in>
-				</var>
-				<var name="Pilot_Maturity">
-					<in>Initial_Indices_of_Pilot_Maturity</in>
-				</var>
-				<var name="pilot_learning_logic">
-					<in>rate_of_doubling_pilot_experience</in>
-					<in>Pilot_Progress_Ratios</in>
-					<in>pilot_maturity_gap</in>
-				</var>
-				<var name="pilot_maturity_gap">
-					<in>Pilot_Maturity</in>
-					<in>one</in>
-				</var>
-				<var name="Number_of_Doublings_of_Cume_Output">
-					<in>Commercial_Maturity</in>
-					<in>Progress_Ratios_Commercial</in>
-					<in>commercial_maturity_gap</in>
-				</var>
-				<var name="Cumulative_Industry_Output">
-					<in>Number_of_Doublings_of_Cume_Output</in>
-					<in>Min_Cume_Industry_Output_For_Learning</in>
-				</var>
-				<var name="output_bb_gpy_by_tech">
-					<in>Output_gpy_by_Technology</in>
-					<in>one_billion</in>
-				</var>
-				<var name="rate_of_doubling_industry_output_by_technology">
-					<in>doubling_factor</in>
-					<in>frac_rate_of_growth_in_industry_output</in>
-				</var>
-				<var name="frac_rate_of_growth_in_industry_output">
-					<in>output_bb_gpy_by_tech</in>
-					<in>Min_Cume_Industry_Output_For_Learning</in>
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="Number_of_Doublings_of_Pilot_Experience">
-					<in>Pilot_Maturity</in>
-					<in>Pilot_Progress_Ratios</in>
-					<in>pilot_maturity_gap</in>
-				</var>
-				<var name="PoP_Price_Subs_Logic">
-					<in>one_dollar_per_gal</in>
-					<in>Subsidy_Amt</in>
-					<in>Policy_time_constraints</in>
-					<in>Policy_Switch</in>
-				</var>
-				<var name="PY_retirements">
-					<in>retirements</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="PY_in_In_Design_and_Cons">
-					<in>In_Design_and_Cons</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Cumulative_Pilot_Experience">
-					<in>Number_of_Doublings_of_Pilot_Experience</in>
-					<in>Min_Pilot_Experience_for_Learning</in>
-				</var>
-				<var name="logging_pilot_experience">
-					<in>pilot_op_experience_per_year</in>
-					<in>IBR_Pilot_experience</in>
-					<in>Pilot_Scale_Operations</in>
-				</var>
-				<var name="rate_of_doubling_pilot_experience">
-					<in>frac_rate_of_growth_pilot_experience</in>
-					<in>doubling_factor</in>
-				</var>
-				<var name="frac_rate_of_growth_pilot_experience">
-					<in>Cumulative_Pilot_Experience</in>
-					<in>Min_Pilot_Experience_for_Learning</in>
-					<in>logging_pilot_experience</in>
-				</var>
-				<var name="initiating_PC_development">
-					<in>technology_switches</in>
-					<in>PC_start</in>
-				</var>
-				<var name="PY_OnLine">
-					<in>OnLine</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Industry_Process_Yield_Gap">
-					<in>State_of_Industry_Process_Yield</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="yrly_prodn_subs">
-					<in>Output_gpy_by_Technology</in>
-					<in>PoP_Price_Subs_Logic</in>
-				</var>
-				<var name="PC_Maturity">
-					<in>Initial_Indices_of_PC_Maturity</in>
-				</var>
-				<var name="PC_learning_logic">
-					<in>rate_of_doubling_demo_experience</in>
-					<in>PC_maturity_gap</in>
-					<in>PC_Progress_Ratios</in>
-				</var>
-				<var name="PC_maturity_gap">
-					<in>PC_Maturity</in>
-					<in>one</in>
-				</var>
-				<var name="Number_of_Doublings_of_PC_Experience">
-					<in>PC_Maturity</in>
-					<in>PC_Progress_Ratios</in>
-					<in>PC_maturity_gap</in>
-				</var>
-				<var name="Cumulative_PC_Experience">
-					<in>Number_of_Doublings_of_PC_Experience</in>
-					<in>Min_PC_Experience_for_Learning</in>
-				</var>
-				<var name="logging_PC_experience">
-					<in>Op_Experience_Per_Year</in>
-					<in>IBR_PC_experience</in>
-					<in>PC_Scale_Operations</in>
-				</var>
-				<var name="rate_of_doubling_demo_experience">
-					<in>frac_rate_of_growth_PC_experience</in>
-					<in>doubling_factor</in>
-				</var>
-				<var name="frac_rate_of_growth_PC_experience">
-					<in>Cumulative_PC_Experience</in>
-					<in>logging_PC_experience</in>
-					<in>Min_PC_Experience_for_Learning</in>
-				</var>
-				<var name="PY_influx">
-					<in>initiating</in>
-					<in>scheduled_plant_initiation</in>
-					<in>State_of_Industry_Process_Yield</in>
-				</var>
-				<var name="Pilot_Multipliers">
-					<in>Pilot_Maturity</in>
-					<in>Mature_Pilot_Multipliers</in>
-					<in>Early_Pilot_Multipliers</in>
-				</var>
-				<var name="PY_D_and_C_to_Startup">
-					<in>completing_D_and_C</in>
-					<in>Avg_PY_Pipeline</in>
-				</var>
-				<var name="Expected_FS_cost_after_Subs">
-					<in>FS_Subs_Logic</in>
-					<in>Expected_Feedstock_Cost</in>
-				</var>
-				<var name="Avg_PY">
-					<in>OnLine</in>
-					<in>PY_OnLine</in>
-				</var>
-				<var name="Demo_Multipliers">
-					<in>Mature_PC_Multipliers</in>
-					<in>Pilot_Multipliers</in>
-					<in>PC_Maturity</in>
-				</var>
-				<var name="Expected_Plant_Output_Gal_Day_C">
-					<in>State_of_Industry_Process_Yield</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="Expected_Plant_Output">
-					<in>Days_per_Year_Online</in>
-					<in>Expected_Plant_Output_Gal_Day_C</in>
-				</var>
-				<var name="Equity_Fraction">
-					<in>Loan_Guarantee_Logic</in>
-					<in>Expected_Equity_Fraction</in>
-				</var>
-				<var name="industry_FS_thruput_tpy">
-					<in>Actual_Output_gpy</in>
-					<in>Avg_PY</in>
-				</var>
-				<var name="Expected_FCI_after_Subs">
-					<in>FCI_Subs_Logic</in>
-					<in>Expected_FCI</in>
-				</var>
-				<var name="Expected_Price_after_Subs">
-					<in>Price_Increase_Due_to_RINs</in>
-					<in>PoP_Price_Subs_Logic</in>
-					<in>PoP_Price</in>
-					<in>Converter_1</in>
-				</var>
-				<var name="number_of_plants_to_start">
-					<in>Plant_Start_Accumulator</in>
-				</var>
-				<var name="State_of_the_Industry_Multipliers">
-					<in>Mature_Commercial_Multipliers</in>
-					<in>Demo_Multipliers</in>
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Actual_Output_gpy">
-					<in>Plant_Utilization_Factors</in>
-					<in>Output_Capacity</in>
-				</var>
-				<var name="nominal_Attr">
-					<in>k</in>
-					<in>invest_attractiveness_weighting</in>
-					<in>NPV_rel_to_a_million</in>
-					<in>lambda</in>
-				</var>
-				<var name="yrly_Loan_guarantee_flux">
-					<in>L_G_exposure_by_pathway_and_region</in>
-				</var>
-				<var name="Attr">
-					<in>technology_switches</in>
-					<in>Regional_coeffs</in>
-					<in>nominal_Attr</in>
-				</var>
-				<var name="RegionRollup_Attr">
-					<in>threshold_for_total_attr_calc</in>
-					<in>Attr</in>
-				</var>
-				<var name="nominal_regional_distn_new_facilities">
-					<in>Attr</in>
-					<in>RegionRollup_Attr</in>
-				</var>
-				<var name="Regional_FS_Cost_USD_per_gal">
-					<in>State_of_Industry_Process_Yield</in>
-					<in>Expected_FS_cost_after_Subs</in>
-				</var>
-				<var name="yrly_fs_subs">
-					<in>FS_Subs_Logic</in>
-					<in>industry_FS_thruput_tpy</in>
-				</var>
-				<var name="yrly_FCI_subs">
-					<in>FCI_subs_by_pathway_and_region</in>
-				</var>
-				<var name="per_plant_L_G_exposure_C">
-					<in>Loan_Guarantee_Logic</in>
-					<in>Cume_Loan_Payment</in>
-				</var>
-				<var name="Policy_time_constraints">
-					<in>Policy_End</in>
-					<in>Policy_Start</in>
-				</var>
-				<var name="FS_Subs_Logic">
-					<in>Subsidy_Amt</in>
-					<in>Policy_Switch</in>
-					<in>one_dollar_per_ton</in>
-					<in>Policy_time_constraints</in>
-				</var>
-				<var name="Policy_End">
-					<in>Policy_Duration</in>
-					<in>Policy_Start</in>
-				</var>
-				<var name="FCI_Subs_Logic">
-					<in>Subsidy_Amt</in>
-					<in>Policy_Switch</in>
-					<in>Expected_FCI</in>
-					<in>Policy_time_constraints</in>
-				</var>
-				<var name="Loan_Guarantee_Logic">
-					<in>Policy_time_constraints</in>
-					<in>Subsidy_Amt</in>
-					<in>Policy_Switch</in>
-				</var>
-				<var name="platform_specific_regional_concentration_weighting_factor">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Cumulative_Module_Output">
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="distn_new_facilities">
-					<in>weighted_distn_new_facilities</in>
-				</var>
-				<var name="Use_Startup_Subs">
-					<in>Startup_Subs_Volume_Input</in>
-					<in>Startup_Subs_Vol_Thresh</in>
-				</var>
-				<var name="Subsidy_Amt">
-					<in>startup_spend_constraint</in>
-					<in>Use_Startup_Subs</in>
-					<in>Startup_Subs</in>
-					<in>Background_Subs</in>
-				</var>
-				<var name="rollup_cumulative_subsidies">
-					<in>Cume_FS_Subs</in>
-					<in>Cume_FCI_Subs</in>
-					<in>Cume_Prodn_Subs</in>
-				</var>
-				<var name="rollup_annual_subsidies">
-					<in>rollup_cumulative_subsidies</in>
-				</var>
-				<var name="Rollup_Loan_Expsure">
-					<in>Cume_Loan_Guarantee_Exposure</in>
-				</var>
-				<var name="exp_net_op_cost_USD_per_yr">
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-					<in>Expected_Op_Cost</in>
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="weighted_distn_new_facilities">
-					<in>nominal_regional_distn_new_facilities</in>
-					<in>platform_specific_regional_concentration_weighting_factor</in>
-				</var>
-				<var name="doubling_factor">
-					<in>Doubling</in>
-				</var>
-				<var name="est_depreciation_exp_USD_per_gal">
-					<in>Expected_Plant_Output</in>
-					<in>est_depreciation_expense</in>
-				</var>
-				<var name="fixed_cost_USD_per_gal">
-					<in>ROI_USD_per_gal</in>
-					<in>est_depreciation_exp_USD_per_gal</in>
-					<in>Taxes_USD_per_gal</in>
-					<in>FCI_after_USD_per_gal</in>
-				</var>
-				<var name="Feedstock_Cost_USD_per_gal">
-					<in>Avg_PY</in>
-					<in>Expected_FS_cost_after_Subs</in>
-				</var>
-				<var name="Cost_to_Price_Ratio">
-					<in>Other_rev_net_of_vbl_cost_per_gal</in>
-					<in>Feedstock_Cost_USD_per_gal</in>
-					<in>Expected_Price_after_Subs</in>
-				</var>
-				<var name="UTIL_by_tech">
-					<in>Actual_Output_gpy</in>
-					<in>Output_Capacity</in>
-				</var>
-				<var name="Other_rev_net_of_vbl_cost_per_gal">
-					<in>Avg_Plant_Output_gal_yr</in>
-					<in>Avg_ORNOVOC</in>
-				</var>
-				<var name="Reqd_Annual_FS_Supply_TPY">
-					<in>Output_Capacity</in>
-					<in>frac_contracted_capacity</in>
-					<in>Avg_PY</in>
-					<in>Nominal_Plant_Utilization_Factors</in>
-				</var>
-				<var name="Feedstock_Constraint_on_Utilization">
-					<in>fs_constraint_by_fs_type</in>
-				</var>
-				<var name="Nominal_Plant_Utilization_Factors">
-					<in>Cost_to_Price_Ratio</in>
-				</var>
-				<var name="Expected_Regional_Cellulosic_FS_cost_USD_per_ton">
-					<in>Expected_FS_Prodn_Cost_USD_per_ton</in>
-				</var>
-				<var name="Reqd_FS_supply_Pipeline_TPY">
-					<in>Avg_PY_Pipeline</in>
-					<in>Output_Capacity_Pipeline</in>
-				</var>
-				<var name="Reqd_Annual_FS_Supply_Million_TPY">
-					<in>one_million</in>
-					<in>Reqd_Annual_FS_Supply_TPY</in>
-				</var>
-				<var name="ROI_USD_per_gal">
-					<in>Initial_Equity_Investment</in>
-					<in>Expected_Plant_Output</in>
-					<in>Reqd_Rate_of_Return</in>
-				</var>
-				<var name="Taxes_USD_per_gal">
-					<in>Expected_Tax_Rate</in>
-					<in>ROI_USD_per_gal</in>
-				</var>
-				<var name="FCI_after_USD_per_gal">
-					<in>Expected_Plant_Output</in>
-					<in>Annual_Loan_Payment</in>
-				</var>
-				<var name="exp_net_op_cost_USD_per_gal">
-					<in>Expected_Plant_Output</in>
-					<in>exp_net_op_cost_USD_per_yr</in>
-				</var>
-				<var name="Reqd_FS_Supply_Pipeline_Million_TPY">
-					<in>one_million</in>
-					<in>Reqd_FS_supply_Pipeline_TPY</in>
-				</var>
-				<var name="regional_op_cost_weights">
-					<in>Output_gpy_by_Technology</in>
-					<in>Actual_Output_gpy</in>
-				</var>
-				<var name="volume_wtd_net_op_cost_USD_per_gal">
-					<in>regional_op_cost_weights</in>
-					<in>exp_net_op_cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_USD_per_gal">
-					<in>MFSP_fixed_cost_per_gal</in>
-					<in>MFSP_op_cost_per_gal</in>
-				</var>
-				<var name="Output_Capacity_incl_Pipeline">
-					<in>Output_Capacity_Pipeline</in>
-					<in>Output_Capacity</in>
-				</var>
-				<var name="Pipeline_Potential_Plant_Output_gal_per_yr_C">
-					<in>Avg_Plant_Output_gpd_pipeline_C</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="Output_Capacity_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>Pipeline_Potential_Plant_Output_gal_per_yr_C</in>
-					<in>one_project</in>
-				</var>
-				<var name="Avg_Plant_Output_gpd_pipeline_C">
-					<in>Avg_FS_Thruput_Pipeline_C</in>
-					<in>Avg_PY_Pipeline</in>
-				</var>
-				<var name="NextPlant_Expected_Other_VBL_Op_Cost">
-					<in>Expected_Other_VBL_Op_Cost</in>
-					<in>op_cost_scale_factor</in>
-					<in>FS_thruput_Cap_Ratio</in>
-				</var>
-				<var name="NextPlant_Expected_Fixed_Op_Cost">
-					<in>Expected_Fixed_Op_Cost</in>
-					<in>op_cost_scale_factor</in>
-					<in>FS_thruput_Cap_Ratio</in>
-				</var>
-				<var name="NextPlant_Expected_Power_Sales_Rev">
-					<in>Exp_Power_Sales_Rev</in>
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>other_rev_scale_factor</in>
-				</var>
-				<var name="NextPlant_Other_Coproduct_Sales_Rev">
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>other_rev_scale_factor</in>
-					<in>Exp_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="ORNOVOC_Retirements">
-					<in>Avg_ORNOVOC</in>
-					<in>retirements</in>
-				</var>
-				<var name="Avg_ORNOVOC">
-					<in>Tot_ORNOVOC_OnLine</in>
-					<in>OnLine</in>
-				</var>
-				<var name="FCI_subs_by_pathway_and_region">
-					<in>initiating</in>
-					<in>one_project</in>
-					<in>FCI_Subs_Logic</in>
-				</var>
-				<var name="Tot_ORNOVOC_in_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>NextPlant_ORNOVOC</in>
-				</var>
-				<var name="Tot_ORNOVOC_OnLine">
-					<in>OnLine</in>
-					<in>NextPlant_ORNOVOC</in>
-				</var>
-				<var name="L_Commercial">
-					<in>RegionRollup_Attr</in>
-				</var>
-				<var name="Platform_Attr">
-					<in>L_Commercial</in>
-					<in>W</in>
-					<in>lambda</in>
-				</var>
-				<var name="ORNOVOC_influx">
-					<in>initiating</in>
-					<in>NextPlant_ORNOVOC</in>
-					<in>start_schedule_ORNOVOC</in>
-					<in>scheduled_plant_initiation</in>
-				</var>
-				<var name="ORNOVOC_to_Startup_C">
-					<in>Avg_ORNOVOC_D_and_C_C</in>
-					<in>completing_D_and_C</in>
-				</var>
-				<var name="Avg_ORNOVOC_D_and_C_C">
-					<in>In_Design_and_Cons</in>
-					<in>Tot_ORNOVOC_in_Pipeline</in>
-				</var>
-				<var name="FS_Thruput_Cap_Retirements">
-					<in>Avg_FS_Thruput_Cap</in>
-					<in>retirements</in>
-				</var>
-				<var name="Avg_FS_Thruput_Cap">
-					<in>Tot_FS_Thruput_Cap_OnLine</in>
-					<in>OnLine</in>
-				</var>
-				<var name="Tot_FS_Thruput_Cap_Pipeline">
-					<in>In_Design_and_Cons</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="Tot_FS_Thruput_Cap_OnLine">
-					<in>OnLine</in>
-					<in>NextPlant_FS_Thruput_Cap</in>
-				</var>
-				<var name="FS_thruput_cap_influx">
-					<in>NextPlant_FS_Thruput_Cap</in>
-					<in>start_schedule_thruput_capacity</in>
-					<in>scheduled_plant_initiation</in>
-					<in>initiating</in>
-				</var>
-				<var name="FS_Thruput_Cap_to_Startup_C">
-					<in>completing_D_and_C</in>
-					<in>Avg_FS_Thruput_Cap_Pipeline</in>
-				</var>
-				<var name="Avg_FS_Thruput_Cap_Pipeline">
-					<in>Tot_FS_Thruput_Cap_Pipeline</in>
-					<in>In_Design_and_Cons</in>
-				</var>
-				<var name="NextPlant_FS_Thruput_Cap">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>maturing_industry_scale_factor</in>
-					<in>Feedstock_Thruput_Incremental_Scale_Factor</in>
-				</var>
-				<var name="NextPlant_ORNOVOC">
-					<in>NextPlant_Expected_Power_Sales_Rev</in>
-					<in>NextPlant_Expected_Other_VBL_Op_Cost</in>
-					<in>NextPlant_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="Feedstock_Thruput_Incremental_Scale_Factor">
-					<in>Impact_of_regional_industry_development_on_scale_factor</in>
-					<in>SCALE_UP_Switch</in>
-					<in>incremental_scale_factor_from_industry_maturity</in>
-					<in>incremental_scale_up_level</in>
-				</var>
-				<var name="incremental_scale_factor_from_industry_maturity">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="Impact_of_regional_industry_development_on_scale_factor">
-					<in>FLM_frac_supply_system_advanced</in>
-				</var>
-				<var name="NextPlant_Expected_FCI">
-					<in>Mature_Industry_FCI</in>
-					<in>FS_thruput_Cap_Ratio</in>
-					<in>FCI_scale_factor</in>
-				</var>
-				<var name="FS_thruput_Cap_Ratio">
-					<in>NextPlant_FS_Thruput_Cap</in>
-					<in>Mature_FS_Thruput_Capacity</in>
-				</var>
-				<var name="volume_wtd_fixed_cost_USD_per_gal">
-					<in>regional_op_cost_weights</in>
-					<in>fixed_cost_USD_per_gal</in>
-				</var>
-				<var name="L_G_exposure_by_pathway_and_region">
-					<in>one_project</in>
-					<in>per_plant_L_G_exposure_C</in>
-					<in>initiating</in>
-				</var>
-				<var name="Avg_FS_throughput">
-					<in>State_of_the_Industry_Multipliers</in>
-					<in>Avg_FS_Thruput_Cap</in>
-				</var>
-				<var name="fs_demand_incl_pipeline">
-					<in>fs_demand_at_nominal_utilization</in>
-					<in>Reqd_FS_Supply_Pipeline_Million_TPY</in>
-				</var>
-				<var name="actual_fs_consn">
-					<in>fs_demand_at_nominal_utilization</in>
-				</var>
-				<var name="fs_demand_at_nominal_utilization">
-					<in>Reqd_Annual_FS_Supply_Million_TPY</in>
-				</var>
-				<var name="fs_constraint_by_fs_type">
-					<in>fs_demand_at_nominal_utilization</in>
-					<in>actual_fs_consn</in>
-				</var>
-				<var name="endogenous_plant_planning">
-					<in>Des_C_to_EtOH_yrly_starts</in>
-				</var>
-				<var name="State_of_the_Industry_Multipliers_FS">
-					<in>Commercial_Maturity</in>
-					<in>Mature_Commercial_Multipliers_FS</in>
-					<in>Demo_Multipliers_FS</in>
-				</var>
-				<var name="Pilot_Multipliers_FS">
-					<in>Mature_Pilot_Multipliers_FS</in>
-					<in>Early_Pilot_Multipliers_FS</in>
-					<in>Pilot_Maturity</in>
-				</var>
-				<var name="Demo_Multipliers_FS">
-					<in>Pilot_Multipliers_FS</in>
-					<in>PC_Maturity</in>
-					<in>Mature_PC_Multipliers_FS</in>
-				</var>
-				<var name="Expected_FS_Prodn_Cost_USD_per_yr">
-					<in>Mature_Industry_Feedstock_Prodn_Cost</in>
-					<in>State_of_the_Industry_Multipliers_FS</in>
-				</var>
-				<var name="Expected_FS_Prodn_Cost_USD_per_ton">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>Expected_FS_Prodn_Cost_USD_per_yr</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="maturity_weight_factor">
-					<in>Commercial_Maturity</in>
-				</var>
-				<var name="maturing_industry_scale_factor">
-					<in>pioneer_capacity_scale_factor</in>
-					<in>maturity_weight_factor</in>
-				</var>
-				<var name="start_schedule_scale_factor">
-					<in>Mature_FS_Thruput_Capacity</in>
-					<in>start_schedule_thruput_capacity</in>
-				</var>
-				<var name="start_schedule_thruput_capacity">
-					<in>Mature_Industry_Process_Yield</in>
-					<in>start_schedule_nameplate_output_gpd</in>
-				</var>
-				<var name="start_schedule_ORNOVOC">
-					<in>Expected_Other_VBL_Op_Cost</in>
-					<in>Exp_Power_Sales_Rev</in>
-					<in>start_schedule_scale_factor</in>
-					<in>other_rev_scale_factor</in>
-					<in>op_cost_scale_factor</in>
-					<in>Exp_Other_Coproduct_Sales_Rev</in>
-				</var>
-				<var name="scheduled_plant_initiation">
-					<in>Start_Schedule</in>
-				</var>
-				<var name="start_schedule_nameplate_output_gpd">
-					<in>start_schedule_nameplate_output_gpy</in>
-					<in>Days_per_Year_Online</in>
-				</var>
-				<var name="initiating_Pilot_development">
-					<in>Pilot_start</in>
-					<in>technology_switches</in>
-				</var>
-				<var name="Startup_Subs_Volume_Input">
-					<in>Cumulative_Module_Output</in>
-					<in>Use_Startup_Subs_Module_Volume_Input</in>
-					<in>Cumulative_Industry_Output</in>
-				</var>
-				<var name="MFSP_fs_cost_per_gal">
-					<in>volume_wtd_fs_cost_USD_per_gal</in>
-				</var>
-				<var name="volume_wtd_fs_cost_USD_per_gal">
-					<in>regional_op_cost_weights</in>
-					<in>Regional_FS_Cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_fixed_cost_per_gal">
-					<in>volume_wtd_fixed_cost_USD_per_gal</in>
-				</var>
-				<var name="MFSP_op_cost_per_gal">
-					<in>volume_wtd_net_op_cost_USD_per_gal</in>
-				</var>
-				<var name="frac_contracted_capacity">
-					<in>Contracted_Output_Capacity</in>
-					<in>Output_Capacity</in>
-				</var>
-			</isee:dependencies>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -6433,28 +5609,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="9" isee:page_rows="5" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="6" isee:page_rows="4" isee:scroll_y="60" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="55" height="45"/>
 					</module>
@@ -6466,7 +5650,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -6483,7 +5667,7 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
 				<connector uid="72" angle="310.601">
 					<from>
@@ -9794,7 +8978,7 @@ COMMENTS: </doc>
 					<of>Expected_Plant_Output</of>
 				</alias>
 			</view>
-			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+			<view isee:show_pages="true" background="white" page_width="1012" page_height="696" home_view="true" type="interface">
 				<style/>
 			</view>
 			<isee:templates/>

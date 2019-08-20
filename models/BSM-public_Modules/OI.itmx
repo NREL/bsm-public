@@ -3,23 +3,38 @@
 	<header>
 		<smile version="1.0" namespace="std, isee" uses_arrays="2"/>
 		<name>OI</name>
-		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
+		<uuid>1790f240-d4f5-4c1b-9a4f-99cfbf779bc5</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
 		<dim name="AlgalTech">
 			<elem name="Pond"/>
 			<elem name="PBR"/>
 		</dim>
-		<dim name="CtoATech">
-			<elem name="BC"/>
-			<elem name="TC"/>
+		<dim name="Gen">
+			<elem name="One"/>
+			<elem name="OnePointFive"/>
+		</dim>
+		<dim name="Product">
+			<elem name="Primary"/>
+			<elem name="Co1"/>
+			<elem name="Co2"/>
+		</dim>
+		<dim name="RefineryProduct">
+			<elem name="gasoline"/>
+			<elem name="diesel"/>
+			<elem name="JetFuel"/>
+			<elem name="AllOther"/>
 		</dim>
 		<dim name="CtoRRTech">
 			<elem name="FP"/>
@@ -28,17 +43,6 @@
 			<elem name="CP"/>
 			<elem name="F"/>
 			<elem name="APR"/>
-		</dim>
-		<dim name="OilCropTech">
-			<elem name="TransEster"/>
-			<elem name="HEFA"/>
-			<elem name="Catalytic"/>
-		</dim>
-		<dim name="RefineryProduct">
-			<elem name="gasoline"/>
-			<elem name="diesel"/>
-			<elem name="JetFuel"/>
-			<elem name="AllOther"/>
 		</dim>
 		<dim name="Region">
 			<elem name="NE"/>
@@ -52,14 +56,25 @@
 			<elem name="M"/>
 			<elem name="P"/>
 		</dim>
+		<dim name="OilCropTech">
+			<elem name="TransEster"/>
+			<elem name="HEFA"/>
+			<elem name="Catalytic"/>
+		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -296,7 +311,8 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="RefineryProduct"/>
 				</dimensions>
-				<eqn>(RP_crack_spread_intercepts[RefineryProduct] + crude_oil_price_per_barrel * RP_crack_spread_slopes[RefineryProduct])+ Additional_RP_rev_per_gal[RefineryProduct]</eqn>
+				<eqn>(RP_crack_spread_intercepts[RefineryProduct] + crude_oil_price_per_barrel * RP_crack_spread_slopes[RefineryProduct])
++ Additional_RP_rev_per_gal[RefineryProduct]</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C to R composite CM finished product price">
@@ -340,7 +356,7 @@ COMMENTS: </doc>
 					<dim name="CtoRRTech"/>
 					<dim name="RefineryProduct"/>
 				</dimensions>
-				<eqn>C_to_RR_product_distribution[CtoRRTech,RefineryProduct] * refinery_product_price_per_gallon[RefineryProduct] * Premium_for_Added_Efficiency</eqn>
+				<eqn>C_to_RR_product_distribution[CtoRRTech,RefineryProduct] * refinery_product_price_per_gallon[RefineryProduct] * Premium_for_Added_Efficiency_C_to_R</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="CM C to R price input before transport">
@@ -424,7 +440,18 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="RefineryProduct"/>
 				</dimensions>
-				<eqn>0</eqn>
+				<element subscript="gasoline">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="diesel">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="JetFuel">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="AllOther">
+					<eqn>0</eqn>
+				</element>
 				<inflow>displacing_petroleum</inflow>
 				<non_negative/>
 				<units>gallons</units>
@@ -458,19 +485,13 @@ COMMENTS: </doc>
 					<dim name="CtoRRTech"/>
 					<dim name="RefineryProduct"/>
 				</dimensions>
-				<eqn>rollup_ff_prodn_across_regions[CtoRRTech] * (C_to_RR_product_distribution[CtoRRTech,RefineryProduct])</eqn>
+				<eqn>rollup_ff_prodn_across_regions[CtoRRTech,Primary] * (C_to_RR_product_distribution[CtoRRTech,RefineryProduct])</eqn>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="rollup ff prodn across regions" access="input">
-				<doc>DEFINITION: module interface to CHC.Output gpy by Technology
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="CtoRRTech"/>
+					<dim name="Product"/>
 				</dimensions>
 				<eqn>0</eqn>
 				<units>gallons per year</units>
@@ -606,13 +627,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Algae prodn by tech" access="input">
-				<doc>DEFINITION: module interface to AHC.Output gpy by Technology
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
@@ -630,7 +644,12 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="AlgalTech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="Pond">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="PBR">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="A to R per gallon transport cost to refinery">
@@ -698,7 +717,15 @@ COMMENTS: </doc>
 				<dimensions>
 					<dim name="OilCropTech"/>
 				</dimensions>
-				<eqn>1</eqn>
+				<element subscript="TransEster">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="HEFA">
+					<eqn>1</eqn>
+				</element>
+				<element subscript="Catalytic">
+					<eqn>1</eqn>
+				</element>
 				<units>Unitless</units>
 			</aux>
 			<aux name="OC to R per gallon transport cost to refinery">
@@ -728,13 +755,6 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="OilCrop prodn by tech" access="input">
-				<doc>DEFINITION: module interface to OHC.Output gpy by Technology
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="OilCropTech"/>
 				</dimensions>
@@ -744,7 +764,7 @@ COMMENTS: </doc>
 			<aux name="Nominal OC to RR product distribution">
 				<doc>DEFINITION: For each conversion pathway, provides distribution (in percentage) among different end-products
 
-UNITS: unitless
+UNITS: Unitless
 
 TYPE: array | constant | scenario input
 
@@ -794,7 +814,7 @@ COMMENTS: </doc>
 			<aux name="Nominal A to RR product distribution">
 				<doc>DEFINITION: For each conversion pathway, provides distribution (in percentage) among different end-products
 
-UNITS: unitless
+UNITS: Unitless
 
 TYPE: array | constant | scenario input
 
@@ -832,7 +852,7 @@ COMMENTS: </doc>
 			<aux name="Nominal C to RR product distribution">
 				<doc>DEFINITION: For each conversion pathway, provides distribution (in percentage) among different end-products
 
-UNITS: unitless
+UNITS: Unitless
 
 TYPE: array | constant | scenario input
 
@@ -1030,7 +1050,7 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="one tonne">
-				<doc>DEFINITION: one unit of metric tones
+				<doc>DEFINITION: one unit of metric tonnes
 
 UNITS: Tonnes
 
@@ -1051,7 +1071,7 @@ COMMENTS: </doc>
 				<eqn>1</eqn>
 				<units>MJ</units>
 			</aux>
-			<aux name="Premium for Added Efficiency">
+			<aux name="Premium for Added Efficiency C to R">
 				<doc>DEFINITION: multiplier on finished product revenue for cellulose to hydrocarbon pathways, associated with (potential) efficiency improvements for those fuels
 
 UNITS: Unitless
@@ -1138,13 +1158,6 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="SJ output gpy" access="input">
-				<doc>DEFINITION: module interface to SJ.Output gpy by Technology
-
-UNITS: gallons per year
-
-TYPE: scalar | module interface
-
-COMMENTS: </doc>
 				<eqn>0</eqn>
 				<units>gallons per year</units>
 			</aux>
@@ -1235,7 +1248,7 @@ COMMENTS: </doc>
 			<aux name="Nominal SJ product distribution">
 				<doc>DEFINITION: For each conversion pathway, provides distribution (in percentage) among different end-products
 
-UNITS: unitless
+UNITS: Unitless
 
 TYPE: array | constant | scenario input
 
@@ -1272,67 +1285,69 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<group name="Dropin Point Inputs" run="false">
-				<entity name="Nominal_OC_to_RR_product_distribution"/>
-				<entity name="OC_to_R_per_gallon_transport_cost_to_refinery"/>
+				<entity name="Nominal_A_to_RR_product_distribution"/>
+				<entity name="OC_to_R_degree_of_finished_productness"/>
 				<entity name="C_to_R_per_gallon_transport_cost_to_refinery"/>
-				<entity name="SJ_per_gallon_transport_cost_to_refinery"/>
 				<entity name="A_to_R_per_gallon_transport_cost_to_refinery"/>
 				<entity name="Nominal_C_to_RR_product_distribution"/>
-				<entity name="OC_to_R_degree_of_finished_productness"/>
-				<entity name="Nominal_A_to_RR_product_distribution"/>
-				<entity name="C_to_R_degree_of_finished_productness"/>
-				<entity name="Premium_for_Added_Efficiency"/>
+				<entity name="OC_to_R_per_gallon_transport_cost_to_refinery"/>
+				<entity name="Premium_for_Added_Efficiency_C_to_R"/>
 				<entity name="SJ_degree_of_finished_productness"/>
-				<entity name="Nominal_SJ_product_distribution"/>
+				<entity name="SJ_per_gallon_transport_cost_to_refinery"/>
+				<entity name="C_to_R_degree_of_finished_productness"/>
 				<entity name="A_to_R_degree_of_finished_productness"/>
+				<entity name="Nominal_OC_to_RR_product_distribution"/>
+				<entity name="Nominal_SJ_product_distribution"/>
 			</group>
 			<group name="Price Input Calculations" run="false">
-				<entity name="OilCrop_displacing_petroleum_by_product"/>
-				<entity name="A_to_R_composite_CM_finished_product_price"/>
-				<entity name="OC_to_R_weighted_CM_finished_product_price"/>
-				<entity name="Gasoline_POP_Price"/>
 				<entity name="OC_to_R_composite_CM_finished_product_price"/>
-				<entity name="A_to_RR_product_distribution"/>
-				<entity name="CM_C_to_R_price_input"/>
-				<entity name="C_to_R_composite_CM_finished_product_price"/>
 				<entity name="barrel_gallon_conversion"/>
-				<entity name="C_to_R_weighted_CM_finished_product_price"/>
+				<entity name="CM_C_to_R_price_input"/>
+				<entity name="A_to_R_weighted_CM_finished_product_price"/>
+				<entity name="CoProduct_Price_Input"/>
+				<entity name="C_to_RR_product_distribution"/>
 				<entity name="C_to_R_displacing_petroleum_by_product"/>
-				<entity name="crude_oil_price_per_gallon"/>
+				<entity name="crude_oil_price_per_barrel"/>
+				<entity name="Cumulative_Displaced_Petroleum"/>
+				<entity name="refinery_product_price_per_gallon"/>
+				<entity name="A_to_RR_product_distribution"/>
+				<entity name="OC_to_RR_CM_refinery_Input_product_distribution"/>
+				<entity name="OC_to_R_weighted_CM_finished_product_price"/>
+				<entity name="displacing_petroleum"/>
+				<entity name="CM_Oil_Crop_price_input"/>
+				<entity name="CM_C_to_R_price_input_before_transport"/>
+				<entity name="CM_Algae_price_input_before_transport"/>
 				<entity name="Gasoline_POD_price_before_tax"/>
 				<entity name="CM_Algae_price_input"/>
-				<entity name="crude_oil_price_per_barrel"/>
-				<entity name="OC_to_RR_CM_refinery_Input_product_distribution"/>
-				<entity name="CM_Algae_price_input_before_transport"/>
-				<entity name="Cumulative_Displaced_Petroleum"/>
+				<entity name="C_to_R_composite_CM_finished_product_price"/>
+				<entity name="A_to_R_composite_CM_finished_product_price"/>
+				<entity name="C_to_R_weighted_CM_finished_product_price"/>
 				<entity name="CM_OC_to_R_price_input_before_transport"/>
-				<entity name="displacing_petroleum"/>
-				<entity name="C_to_RR_product_distribution"/>
-				<entity name="refinery_product_price_per_gallon"/>
-				<entity name="A_to_R_weighted_CM_finished_product_price"/>
+				<entity name="OilCrop_displacing_petroleum_by_product"/>
 				<entity name="Algae_displacing_petroleum_by_product"/>
-				<entity name="CM_C_to_R_price_input_before_transport"/>
-				<entity name="CM_Oil_Crop_price_input"/>
+				<entity name="Gasoline_POP_Price"/>
+				<entity name="Coproduct_Price_Spread"/>
+				<entity name="crude_oil_price_per_gallon"/>
 			</group>
 			<group name="Interfaces to Other Modules 7" run="false">
+				<entity name="Algae_prodn_by_tech"/>
+				<entity name="SJ_output_gpy"/>
 				<entity name="rollup_ff_prodn_across_regions"/>
 				<entity name="OilCrop_prodn_by_tech"/>
-				<entity name="SJ_output_gpy"/>
-				<entity name="Algae_prodn_by_tech"/>
 			</group>
 			<group name="Oil Price Inputs" run="false">
-				<entity name="Use_AEO_Reference_Oil"/>
-				<entity name="RP_crack_spread_slopes"/>
 				<entity name="Use_AEO_Low_Oil"/>
-				<entity name="AEO_Reference_Oil"/>
+				<entity name="Additional_RP_rev_per_gal"/>
+				<entity name="Use_User_Defined_Oil"/>
+				<entity name="RP_crack_spread_slopes"/>
+				<entity name="PoD_PoP_gasoline_Offset"/>
+				<entity name="Use_AEO_Reference_Oil"/>
+				<entity name="User_Defined_Oil"/>
 				<entity name="Use_AEO_Hi_Oil"/>
 				<entity name="RP_crack_spread_intercepts"/>
 				<entity name="AEO_High_Oil"/>
-				<entity name="Use_User_Defined_Oil"/>
-				<entity name="Additional_RP_rev_per_gal"/>
 				<entity name="AEO_Low_Oil"/>
-				<entity name="PoD_PoP_gasoline_Offset"/>
-				<entity name="User_Defined_Oil"/>
+				<entity name="AEO_Reference_Oil"/>
 			</group>
 			<aux name="Use AEO Hi Oil">
 				<doc>DEFINITION: 0-1 switch to activate AEO Hi Oil  price Scenario. Only ONE of the Use AEO Oil switches should be active in a given run
@@ -1427,7 +1442,7 @@ COMMENTS: </doc>
 				<units>USD per barrel</units>
 			</aux>
 			<aux name="User Defined Oil">
-				<doc>DEFINITION: contains time series data for user-defined Oil Price Scenario. 
+				<doc>DEFINITION: contains time series data for user-defined Oil Price Scenario.
 
 UNITS: USD per barrel
 
@@ -1516,11 +1531,11 @@ COMMENTS: </doc>
 				<units>Tonnes/Gallons</units>
 			</aux>
 			<aux name="C tax scenario">
-				<doc>DEFINITION: 
+				<doc>DEFINITION: User defined scenario for carbon taxes
 
-UNITS: USD/tonnes
+UNITS: USD/Tonnes
 
-TYPE: scalar | constant | scenario input
+TYPE: scalar | graphical function | scenario input
 
 COMMENTS: </doc>
 				<eqn>TIME</eqn>
@@ -1532,11 +1547,11 @@ COMMENTS: </doc>
 				<units>USD/Tonnes</units>
 			</aux>
 			<aux name="C tax OIL">
-				<doc>DEFINITION: 
+				<doc>DEFINITION: Applies carbon intensity, energy intensity, and user-defined carbon tax scenario to calculate carbon tax
 
 UNITS: USD per gallon
 
-TYPE: scalar | constant | scenario input
+TYPE: array | internal calculation 
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1546,11 +1561,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax CHC">
-				<doc>DEFINITION: Calculates carbon tax for pathway, considering final product distribution
+				<doc>DEFINITION: Applies carbon intensity, energy intensity, and user-defined carbon tax scenario to calculate carbon tax
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array | internal calculation 
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1561,11 +1576,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax OC">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: Applies carbon intensity, energy intensity, and user-defined carbon tax scenario to calculate carbon tax
 
 UNITS: USD per gallon
 
-TYPE: internal calculation
+TYPE: array | internal calculation 
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1576,11 +1591,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C Tax Algae">
-				<doc>DEFINITION: Calculates carbon tax for pathway, considering final product distribution
+				<doc>DEFINITION: Applies carbon intensity, energy intensity, and user-defined carbon tax scenario to calculate carbon tax
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array | internal calculation 
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1591,11 +1606,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C Tax SJ">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: Applies carbon intensity, energy intensity, and user-defined carbon tax scenario to calculate carbon tax
 
 UNITS: USD per gallon
 
-TYPE: internal calculation
+TYPE: array | internal calculation 
 
 COMMENTS: </doc>
 				<dimensions>
@@ -1647,11 +1662,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C Tax delta SJ">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: internal calculation
+TYPE: array | sector interface
 
 COMMENTS: </doc>
 				<eqn>SUM(rollup_c_tax_delta_SJ[*])</eqn>
@@ -2030,7 +2045,15 @@ UNITS: GramsPerMJ
 TYPE: scalar | constant | unit conversion
 
 COMMENTS: </doc>
-				<eqn>75</eqn>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
+				<element subscript="One">
+					<eqn>75</eqn>
+				</element>
+				<element subscript="OnePointFive">
+					<eqn>36</eqn>
+				</element>
 				<units>GramsPerMJ</units>
 			</aux>
 			<aux name="energy density input CE">
@@ -2088,6 +2111,9 @@ UNITS: Tonnes/Gallons
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>C_intensity_SE*energy_density_input_SE*mass_energy_unit_conversion_factor</eqn>
 				<units>Tonnes/Gallons</units>
 			</aux>
@@ -2113,6 +2139,9 @@ UNITS: USD per gallon
 TYPE: scalar | module interface
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>C_tax_OIL[gasoline] - C_tax_SE</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2163,7 +2192,7 @@ COMMENTS: </doc>
 			<aux name="LCFS credit scenario">
 				<doc>DEFINITION: scenario expressing low carbon fuel standard credit, in terms of USD/tonne of carbon
 
-UNITS: USD/tonnes
+UNITS: USD/Tonnes
 
 TYPE: scalar | graphical function | scenario input
 
@@ -2257,6 +2286,9 @@ UNITS: Tonnes/Gallons
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>lcfs_c_intensity_input[gasoline] - C_intensity_input_SE</eqn>
 				<units>Tonnes/Gallons</units>
 			</aux>
@@ -2352,6 +2384,9 @@ UNITS: USD per gallon
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>LCFS_credit_scenario * C_intensity_delta_SE</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2441,6 +2476,9 @@ UNITS: USD per gallon
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>rollup_LCFS_credit_wt_factors_SE</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2498,7 +2536,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors CHC">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
@@ -2513,7 +2551,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors OC">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
@@ -2543,7 +2581,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors SJ">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
@@ -2557,7 +2595,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors CE">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
@@ -2571,7 +2609,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors B">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
@@ -2582,13 +2620,16 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="LCFS credit wt factors SE">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: weighting factors, based on end-product distribution, used as intermediate in calculating low carbon fuel standard credit for each conversion pathway
 
 UNITS: unitless
 
 TYPE: scalar | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>LCFS_Fuel_Cut_Switch_EtOH</eqn>
 				<units>unitless</units>
 			</aux>
@@ -2640,9 +2681,9 @@ COMMENTS: </doc>
 				<units>MillionBTUPerGal</units>
 			</aux>
 			<aux name="lcfs c intensity input">
-				<doc>DEFINITION: expresses low carbon fuel standard in tonne/gal for each refinery product
+				<doc>DEFINITION: expresses low carbon fuel standard carbon intensity in tonne/gal for each refinery product
 
-UNITS: Tonnes/gallons
+UNITS: Tonnes/Gallons
 
 TYPE: array | internal calculation
 
@@ -2789,6 +2830,9 @@ UNITS: USD per gallon
 TYPE: array |internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>LCFS_credit_wt_factors_SE * LCFS_nominal_credit_SE</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -2888,16 +2932,17 @@ TYPE: Array | Module Interface
 COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
+					<dim name="Gen"/>
 				</dimensions>
-				<eqn>MAX(0, LCFS_gross_credit_SE - regional_transport_cost[Region])</eqn>
+				<eqn>MAX(0, LCFS_gross_credit_SE[Gen] - regional_transport_cost[Region])</eqn>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax delta nominal CHC">
-				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, for each refinery product
+				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array |internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2908,11 +2953,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax delta nominal OC">
-				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, for each refinery product
+				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array |internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2923,11 +2968,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax delta nominal Algae">
-				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, for each refinery product
+				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array |internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2938,11 +2983,11 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax delta nominal SJ">
-				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, for each refinery product
+				<doc>DEFINITION: Calculates carbon tax differential (relative to oil) for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: array | internal calculation
+TYPE: array |internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -2954,7 +2999,7 @@ COMMENTS: </doc>
 			<aux name="OC regional wt">
 				<doc>DEFINITION: Part of LCFS (CARB) logic.  Weights are applied to regional transport costs to calculate aggregate average transport cost into LCFS region
 
-UNITS: Unitless
+UNITS: unitless
 
 TYPE: array | constant | scenario input
 
@@ -2995,7 +3040,7 @@ COMMENTS: </doc>
 				<units>unitless</units>
 			</aux>
 			<aux name="OC national transport">
-				<doc>DEFINITION: Part of LCFS (CARB) logic.  Used to calculate aggregate average transport cost into LCFS region
+				<doc>DEFINITION: Part of LCFS (CARB) logic.  Used to calculate aggregate average transport cost into LCFS region for oilcrop-based fuels
 
 UNITS: USD per gallon
 
@@ -3008,7 +3053,7 @@ COMMENTS: </doc>
 			<aux name="algae regional wt">
 				<doc>DEFINITION: Part of LCFS (CARB) logic.  Weights are applied to regional transport costs to calculate aggregate average transport cost into LCFS region
 
-UNITS: Unitless
+UNITS: unitless
 
 TYPE: array | constant | scenario input
 
@@ -3175,13 +3220,16 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="C tax SE">
-				<doc>DEFINITION: weighted average of crude and finished product prices, with degree of finished productness as the weighting factor.  Used to drive price input to conversion modules
+				<doc>DEFINITION: Calculates carbon tax for pathway, considering final product distribution
 
 UNITS: USD per gallon
 
-TYPE: internal calculation
+TYPE: array | internal calculation
 
 COMMENTS: </doc>
+				<dimensions>
+					<dim name="Gen"/>
+				</dimensions>
 				<eqn>C_intensity_input_SE * C_tax_scenario</eqn>
 				<units>USD per gallon</units>
 			</aux>
@@ -3196,448 +3244,49 @@ COMMENTS: </doc>
 				<eqn>C_intensity_input_B * C_tax_scenario</eqn>
 				<units>USD per gallon</units>
 			</aux>
-			<isee:dependencies>
-				<var name="crude_oil_price_per_barrel">
-					<in>AEO_Reference_Oil</in>
-					<in>Use_AEO_Hi_Oil</in>
-					<in>AEO_High_Oil</in>
-					<in>Use_AEO_Low_Oil</in>
-					<in>AEO_Low_Oil</in>
-					<in>User_Defined_Oil</in>
-					<in>Use_AEO_Reference_Oil</in>
-					<in>Use_User_Defined_Oil</in>
-				</var>
-				<var name="crude_oil_price_per_gallon">
-					<in>barrel_gallon_conversion</in>
-					<in>crude_oil_price_per_barrel</in>
-				</var>
-				<var name="refinery_product_price_per_gallon">
-					<in>RP_crack_spread_intercepts</in>
-					<in>crude_oil_price_per_barrel</in>
-					<in>Additional_RP_rev_per_gal</in>
-					<in>RP_crack_spread_slopes</in>
-				</var>
-				<var name="C_to_R_composite_CM_finished_product_price">
-					<in>C_to_R_weighted_CM_finished_product_price</in>
-				</var>
-				<var name="C_to_RR_product_distribution">
-					<in>Nominal_C_to_RR_product_distribution</in>
-				</var>
-				<var name="C_to_R_weighted_CM_finished_product_price">
-					<in>C_to_RR_product_distribution</in>
-					<in>refinery_product_price_per_gallon</in>
-					<in>Premium_for_Added_Efficiency</in>
-				</var>
-				<var name="CM_C_to_R_price_input_before_transport">
-					<in>crude_oil_price_per_gallon</in>
-					<in>C_to_R_composite_CM_finished_product_price</in>
-					<in>C_to_R_degree_of_finished_productness</in>
-				</var>
-				<var name="CM_C_to_R_price_input">
-					<in>C_to_R_per_gallon_transport_cost_to_refinery</in>
-					<in>CM_C_to_R_price_input_before_transport</in>
-					<in>C_tax_delta_CHC</in>
-				</var>
-				<var name="displacing_petroleum">
-					<in>Algae_displacing_petroleum_by_product</in>
-					<in>OilCrop_displacing_petroleum_by_product</in>
-					<in>C_to_R_displacing_petroleum_by_product</in>
-					<in>SJ_displacing_petroleum_by_product</in>
-				</var>
-				<var name="C_to_R_displacing_petroleum_by_product">
-					<in>C_to_RR_product_distribution</in>
-					<in>rollup_ff_prodn_across_regions</in>
-				</var>
-				<var name="CM_Algae_price_input">
-					<in>CM_Algae_price_input_before_transport</in>
-					<in>A_to_R_per_gallon_transport_cost_to_refinery</in>
-					<in>C_Tax_delta_Algae</in>
-				</var>
-				<var name="A_to_RR_product_distribution">
-					<in>Nominal_A_to_RR_product_distribution</in>
-				</var>
-				<var name="A_to_R_weighted_CM_finished_product_price">
-					<in>refinery_product_price_per_gallon</in>
-					<in>A_to_RR_product_distribution</in>
-				</var>
-				<var name="Algae_displacing_petroleum_by_product">
-					<in>A_to_RR_product_distribution</in>
-					<in>Algae_prodn_by_tech</in>
-				</var>
-				<var name="CM_Oil_Crop_price_input">
-					<in>OC_to_R_per_gallon_transport_cost_to_refinery</in>
-					<in>CM_OC_to_R_price_input_before_transport</in>
-					<in>C_tax_delta_OC</in>
-				</var>
-				<var name="A_to_R_composite_CM_finished_product_price">
-					<in>A_to_R_weighted_CM_finished_product_price</in>
-				</var>
-				<var name="Gasoline_POD_price_before_tax">
-					<in>Gasoline_POP_Price</in>
-					<in>PoD_PoP_gasoline_Offset</in>
-				</var>
-				<var name="OC_to_RR_CM_refinery_Input_product_distribution">
-					<in>Nominal_OC_to_RR_product_distribution</in>
-				</var>
-				<var name="CM_Algae_price_input_before_transport">
-					<in>crude_oil_price_per_gallon</in>
-					<in>A_to_R_degree_of_finished_productness</in>
-					<in>A_to_R_composite_CM_finished_product_price</in>
-				</var>
-				<var name="OC_to_R_weighted_CM_finished_product_price">
-					<in>refinery_product_price_per_gallon</in>
-					<in>OC_to_RR_CM_refinery_Input_product_distribution</in>
-				</var>
-				<var name="OC_to_R_composite_CM_finished_product_price">
-					<in>OC_to_R_weighted_CM_finished_product_price</in>
-				</var>
-				<var name="CM_OC_to_R_price_input_before_transport">
-					<in>crude_oil_price_per_gallon</in>
-					<in>OC_to_R_composite_CM_finished_product_price</in>
-					<in>OC_to_R_degree_of_finished_productness</in>
-				</var>
-				<var name="OilCrop_displacing_petroleum_by_product">
-					<in>OC_to_RR_CM_refinery_Input_product_distribution</in>
-					<in>OilCrop_prodn_by_tech</in>
-				</var>
-				<var name="Gasoline_POP_Price">
-					<in>refinery_product_price_per_gallon</in>
-				</var>
-				<var name="SJ_price_input">
-					<in>SJ_per_gallon_transport_cost_to_refinery</in>
-					<in>price_input_before_transport</in>
-					<in>C_Tax_delta_SJ</in>
-				</var>
-				<var name="SJ_product_distribution">
-					<in>Nominal_SJ_product_distribution</in>
-				</var>
-				<var name="SJ_weighted_CM_finished_product_price">
-					<in>SJ_product_distribution</in>
-					<in>refinery_product_price_per_gallon</in>
-				</var>
-				<var name="SJ_composite_CM_finished_product_price">
-					<in>SJ_weighted_CM_finished_product_price</in>
-				</var>
-				<var name="price_input_before_transport">
-					<in>SJ_composite_CM_finished_product_price</in>
-					<in>crude_oil_price_per_gallon</in>
-					<in>SJ_degree_of_finished_productness</in>
-				</var>
-				<var name="SJ_displacing_petroleum_by_product">
-					<in>SJ_product_distribution</in>
-					<in>SJ_output_gpy</in>
-				</var>
-				<var name="C_intensity_input_OIL">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>energy_density_input_OIL</in>
-					<in>C_intensity_OIL</in>
-				</var>
-				<var name="C_intensity_input_CHC">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>energy_density_input_CHC</in>
-					<in>C_intensity_CHC</in>
-				</var>
-				<var name="C_Intensity_input_OC">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_Intensity_OC</in>
-					<in>energy_density_input_OC</in>
-				</var>
-				<var name="C_Intensity_input_Algae">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_Intensity_Algae</in>
-					<in>energy_density_input_Algae</in>
-				</var>
-				<var name="C_intensity_input_SJ">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_intensity_SJ</in>
-					<in>energy_density_input_SJ</in>
-				</var>
-				<var name="C_tax_OIL">
-					<in>C_intensity_input_OIL</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_tax_CHC">
-					<in>C_intensity_input_CHC</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_tax_OC">
-					<in>C_Intensity_input_OC</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_Tax_Algae">
-					<in>C_Intensity_input_Algae</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_Tax_SJ">
-					<in>C_intensity_input_SJ</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_tax_delta_CHC">
-					<in>rollup_c_tax_delta_CHC</in>
-				</var>
-				<var name="C_tax_delta_OC">
-					<in>rollup_c_tax_delta_OC</in>
-				</var>
-				<var name="C_Tax_delta_Algae">
-					<in>rollup_c_tax_delta_Algae</in>
-				</var>
-				<var name="C_Tax_delta_SJ">
-					<in>rollup_c_tax_delta_SJ</in>
-				</var>
-				<var name="mass_energy_unit_conversion_factor">
-					<in>mmbtu_per_mj</in>
-					<in>tonnes_per_gram</in>
-				</var>
-				<var name="C_intensity_input_CE">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_intensity_CE</in>
-					<in>energy_density_input_CE</in>
-				</var>
-				<var name="C_intensity_input_SE">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_intensity_SE</in>
-					<in>energy_density_input_SE</in>
-				</var>
-				<var name="C_tax_delta_CE">
-					<in>C_tax_OIL</in>
-					<in>C_tax_CE</in>
-				</var>
-				<var name="C_tax_delta_SE">
-					<in>C_tax_OIL</in>
-					<in>C_tax_SE</in>
-				</var>
-				<var name="C_intensity_input_B">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>C_intensity_B</in>
-					<in>energy_density_input_B</in>
-				</var>
-				<var name="C_tax_delta_B">
-					<in>C_tax_OIL</in>
-					<in>C_tax_B</in>
-				</var>
-				<var name="C_intensity_delta_CHC">
-					<in>lcfs_c_intensity_input</in>
-					<in>C_intensity_input_CHC</in>
-				</var>
-				<var name="C_Intensity_delta_OC">
-					<in>lcfs_c_intensity_input</in>
-					<in>C_Intensity_input_OC</in>
-				</var>
-				<var name="C_Intensity_delta_Algae">
-					<in>lcfs_c_intensity_input</in>
-					<in>C_Intensity_input_Algae</in>
-				</var>
-				<var name="C_intensity_delta_SJ">
-					<in>lcfs_c_intensity_input</in>
-					<in>C_intensity_input_SJ</in>
-				</var>
-				<var name="C_intensity_delta_CE">
-					<in>C_intensity_input_CE</in>
-					<in>lcfs_c_intensity_input</in>
-				</var>
-				<var name="C_intensity_delta_SE">
-					<in>C_intensity_input_SE</in>
-					<in>lcfs_c_intensity_input</in>
-				</var>
-				<var name="C_intensity_delta_B">
-					<in>lcfs_c_intensity_input</in>
-					<in>C_intensity_input_B</in>
-				</var>
-				<var name="LCFS_nominal_credit_CHC">
-					<in>C_intensity_delta_CHC</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_OC">
-					<in>C_Intensity_delta_OC</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_Algae">
-					<in>C_Intensity_delta_Algae</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_SJ">
-					<in>C_intensity_delta_SJ</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_CE">
-					<in>C_intensity_delta_CE</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_SE">
-					<in>C_intensity_delta_SE</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_nominal_credit_B">
-					<in>C_intensity_delta_B</in>
-					<in>LCFS_credit_scenario</in>
-				</var>
-				<var name="LCFS_gross_credit_CHC">
-					<in>rollup_LCFS_credit_wt_factors_CHC</in>
-				</var>
-				<var name="LCFS_gross_credit_OC">
-					<in>rollup_LCFS_credit_wt_factors_OC</in>
-				</var>
-				<var name="LCFS_gross_credit_Algae">
-					<in>rollup_LCFS_credit_wt_factors_Algae</in>
-				</var>
-				<var name="LCFS_gross_credit_SJ">
-					<in>rollup_LCFS_credit_wt_factors_SJ</in>
-				</var>
-				<var name="LCFS_gross_credit_CE">
-					<in>rollup_LCFS_credit_wt_factors_CE</in>
-				</var>
-				<var name="LCFS_gross_credit_SE">
-					<in>rollup_LCFS_credit_wt_factors_SE</in>
-				</var>
-				<var name="LCFS_gross_credit_B">
-					<in>rollup_LCFS_credit_wt_factors_B</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_CHC">
-					<in>C_to_RR_product_distribution</in>
-					<in>LCFS_Fuel_Cut_Switch_Refinery_Product</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_OC">
-					<in>OC_to_RR_CM_refinery_Input_product_distribution</in>
-					<in>LCFS_Fuel_Cut_Switch_Refinery_Product</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_Algae">
-					<in>A_to_RR_product_distribution</in>
-					<in>LCFS_Fuel_Cut_Switch_Refinery_Product</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_SJ">
-					<in>SJ_product_distribution</in>
-					<in>LCFS_Fuel_Cut_Switch_Refinery_Product</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_CE">
-					<in>LCFS_Fuel_Cut_Switch_EtOH</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_B">
-					<in>LCFS_Fuel_Cut_Switch_Butanol</in>
-				</var>
-				<var name="LCFS_credit_wt_factors_SE">
-					<in>LCFS_Fuel_Cut_Switch_EtOH</in>
-				</var>
-				<var name="lcfs_c_intensity_input">
-					<in>mass_energy_unit_conversion_factor</in>
-					<in>energy_density_input_OIL</in>
-					<in>lcfs_target_carbon_intensity</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_CHC">
-					<in>LCFS_credit_wt_factors_CHC</in>
-					<in>LCFS_nominal_credit_CHC</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_OC">
-					<in>LCFS_credit_wt_factors_OC</in>
-					<in>LCFS_nominal_credit_OC</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_Algae">
-					<in>LCFS_nominal_credit_Algae</in>
-					<in>LCFS_credit_wt_factors_Algae</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_SJ">
-					<in>LCFS_credit_wt_factors_SJ</in>
-					<in>LCFS_nominal_credit_SJ</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_CE">
-					<in>LCFS_credit_wt_factors_CE</in>
-					<in>LCFS_nominal_credit_CE</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_B">
-					<in>LCFS_credit_wt_factors_B</in>
-					<in>LCFS_nominal_credit_B</in>
-				</var>
-				<var name="rollup_LCFS_credit_wt_factors_SE">
-					<in>LCFS_credit_wt_factors_SE</in>
-					<in>LCFS_nominal_credit_SE</in>
-				</var>
-				<var name="lcfs_credit_w_transport_CHC">
-					<in>LCFS_gross_credit_CHC</in>
-					<in>regional_transport_cost</in>
-				</var>
-				<var name="lcfs_credit_w_transport_OC">
-					<in>LCFS_gross_credit_OC</in>
-					<in>OC_national_transport</in>
-				</var>
-				<var name="lcfs_credit_w_transport_algae">
-					<in>LCFS_gross_credit_Algae</in>
-					<in>algae_national_transport</in>
-				</var>
-				<var name="lcfs_credit_w_transport_SJ">
-					<in>LCFS_gross_credit_SJ</in>
-					<in>regional_transport_cost</in>
-				</var>
-				<var name="lcfs_credit_w_transport_CE">
-					<in>LCFS_gross_credit_CE</in>
-					<in>regional_transport_cost</in>
-				</var>
-				<var name="lcfs_credit_w_transport_B">
-					<in>LCFS_gross_credit_B</in>
-					<in>regional_transport_cost</in>
-				</var>
-				<var name="lcfs_credit_w_transport_SE">
-					<in>LCFS_gross_credit_SE</in>
-					<in>regional_transport_cost</in>
-				</var>
-				<var name="C_tax_delta_nominal_CHC">
-					<in>C_tax_CHC</in>
-					<in>C_tax_OIL</in>
-				</var>
-				<var name="C_tax_delta_nominal_OC">
-					<in>C_tax_OIL</in>
-					<in>C_tax_OC</in>
-				</var>
-				<var name="C_tax_delta_nominal_Algae">
-					<in>C_tax_OIL</in>
-					<in>C_Tax_Algae</in>
-				</var>
-				<var name="C_tax_delta_nominal_SJ">
-					<in>C_tax_OIL</in>
-					<in>C_Tax_SJ</in>
-				</var>
-				<var name="OC_national_transport">
-					<in>regional_transport_cost</in>
-					<in>OC_regional_wt</in>
-				</var>
-				<var name="algae_national_transport">
-					<in>regional_transport_cost</in>
-					<in>algae_regional_wt</in>
-				</var>
-				<var name="rollup_c_tax_delta_CHC">
-					<in>C_tax_delta_nominal_CHC</in>
-					<in>C_to_RR_product_distribution</in>
-				</var>
-				<var name="rollup_c_tax_delta_OC">
-					<in>OC_to_RR_CM_refinery_Input_product_distribution</in>
-					<in>C_tax_delta_nominal_OC</in>
-				</var>
-				<var name="rollup_c_tax_delta_Algae">
-					<in>A_to_RR_product_distribution</in>
-					<in>C_tax_delta_nominal_Algae</in>
-				</var>
-				<var name="rollup_c_tax_delta_SJ">
-					<in>C_tax_delta_nominal_SJ</in>
-					<in>SJ_product_distribution</in>
-				</var>
-				<var name="C_tax_CE">
-					<in>C_intensity_input_CE</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_tax_SE">
-					<in>C_intensity_input_SE</in>
-					<in>C_tax_scenario</in>
-				</var>
-				<var name="C_tax_B">
-					<in>C_intensity_input_B</in>
-					<in>C_tax_scenario</in>
-				</var>
-			</isee:dependencies>
+			<aux name="CoProduct Price Input" access="output">
+				<doc>DEFINITION: applies coproduct price spread to crude oil price to calculate coproduct price, used in conversion models that explicity represent coproduct
+
+UNITS: USD per gallon
+
+TYPE: Array | Module Interface
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Product"/>
+				</dimensions>
+				<eqn>crude_oil_price_per_gallon * Coproduct_Price_Spread</eqn>
+				<units>USD per gallon</units>
+			</aux>
+			<aux name="Coproduct Price Spread">
+				<doc>DEFINITION: Multiplier applied to crude oil price per gallon to create price input for coproducts
+
+UNITS: unitless
+
+TYPE: array | constant | scenario input
+
+COMMENTS: </doc>
+				<dimensions>
+					<dim name="Product"/>
+				</dimensions>
+				<element subscript="Primary">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Co1">
+					<eqn>0</eqn>
+				</element>
+				<element subscript="Co2">
+					<eqn>0</eqn>
+				</element>
+				<units>unitless</units>
+			</aux>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3654,28 +3303,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="6" isee:page_rows="3" isee:scroll_x="3976" isee:scroll_y="822" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="5" isee:page_rows="3" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="55" height="45"/>
 					</module>
@@ -3687,7 +3344,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -3704,279 +3361,279 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
-				<connector uid="5597" angle="12.5288">
+				<connector uid="5605" angle="12.5288">
 					<from>SJ_product_distribution</from>
 					<to>SJ_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5598" angle="0">
+				<connector uid="5606" angle="0">
 					<from>crude_oil_price_per_gallon</from>
 					<to>CM_OC_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5599" angle="270">
+				<connector uid="5607" angle="270">
 					<from>
-						<alias uid="5600"/>
+						<alias uid="5608"/>
 					</from>
 					<to>A_to_RR_product_distribution</to>
 				</connector>
-				<connector uid="5601" angle="238.173">
+				<connector uid="5609" angle="238.173">
 					<from>
-						<alias uid="5602"/>
+						<alias uid="5610"/>
 					</from>
 					<to>SJ_product_distribution</to>
 				</connector>
-				<connector uid="5603" angle="180">
+				<connector uid="5611" angle="180">
 					<from>
-						<alias uid="5604"/>
+						<alias uid="5612"/>
 					</from>
 					<to>SJ_price_input</to>
 				</connector>
-				<connector uid="5605" angle="180">
+				<connector uid="5613" angle="180">
 					<from>C_to_RR_product_distribution</from>
 					<to>C_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5606" angle="180">
+				<connector uid="5614" angle="180">
 					<from>SJ_product_distribution</from>
 					<to>SJ_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5607" angle="90">
+				<connector uid="5615" angle="90">
 					<from>C_to_R_weighted_CM_finished_product_price</from>
 					<to>C_to_R_composite_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5608" angle="52.3146">
+				<connector uid="5616" angle="52.3146">
 					<from>Algae_displacing_petroleum_by_product</from>
 					<to>displacing_petroleum</to>
 				</connector>
-				<connector uid="5609" angle="54.4623">
+				<connector uid="5617" angle="54.4623">
 					<from>refinery_product_price_per_gallon</from>
 					<to>C_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5610" angle="90">
+				<connector uid="5618" angle="90">
 					<from>A_to_R_weighted_CM_finished_product_price</from>
 					<to>A_to_R_composite_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5611" angle="27.1181">
+				<connector uid="5619" angle="27.1181">
 					<from>OilCrop_displacing_petroleum_by_product</from>
 					<to>displacing_petroleum</to>
 				</connector>
-				<connector uid="5612" angle="90">
+				<connector uid="5620" angle="90">
 					<from>SJ_composite_CM_finished_product_price</from>
 					<to>price_input_before_transport</to>
 				</connector>
-				<connector uid="5613" angle="310.601">
+				<connector uid="5621" angle="310.601">
 					<from>crude_oil_price_per_gallon</from>
 					<to>CM_Algae_price_input_before_transport</to>
 				</connector>
-				<connector uid="5614" angle="0">
+				<connector uid="5622" angle="1.34262">
 					<from>
-						<alias uid="5615"/>
+						<alias uid="5623"/>
 					</from>
 					<to>refinery_product_price_per_gallon</to>
 				</connector>
-				<connector uid="5616" angle="339.444">
-					<from>
-						<alias uid="5617"/>
-					</from>
-					<to>CM_Algae_price_input_before_transport</to>
-				</connector>
-				<connector uid="5618" angle="270">
-					<from>barrel_gallon_conversion</from>
-					<to>crude_oil_price_per_gallon</to>
-				</connector>
-				<connector uid="5619" angle="49.3987">
-					<from>crude_oil_price_per_gallon</from>
-					<to>CM_C_to_R_price_input_before_transport</to>
-				</connector>
-				<connector uid="5620" angle="90">
-					<from>SJ_weighted_CM_finished_product_price</from>
-					<to>SJ_composite_CM_finished_product_price</to>
-				</connector>
-				<connector uid="5621" angle="0">
-					<from>OC_to_RR_CM_refinery_Input_product_distribution</from>
-					<to>OilCrop_displacing_petroleum_by_product</to>
-				</connector>
-				<connector uid="5622" angle="90">
-					<from>A_to_R_composite_CM_finished_product_price</from>
-					<to>CM_Algae_price_input_before_transport</to>
-				</connector>
-				<connector uid="5623" angle="319.399">
-					<from>crude_oil_price_per_barrel</from>
-					<to>refinery_product_price_per_gallon</to>
-				</connector>
-				<connector uid="5624" angle="270">
+				<connector uid="5624" angle="339.444">
 					<from>
 						<alias uid="5625"/>
 					</from>
-					<to>C_to_RR_product_distribution</to>
+					<to>CM_Algae_price_input_before_transport</to>
 				</connector>
 				<connector uid="5626" angle="270">
-					<from>Gasoline_POP_Price</from>
-					<to>Gasoline_POD_price_before_tax</to>
+					<from>barrel_gallon_conversion</from>
+					<to>crude_oil_price_per_gallon</to>
 				</connector>
-				<connector uid="5627" angle="20.556">
-					<from>A_to_RR_product_distribution</from>
-					<to>Algae_displacing_petroleum_by_product</to>
+				<connector uid="5627" angle="49.3987">
+					<from>crude_oil_price_per_gallon</from>
+					<to>CM_C_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5628" angle="270">
-					<from>
-						<alias uid="5629"/>
-					</from>
-					<to>SJ_displacing_petroleum_by_product</to>
+				<connector uid="5628" angle="90">
+					<from>SJ_weighted_CM_finished_product_price</from>
+					<to>SJ_composite_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5630" angle="0">
-					<from>refinery_product_price_per_gallon</from>
-					<to>OC_to_R_weighted_CM_finished_product_price</to>
+				<connector uid="5629" angle="0">
+					<from>OC_to_RR_CM_refinery_Input_product_distribution</from>
+					<to>OilCrop_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5631" angle="0">
-					<from>price_input_before_transport</from>
-					<to>SJ_price_input</to>
+				<connector uid="5630" angle="90">
+					<from>A_to_R_composite_CM_finished_product_price</from>
+					<to>CM_Algae_price_input_before_transport</to>
 				</connector>
-				<connector uid="5632" color="white" angle="139.399">
+				<connector uid="5631" angle="319.399">
+					<from>crude_oil_price_per_barrel</from>
+					<to>refinery_product_price_per_gallon</to>
+				</connector>
+				<connector uid="5632" angle="270">
 					<from>
 						<alias uid="5633"/>
 					</from>
+					<to>C_to_RR_product_distribution</to>
+				</connector>
+				<connector uid="5634" angle="270">
+					<from>Gasoline_POP_Price</from>
+					<to>Gasoline_POD_price_before_tax</to>
+				</connector>
+				<connector uid="5635" angle="20.556">
+					<from>A_to_RR_product_distribution</from>
+					<to>Algae_displacing_petroleum_by_product</to>
+				</connector>
+				<connector uid="5636" angle="270">
+					<from>
+						<alias uid="5637"/>
+					</from>
+					<to>SJ_displacing_petroleum_by_product</to>
+				</connector>
+				<connector uid="5638" angle="1.63658">
+					<from>refinery_product_price_per_gallon</from>
+					<to>OC_to_R_weighted_CM_finished_product_price</to>
+				</connector>
+				<connector uid="5639" angle="0">
+					<from>price_input_before_transport</from>
+					<to>SJ_price_input</to>
+				</connector>
+				<connector uid="5640" color="white" angle="139.399">
+					<from>
+						<alias uid="5641"/>
+					</from>
 					<to>C_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5634" angle="90">
+				<connector uid="5642" angle="90">
 					<from>C_to_R_composite_CM_finished_product_price</from>
 					<to>CM_C_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5635" angle="184.764">
+				<connector uid="5643" angle="184.764">
 					<from>OC_to_RR_CM_refinery_Input_product_distribution</from>
 					<to>OC_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5636" angle="0">
+				<connector uid="5644" angle="0">
 					<from>C_to_RR_product_distribution</from>
 					<to>C_to_R_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5637" angle="0">
+				<connector uid="5645" angle="0">
 					<from>CM_Algae_price_input_before_transport</from>
 					<to>CM_Algae_price_input</to>
 				</connector>
-				<connector uid="5638" angle="270">
-					<from>
-						<alias uid="5639"/>
-					</from>
-					<to>OC_to_RR_CM_refinery_Input_product_distribution</to>
-				</connector>
-				<connector uid="5640" angle="329.576">
-					<from>C_to_R_displacing_petroleum_by_product</from>
-					<to>displacing_petroleum</to>
-				</connector>
-				<connector uid="5641" angle="90">
-					<from>OC_to_R_weighted_CM_finished_product_price</from>
-					<to>OC_to_R_composite_CM_finished_product_price</to>
-				</connector>
-				<connector uid="5642" angle="69.2773">
-					<from>SJ_displacing_petroleum_by_product</from>
-					<to>displacing_petroleum</to>
-				</connector>
-				<connector uid="5643" angle="6.34019">
-					<from>crude_oil_price_per_barrel</from>
-					<to>crude_oil_price_per_gallon</to>
-				</connector>
-				<connector uid="5644" angle="0">
-					<from>
-						<alias uid="5645"/>
-					</from>
-					<to>Gasoline_POD_price_before_tax</to>
-				</connector>
-				<connector uid="5646" angle="180">
+				<connector uid="5646" angle="270">
 					<from>
 						<alias uid="5647"/>
 					</from>
+					<to>OC_to_RR_CM_refinery_Input_product_distribution</to>
+				</connector>
+				<connector uid="5648" angle="329.576">
+					<from>C_to_R_displacing_petroleum_by_product</from>
+					<to>displacing_petroleum</to>
+				</connector>
+				<connector uid="5649" angle="90">
+					<from>OC_to_R_weighted_CM_finished_product_price</from>
+					<to>OC_to_R_composite_CM_finished_product_price</to>
+				</connector>
+				<connector uid="5650" angle="69.2773">
+					<from>SJ_displacing_petroleum_by_product</from>
+					<to>displacing_petroleum</to>
+				</connector>
+				<connector uid="5651" angle="6.34019">
+					<from>crude_oil_price_per_barrel</from>
+					<to>crude_oil_price_per_gallon</to>
+				</connector>
+				<connector uid="5652" angle="0">
+					<from>
+						<alias uid="5653"/>
+					</from>
+					<to>Gasoline_POD_price_before_tax</to>
+				</connector>
+				<connector uid="5654" angle="180">
+					<from>
+						<alias uid="5655"/>
+					</from>
 					<to>CM_C_to_R_price_input</to>
 				</connector>
-				<connector uid="5648" angle="180">
+				<connector uid="5656" angle="180">
 					<from>
-						<alias uid="5649"/>
+						<alias uid="5657"/>
 					</from>
 					<to>CM_Oil_Crop_price_input</to>
 				</connector>
-				<connector uid="5650" angle="0">
+				<connector uid="5658" angle="0">
 					<from>CM_C_to_R_price_input_before_transport</from>
 					<to>CM_C_to_R_price_input</to>
 				</connector>
-				<connector uid="5651" angle="270">
+				<connector uid="5659" angle="270">
 					<from>
-						<alias uid="5652"/>
+						<alias uid="5660"/>
 					</from>
 					<to>Algae_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5653" angle="90">
+				<connector uid="5661" angle="90">
 					<from>OC_to_R_composite_CM_finished_product_price</from>
 					<to>CM_OC_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5654" color="#C8C8C8" angle="282.529">
+				<connector uid="5662" color="#C8C8C8" angle="290.095">
 					<from>refinery_product_price_per_gallon</from>
 					<to>SJ_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5655" color="#C8C8C8" angle="276.34">
+				<connector uid="5663" color="#C8C8C8" angle="293.629">
 					<from>crude_oil_price_per_gallon</from>
 					<to>price_input_before_transport</to>
 				</connector>
-				<connector uid="5656" angle="310.601">
+				<connector uid="5664" angle="304.636">
 					<from>refinery_product_price_per_gallon</from>
 					<to>A_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5657" angle="173.66">
+				<connector uid="5665" angle="173.66">
 					<from>A_to_RR_product_distribution</from>
 					<to>A_to_R_weighted_CM_finished_product_price</to>
 				</connector>
-				<connector uid="5658" angle="270">
+				<connector uid="5666" angle="270">
 					<from>
-						<alias uid="5659"/>
+						<alias uid="5667"/>
 					</from>
 					<to>OilCrop_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5660" angle="270">
+				<connector uid="5668" angle="238.896">
 					<from>refinery_product_price_per_gallon</from>
 					<to>Gasoline_POP_Price</to>
 				</connector>
-				<connector uid="5661" angle="49.3987">
+				<connector uid="5669" angle="12.6804">
 					<from>
-						<alias uid="5662"/>
+						<alias uid="5670"/>
 					</from>
 					<to>refinery_product_price_per_gallon</to>
 				</connector>
-				<connector uid="5663" angle="315">
+				<connector uid="5671" angle="315">
 					<from>
-						<alias uid="5664"/>
+						<alias uid="5672"/>
 					</from>
 					<to>CM_OC_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5665" angle="0">
+				<connector uid="5673" angle="0">
 					<from>
-						<alias uid="5666"/>
+						<alias uid="5674"/>
 					</from>
 					<to>CM_C_to_R_price_input_before_transport</to>
 				</connector>
-				<connector uid="5667" angle="6.34019">
+				<connector uid="5675" angle="343.057">
 					<from>
-						<alias uid="5668"/>
+						<alias uid="5676"/>
 					</from>
 					<to>refinery_product_price_per_gallon</to>
 				</connector>
-				<connector uid="5669" angle="0">
+				<connector uid="5677" angle="0">
 					<from>CM_OC_to_R_price_input_before_transport</from>
 					<to>CM_Oil_Crop_price_input</to>
 				</connector>
-				<connector uid="5670" angle="180">
+				<connector uid="5678" angle="180">
 					<from>
-						<alias uid="5671"/>
+						<alias uid="5679"/>
 					</from>
 					<to>CM_Algae_price_input</to>
 				</connector>
-				<connector uid="5672" angle="90">
+				<connector uid="5680" angle="90">
 					<from>
-						<alias uid="5673"/>
+						<alias uid="5681"/>
 					</from>
 					<to>C_to_R_displacing_petroleum_by_product</to>
 				</connector>
-				<connector uid="5674" angle="229.399">
+				<connector uid="5682" angle="229.399">
 					<from>
-						<alias uid="5675"/>
+						<alias uid="5683"/>
 					</from>
 					<to>price_input_before_transport</to>
 				</connector>
@@ -4006,7 +3663,7 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="344.68" x="2307.5" y="594.5" name="Algae displacing petroleum by product"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="287.695" x="2063.5" y="304.5" name="CM Oil Crop price input"/>
 				<aux color="black" font_color="black" label_angle="177.167" x="1910.5" y="633.5" name="A to R composite CM finished product price"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="1712.5" y="667.5" name="Gasoline POD price before tax"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="1658.13" y="610.5" name="Gasoline POD price before tax"/>
 				<aux color="black" font_color="black" x="2048.5" y="448.5" name="OC to RR CM refinery Input product distribution"/>
 				<aux color="black" font_color="black" label_angle="283.124" x="1910.5" y="547.5" name="CM Algae price input before transport"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1213.5" y="1608.5" name="Algae prodn by tech"/>
@@ -4022,14 +3679,14 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" x="2392.5" y="1497.5" name="Nominal OC to RR product distribution"/>
 				<aux color="red" font_color="red" x="2393.5" y="1561.5" name="Nominal A to RR product distribution"/>
 				<aux color="red" font_color="red" label_angle="83.4153" x="2394.5" y="1453.5" name="Nominal C to RR product distribution"/>
-				<aux color="black" font_color="black" label_angle="135.409" x="1712.5" y="605.5" name="Gasoline POP Price"/>
+				<aux color="black" font_color="black" label_angle="135.409" x="1658.13" y="538.625" name="Gasoline POP Price"/>
 				<aux color="red" font_color="red" x="2004.5" y="1616.5" name="PoD PoP gasoline Offset"/>
 				<aux color="red" font_color="red" label_angle="66.8512" x="2007.5" y="1522.5" name="RP crack spread intercepts"/>
 				<aux color="red" font_color="red" label_angle="75.284" x="2004.5" y="1453.5" name="RP crack spread slopes"/>
 				<aux color="red" font_color="red" label_angle="281.815" x="1998.5" y="1564.5" name="Additional RP rev per gal"/>
-				<aux color="red" font_color="red" x="3927.75" y="1607.5" name="one tonne"/>
-				<aux color="red" font_color="red" x="3927.75" y="1672.63" name="one megajoule"/>
-				<aux color="red" font_color="red" label_angle="81.0236" x="2507.5" y="1447.5" name="Premium for Added Efficiency"/>
+				<aux color="red" font_color="red" x="3927.75" y="1785.5" name="one tonne"/>
+				<aux color="red" font_color="red" x="3927.75" y="1850.63" name="one megajoule"/>
+				<aux color="red" font_color="red" label_angle="81.0236" x="2507.5" y="1447.5" name="Premium for Added Efficiency C to R"/>
 				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="1103.5" y="1574.5" name="SJ output gpy"/>
 				<aux color="#008F44" font_color="#008F44" label_angle="287.695" x="2053.5" y="839.5" name="SJ price input"/>
 				<aux color="black" font_color="black" x="2019.5" y="986.5" name="SJ product distribution"/>
@@ -4042,88 +3699,89 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="344.68" x="2294.5" y="918.5" name="SJ displacing petroleum by product"/>
 				<group locked="true" color="black" font_color="black" x="2082.5" y="1401.5" width="656" height="239" name="Dropin Point Inputs"/>
 				<group locked="true" color="black" font_color="black" x="1037.5" y="10.5" width="1708" height="743" name="Price Input Calculations">
-					<item uid="5615"/>
-					<item uid="5647"/>
-					<item uid="5657"/>
-					<item uid="5635"/>
-					<item uid="5611"/>
-					<item uid="5625"/>
-					<item uid="5645"/>
-					<item uid="5641"/>
-					<item uid="5668"/>
-					<item uid="5617"/>
-					<item uid="5650"/>
-					<item uid="5653"/>
-					<item uid="5600"/>
-					<item uid="5616"/>
-					<item uid="5649"/>
-					<item uid="5662"/>
-					<item uid="5655"/>
-					<item uid="5618"/>
-					<item uid="5676"/>
-					<item uid="5648"/>
-					<item uid="5664"/>
-					<item uid="5667"/>
-					<item uid="5673"/>
-					<item uid="5607"/>
-					<item uid="5677"/>
-					<item uid="5678"/>
-					<item uid="5679"/>
-					<item uid="5640"/>
-					<item uid="5680"/>
-					<item uid="5610"/>
-					<item uid="5621"/>
-					<item uid="5598"/>
-					<item uid="5626"/>
-					<item uid="5634"/>
-					<item uid="5632"/>
-					<item uid="5660"/>
-					<item uid="5681"/>
-					<item uid="5659"/>
-					<item uid="5633"/>
-					<item uid="5654"/>
-					<item uid="5682"/>
-					<item uid="5665"/>
-					<item uid="5623"/>
-					<item uid="5599"/>
-					<item uid="5683"/>
-					<item uid="5613"/>
-					<item uid="5671"/>
-					<item uid="5669"/>
-					<item uid="5643"/>
-					<item uid="5644"/>
-					<item uid="5627"/>
-					<item uid="5608"/>
-					<item uid="5609"/>
-					<item uid="5661"/>
-					<item uid="5652"/>
-					<item uid="5666"/>
-					<item uid="5684"/>
-					<item uid="5651"/>
 					<item uid="5630"/>
-					<item uid="5622"/>
-					<item uid="5672"/>
-					<item uid="5663"/>
-					<item uid="5656"/>
-					<item uid="5614"/>
-					<item uid="5619"/>
-					<item uid="5636"/>
-					<item uid="5646"/>
-					<item uid="5605"/>
-					<item uid="5670"/>
-					<item uid="5658"/>
+					<item uid="5684"/>
 					<item uid="5685"/>
+					<item uid="5677"/>
+					<item uid="5679"/>
+					<item uid="5673"/>
+					<item uid="5642"/>
+					<item uid="5613"/>
+					<item uid="5651"/>
+					<item uid="5652"/>
+					<item uid="5664"/>
+					<item uid="5625"/>
+					<item uid="5631"/>
+					<item uid="5607"/>
+					<item uid="5616"/>
 					<item uid="5686"/>
-					<item uid="5639"/>
-					<item uid="5624"/>
-					<item uid="5637"/>
+					<item uid="5687"/>
+					<item uid="5622"/>
+					<item uid="5668"/>
+					<item uid="5688"/>
+					<item uid="5665"/>
+					<item uid="5618"/>
+					<item uid="5656"/>
+					<item uid="5648"/>
+					<item uid="5670"/>
+					<item uid="5617"/>
+					<item uid="5661"/>
+					<item uid="5608"/>
+					<item uid="5623"/>
+					<item uid="5653"/>
+					<item uid="5674"/>
 					<item uid="5638"/>
+					<item uid="5634"/>
+					<item uid="5663"/>
+					<item uid="5689"/>
+					<item uid="5655"/>
+					<item uid="5606"/>
+					<item uid="5629"/>
+					<item uid="5678"/>
+					<item uid="5681"/>
+					<item uid="5646"/>
+					<item uid="5676"/>
+					<item uid="5626"/>
+					<item uid="5657"/>
+					<item uid="5671"/>
+					<item uid="5654"/>
+					<item uid="5666"/>
+					<item uid="5680"/>
+					<item uid="5667"/>
+					<item uid="5658"/>
+					<item uid="5619"/>
+					<item uid="5641"/>
+					<item uid="5660"/>
+					<item uid="5662"/>
+					<item uid="5633"/>
+					<item uid="5632"/>
+					<item uid="5615"/>
+					<item uid="5627"/>
+					<item uid="5672"/>
+					<item uid="5659"/>
+					<item uid="5675"/>
+					<item uid="5669"/>
+					<item uid="5645"/>
+					<item uid="5690"/>
+					<item uid="5640"/>
+					<item uid="5649"/>
+					<item uid="5691"/>
+					<item uid="5644"/>
+					<item uid="5692"/>
+					<item uid="5643"/>
+					<item uid="5693"/>
+					<item uid="5694"/>
+					<item uid="5635"/>
+					<item uid="5647"/>
+					<item uid="5624"/>
+					<item uid="5695"/>
+					<item uid="5621"/>
 				</group>
 				<group locked="true" color="black" font_color="black" x="1028.5" y="1402.5" width="656" height="239" name="Interfaces to Other Modules 7">
-					<item uid="5687"/>
-					<item uid="5688"/>
-					<item uid="5689"/>
-					<item uid="5690"/>
+					<item uid="5696"/>
+					<item uid="5697"/>
+					<item uid="5698"/>
+					<item uid="5699"/>
 				</group>
 				<group locked="true" color="black" font_color="black" x="1693.5" y="1403.5" width="380" height="239" name="Oil Price Inputs"/>
 				<aux color="red" font_color="red" x="1868.5" y="1443.5" name="Use AEO Hi Oil"/>
@@ -4134,448 +3792,448 @@ COMMENTS: </doc>
 				<aux color="red" font_color="red" label_angle="250.705" x="1776.5" y="1482.5" name="AEO High Oil"/>
 				<aux color="red" font_color="red" label_angle="250.705" x="1776.5" y="1542.5" name="AEO Low Oil"/>
 				<aux color="red" font_color="red" label_angle="250.705" x="1769.5" y="1591.5" name="User Defined Oil"/>
-				<connector uid="5691" angle="323.393">
-					<from>
-						<alias uid="5678"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5692" angle="10.008">
-					<from>
-						<alias uid="5684"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5693" angle="333.435">
-					<from>
-						<alias uid="5677"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5694" angle="14.0362">
-					<from>
-						<alias uid="5686"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5695" angle="340.017">
-					<from>
-						<alias uid="5683"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5696" angle="340.974">
-					<from>
-						<alias uid="5679"/>
-					</from>
-					<to>crude_oil_price_per_barrel</to>
-				</connector>
-				<connector uid="5697" angle="0.719156">
+				<connector uid="5700" angle="323.393">
 					<from>
 						<alias uid="5685"/>
 					</from>
 					<to>crude_oil_price_per_barrel</to>
 				</connector>
-				<connector uid="5698" angle="34.1417">
+				<connector uid="5701" angle="10.008">
 					<from>
-						<alias uid="5680"/>
+						<alias uid="5693"/>
 					</from>
 					<to>crude_oil_price_per_barrel</to>
 				</connector>
-				<connector uid="5699" angle="213.709">
+				<connector uid="5702" angle="333.435">
 					<from>
-						<alias uid="5700"/>
+						<alias uid="5684"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5703" angle="14.0362">
+					<from>
+						<alias uid="5694"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5704" angle="340.017">
+					<from>
+						<alias uid="5691"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5705" angle="340.974">
+					<from>
+						<alias uid="5688"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5706" angle="0.719156">
+					<from>
+						<alias uid="5695"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5707" angle="34.1417">
+					<from>
+						<alias uid="5690"/>
+					</from>
+					<to>crude_oil_price_per_barrel</to>
+				</connector>
+				<connector uid="5708" angle="27.1568">
+					<from>
+						<alias uid="5709"/>
 					</from>
 					<to>lcfs_c_intensity_input</to>
 				</connector>
-				<connector uid="5701" color="#C8C8C8" angle="216.744">
+				<connector uid="5710" color="#C8C8C8" angle="216.744">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_SJ</to>
 				</connector>
-				<connector uid="5702" color="#C8C8C8" font_color="#C8C8C8" angle="143.002">
+				<connector uid="5711" color="#C8C8C8" font_color="#C8C8C8" angle="125.539">
 					<from>LCFS_credit_wt_factors_CE</from>
 					<to>rollup_LCFS_credit_wt_factors_CE</to>
 				</connector>
-				<connector uid="5703" color="#C8C8C8" angle="189.168">
+				<connector uid="5712" color="#C8C8C8" angle="189.168">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_Intensity_input_OC</to>
 				</connector>
-				<connector uid="5704" angle="1.07082">
+				<connector uid="5713" angle="1.07082">
 					<from>C_intensity_delta_SE</from>
 					<to>LCFS_nominal_credit_SE</to>
 				</connector>
-				<connector uid="5705" angle="0.844298">
+				<connector uid="5714" angle="0.844298">
 					<from>C_intensity_delta_CHC</from>
 					<to>LCFS_nominal_credit_CHC</to>
 				</connector>
-				<connector uid="5706" angle="359.284">
+				<connector uid="5715" angle="359.284">
 					<from>C_intensity_input_CE</from>
 					<to>C_tax_CE</to>
 				</connector>
-				<connector uid="5707" angle="0">
+				<connector uid="5716" angle="0">
 					<from>LCFS_gross_credit_SJ</from>
 					<to>lcfs_credit_w_transport_SJ</to>
 				</connector>
-				<connector uid="5708" color="#C8C8C8" font_color="#C8C8C8" angle="328.011">
+				<connector uid="5717" color="#C8C8C8" font_color="#C8C8C8" angle="318.513">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_nominal_SJ</to>
 				</connector>
-				<connector uid="5709" angle="1.13442">
+				<connector uid="5718" angle="1.13442">
 					<from>C_intensity_delta_CE</from>
 					<to>LCFS_nominal_credit_CE</to>
 				</connector>
-				<connector uid="5710" angle="0">
+				<connector uid="5719" angle="0">
 					<from>LCFS_gross_credit_OC</from>
 					<to>lcfs_credit_w_transport_OC</to>
 				</connector>
-				<connector uid="5711" angle="359.928">
+				<connector uid="5720" angle="359.928">
 					<from>C_tax_delta_nominal_SJ</from>
 					<to>rollup_c_tax_delta_SJ</to>
 				</connector>
-				<connector uid="5712" color="#A8A8A8" font_color="#A8A8A8" angle="233.719">
+				<connector uid="5721" color="#A8A8A8" font_color="#A8A8A8" angle="233.719">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_B</to>
 				</connector>
-				<connector uid="5713" angle="66.7715">
+				<connector uid="5722" angle="72.2826">
 					<from>C_intensity_input_SE</from>
 					<to>C_intensity_delta_SE</to>
 				</connector>
-				<connector uid="5714" color="#C8C8C8" angle="173.827">
+				<connector uid="5723" color="#C8C8C8" angle="173.827">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_CHC</to>
 				</connector>
-				<connector uid="5715" angle="329.064">
+				<connector uid="5724" angle="325.226">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_intensity_delta_B</to>
 				</connector>
-				<connector uid="5716" angle="0">
+				<connector uid="5725" angle="0">
 					<from>C_intensity_input_OIL</from>
 					<to>C_tax_OIL</to>
 				</connector>
-				<connector uid="5717" angle="346.373">
+				<connector uid="5726" angle="341.091">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_Intensity_delta_Algae</to>
 				</connector>
-				<connector uid="5718" color="#C8C8C8" angle="240.09">
+				<connector uid="5727" color="#C8C8C8" angle="240.09">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_SE</to>
 				</connector>
-				<connector uid="5719" angle="359.303">
+				<connector uid="5728" angle="359.303">
 					<from>C_intensity_input_B</from>
 					<to>C_tax_B</to>
 				</connector>
-				<connector uid="5720" color="#C8C8C8" angle="226.584">
+				<connector uid="5729" color="#C8C8C8" angle="226.584">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_CE</to>
 				</connector>
-				<connector uid="5721" color="#C8C8C8" font_color="#C8C8C8" angle="142.91">
+				<connector uid="5730" color="#C8C8C8" font_color="#C8C8C8" angle="125.257">
 					<from>LCFS_credit_wt_factors_SE</from>
 					<to>rollup_LCFS_credit_wt_factors_SE</to>
 				</connector>
-				<connector uid="5722" angle="22.4539">
+				<connector uid="5731" angle="0.466832">
 					<from>rollup_LCFS_credit_wt_factors_SJ</from>
 					<to>LCFS_gross_credit_SJ</to>
 				</connector>
-				<connector uid="5723" angle="15.5174">
+				<connector uid="5732" angle="0.300153">
 					<from>rollup_LCFS_credit_wt_factors_CHC</from>
 					<to>LCFS_gross_credit_CHC</to>
 				</connector>
-				<connector uid="5724" angle="0">
+				<connector uid="5733" angle="354.119">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_intensity_delta_CHC</to>
 				</connector>
-				<connector uid="5725" angle="359.875">
+				<connector uid="5734" angle="359.875">
 					<from>C_tax_delta_nominal_CHC</from>
 					<to>rollup_c_tax_delta_CHC</to>
 				</connector>
-				<connector uid="5726" angle="270">
+				<connector uid="5735" angle="270.261">
 					<from>
-						<alias uid="5727"/>
+						<alias uid="5736"/>
 					</from>
 					<to>rollup_c_tax_delta_OC</to>
 				</connector>
-				<connector uid="5728" angle="1.17876">
+				<connector uid="5737" angle="1.17876">
 					<from>C_Intensity_delta_OC</from>
 					<to>LCFS_nominal_credit_OC</to>
 				</connector>
-				<connector uid="5729" angle="0">
+				<connector uid="5738" angle="0">
 					<from>rollup_c_tax_delta_OC</from>
 					<to>C_tax_delta_OC</to>
 				</connector>
-				<connector uid="5730" angle="0">
+				<connector uid="5739" angle="0">
 					<from>LCFS_nominal_credit_Algae</from>
 					<to>rollup_LCFS_credit_wt_factors_Algae</to>
 				</connector>
-				<connector uid="5731" color="#C8C8C8" angle="157.824">
+				<connector uid="5740" color="#C8C8C8" angle="138.494">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_intensity_input_OIL</to>
 				</connector>
-				<connector uid="5732" angle="16.962">
+				<connector uid="5741" angle="0.266737">
 					<from>rollup_LCFS_credit_wt_factors_OC</from>
 					<to>LCFS_gross_credit_OC</to>
 				</connector>
-				<connector uid="5733" color="#C8C8C8" font_color="#C8C8C8" angle="138.719">
+				<connector uid="5742" color="#C8C8C8" font_color="#C8C8C8" angle="123.833">
 					<from>LCFS_credit_wt_factors_OC</from>
 					<to>rollup_LCFS_credit_wt_factors_OC</to>
 				</connector>
-				<connector uid="5734" angle="359.544">
+				<connector uid="5743" angle="359.544">
 					<from>C_Tax_SJ</from>
 					<to>C_tax_delta_nominal_SJ</to>
 				</connector>
-				<connector uid="5735" angle="0.156989">
+				<connector uid="5744" angle="0.156989">
 					<from>C_tax_delta_nominal_OC</from>
 					<to>rollup_c_tax_delta_OC</to>
 				</connector>
-				<connector uid="5736" color="#C8C8C8" font_color="#C8C8C8" angle="143.252">
+				<connector uid="5745" color="#C8C8C8" font_color="#C8C8C8" angle="125.505">
 					<from>LCFS_credit_wt_factors_B</from>
 					<to>rollup_LCFS_credit_wt_factors_B</to>
 				</connector>
-				<connector uid="5737" angle="270">
+				<connector uid="5746" angle="270.273">
 					<from>
-						<alias uid="5738"/>
+						<alias uid="5747"/>
 					</from>
 					<to>rollup_c_tax_delta_CHC</to>
 				</connector>
-				<connector uid="5739" angle="1.21371">
+				<connector uid="5748" angle="1.21371">
 					<from>C_Intensity_delta_Algae</from>
 					<to>LCFS_nominal_credit_Algae</to>
 				</connector>
-				<connector uid="5740" color="#C8C8C8" font_color="#C8C8C8" angle="341.837">
+				<connector uid="5749" color="#C8C8C8" font_color="#C8C8C8" angle="329.458">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_nominal_OC</to>
 				</connector>
-				<connector uid="5741" angle="270">
+				<connector uid="5750" angle="270.254">
 					<from>
-						<alias uid="5742"/>
+						<alias uid="5751"/>
 					</from>
 					<to>rollup_c_tax_delta_Algae</to>
 				</connector>
-				<connector uid="5743" angle="0.198026">
+				<connector uid="5752" angle="0.198026">
 					<from>C_intensity_input_SJ</from>
 					<to>C_Tax_SJ</to>
 				</connector>
-				<connector uid="5744" color="#C8C8C8" font_color="#C8C8C8" angle="141.249">
+				<connector uid="5753" color="#C8C8C8" font_color="#C8C8C8" angle="125.26">
 					<from>LCFS_credit_wt_factors_SJ</from>
 					<to>rollup_LCFS_credit_wt_factors_SJ</to>
 				</connector>
-				<connector uid="5745" angle="353.267">
+				<connector uid="5754" angle="347.619">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_Intensity_delta_OC</to>
 				</connector>
-				<connector uid="5746" angle="1.21371">
+				<connector uid="5755" angle="1.21371">
 					<from>C_intensity_delta_SJ</from>
 					<to>LCFS_nominal_credit_SJ</to>
 				</connector>
-				<connector uid="5747" angle="340.314">
+				<connector uid="5756" angle="335.504">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_intensity_delta_SJ</to>
 				</connector>
-				<connector uid="5748" angle="1.07082">
+				<connector uid="5757" angle="1.07082">
 					<from>C_intensity_delta_B</from>
 					<to>LCFS_nominal_credit_B</to>
 				</connector>
-				<connector uid="5749" angle="359.54">
+				<connector uid="5758" angle="359.54">
 					<from>C_tax_CHC</from>
 					<to>C_tax_delta_nominal_CHC</to>
 				</connector>
-				<connector uid="5750" angle="22.6236">
+				<connector uid="5759" angle="0.692799">
 					<from>rollup_LCFS_credit_wt_factors_SE</from>
 					<to>LCFS_gross_credit_SE</to>
 				</connector>
-				<connector uid="5751" angle="0.199868">
+				<connector uid="5760" angle="0.199868">
 					<from>C_intensity_input_CHC</from>
 					<to>C_tax_CHC</to>
 				</connector>
-				<connector uid="5752" color="#C8C8C8" font_color="#C8C8C8" angle="350.492">
+				<connector uid="5761" color="#C8C8C8" font_color="#C8C8C8" angle="336.796">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_nominal_CHC</to>
 				</connector>
-				<connector uid="5753" angle="270">
+				<connector uid="5762" angle="270.249">
 					<from>
-						<alias uid="5754"/>
+						<alias uid="5763"/>
 					</from>
 					<to>rollup_c_tax_delta_SJ</to>
 				</connector>
-				<connector uid="5755" color="#C8C8C8" font_color="#C8C8C8" angle="137.208">
+				<connector uid="5764" color="#C8C8C8" font_color="#C8C8C8" angle="123.16">
 					<from>LCFS_credit_wt_factors_CHC</from>
 					<to>rollup_LCFS_credit_wt_factors_CHC</to>
 				</connector>
-				<connector uid="5756" angle="25.0565">
+				<connector uid="5765" angle="358.367">
 					<from>rollup_LCFS_credit_wt_factors_CE</from>
 					<to>LCFS_gross_credit_CE</to>
 				</connector>
-				<connector uid="5757" angle="20.9332">
+				<connector uid="5766" angle="0">
 					<from>rollup_LCFS_credit_wt_factors_Algae</from>
 					<to>LCFS_gross_credit_Algae</to>
 				</connector>
-				<connector uid="5758" angle="0">
+				<connector uid="5767" angle="0">
 					<from>LCFS_gross_credit_SE</from>
 					<to>lcfs_credit_w_transport_SE</to>
 				</connector>
-				<connector uid="5759" angle="359.541">
+				<connector uid="5768" angle="359.541">
 					<from>C_Intensity_input_OC</from>
 					<to>C_tax_OC</to>
 				</connector>
-				<connector uid="5760" angle="65.1208">
+				<connector uid="5769" angle="71.141">
 					<from>C_Intensity_input_Algae</from>
 					<to>C_Intensity_delta_Algae</to>
 				</connector>
-				<connector uid="5761" angle="64.6659">
+				<connector uid="5770" angle="70.7661">
 					<from>C_Intensity_input_OC</from>
 					<to>C_Intensity_delta_OC</to>
 				</connector>
-				<connector uid="5762" angle="0">
+				<connector uid="5771" angle="0">
 					<from>rollup_c_tax_delta_SJ</from>
 					<to>C_Tax_delta_SJ</to>
 				</connector>
-				<connector uid="5763" angle="0">
+				<connector uid="5772" angle="0">
 					<from>LCFS_gross_credit_CE</from>
 					<to>lcfs_credit_w_transport_CE</to>
 				</connector>
-				<connector uid="5764" angle="0">
+				<connector uid="5773" angle="0">
 					<from>LCFS_nominal_credit_OC</from>
 					<to>rollup_LCFS_credit_wt_factors_OC</to>
 				</connector>
-				<connector uid="5765" angle="1.80684">
+				<connector uid="5774" angle="1.80684">
 					<from>LCFS_nominal_credit_SE</from>
 					<to>rollup_LCFS_credit_wt_factors_SE</to>
 				</connector>
-				<connector uid="5766" color="#C8C8C8" angle="204.368">
+				<connector uid="5775" color="#C8C8C8" angle="204.368">
 					<from>mass_energy_unit_conversion_factor</from>
 					<to>C_Intensity_input_Algae</to>
 				</connector>
-				<connector uid="5767" angle="0">
+				<connector uid="5776" angle="0">
 					<from>LCFS_nominal_credit_CE</from>
 					<to>rollup_LCFS_credit_wt_factors_CE</to>
 				</connector>
-				<connector uid="5768" color="#C8C8C8" font_color="#C8C8C8" angle="334.489">
+				<connector uid="5777" color="#C8C8C8" font_color="#C8C8C8" angle="323.505">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_nominal_Algae</to>
 				</connector>
-				<connector uid="5769" angle="1.5163">
+				<connector uid="5778" angle="1.5163">
 					<from>LCFS_nominal_credit_SJ</from>
 					<to>rollup_LCFS_credit_wt_factors_SJ</to>
 				</connector>
-				<connector uid="5770" angle="0.276335">
+				<connector uid="5779" angle="0.276335">
 					<from>LCFS_nominal_credit_CHC</from>
 					<to>rollup_LCFS_credit_wt_factors_CHC</to>
 				</connector>
-				<connector uid="5771" angle="65.9911">
+				<connector uid="5780" angle="71.6969">
 					<from>C_intensity_input_B</from>
 					<to>C_intensity_delta_B</to>
 				</connector>
-				<connector uid="5772" angle="359.542">
+				<connector uid="5781" angle="359.542">
 					<from>C_tax_OC</from>
 					<to>C_tax_delta_nominal_OC</to>
 				</connector>
-				<connector uid="5773" angle="359.427">
+				<connector uid="5782" angle="359.427">
 					<from>LCFS_gross_credit_Algae</from>
 					<to>lcfs_credit_w_transport_algae</to>
 				</connector>
-				<connector uid="5774" angle="0">
+				<connector uid="5783" angle="0">
 					<from>rollup_c_tax_delta_CHC</from>
 					<to>C_tax_delta_CHC</to>
 				</connector>
-				<connector uid="5775" angle="65.456">
+				<connector uid="5784" angle="71.3794">
 					<from>C_intensity_input_CE</from>
 					<to>C_intensity_delta_CE</to>
 				</connector>
-				<connector uid="5776" angle="0.0439714">
+				<connector uid="5785" angle="0.0439714">
 					<from>C_tax_delta_nominal_Algae</from>
 					<to>rollup_c_tax_delta_Algae</to>
 				</connector>
-				<connector uid="5777" color="#C8C8C8" font_color="#C8C8C8" angle="140.605">
+				<connector uid="5786" color="#C8C8C8" font_color="#C8C8C8" angle="124.874">
 					<from>LCFS_credit_wt_factors_Algae</from>
 					<to>rollup_LCFS_credit_wt_factors_Algae</to>
 				</connector>
-				<connector uid="5778" angle="0">
+				<connector uid="5787" angle="0">
 					<from>LCFS_gross_credit_CHC</from>
 					<to>lcfs_credit_w_transport_CHC</to>
 				</connector>
-				<connector uid="5779" angle="334.031">
+				<connector uid="5788" angle="329.75">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_intensity_delta_CE</to>
 				</connector>
-				<connector uid="5780" angle="0">
+				<connector uid="5789" angle="0">
 					<from>LCFS_gross_credit_B</from>
 					<to>lcfs_credit_w_transport_B</to>
 				</connector>
-				<connector uid="5781" angle="65.332">
+				<connector uid="5790" angle="71.3063">
 					<from>C_intensity_input_SJ</from>
 					<to>C_intensity_delta_SJ</to>
 				</connector>
-				<connector uid="5782" angle="323.805">
+				<connector uid="5791" angle="320.485">
 					<from>lcfs_c_intensity_input</from>
 					<to>C_intensity_delta_SE</to>
 				</connector>
-				<connector uid="5783" angle="359.541">
+				<connector uid="5792" angle="359.541">
 					<from>C_Tax_Algae</from>
 					<to>C_tax_delta_nominal_Algae</to>
 				</connector>
-				<connector uid="5784" angle="0">
+				<connector uid="5793" angle="0">
 					<from>rollup_c_tax_delta_Algae</from>
 					<to>C_Tax_delta_Algae</to>
 				</connector>
-				<connector uid="5785" angle="65.0891">
+				<connector uid="5794" angle="71.0814">
 					<from>C_intensity_input_CHC</from>
 					<to>C_intensity_delta_CHC</to>
 				</connector>
-				<connector uid="5786" angle="23.4964">
+				<connector uid="5795" angle="359.293">
 					<from>rollup_LCFS_credit_wt_factors_B</from>
 					<to>LCFS_gross_credit_B</to>
 				</connector>
-				<connector uid="5787" angle="359.292">
+				<connector uid="5796" angle="359.292">
 					<from>C_intensity_input_SE</from>
 					<to>C_tax_SE</to>
 				</connector>
-				<connector uid="5788" angle="0">
+				<connector uid="5797" angle="0">
 					<from>LCFS_nominal_credit_B</from>
 					<to>rollup_LCFS_credit_wt_factors_B</to>
 				</connector>
-				<connector uid="5789" angle="0.197571">
+				<connector uid="5798" angle="0.197571">
 					<from>C_Intensity_input_Algae</from>
 					<to>C_Tax_Algae</to>
 				</connector>
-				<aux color="black" font_color="black" x="3365.75" y="856" name="C intensity input OIL"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="3366.75" y="927" name="C intensity input CHC"/>
-				<aux color="black" font_color="black" label_angle="293.149" x="3357.75" y="992" name="C Intensity input OC"/>
-				<aux color="black" font_color="black" label_angle="298.127" x="3360.75" y="1062" name="C Intensity input Algae"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="3364.75" y="1130" name="C intensity input SJ"/>
-				<aux color="red" font_color="red" label_angle="278.976" x="3795.5" y="1636.25" name="C tax scenario"/>
-				<aux color="black" font_color="black" label_side="top" x="3796.75" y="856" name="C tax OIL"/>
-				<aux color="black" font_color="black" label_side="right" x="3796.75" y="925.5" name="C tax CHC"/>
-				<aux color="black" font_color="black" label_side="right" x="3794.75" y="995.5" name="C tax OC"/>
-				<aux color="black" font_color="black" label_angle="2.80731" x="3795.75" y="1060.5" name="C Tax Algae"/>
-				<aux color="black" font_color="black" label_angle="1.64325" x="3798.75" y="1128.5" name="C Tax SJ"/>
-				<aux color="#008F44" font_color="#008F44" label_side="right" x="5012.89" y="930.31" name="C tax delta CHC"/>
-				<aux color="#008F44" font_color="#008F44" label_side="right" x="4872.18" y="997.74" name="C tax delta OC"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="2.18264" x="4750.89" y="1063.74" name="C Tax delta Algae"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="1.22921" x="4666.89" y="1132.31" name="C Tax delta SJ"/>
-				<aux color="red" font_color="red" x="3294.25" y="1607.5" name="C intensity OIL"/>
-				<aux color="red" font_color="red" label_angle="306.268" x="3294.25" y="1656.5" name="C intensity CHC"/>
-				<aux color="red" font_color="red" label_angle="293.149" x="3284.25" y="1704.5" name="C Intensity OC"/>
-				<aux color="red" font_color="red" label_angle="298.127" x="3292.25" y="1774.5" name="C Intensity Algae"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="1828.5" name="C intensity SJ"/>
-				<aux color="red" font_color="red" x="3151.25" y="1588.5" name="energy density input OIL"/>
-				<aux color="red" font_color="red" label_angle="306.268" x="3151.25" y="1652.5" name="energy density input CHC"/>
-				<aux color="red" font_color="red" label_angle="293.149" x="3140.25" y="1723.5" name="energy density input OC"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3140.25" y="1827.5" name="energy density input SJ"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="1888.5" name="C intensity CE"/>
-				<aux color="red" font_color="red" x="3730.75" y="1695" name="tonnes per gram"/>
-				<aux color="red" font_color="red" x="3788.75" y="1695" name="mmbtu per mj"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="1979.5" name="C intensity SE"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3135.25" y="1881.5" name="energy density input CE"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3136.25" y="1978.5" name="energy density input SE"/>
-				<aux color="black" font_color="black" x="3602.5" y="952.5" name="mass energy unit conversion factor"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="3360.75" y="1208" name="C intensity input CE"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="3361.75" y="1371" name="C intensity input SE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="4239.75" y="1211.5" name="C tax delta CE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="210.563" x="4245.75" y="1375.5" name="C tax delta SE"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="1936.5" name="C intensity B"/>
-				<aux color="red" font_color="red" label_angle="289.991" x="3140.25" y="1923.5" name="energy density input B"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="3354.75" y="1290" name="C intensity input B"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="213.394" x="4245.75" y="1294.5" name="C tax delta B"/>
-				<aux color="red" font_color="red" label_angle="119.861" x="3576.25" y="1636.25" name="LCFS credit scenario"/>
+				<aux color="black" font_color="black" x="3365.75" y="1034" name="C intensity input OIL"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="3366.75" y="1218" name="C intensity input CHC"/>
+				<aux color="black" font_color="black" label_angle="293.149" x="3357.75" y="1283" name="C Intensity input OC"/>
+				<aux color="black" font_color="black" label_angle="298.127" x="3360.75" y="1353" name="C Intensity input Algae"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="3364.75" y="1421" name="C intensity input SJ"/>
+				<aux color="red" font_color="red" label_angle="278.976" x="3795.5" y="1814.25" name="C tax scenario"/>
+				<aux color="black" font_color="black" label_side="top" x="3798.75" y="1034" name="C tax OIL"/>
+				<aux color="black" font_color="black" label_side="right" x="3796.75" y="1216.5" name="C tax CHC"/>
+				<aux color="black" font_color="black" label_side="right" x="3794.75" y="1286.5" name="C tax OC"/>
+				<aux color="black" font_color="black" label_angle="2.80731" x="3795.75" y="1351.5" name="C Tax Algae"/>
+				<aux color="black" font_color="black" label_angle="1.64325" x="3798.75" y="1419.5" name="C Tax SJ"/>
+				<aux color="#008F44" font_color="#008F44" label_side="right" x="5012.89" y="1221.31" name="C tax delta CHC"/>
+				<aux color="#008F44" font_color="#008F44" label_side="right" x="4872.18" y="1288.74" name="C tax delta OC"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="2.18264" x="4750.89" y="1354.74" name="C Tax delta Algae"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="1.22921" x="4666.89" y="1423.31" name="C Tax delta SJ"/>
+				<aux color="red" font_color="red" x="3294.25" y="1785.5" name="C intensity OIL"/>
+				<aux color="red" font_color="red" label_angle="306.268" x="3294.25" y="1834.5" name="C intensity CHC"/>
+				<aux color="red" font_color="red" label_angle="293.149" x="3284.25" y="1882.5" name="C Intensity OC"/>
+				<aux color="red" font_color="red" label_angle="298.127" x="3292.25" y="1952.5" name="C Intensity Algae"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="2006.5" name="C intensity SJ"/>
+				<aux color="red" font_color="red" x="3151.25" y="1766.5" name="energy density input OIL"/>
+				<aux color="red" font_color="red" label_angle="306.268" x="3151.25" y="1830.5" name="energy density input CHC"/>
+				<aux color="red" font_color="red" label_angle="293.149" x="3140.25" y="1901.5" name="energy density input OC"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3140.25" y="2005.5" name="energy density input SJ"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="2066.5" name="C intensity CE"/>
+				<aux color="red" font_color="red" x="3730.75" y="1873" name="tonnes per gram"/>
+				<aux color="red" font_color="red" x="3788.75" y="1873" name="mmbtu per mj"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="2157.5" name="C intensity SE"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3135.25" y="2059.5" name="energy density input CE"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3136.25" y="2156.5" name="energy density input SE"/>
+				<aux color="black" font_color="black" x="3602.5" y="1243.5" name="mass energy unit conversion factor"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="3360.75" y="1499" name="C intensity input CE"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="3361.75" y="1662" name="C intensity input SE"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="4239.75" y="1502.5" name="C tax delta CE"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="210.563" x="4245.75" y="1666.5" name="C tax delta SE"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3292.25" y="2114.5" name="C intensity B"/>
+				<aux color="red" font_color="red" label_angle="289.991" x="3140.25" y="2101.5" name="energy density input B"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="3354.75" y="1581" name="C intensity input B"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="213.394" x="4245.75" y="1585.5" name="C tax delta B"/>
+				<aux color="red" font_color="red" label_angle="119.861" x="3576.25" y="1814.25" name="LCFS credit scenario"/>
 				<aux color="black" font_color="black" label_angle="306.268" x="3747.42" y="107.333" name="C intensity delta CHC"/>
 				<aux color="black" font_color="black" label_angle="293.149" x="3743.75" y="176.667" name="C Intensity delta OC"/>
 				<aux color="black" font_color="black" label_angle="298.127" x="3729.08" y="239.333" width="18" height="18" name="C Intensity delta Algae"/>
@@ -4590,26 +4248,26 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="289.991" x="3903.08" y="385.667" name="LCFS nominal credit CE"/>
 				<aux color="black" font_color="black" label_angle="289.991" x="3903.75" y="520.333" name="LCFS nominal credit SE"/>
 				<aux color="black" font_color="black" label_angle="289.991" x="3907.08" y="447" name="LCFS nominal credit B"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4295.75" y="25" name="LCFS gross credit CHC"/>
-				<aux color="black" font_color="black" label_angle="293.149" x="4295.75" y="86" name="LCFS gross credit OC"/>
-				<aux color="black" font_color="black" label_angle="298.127" x="4291.75" y="137" name="LCFS gross credit Algae"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="4295.75" y="191" name="LCFS gross credit SJ"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="4301.75" y="249" name="LCFS gross credit CE"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="4367.75" y="367.667" name="LCFS gross credit SE"/>
-				<aux color="black" font_color="black" label_angle="289.991" x="4333.75" y="306" name="LCFS gross credit B"/>
-				<aux color="red" font_color="red" label_side="right" x="3605.88" y="1879.5" name="LCFS Fuel Cut Switch Refinery Product"/>
-				<aux color="black" font_color="black" label_side="right" label_angle="45" x="4397.75" y="464" name="LCFS credit wt factors CHC"/>
-				<aux color="black" font_color="black" label_side="right" label_angle="315" x="4391.75" y="509" name="LCFS credit wt factors OC"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4391.75" y="559" name="LCFS credit wt factors Algae"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4392.75" y="617" name="LCFS credit wt factors SJ"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4390.75" y="673" name="LCFS credit wt factors CE"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4385.75" y="728" name="LCFS credit wt factors B"/>
-				<aux color="black" font_color="black" label_angle="306.268" x="4383.75" y="800" name="LCFS credit wt factors SE"/>
-				<aux color="red" font_color="red" label_angle="306.268" x="3398" y="1815.5" name="LCFS Fuel Cut Switch Butanol"/>
-				<aux color="red" font_color="red" label_angle="306.268" x="3403.88" y="1875.5" name="LCFS Fuel Cut Switch EtOH"/>
-				<aux color="red" font_color="red" label_angle="323.325" x="3128.25" y="1772.5" name="energy density input Algae"/>
-				<aux color="black" font_color="black" x="3156.46" y="107.333" name="lcfs c intensity input"/>
-				<aux color="red" font_color="red" label_angle="0.910125" x="3468.81" y="1727.83" name="regional transport cost"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4295.75" y="103" name="LCFS gross credit CHC"/>
+				<aux color="black" font_color="black" label_angle="293.149" x="4295.75" y="172" name="LCFS gross credit OC"/>
+				<aux color="black" font_color="black" label_angle="298.127" x="4291.75" y="245" name="LCFS gross credit Algae"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="4295.75" y="307" name="LCFS gross credit SJ"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="4301.75" y="394" name="LCFS gross credit CE"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="4358.75" y="503.667" width="18" height="18" name="LCFS gross credit SE"/>
+				<aux color="black" font_color="black" label_angle="289.991" x="4333.75" y="451" name="LCFS gross credit B"/>
+				<aux color="red" font_color="red" label_side="right" x="3605.88" y="2057.5" name="LCFS Fuel Cut Switch Refinery Product"/>
+				<aux color="black" font_color="black" label_side="right" label_angle="45" x="4395.25" y="695" name="LCFS credit wt factors CHC"/>
+				<aux color="black" font_color="black" label_side="right" label_angle="315" x="4389.25" y="740" name="LCFS credit wt factors OC"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4389.25" y="790" name="LCFS credit wt factors Algae"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4390.25" y="848" name="LCFS credit wt factors SJ"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4388.25" y="916" name="LCFS credit wt factors CE"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4383.25" y="971" name="LCFS credit wt factors B"/>
+				<aux color="black" font_color="black" label_angle="306.268" x="4381.25" y="1043" name="LCFS credit wt factors SE"/>
+				<aux color="red" font_color="red" label_angle="306.268" x="3398" y="1993.5" name="LCFS Fuel Cut Switch Butanol"/>
+				<aux color="red" font_color="red" label_angle="306.268" x="3403.88" y="2053.5" name="LCFS Fuel Cut Switch EtOH"/>
+				<aux color="red" font_color="red" label_angle="323.325" x="3128.25" y="1950.5" name="energy density input Algae"/>
+				<aux color="black" font_color="black" x="3145.46" y="45.333" name="lcfs c intensity input"/>
+				<aux color="red" font_color="red" label_angle="0.910125" x="3468.81" y="1905.83" name="regional transport cost"/>
 				<aux color="black" font_color="black" label_angle="76.8757" x="4009.42" y="104.5" name="rollup LCFS credit wt factors CHC"/>
 				<aux color="black" font_color="black" label_angle="298.2" x="4009.42" y="173.333" name="rollup LCFS credit wt factors OC"/>
 				<aux color="black" font_color="black" label_angle="298.2" x="4009.42" y="245" name="rollup LCFS credit wt factors Algae"/>
@@ -4617,632 +4275,648 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_side="bottom" x="4009.42" y="385.667" name="rollup LCFS credit wt factors CE"/>
 				<aux color="black" font_color="black" label_angle="306.268" x="4009.42" y="447" name="rollup LCFS credit wt factors B"/>
 				<aux color="black" font_color="black" label_angle="289.295" x="4009.42" y="517" name="rollup LCFS credit wt factors SE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="92.7392" x="4757.75" y="25" name="lcfs credit w transport CHC"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="83.8151" x="4523.75" y="86" name="lcfs credit w transport OC"/>
-				<aux color="#008F44" font_color="#008F44" label_side="left" x="4491.75" y="139" name="lcfs credit w transport algae"/>
-				<aux color="#008F44" font_color="#008F44" label_side="left" label_angle="135" x="4573.75" y="191" name="lcfs credit w transport SJ"/>
-				<aux color="#008F44" font_color="#008F44" label_side="left" label_angle="135" x="4568.75" y="249" name="lcfs credit w transport CE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="92.7392" x="4596.75" y="306" name="lcfs credit w transport B"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="78.185" x="4656.75" y="367.667" name="lcfs credit w transport SE"/>
-				<aux color="black" font_color="black" x="4232.63" y="929" name="C tax delta nominal CHC"/>
-				<aux color="black" font_color="black" x="4232.63" y="999" name="C tax delta nominal OC"/>
-				<aux color="black" font_color="black" x="4232.63" y="1064" name="C tax delta nominal Algae"/>
-				<aux color="black" font_color="black" x="4238.63" y="1132" name="C tax delta nominal SJ"/>
-				<aux color="red" font_color="red" label_angle="356.268" x="3416.67" y="1659.33" name="OC regional wt"/>
-				<aux color="black" font_color="black" label_side="bottom" x="4613.75" y="86" name="OC national transport"/>
-				<aux color="red" font_color="red" label_angle="356.568" x="3447.67" y="1794.83" name="algae regional wt"/>
-				<aux color="black" font_color="black" label_angle="295.599" x="4581.75" y="139" name="algae national transport"/>
-				<aux color="black" font_color="black" x="4832.89" y="930.31" name="rollup c tax delta CHC"/>
-				<aux color="black" font_color="black" x="4693.18" y="997.74" name="rollup c tax delta OC"/>
-				<aux color="black" font_color="black" x="4573.89" y="1063.74" name="rollup c tax delta Algae"/>
-				<aux color="black" font_color="black" x="4484.89" y="1132.31" name="rollup c tax delta SJ"/>
-				<connector uid="5790" angle="89.4161">
-					<from>
-						<alias uid="5791"/>
-					</from>
-					<to>lcfs_c_intensity_input</to>
-				</connector>
-				<aux color="red" font_color="red" x="3605.88" y="1936.5" name="lcfs target carbon intensity"/>
-				<connector uid="5792" angle="270">
-					<from>
-						<alias uid="5793"/>
-					</from>
-					<to>lcfs_c_intensity_input</to>
-				</connector>
-				<connector uid="5794" angle="0">
-					<from>
-						<alias uid="5791"/>
-					</from>
-					<to>C_intensity_input_OIL</to>
-				</connector>
-				<connector uid="5795" angle="0">
-					<from>
-						<alias uid="5796"/>
-					</from>
-					<to>C_intensity_input_CHC</to>
-				</connector>
-				<connector uid="5797" angle="18.2067">
-					<from>
-						<alias uid="5798"/>
-					</from>
-					<to>C_intensity_input_OIL</to>
-				</connector>
-				<connector uid="5799" angle="14.9027">
+				<aux color="#008F44" font_color="#008F44" label_side="left" label_angle="135" x="4757.75" y="103" name="lcfs credit w transport CHC"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="83.8151" x="4523.75" y="172" name="lcfs credit w transport OC"/>
+				<aux color="#008F44" font_color="#008F44" label_side="left" x="4491.75" y="247" name="lcfs credit w transport algae"/>
+				<aux color="#008F44" font_color="#008F44" label_side="left" label_angle="135" x="4573.75" y="307" name="lcfs credit w transport SJ"/>
+				<aux color="#008F44" font_color="#008F44" label_side="left" label_angle="135" x="4568.75" y="394" name="lcfs credit w transport CE"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="92.7392" x="4596.75" y="451" name="lcfs credit w transport B"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="78.185" x="4647.75" y="503.667" width="18" height="18" name="lcfs credit w transport SE"/>
+				<aux color="black" font_color="black" x="4232.63" y="1220" name="C tax delta nominal CHC"/>
+				<aux color="black" font_color="black" x="4232.63" y="1290" name="C tax delta nominal OC"/>
+				<aux color="black" font_color="black" x="4232.63" y="1355" name="C tax delta nominal Algae"/>
+				<aux color="black" font_color="black" x="4238.63" y="1423" name="C tax delta nominal SJ"/>
+				<aux color="red" font_color="red" label_angle="356.268" x="3416.67" y="1837.33" name="OC regional wt"/>
+				<aux color="black" font_color="black" label_side="bottom" x="4613.75" y="172" name="OC national transport"/>
+				<aux color="red" font_color="red" label_angle="356.568" x="3447.67" y="1972.83" name="algae regional wt"/>
+				<aux color="black" font_color="black" label_angle="295.599" x="4581.75" y="247" name="algae national transport"/>
+				<aux color="black" font_color="black" x="4832.89" y="1221.31" name="rollup c tax delta CHC"/>
+				<aux color="black" font_color="black" x="4693.18" y="1288.74" name="rollup c tax delta OC"/>
+				<aux color="black" font_color="black" x="4573.89" y="1354.74" name="rollup c tax delta Algae"/>
+				<aux color="black" font_color="black" x="4484.89" y="1423.31" name="rollup c tax delta SJ"/>
+				<connector uid="5799" angle="90.1953">
 					<from>
 						<alias uid="5800"/>
 					</from>
-					<to>C_intensity_input_CHC</to>
+					<to>lcfs_c_intensity_input</to>
 				</connector>
-				<connector uid="5801" angle="17.3824">
+				<aux color="red" font_color="red" x="3605.88" y="2114.5" name="lcfs target carbon intensity"/>
+				<connector uid="5801" angle="0">
 					<from>
 						<alias uid="5802"/>
 					</from>
-					<to>C_Intensity_input_OC</to>
+					<to>lcfs_c_intensity_input</to>
 				</connector>
 				<connector uid="5803" angle="0">
 					<from>
-						<alias uid="5804"/>
+						<alias uid="5800"/>
+					</from>
+					<to>C_intensity_input_OIL</to>
+				</connector>
+				<connector uid="5804" angle="0">
+					<from>
+						<alias uid="5805"/>
+					</from>
+					<to>C_intensity_input_CHC</to>
+				</connector>
+				<connector uid="5806" angle="18.2067">
+					<from>
+						<alias uid="5807"/>
+					</from>
+					<to>C_intensity_input_OIL</to>
+				</connector>
+				<connector uid="5808" angle="14.9027">
+					<from>
+						<alias uid="5809"/>
+					</from>
+					<to>C_intensity_input_CHC</to>
+				</connector>
+				<connector uid="5810" angle="17.3824">
+					<from>
+						<alias uid="5811"/>
 					</from>
 					<to>C_Intensity_input_OC</to>
 				</connector>
-				<connector uid="5805" angle="18.07">
+				<connector uid="5812" angle="0">
 					<from>
-						<alias uid="5806"/>
+						<alias uid="5813"/>
+					</from>
+					<to>C_Intensity_input_OC</to>
+				</connector>
+				<connector uid="5814" angle="18.07">
+					<from>
+						<alias uid="5815"/>
 					</from>
 					<to>C_Intensity_input_Algae</to>
 				</connector>
-				<connector uid="5807" angle="19.4155">
+				<connector uid="5816" angle="19.4155">
 					<from>
-						<alias uid="5808"/>
+						<alias uid="5817"/>
 					</from>
 					<to>C_intensity_input_SJ</to>
 				</connector>
-				<connector uid="5809" angle="21.5078">
+				<connector uid="5818" angle="21.5078">
 					<from>
-						<alias uid="5810"/>
+						<alias uid="5819"/>
 					</from>
 					<to>C_intensity_input_CE</to>
 				</connector>
-				<connector uid="5811" angle="24.9048">
+				<connector uid="5820" angle="24.9048">
 					<from>
-						<alias uid="5812"/>
+						<alias uid="5821"/>
 					</from>
 					<to>C_intensity_input_B</to>
 				</connector>
-				<connector uid="5813" angle="26.2575">
+				<connector uid="5822" angle="26.2575">
 					<from>
-						<alias uid="5814"/>
+						<alias uid="5823"/>
 					</from>
 					<to>C_intensity_input_SE</to>
 				</connector>
-				<connector uid="5815" angle="357.138">
+				<connector uid="5824" angle="357.138">
 					<from>
-						<alias uid="5816"/>
+						<alias uid="5825"/>
 					</from>
 					<to>C_Intensity_input_Algae</to>
 				</connector>
-				<connector uid="5817" angle="0">
+				<connector uid="5826" angle="0">
 					<from>
-						<alias uid="5818"/>
+						<alias uid="5827"/>
 					</from>
 					<to>C_intensity_input_SJ</to>
 				</connector>
-				<connector uid="5819" angle="0">
+				<connector uid="5828" angle="0">
 					<from>
-						<alias uid="5820"/>
+						<alias uid="5829"/>
 					</from>
 					<to>C_intensity_input_CE</to>
 				</connector>
-				<connector uid="5821" angle="0">
+				<connector uid="5830" angle="0">
 					<from>
-						<alias uid="5822"/>
+						<alias uid="5831"/>
 					</from>
 					<to>C_intensity_input_B</to>
 				</connector>
-				<connector uid="5823" angle="1.85914">
+				<connector uid="5832" angle="1.85914">
 					<from>
-						<alias uid="5824"/>
+						<alias uid="5833"/>
 					</from>
 					<to>C_intensity_input_SE</to>
 				</connector>
-				<connector uid="5825" color="#A8A8A8" font_color="#A8A8A8" angle="56.729">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_OIL</to>
-				</connector>
-				<connector uid="5827" color="#A8A8A8" font_color="#A8A8A8" angle="47.3307">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_CHC</to>
-				</connector>
-				<connector uid="5828" color="#A8A8A8" font_color="#A8A8A8" angle="33.0538">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_OC</to>
-				</connector>
-				<connector uid="5829" color="#A8A8A8" font_color="#A8A8A8" angle="13.1295">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_Tax_Algae</to>
-				</connector>
-				<connector uid="5830" color="#A8A8A8" font_color="#A8A8A8" angle="348.941">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_Tax_SJ</to>
-				</connector>
-				<connector uid="5831" color="#A8A8A8" font_color="#A8A8A8" angle="324.362">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_CE</to>
-				</connector>
-				<connector uid="5832" color="#949494" font_color="#949494" angle="312.49">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_B</to>
-				</connector>
-				<connector uid="5833" color="#A8A8A8" font_color="#A8A8A8" angle="302.763">
-					<from>
-						<alias uid="5826"/>
-					</from>
-					<to>C_tax_SE</to>
-				</connector>
-				<connector uid="5834" angle="180">
+				<connector uid="5834" color="#A8A8A8" font_color="#A8A8A8" angle="65.6555">
 					<from>
 						<alias uid="5835"/>
 					</from>
-					<to>mass_energy_unit_conversion_factor</to>
+					<to>C_tax_OIL</to>
 				</connector>
-				<connector uid="5836" angle="221.393">
+				<connector uid="5836" color="#A8A8A8" font_color="#A8A8A8" angle="47.3307">
 					<from>
-						<alias uid="5837"/>
+						<alias uid="5835"/>
+					</from>
+					<to>C_tax_CHC</to>
+				</connector>
+				<connector uid="5837" color="#A8A8A8" font_color="#A8A8A8" angle="33.0538">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_tax_OC</to>
+				</connector>
+				<connector uid="5838" color="#A8A8A8" font_color="#A8A8A8" angle="13.1295">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_Tax_Algae</to>
+				</connector>
+				<connector uid="5839" color="#A8A8A8" font_color="#A8A8A8" angle="348.941">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_Tax_SJ</to>
+				</connector>
+				<connector uid="5840" color="#A8A8A8" font_color="#A8A8A8" angle="324.362">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_tax_CE</to>
+				</connector>
+				<connector uid="5841" color="#949494" font_color="#949494" angle="312.49">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_tax_B</to>
+				</connector>
+				<connector uid="5842" color="#A8A8A8" font_color="#A8A8A8" angle="302.763">
+					<from>
+						<alias uid="5835"/>
+					</from>
+					<to>C_tax_SE</to>
+				</connector>
+				<connector uid="5843" angle="180">
+					<from>
+						<alias uid="5844"/>
 					</from>
 					<to>mass_energy_unit_conversion_factor</to>
 				</connector>
-				<connector uid="5838" color="#C8C8C8" font_color="#C8C8C8" angle="68.1682">
+				<connector uid="5845" angle="246.773">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5846"/>
+					</from>
+					<to>mass_energy_unit_conversion_factor</to>
+				</connector>
+				<connector uid="5847" color="#C8C8C8" font_color="#C8C8C8" angle="68.1682">
+					<from>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_CHC</to>
 				</connector>
-				<connector uid="5840" color="#C8C8C8" font_color="#C8C8C8" angle="60.9062">
+				<connector uid="5849" color="#C8C8C8" font_color="#C8C8C8" angle="60.9062">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_OC</to>
 				</connector>
-				<connector uid="5841" color="#C8C8C8" font_color="#C8C8C8" angle="49.9514">
+				<connector uid="5850" color="#C8C8C8" font_color="#C8C8C8" angle="49.9514">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_Algae</to>
 				</connector>
-				<connector uid="5842" color="#C8C8C8" font_color="#C8C8C8" angle="22.6006">
+				<connector uid="5851" color="#C8C8C8" font_color="#C8C8C8" angle="22.6006">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_SJ</to>
 				</connector>
-				<connector uid="5843" color="#C8C8C8" font_color="#C8C8C8" angle="338.912">
+				<connector uid="5852" color="#C8C8C8" font_color="#C8C8C8" angle="338.912">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_CE</to>
 				</connector>
-				<connector uid="5844" color="#C8C8C8" font_color="#C8C8C8" angle="315.315">
+				<connector uid="5853" color="#C8C8C8" font_color="#C8C8C8" angle="315.315">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_B</to>
 				</connector>
-				<connector uid="5845" color="#C8C8C8" font_color="#C8C8C8" angle="299.199">
+				<connector uid="5854" color="#C8C8C8" font_color="#C8C8C8" angle="299.199">
 					<from>
-						<alias uid="5839"/>
+						<alias uid="5848"/>
 					</from>
 					<to>LCFS_nominal_credit_SE</to>
 				</connector>
-				<connector uid="5846" angle="179.737">
+				<connector uid="5855" angle="179.737">
 					<from>
-						<alias uid="5738"/>
+						<alias uid="5747"/>
 					</from>
 					<to>LCFS_credit_wt_factors_CHC</to>
 				</connector>
-				<connector uid="5847" angle="180">
+				<connector uid="5856" angle="180">
 					<from>
-						<alias uid="5727"/>
+						<alias uid="5736"/>
 					</from>
 					<to>LCFS_credit_wt_factors_OC</to>
 				</connector>
-				<connector uid="5848" angle="180">
+				<connector uid="5857" angle="180">
 					<from>
-						<alias uid="5742"/>
+						<alias uid="5751"/>
 					</from>
 					<to>LCFS_credit_wt_factors_Algae</to>
 				</connector>
-				<connector uid="5849" angle="180.163">
+				<connector uid="5858" angle="180.163">
 					<from>
-						<alias uid="5754"/>
+						<alias uid="5763"/>
 					</from>
 					<to>LCFS_credit_wt_factors_SJ</to>
 				</connector>
-				<connector uid="5850" angle="22.6171">
+				<connector uid="5859" angle="22.6171">
 					<from>
-						<alias uid="5851"/>
+						<alias uid="5860"/>
 					</from>
 					<to>LCFS_credit_wt_factors_CHC</to>
 				</connector>
-				<connector uid="5852" angle="16.6447">
+				<connector uid="5861" angle="16.6447">
 					<from>
-						<alias uid="5851"/>
+						<alias uid="5860"/>
 					</from>
 					<to>LCFS_credit_wt_factors_OC</to>
 				</connector>
-				<connector uid="5853" angle="9.1212">
+				<connector uid="5862" angle="9.1212">
 					<from>
-						<alias uid="5851"/>
+						<alias uid="5860"/>
 					</from>
 					<to>LCFS_credit_wt_factors_Algae</to>
 				</connector>
-				<connector uid="5854" angle="0">
+				<connector uid="5863" angle="0">
 					<from>
-						<alias uid="5851"/>
+						<alias uid="5860"/>
 					</from>
 					<to>LCFS_credit_wt_factors_SJ</to>
 				</connector>
-				<connector uid="5855" angle="0">
+				<connector uid="5864" angle="0">
 					<from>
-						<alias uid="5856"/>
+						<alias uid="5865"/>
 					</from>
 					<to>LCFS_credit_wt_factors_B</to>
 				</connector>
-				<connector uid="5857" angle="8.68042">
+				<connector uid="5866" angle="8.68042">
 					<from>
-						<alias uid="5858"/>
+						<alias uid="5867"/>
 					</from>
 					<to>LCFS_credit_wt_factors_CE</to>
 				</connector>
-				<connector uid="5859" angle="348.48">
+				<connector uid="5868" angle="348.48">
 					<from>
-						<alias uid="5858"/>
+						<alias uid="5867"/>
 					</from>
 					<to>LCFS_credit_wt_factors_SE</to>
 				</connector>
-				<connector uid="5860" angle="124.266">
+				<connector uid="5869" angle="128.021">
 					<from>
-						<alias uid="5861"/>
+						<alias uid="5870"/>
 					</from>
 					<to>OC_national_transport</to>
 				</connector>
-				<connector uid="5862" angle="142.026">
+				<connector uid="5871" angle="137.976">
 					<from>
-						<alias uid="5861"/>
+						<alias uid="5870"/>
 					</from>
 					<to>algae_national_transport</to>
 				</connector>
-				<connector uid="5863" angle="181.369">
+				<connector uid="5872" angle="181.369">
 					<from>
-						<alias uid="5864"/>
+						<alias uid="5873"/>
 					</from>
 					<to>algae_national_transport</to>
 				</connector>
-				<connector uid="5865" angle="180">
-					<from>
-						<alias uid="5866"/>
-					</from>
-					<to>OC_national_transport</to>
-				</connector>
-				<connector uid="5867" angle="110.31">
-					<from>
-						<alias uid="5861"/>
-					</from>
-					<to>lcfs_credit_w_transport_CHC</to>
-				</connector>
-				<connector uid="5868" angle="156.168">
-					<from>
-						<alias uid="5861"/>
-					</from>
-					<to>lcfs_credit_w_transport_SJ</to>
-				</connector>
-				<connector uid="5869" angle="157.957">
-					<from>
-						<alias uid="5861"/>
-					</from>
-					<to>lcfs_credit_w_transport_CE</to>
-				</connector>
-				<connector uid="5870" angle="173.767">
-					<from>
-						<alias uid="5861"/>
-					</from>
-					<to>lcfs_credit_w_transport_B</to>
-				</connector>
-				<connector uid="5871" angle="177.325">
-					<from>
-						<alias uid="5861"/>
-					</from>
-					<to>lcfs_credit_w_transport_SE</to>
-				</connector>
-				<connector uid="5872" angle="180">
-					<from>OC_national_transport</from>
-					<to>lcfs_credit_w_transport_OC</to>
-				</connector>
-				<connector uid="5873" angle="176.055">
-					<from>algae_national_transport</from>
-					<to>lcfs_credit_w_transport_algae</to>
-				</connector>
-				<connector uid="5874" angle="225">
+				<connector uid="5874" angle="180">
 					<from>
 						<alias uid="5875"/>
 					</from>
+					<to>OC_national_transport</to>
+				</connector>
+				<connector uid="5876" angle="107.282">
+					<from>
+						<alias uid="5870"/>
+					</from>
+					<to>lcfs_credit_w_transport_CHC</to>
+				</connector>
+				<connector uid="5877" angle="145.485">
+					<from>
+						<alias uid="5870"/>
+					</from>
+					<to>lcfs_credit_w_transport_SJ</to>
+				</connector>
+				<connector uid="5878" angle="157.957">
+					<from>
+						<alias uid="5870"/>
+					</from>
+					<to>lcfs_credit_w_transport_CE</to>
+				</connector>
+				<connector uid="5879" angle="173.767">
+					<from>
+						<alias uid="5870"/>
+					</from>
+					<to>lcfs_credit_w_transport_B</to>
+				</connector>
+				<connector uid="5880" angle="177.325">
+					<from>
+						<alias uid="5870"/>
+					</from>
+					<to>lcfs_credit_w_transport_SE</to>
+				</connector>
+				<connector uid="5881" angle="180">
+					<from>OC_national_transport</from>
+					<to>lcfs_credit_w_transport_OC</to>
+				</connector>
+				<connector uid="5882" angle="176.055">
+					<from>algae_national_transport</from>
+					<to>lcfs_credit_w_transport_algae</to>
+				</connector>
+				<connector uid="5883" angle="225">
+					<from>
+						<alias uid="5884"/>
+					</from>
 					<to>SJ_price_input</to>
 				</connector>
-				<connector uid="5876" angle="223.264">
+				<connector uid="5885" angle="223.264">
 					<from>
-						<alias uid="5681"/>
+						<alias uid="5686"/>
 					</from>
 					<to>CM_Algae_price_input</to>
 				</connector>
-				<connector uid="5877" angle="214.439">
+				<connector uid="5886" angle="214.439">
 					<from>
-						<alias uid="5682"/>
+						<alias uid="5689"/>
 					</from>
 					<to>CM_Oil_Crop_price_input</to>
 				</connector>
-				<connector uid="5878" angle="152.103">
+				<connector uid="5887" angle="152.103">
 					<from>
-						<alias uid="5676"/>
+						<alias uid="5687"/>
 					</from>
 					<to>CM_C_to_R_price_input</to>
 				</connector>
-				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="3800.75" y="1213.5" name="C tax CE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="210.563" x="3806.75" y="1376.5" name="C tax SE"/>
-				<aux color="#008F44" font_color="#008F44" label_angle="213.394" x="3806.75" y="1295.5" name="C tax B"/>
-				<connector uid="5879" color="#C8C8C8" font_color="#C8C8C8" angle="321.254">
+				<aux color="#008F44" font_color="#008F44" label_angle="261.024" x="3800.75" y="1504.5" name="C tax CE"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="210.563" x="3806.75" y="1667.5" name="C tax SE"/>
+				<aux color="#008F44" font_color="#008F44" label_angle="213.394" x="3806.75" y="1586.5" name="C tax B"/>
+				<connector uid="5888" color="#C8C8C8" font_color="#C8C8C8" angle="313.268">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_CE</to>
 				</connector>
-				<connector uid="5880" color="#C8C8C8" font_color="#C8C8C8" angle="315.678">
+				<connector uid="5889" color="#C8C8C8" font_color="#C8C8C8" angle="309.025">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_B</to>
 				</connector>
-				<connector uid="5881" color="#C8C8C8" font_color="#C8C8C8" angle="310.837">
+				<connector uid="5890" color="#C8C8C8" font_color="#C8C8C8" angle="305.25">
 					<from>C_tax_OIL</from>
 					<to>C_tax_delta_SE</to>
 				</connector>
-				<connector uid="5882" angle="0.261027">
+				<connector uid="5891" angle="0.261027">
 					<from>C_tax_CE</from>
 					<to>C_tax_delta_CE</to>
 				</connector>
-				<connector uid="5883" angle="0.130514">
+				<connector uid="5892" angle="0.130514">
 					<from>C_tax_B</from>
 					<to>C_tax_delta_B</to>
 				</connector>
-				<connector uid="5884" angle="0.130514">
+				<connector uid="5893" angle="0.130514">
 					<from>C_tax_SE</from>
 					<to>C_tax_delta_SE</to>
 				</connector>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="5885" x="8" y="5.5" width="701" height="51">Biomass Scenario Oil Industry Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="5886" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="5887" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="5888" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="5889" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="5890" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="5891" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
-				<text_box color="black" font_size="16pt" padding="5" appearance="transparent" uid="5892" x="11" y="411" width="701" height="51">Oil industry | Carbon tax | Low carbon fuel standard</text_box>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="130.95" uid="5629" x="2285.5" y="782.5" width="18" height="18">
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="5894" x="8" y="5.5" width="701" height="51">Biomass Scenario Oil Industry Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="5895" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="5896" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="5897" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="5898" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="5899" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="5900" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<text_box color="black" font_size="16pt" padding="5" appearance="transparent" uid="5901" x="11" y="411" width="701" height="51">Oil industry | Carbon tax | Low carbon fuel standard</text_box>
+				<aux color="#008F44" font_color="#008F44" label_side="top" x="1711.5" y="112.5" name="CoProduct Price Input"/>
+				<connector uid="5902" angle="145.305">
+					<from>crude_oil_price_per_gallon</from>
+					<to>CoProduct_Price_Input</to>
+				</connector>
+				<aux color="red" font_color="red" x="1446.5" y="74.5" name="Coproduct Price Spread"/>
+				<connector uid="5903" angle="351.828">
+					<from>
+						<alias uid="5692"/>
+					</from>
+					<to>CoProduct_Price_Input</to>
+				</connector>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="130.95" uid="5637" x="2285.5" y="782.5" width="18" height="18">
 					<of>SJ_output_gpy</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="5615" x="1583.5" y="439.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="5623" x="1543.5" y="443.25" width="18" height="18">
 					<of>RP_crack_spread_intercepts</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="113.149" uid="5602" x="2046.5" y="919.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="113.149" uid="5610" x="2046.5" y="919.5" width="18" height="18">
 					<of>Nominal_SJ_product_distribution</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="5673" x="2242.5" y="219.5" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="5681" x="2242.5" y="219.5" width="18" height="18">
 					<of>rollup_ff_prodn_across_regions</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5688" x="1539.5" y="1436.5" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5696" x="1539.5" y="1436.5" width="18" height="18">
 					<of>CM_Algae_price_input</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="left" uid="5647" x="2268.5" y="28.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="left" uid="5655" x="2268.5" y="28.5" width="18" height="18">
 					<of>C_to_R_per_gallon_transport_cost_to_refinery</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5600" x="2021.5" y="619.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5608" x="2021.5" y="619.5" width="18" height="18">
 					<of>Nominal_A_to_RR_product_distribution</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5690" x="1493.5" y="1515.5" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5698" x="1493.5" y="1515.5" width="18" height="18">
 					<of>CM_Oil_Crop_price_input</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="104.888" uid="5625" x="2040.5" y="103.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="104.888" uid="5633" x="2040.5" y="103.5" width="18" height="18">
 					<of>Nominal_C_to_RR_product_distribution</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5671" x="2180.5" y="538.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5679" x="2180.5" y="538.5" width="18" height="18">
 					<of>A_to_R_per_gallon_transport_cost_to_refinery</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5668" x="1534.5" y="471.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="top" uid="5676" x="1552.5" y="393.5" width="18" height="18">
 					<of>RP_crack_spread_slopes</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5649" x="2209.5" y="295.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5657" x="2209.5" y="295.5" width="18" height="18">
 					<of>OC_to_R_per_gallon_transport_cost_to_refinery</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5687" x="1402.5" y="1432.5" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5697" x="1402.5" y="1432.5" width="18" height="18">
 					<of>Gasoline_POD_price_before_tax</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="13.5201" uid="5659" x="2255.5" y="376.5" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="13.5201" uid="5667" x="2255.5" y="376.5" width="18" height="18">
 					<of>OilCrop_prodn_by_tech</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5666" x="1806.5" y="28.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5674" x="1806.5" y="28.5" width="18" height="18">
 					<of>C_to_R_degree_of_finished_productness</of>
 				</alias>
-				<alias color="fuchsia" font_style="italic" font_color="fuchsia" uid="5604" x="2142.5" y="830.5" width="18" height="18">
+				<alias color="fuchsia" font_style="italic" font_color="fuchsia" uid="5612" x="2142.5" y="830.5" width="18" height="18">
 					<of>SJ_per_gallon_transport_cost_to_refinery</of>
 				</alias>
-				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5689" x="1501.5" y="1586.5" width="18" height="18">
+				<alias color="#008F44" font_style="italic" font_color="#008F44" uid="5699" x="1501.5" y="1586.5" width="18" height="18">
 					<of>CM_C_to_R_price_input</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5645" x="1565.5" y="658.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5653" x="1525.5" y="601.5" width="18" height="18">
 					<of>PoD_PoP_gasoline_Offset</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="5652" x="2298.5" y="496.5" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="5660" x="2298.5" y="496.5" width="18" height="18">
 					<of>Algae_prodn_by_tech</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5662" x="1643.5" y="500.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5670" x="1543.5" y="475.5" width="18" height="18">
 					<of>Additional_RP_rev_per_gal</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5664" x="1858.5" y="242.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5672" x="1858.5" y="242.5" width="18" height="18">
 					<of>OC_to_R_degree_of_finished_productness</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5633" x="1987.5" y="207.5" width="18" height="18">
-					<of>Premium_for_Added_Efficiency</of>
+				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="315" uid="5641" x="1987.5" y="207.5" width="18" height="18">
+					<of>Premium_for_Added_Efficiency_C_to_R</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5617" x="1820.5" y="498.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5625" x="1820.5" y="498.5" width="18" height="18">
 					<of>A_to_R_degree_of_finished_productness</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="352.568" uid="5639" x="2039.5" y="375.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="352.568" uid="5647" x="2039.5" y="375.5" width="18" height="18">
 					<of>Nominal_OC_to_RR_product_distribution</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5675" x="1930.5" y="767.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5683" x="1930.5" y="767.5" width="18" height="18">
 					<of>SJ_degree_of_finished_productness</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5678" x="1295.5" y="80.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5685" x="1295.5" y="80.5" width="18" height="18">
 					<of>AEO_Reference_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5677" x="1295.5" y="134.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5684" x="1295.5" y="134.5" width="18" height="18">
 					<of>AEO_High_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5683" x="1295.5" y="189.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5691" x="1295.5" y="189.5" width="18" height="18">
 					<of>AEO_Low_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5679" x="1295.5" y="246.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5688" x="1295.5" y="246.5" width="18" height="18">
 					<of>User_Defined_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5684" x="1301.5" y="337.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5693" x="1301.5" y="337.5" width="18" height="18">
 					<of>Use_AEO_Hi_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5686" x="1295.5" y="393.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5694" x="1295.5" y="393.5" width="18" height="18">
 					<of>Use_AEO_Low_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5685" x="1295.5" y="298.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5695" x="1295.5" y="298.5" width="18" height="18">
 					<of>Use_AEO_Reference_Oil</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5680" x="1301.5" y="453.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5690" x="1301.5" y="453.5" width="18" height="18">
 					<of>Use_User_Defined_Oil</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="right" uid="5727" x="4684.18" y="500" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_side="right" uid="5736" x="4681.68" y="731" width="18" height="18">
 					<of>OC_to_RR_CM_refinery_Input_product_distribution</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="5700" x="3243.89" y="34" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="5709" x="2972.71" y="120.333" width="18" height="18">
 					<of>mass_energy_unit_conversion_factor</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="96.1849" uid="5738" x="4823.89" y="457" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_angle="96.1849" uid="5747" x="4821.39" y="688" width="18" height="18">
 					<of>C_to_RR_product_distribution</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="top" uid="5754" x="4475.89" y="607.738" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" label_side="top" uid="5763" x="4473.39" y="838.738" width="18" height="18">
 					<of>SJ_product_distribution</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" uid="5742" x="4564.89" y="550" width="18" height="18">
+				<alias color="black" font_style="italic" font_color="black" uid="5751" x="4562.39" y="781" width="18" height="18">
 					<of>A_to_RR_product_distribution</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="5791" x="3139.83" y="847" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="5800" x="3139.83" y="1025" width="18" height="18">
 					<of>energy_density_input_OIL</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5793" x="3147.46" y="2.7857" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5802" x="2972.71" y="36.333" width="18" height="18">
 					<of>lcfs_target_carbon_intensity</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5796" x="3152.5" y="918" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5805" x="3152.5" y="1209" width="18" height="18">
 					<of>energy_density_input_CHC</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5798" x="3262.5" y="878" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5807" x="3262.5" y="1056" width="18" height="18">
 					<of>C_intensity_OIL</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5800" x="3233.75" y="951" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5809" x="3233.75" y="1242" width="18" height="18">
 					<of>C_intensity_CHC</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5802" x="3233.75" y="1019" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5811" x="3233.75" y="1310" width="18" height="18">
 					<of>C_Intensity_OC</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5804" x="3152.5" y="983" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5813" x="3152.5" y="1274" width="18" height="18">
 					<of>energy_density_input_OC</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5806" x="3233.75" y="1091.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5815" x="3233.75" y="1382.5" width="18" height="18">
 					<of>C_Intensity_Algae</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5808" x="3233.75" y="1164" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5817" x="3233.75" y="1455" width="18" height="18">
 					<of>C_intensity_SJ</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5810" x="3233.75" y="1245.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5819" x="3233.75" y="1536.5" width="18" height="18">
 					<of>C_intensity_CE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5812" x="3233.75" y="1333" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5821" x="3233.75" y="1624" width="18" height="18">
 					<of>C_intensity_B</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5814" x="3222" y="1426.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5823" x="3222" y="1717.5" width="18" height="18">
 					<of>C_intensity_SE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5816" x="3150.5" y="1053" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5825" x="3150.5" y="1344" width="18" height="18">
 					<of>energy_density_input_Algae</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5818" x="3152.5" y="1121" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5827" x="3152.5" y="1412" width="18" height="18">
 					<of>energy_density_input_SJ</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5820" x="3150.5" y="1199" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5829" x="3150.5" y="1490" width="18" height="18">
 					<of>energy_density_input_CE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5822" x="3150.5" y="1281" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5831" x="3150.5" y="1572" width="18" height="18">
 					<of>energy_density_input_B</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5824" x="3152.5" y="1368.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5833" x="3152.5" y="1659.5" width="18" height="18">
 					<of>energy_density_input_SE</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="top" uid="5826" x="3629.5" y="1088.18" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="top" uid="5835" x="3629.5" y="1379.18" width="18" height="18">
 					<of>C_tax_scenario</of>
 				</alias>
-				<alias color="red" background="white" font_style="italic" font_color="red" uid="5835" x="3675.13" y="943.5" width="18" height="18">
+				<alias color="red" background="white" font_style="italic" font_color="red" uid="5844" x="3675.13" y="1234.5" width="18" height="18">
 					<of>mmbtu_per_mj</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5837" x="3671.5" y="874.75" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5846" x="3671.5" y="1052.75" width="18" height="18">
 					<of>tonnes_per_gram</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5839" x="3799" y="340" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5848" x="3799" y="340" width="18" height="18">
 					<of>LCFS_credit_scenario</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5851" x="4021.5" y="608" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5860" x="4019" y="839" width="18" height="18">
 					<of>LCFS_Fuel_Cut_Switch_Refinery_Product</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5856" x="4224.5" y="719" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5865" x="4222" y="962" width="18" height="18">
 					<of>LCFS_Fuel_Cut_Switch_Butanol</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5858" x="4021.5" y="719" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5867" x="4019" y="962" width="18" height="18">
 					<of>LCFS_Fuel_Cut_Switch_EtOH</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="5861" x="4879.58" y="369.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="bottom" uid="5870" x="4879.58" y="514.5" width="18" height="18">
 					<of>regional_transport_cost</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5864" x="4719.25" y="126.5" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5873" x="4719.25" y="234.5" width="18" height="18">
 					<of>algae_regional_wt</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="5866" x="4722.25" y="77" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="5875" x="4722.25" y="163" width="18" height="18">
 					<of>OC_regional_wt</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="5875" x="2096.5" y="785.5" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="5884" x="2096.5" y="785.5" width="18" height="18">
 					<of>C_Tax_delta_SJ</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="5681" x="2120.5" y="486.5" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="5686" x="2120.5" y="486.5" width="18" height="18">
 					<of>C_Tax_delta_Algae</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="5682" x="2105.5" y="249.5" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="5689" x="2105.5" y="249.5" width="18" height="18">
 					<of>C_tax_delta_OC</of>
 				</alias>
-				<alias color="blue" font_style="italic" font_color="#008F44" uid="5676" x="2172.5" y="75.5" width="18" height="18">
+				<alias color="blue" font_style="italic" font_color="#008F44" uid="5687" x="2172.5" y="75.5" width="18" height="18">
 					<of>C_tax_delta_CHC</of>
 				</alias>
+				<alias color="red" background="white" font_style="italic" font_color="red" uid="5692" x="1516.5" y="102.333" width="18" height="18">
+					<shape type="circle" radius="18"/>
+					<of>Coproduct_Price_Spread</of>
+				</alias>
 			</view>
-			<view isee:show_pages="true" background="white" page_width="1012" type="interface" home_view="true" page_height="696">
+			<view background="white" page_width="1012" type="interface" page_height="696" home_view="true" isee:show_pages="true">
 				<style/>
 			</view>
 			<isee:templates/>

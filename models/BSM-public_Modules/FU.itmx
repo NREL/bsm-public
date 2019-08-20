@@ -5,11 +5,11 @@
 		<name>FU</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.4.1" isee:build_number="1148" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.769231" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
-		<start>1</start>
-		<stop>13</stop>
+	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+		<start>0</start>
+		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
@@ -26,13 +26,19 @@
 			<elem name="P"/>
 		</dim>
 	</dimensions>
-	<isee:prefs show_module_prefix="true" live_update_on_drag="true" layer="model" saved_runs="5" keep="false" rifp="true"/>
+	<isee:prefs show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" saved_runs="5" keep="false" rifp="false"/>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" observer_start_page="home_page" enabled="false"/>
+	<isee:time_formats default_format="Builtin">
+		<isee:time_format name="Builtin" type="adaptive"/>
+		<isee:time_format name="Number Not Scaled With Precision of 1" precision="1" scale_by="1" type="number"/>
+	</isee:time_formats>
+	<default_format/>
 	<model_units>
 		<unit name="Dimensionless">
 			<eqn>1</eqn>
 			<alias>dmnl</alias>
 			<alias>unitless</alias>
+			<alias>fraction</alias>
 		</unit>
 		<unit name="Gallons">
 			<eqn/>
@@ -221,13 +227,6 @@
 	<model name="FU">
 		<variables>
 			<aux name="Station Coverage From Dispensing Module" access="input">
-				<doc>DEFINITION: module interface to DS.Station Coverage
-
-UNITS: unitless
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -364,13 +363,6 @@ COMMENTS: </doc>
 				<units>percent</units>
 			</aux>
 			<aux name="max FFV Lo Blend Consn from Vehicle Module" access="input">
-				<doc>DEFINITION: module interface to V.regional potential lo blend consn FFV
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -406,7 +398,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="k Hi Blend Occasional Users">
-				<doc>DEFINITION: Assumed non-$-based utility component ofattractiveness for occasional hi blend users
+				<doc>DEFINITION: Assumed non-$-based utility component of attractiveness for occasional hi blend users
 
 UNITS: Unitless
 
@@ -450,7 +442,7 @@ COMMENTS: </doc>
 
 UNITS: percent
 
-TYPE: Array | internal calculation 
+TYPE: Array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -482,7 +474,7 @@ COMMENTS: </doc>
 
 UNITS: percent
 
-TYPE: Array | internal calculation 
+TYPE: Array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -507,7 +499,7 @@ COMMENTS: </doc>
 				<units>percent/yr</units>
 			</flow>
 			<aux name="Total Desired Hi Blend Consn" access="output">
-				<doc>DEFINITION: Calculates total  desired amount of hi blend consumption in each region
+				<doc>DEFINITION: Calculates total  desired amount of hi blend fuel consumption in each region
 
 UNITS: gallons per year
 
@@ -625,7 +617,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | Graphical function | Internal Calculation 
+TYPE: Array | Graphical function | Internal Calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -819,11 +811,11 @@ COMMENTS: </doc>
 				<units>percent</units>
 			</aux>
 			<aux name="rate of becoming reg HiBlend user">
-				<doc>DEFINITION: Sets the rate at which the regular hiblend user gap is eliminated
+				<doc>DEFINITION: Sets the rate at which the regular hiblend user gap (the difference between preference share and actual users) is eliminated
 
 UNITS: per year
 
-TYPE: Array | internal calculation 
+TYPE: Array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -833,7 +825,7 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="max rate of becoming regular HiBlend user">
-				<doc>DEFINITION: Sets the maximum rate at which the regular hiblend user gap is eliminated
+				<doc>DEFINITION: Sets the maximum rate at which the regular hiblend user gap  (the difference between preference share and actual users) is eliminated
 
 UNITS: per year
 
@@ -844,13 +836,6 @@ COMMENTS: </doc>
 				<units>per year</units>
 			</aux>
 			<aux name="Hi Blend Pump Price From PIM" access="input">
-				<doc>DEFINITION: module interface to IP.Hi Blend Pump Price
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -858,13 +843,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="Gasoline Pump Price from PIM" access="input">
-				<doc>DEFINITION: module interface to IP.Gasoline Pump Price
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -886,13 +864,6 @@ COMMENTS: </doc>
 				<units>USD per gallon</units>
 			</aux>
 			<aux name="potential Hi Blend Consn from Vehicle Module" access="input">
-				<doc>DEFINITION: module interface to V.regional potential hi blend consn FFV
-
-UNITS: gallons per year
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -900,7 +871,7 @@ COMMENTS: </doc>
 				<units>gallons per year</units>
 			</aux>
 			<aux name="Occasional User Wtd Hi Blend Share">
-				<doc>DEFINITION: calculates total share of potential hiblend cons&apos;n that accrues to occasional users
+				<doc>DEFINITION: calculates total share of potential hiblend consumption that accrues to occasional users
 
 UNITS: Unitless
 
@@ -918,7 +889,7 @@ COMMENTS: </doc>
 
 UNITS: Unitless
 
-TYPE: Array | internal calculation 
+TYPE: Array | internal calculation
 
 COMMENTS: </doc>
 				<dimensions>
@@ -928,7 +899,7 @@ COMMENTS: </doc>
 				<units>Unitless</units>
 			</aux>
 			<aux name="Share Occasional Use to Hi Blend">
-				<doc>DEFINITION: share of occasional hiblend user user total fuel use allocated to hiblend fuels
+				<doc>DEFINITION: share of occasional hiblend user  total fuel use allocated to hiblend fuels
 
 UNITS: Unitless
 
@@ -956,7 +927,7 @@ COMMENTS: </doc>
 				<units>percent</units>
 			</aux>
 			<flow name="dropping back to occasional user">
-				<doc>DEFINITION: calculates flow (in $/yr) from HiBlend Regular Users in the region to occasional users
+				<doc>DEFINITION: calculates flow (in %/yr) from HiBlend Regular Users in the region to occasional users
 
 UNITS: percent/yr
 
@@ -971,7 +942,7 @@ COMMENTS: </doc>
 				<units>percent/yr</units>
 			</flow>
 			<aux name="time to drop out">
-				<doc>DEFINITION: Time, on average, to drop out of regular use, preference share is less than stock of regular hiblend users
+				<doc>DEFINITION: Time, on average, to drop out of regular use, when preference share is less than stock of regular hiblend users
 
 UNITS: years
 
@@ -996,7 +967,7 @@ COMMENTS: </doc>
 				<units>percent</units>
 			</aux>
 			<aux name="HiBlend Capable PCT WITHOUT station coverage">
-				<doc>DEFINITION: % of Highblend capable users in region who do not have dispensing station coverage and therefore cannot become Hiblend user
+				<doc>DEFINITION: % of Highblend capable users in region who do not have access to dispensing stations and therefore cannot become Hiblend user
 
 UNITS: percent
 
@@ -1010,13 +981,6 @@ COMMENTS: </doc>
 				<units>percent</units>
 			</aux>
 			<aux name="Hi Blend Gas equivalent price" access="input">
-				<doc>DEFINITION: module interface to IP.Hi Blend Gas equivalent price
-
-UNITS: USD per gallon
-
-TYPE: array | module interface
-
-COMMENTS: </doc>
 				<dimensions>
 					<dim name="Region"/>
 				</dimensions>
@@ -1354,8 +1318,9 @@ COMMENTS: </doc>
 				<entity name="Gasoline_Pump_Price_from_PIM"/>
 				<entity name="potential_Hi_Blend_Consn_from_Vehicle_Module"/>
 				<entity name="Hi_Blend_Gas_equivalent_price"/>
+				<entity name="IP_regular_Pemium_Gas_Spread_as_Frac"/>
 			</group>
-			<group name="HiBlend and Fuel Use Logic" run="false">
+			<group name="HiBlend and RSP Fuel Use Logic" run="false">
 				<entity name="becoming_occasional_user"/>
 				<entity name="Non_HiBlend_Users"/>
 				<entity name="Potential_Hi_Blend_Users"/>
@@ -1392,151 +1357,17 @@ COMMENTS: </doc>
 				<entity name="FFV_Hi_Blend_Consn"/>
 				<entity name="Total_Desired_Hi_Blend_Consn"/>
 			</group>
-			<isee:dependencies>
-				<var name="FFV_Lo_Blend_Consn">
-					<in>Total_User_Wtd_Hi_Blend_Share</in>
-					<in>max_FFV_Lo_Blend_Consn_from_Vehicle_Module</in>
-				</var>
-				<var name="Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users">
-					<in>Hi_Blend_Gas_equivalent_price</in>
-					<in>occasional_user_price_attractiveness_weighting</in>
-					<in>k_Hi_Blend_Occasional_Users</in>
-				</var>
-				<var name="Occasional_HiBlend_Users">
-					<in>Initial_Occasional_Hi_Blend_Users</in>
-				</var>
-				<var name="Regular_HiBlend_Users">
-					<in>Initial_Regular_Hi_Blend_Users</in>
-				</var>
-				<var name="becoming_regular_user">
-					<in>rate_of_becoming_reg_HiBlend_user</in>
-					<in>Regular_HiBlend_User_Gap</in>
-				</var>
-				<var name="Regular_HiBlend_User_Gap">
-					<in>preference_share_Regular_Users</in>
-					<in>Regular_HiBlend_Users</in>
-				</var>
-				<var name="becoming_occasional_user">
-					<in>rate_of_becoming_occasional_HiBlend_user</in>
-					<in>susceptible_non_HiBlend_users</in>
-				</var>
-				<var name="Total_Desired_Hi_Blend_Consn">
-					<in>FFV_Hi_Blend_Consn</in>
-				</var>
-				<var name="preference_share_Regular_Users">
-					<in>Long_Term_Relative_Price</in>
-				</var>
-				<var name="Non_HiBlend_Users">
-					<in>Initial_Non_HiBlend_Users</in>
-				</var>
-				<var name="occasional_user_constraint_on_becoming_regular_HiBlend_User">
-					<in>Occasional_HiBlend_Users</in>
-				</var>
-				<var name="Potential_Hi_Blend_Users">
-					<in>HiBlend_Capable_PCT_WITHOUT_station_coverage</in>
-					<in>Non_HiBlend_Users</in>
-				</var>
-				<var name="susceptible_non_HiBlend_users">
-					<in>Potential_Hi_Blend_Users</in>
-					<in>fraction_NonUsers_susceptible</in>
-				</var>
-				<var name="rate_of_becoming_reg_HiBlend_user">
-					<in>occasional_user_constraint_on_becoming_regular_HiBlend_User</in>
-					<in>max_rate_of_becoming_regular_HiBlend_user</in>
-				</var>
-				<var name="Long_Term_Avg_Gas_Price">
-					<in>Gasoline_Pump_Price_from_PIM</in>
-					<in>gas_price_averaging_time</in>
-				</var>
-				<var name="Occasional_User_Wtd_Hi_Blend_Share">
-					<in>Share_Occasional_Use_to_Hi_Blend</in>
-					<in>Occasional_HiBlend_Users_as_Frac</in>
-				</var>
-				<var name="Reg_HiBlend_Users_as_Frac">
-					<in>Total_PCT_HiBlend_Capable_By_Region</in>
-					<in>Regular_HiBlend_Users</in>
-				</var>
-				<var name="Share_Occasional_Use_to_Hi_Blend">
-					<in>RAT_HiBlend_Occasional_Hi_Blend_Users</in>
-				</var>
-				<var name="maximum_HiBlend_Users_PCT_from_regional_coverage">
-					<in>Total_PCT_HiBlend_Capable_By_Region</in>
-					<in>frac_HiBlend_capable_with_station_coverage</in>
-				</var>
-				<var name="dropping_back_to_occasional_user">
-					<in>Regular_HiBlend_User_Gap</in>
-					<in>time_to_drop_out</in>
-				</var>
-				<var name="Total_PCT_HiBlend_Capable_By_Region">
-					<in>Regular_HiBlend_Users</in>
-					<in>Occasional_HiBlend_Users</in>
-					<in>Non_HiBlend_Users</in>
-				</var>
-				<var name="HiBlend_Capable_PCT_WITHOUT_station_coverage">
-					<in>maximum_HiBlend_Users_PCT_from_regional_coverage</in>
-					<in>Total_PCT_HiBlend_Capable_By_Region</in>
-				</var>
-				<var name="Gasoline_Attractiveness_Occasional_Users">
-					<in>k_Gas_Occasional_Users</in>
-					<in>Gasoline_Pump_Price_from_PIM</in>
-					<in>occasional_user_price_attractiveness_weighting</in>
-				</var>
-				<var name="RAT_HiBlend_Occasional_Hi_Blend_Users">
-					<in>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</in>
-					<in>Gasoline_Attractiveness_Occasional_Users</in>
-				</var>
-				<var name="Occasional_HiBlend_Users_as_Frac">
-					<in>Total_PCT_HiBlend_Capable_By_Region</in>
-					<in>Occasional_HiBlend_Users</in>
-				</var>
-				<var name="Hi_Blend_Attractiveness_Regular_Hi_Blend_Users">
-					<in>Hi_Blend_Gas_equivalent_price</in>
-					<in>k_Hi_Blend_Regular_Users</in>
-					<in>regular_user_price_attractiveness_weighting</in>
-				</var>
-				<var name="Regular_User_Wtd_Hi_Blend_Share">
-					<in>Reg_HiBlend_Users_as_Frac</in>
-					<in>Share_Regular_Use_to_Hi_Blend</in>
-				</var>
-				<var name="Share_Regular_Use_to_Hi_Blend">
-					<in>RAT_HiBlend_Regular_Hi_Blend_Users</in>
-				</var>
-				<var name="Gasoline_Attractiveness_Reg_Hi_Blend_Users">
-					<in>Gasoline_Pump_Price_from_PIM</in>
-					<in>regular_user_price_attractiveness_weighting</in>
-					<in>k_Gas_Regular_Users</in>
-				</var>
-				<var name="RAT_HiBlend_Regular_Hi_Blend_Users">
-					<in>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</in>
-					<in>Gasoline_Attractiveness_Reg_Hi_Blend_Users</in>
-				</var>
-				<var name="Total_User_Wtd_Hi_Blend_Share">
-					<in>Occasional_User_Wtd_Hi_Blend_Share</in>
-					<in>Regular_User_Wtd_Hi_Blend_Share</in>
-				</var>
-				<var name="Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price">
-					<in>Hi_Blend_Gas_equivalent_price</in>
-					<in>gas_price_averaging_time</in>
-				</var>
-				<var name="Long_Term_Relative_Price">
-					<in>Long_Term_Avg_Gas_Price</in>
-					<in>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</in>
-				</var>
-				<var name="frac_HiBlend_capable_with_station_coverage">
-					<in>Station_Coverage_From_Dispensing_Module</in>
-				</var>
-				<var name="FFV_Hi_Blend_Consn">
-					<in>potential_Hi_Blend_Consn_from_Vehicle_Module</in>
-					<in>Total_User_Wtd_Hi_Blend_Share</in>
-				</var>
-			</isee:dependencies>
+			<aux name="IP regular Pemium Gas Spread as Frac" access="input">
+				<eqn>0</eqn>
+				<units>Unitless</units>
+			</aux>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 				<isee:loop_indicator color="black" background="white"/>
 				<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+				<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 					<isee:series_styles>
 						<isee:series_style color="blue" thickness="1"/>
 						<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -1553,28 +1384,36 @@ COMMENTS: </doc>
 						<isee:series_style color="#C8C8C8" thickness="1"/>
 					</isee:series_styles>
 				</graph>
-				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" popup_background_color="#FFFECF" popup_font_family="Arial"/>
-				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
+				<isee:sim_speed_slider color="black" background="white"/>
+				<isee:time_slider color="black" background="white"/>
 				<isee:pie_input color="black" background="white" legend_position="bottom" isee:transparent="false"/>
 				<knob color="#66CC66" background="#E0E0E0" font_size="12pt" label_side="bottom" wrap_title="true"/>
 				<numeric_input color="black" background="#E0E0E0" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
-				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch"/>
+				<switch color="black" background="#E0E0E0" font_size="12pt" label_side="top" wrap_title="true" isee:appearance="switch" isee:on_color="green"/>
 				<options color="black" background="white" appearance="radio-buttons" arrangement="vertical"/>
-				<graphical_input color="black" background="#E0E0E0" font_size="12pt"/>
-				<group_input color="black" background="#E0E0E0" font_size="12pt" header_font_family="Arial"/>
+				<graphical_input color="black" background="#E0E0E0" font_size="12pt" isee:show_hover_tip="true"/>
+				<group_input color="black" background="#E0E0E0" font_size="12pt"/>
 				<lamp color="black" background="white" font_size="9pt"/>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
+				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
+				<isee:selector color="black" background="white"/>
+				<isee:iframe color="black" background="white"/>
+				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" page_width="1024" page_height="784" isee:page_cols="4" isee:page_rows="3" isee:scroll_y="627" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="3" isee:page_rows="3" isee:scroll_y="52.5" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
 					</stock>
 					<flow color="blue" background="white" font_color="blue" font_size="9pt" label_side="bottom"/>
+					<isee:placeholder color="#228B22" background="white" font_color="#228B22" label_side="bottom"/>
 					<module color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="55" height="45"/>
 					</module>
@@ -1586,7 +1425,7 @@ COMMENTS: </doc>
 					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt"/>
 					<isee:loop_indicator color="black" background="white"/>
 					<numeric_display color="blue" background="white" font_size="9pt" isee:transparent="false"/>
-					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false">
+					<graph color="black" background="white" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" isee:graph_area_color="white" legend_position="bottom" isee:transparent="false" isee:hide_border="false" axis_title_font_style="normal" axis_title_font_weight="normal" axis_title_text_decoration="none" axis_title_text_align="center" axis_title_vertical_text_align="center" axis_title_font_color="black" axis_title_font_family="Arial" axis_title_font_size="12pt" axis_title_text_padding="2" axis_title_text_border_color="black" axis_title_text_border_width="thin" axis_title_text_border_style="none" axis_label_font_style="normal" axis_label_font_weight="normal" axis_label_text_decoration="none" axis_label_text_align="center" axis_label_vertical_text_align="center" axis_label_font_color="black" axis_label_font_family="Arial" axis_label_font_size="9pt" axis_label_text_padding="2" axis_label_text_border_color="black" axis_label_text_border_width="thin" axis_label_text_border_style="none">
 						<isee:series_styles>
 							<isee:series_style color="blue" thickness="1"/>
 							<isee:series_style color="red" thickness="1" pen_style="dot_dashed"/>
@@ -1603,313 +1442,313 @@ COMMENTS: </doc>
 							<isee:series_style color="#C8C8C8" thickness="1"/>
 						</isee:series_styles>
 					</graph>
-					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_family="Arial"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 				</style>
-				<connector uid="3991" angle="270">
-					<from>
-						<alias uid="3992"/>
-					</from>
-					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="3993" angle="90">
-					<from>HiBlend_Capable_PCT_WITHOUT_station_coverage</from>
-					<to>Potential_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="3994" angle="270">
-					<from>preference_share_Regular_Users</from>
-					<to>Regular_HiBlend_User_Gap</to>
-				</connector>
-				<connector uid="3995" angle="0">
-					<from>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</from>
-					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
-				</connector>
 				<connector uid="3996" angle="270">
 					<from>
 						<alias uid="3997"/>
 					</from>
+					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3998" angle="90">
+					<from>HiBlend_Capable_PCT_WITHOUT_station_coverage</from>
+					<to>Potential_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="3999" angle="270">
+					<from>preference_share_Regular_Users</from>
+					<to>Regular_HiBlend_User_Gap</to>
+				</connector>
+				<connector uid="4000" angle="0">
+					<from>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</from>
+					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4001" angle="270">
+					<from>
+						<alias uid="4002"/>
+					</from>
 					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="3998" angle="270">
+				<connector uid="4003" angle="270">
 					<from>RAT_HiBlend_Regular_Hi_Blend_Users</from>
 					<to>Share_Regular_Use_to_Hi_Blend</to>
 				</connector>
-				<connector uid="3999" angle="305.538">
+				<connector uid="4004" angle="305.538">
 					<from>
-						<alias uid="4000"/>
+						<alias uid="4005"/>
 					</from>
 					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4001" angle="352.875">
+				<connector uid="4006" angle="352.875">
 					<from>Potential_Hi_Blend_Users</from>
 					<to>susceptible_non_HiBlend_users</to>
 				</connector>
-				<connector uid="4002" angle="353.66">
+				<connector uid="4007" angle="353.66">
 					<from>
-						<alias uid="3997"/>
+						<alias uid="4002"/>
 					</from>
 					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4003" angle="125.218">
+				<connector uid="4008" angle="125.218">
 					<from>
-						<alias uid="4004"/>
+						<alias uid="4009"/>
 					</from>
 					<to>Total_PCT_HiBlend_Capable_By_Region</to>
 				</connector>
-				<connector uid="4005" angle="180">
+				<connector uid="4010" angle="180">
 					<from>Long_Term_Relative_Price</from>
 					<to>preference_share_Regular_Users</to>
 				</connector>
-				<connector uid="4006" angle="270">
+				<connector uid="4011" angle="270">
 					<from>Share_Occasional_Use_to_Hi_Blend</from>
 					<to>Occasional_User_Wtd_Hi_Blend_Share</to>
 				</connector>
-				<connector uid="4007" angle="0">
+				<connector uid="4012" angle="0">
 					<from>occasional_user_constraint_on_becoming_regular_HiBlend_User</from>
 					<to>rate_of_becoming_reg_HiBlend_user</to>
 				</connector>
-				<connector uid="4008" angle="309.472">
+				<connector uid="4013" angle="309.472">
 					<from>Regular_HiBlend_Users</from>
 					<to>Regular_HiBlend_User_Gap</to>
 				</connector>
-				<connector uid="4009" angle="200.556">
+				<connector uid="4014" angle="200.556">
 					<from>Regular_HiBlend_User_Gap</from>
 					<to>dropping_back_to_occasional_user</to>
 				</connector>
-				<connector uid="4010" angle="0">
+				<connector uid="4015" angle="0">
 					<from>Occasional_User_Wtd_Hi_Blend_Share</from>
 					<to>Total_User_Wtd_Hi_Blend_Share</to>
 				</connector>
-				<connector uid="4011" angle="319.399">
+				<connector uid="4016" angle="319.399">
 					<from>Total_PCT_HiBlend_Capable_By_Region</from>
 					<to>Reg_HiBlend_Users_as_Frac</to>
 				</connector>
-				<connector uid="4012" angle="288.435">
+				<connector uid="4017" angle="288.435">
 					<from>Total_PCT_HiBlend_Capable_By_Region</from>
 					<to>Occasional_HiBlend_Users_as_Frac</to>
 				</connector>
-				<connector uid="4013" angle="270">
+				<connector uid="4018" angle="270">
 					<from>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</from>
 					<to>RAT_HiBlend_Regular_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4014" angle="90">
+				<connector uid="4019" angle="90">
 					<from>
-						<alias uid="3992"/>
+						<alias uid="3997"/>
 					</from>
 					<to>Long_Term_Avg_Gas_Price</to>
 				</connector>
-				<connector uid="4015" angle="180">
+				<connector uid="4020" angle="180">
 					<from>
-						<alias uid="4016"/>
+						<alias uid="4021"/>
 					</from>
 					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4017" angle="0">
+				<connector uid="4022" angle="0">
 					<from>Occasional_HiBlend_Users_as_Frac</from>
 					<to>Occasional_User_Wtd_Hi_Blend_Share</to>
 				</connector>
-				<connector uid="4018" angle="0">
+				<connector uid="4023" angle="0">
 					<from>
-						<alias uid="4004"/>
+						<alias uid="4009"/>
 					</from>
 					<to>Reg_HiBlend_Users_as_Frac</to>
 				</connector>
-				<connector uid="4019" angle="180">
-					<from>
-						<alias uid="4020"/>
-					</from>
-					<to>FFV_Hi_Blend_Consn</to>
-				</connector>
-				<connector uid="4021" angle="180">
-					<from>Total_PCT_HiBlend_Capable_By_Region</from>
-					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
-				</connector>
-				<connector uid="4022" angle="90">
-					<from>
-						<alias uid="4023"/>
-					</from>
-					<to>susceptible_non_HiBlend_users</to>
-				</connector>
-				<connector uid="4024" angle="161.565">
+				<connector uid="4024" angle="180">
 					<from>
 						<alias uid="4025"/>
 					</from>
-					<to>dropping_back_to_occasional_user</to>
+					<to>FFV_Hi_Blend_Consn</to>
 				</connector>
-				<connector uid="4026" angle="0">
-					<from>Total_User_Wtd_Hi_Blend_Share</from>
-					<to>FFV_Lo_Blend_Consn</to>
+				<connector uid="4026" angle="180">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
 				</connector>
 				<connector uid="4027" angle="90">
 					<from>
 						<alias uid="4028"/>
 					</from>
+					<to>susceptible_non_HiBlend_users</to>
+				</connector>
+				<connector uid="4029" angle="161.565">
+					<from>
+						<alias uid="4030"/>
+					</from>
+					<to>dropping_back_to_occasional_user</to>
+				</connector>
+				<connector uid="4031" angle="0">
+					<from>Total_User_Wtd_Hi_Blend_Share</from>
+					<to>FFV_Lo_Blend_Consn</to>
+				</connector>
+				<connector uid="4032" angle="90">
+					<from>
+						<alias uid="4033"/>
+					</from>
 					<to>rate_of_becoming_reg_HiBlend_user</to>
 				</connector>
-				<connector uid="4029" angle="173.66">
+				<connector uid="4034" angle="173.66">
 					<from>Long_Term_Avg_Gas_Price</from>
 					<to>Long_Term_Relative_Price</to>
 				</connector>
-				<connector uid="4030" angle="125.538">
+				<connector uid="4035" angle="125.538">
 					<from>
-						<alias uid="4000"/>
+						<alias uid="4005"/>
 					</from>
 					<to>Hi_Blend_Attractiveness_Regular_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4031" angle="90">
-					<from>
-						<alias uid="4032"/>
-					</from>
-					<to>Total_PCT_HiBlend_Capable_By_Region</to>
-				</connector>
-				<connector uid="4033" angle="102.529">
-					<from>
-						<alias uid="4034"/>
-					</from>
-					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="4035" angle="270">
-					<from>Regular_User_Wtd_Hi_Blend_Share</from>
-					<to>Total_User_Wtd_Hi_Blend_Share</to>
-				</connector>
-				<connector uid="4036" angle="229.399">
+				<connector uid="4036" angle="90">
 					<from>
 						<alias uid="4037"/>
 					</from>
-					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+					<to>Total_PCT_HiBlend_Capable_By_Region</to>
 				</connector>
-				<connector uid="4038" angle="90">
+				<connector uid="4038" angle="102.529">
 					<from>
 						<alias uid="4039"/>
 					</from>
+					<to>Gasoline_Attractiveness_Reg_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4040" angle="270">
+					<from>Regular_User_Wtd_Hi_Blend_Share</from>
+					<to>Total_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4041" angle="229.399">
+					<from>
+						<alias uid="4042"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4043" angle="90">
+					<from>
+						<alias uid="4044"/>
+					</from>
 					<to>becoming_occasional_user</to>
 				</connector>
-				<connector uid="4040" angle="180">
+				<connector uid="4045" angle="180">
 					<from>Gasoline_Attractiveness_Reg_Hi_Blend_Users</from>
 					<to>RAT_HiBlend_Regular_Hi_Blend_Users</to>
 				</connector>
-				<connector uid="4041" angle="0">
+				<connector uid="4046" angle="0">
+					<from>
+						<alias uid="4047"/>
+					</from>
+					<to>Gasoline_Attractiveness_Occasional_Users</to>
+				</connector>
+				<connector uid="4048" angle="96.2773">
+					<from>rate_of_becoming_reg_HiBlend_user</from>
+					<to>becoming_regular_user</to>
+				</connector>
+				<connector uid="4049" angle="180">
+					<from>
+						<alias uid="4050"/>
+					</from>
+					<to>FFV_Lo_Blend_Consn</to>
+				</connector>
+				<connector uid="4051" angle="67.6199">
+					<from>
+						<alias uid="4052"/>
+					</from>
+					<to>Total_PCT_HiBlend_Capable_By_Region</to>
+				</connector>
+				<connector uid="4053" angle="0">
+					<from>Reg_HiBlend_Users_as_Frac</from>
+					<to>Regular_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4054" angle="90">
+					<from>
+						<alias uid="4055"/>
+					</from>
+					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4056" angle="263.66">
+					<from>Total_User_Wtd_Hi_Blend_Share</from>
+					<to>FFV_Hi_Blend_Consn</to>
+				</connector>
+				<connector uid="4057" angle="283.241">
+					<from>Occasional_HiBlend_Users</from>
+					<to>occasional_user_constraint_on_becoming_regular_HiBlend_User</to>
+				</connector>
+				<connector uid="4058" angle="90">
+					<from>maximum_HiBlend_Users_PCT_from_regional_coverage</from>
+					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
+				</connector>
+				<connector uid="4059" angle="270">
+					<from>FFV_Hi_Blend_Consn</from>
+					<to>Total_Desired_Hi_Blend_Consn</to>
+				</connector>
+				<connector uid="4060" angle="180">
+					<from>
+						<alias uid="4061"/>
+					</from>
+					<to>frac_HiBlend_capable_with_station_coverage</to>
+				</connector>
+				<connector uid="4062" angle="90">
+					<from>
+						<alias uid="4002"/>
+					</from>
+					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
+				</connector>
+				<connector uid="4063" angle="49.3987">
+					<from>susceptible_non_HiBlend_users</from>
+					<to>becoming_occasional_user</to>
+				</connector>
+				<connector uid="4064" angle="180">
+					<from>
+						<alias uid="4065"/>
+					</from>
+					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
+				</connector>
+				<connector uid="4066" angle="192.529">
+					<from>
+						<alias uid="3997"/>
+					</from>
+					<to>Gasoline_Attractiveness_Occasional_Users</to>
+				</connector>
+				<connector uid="4067" angle="158.474">
+					<from>Regular_HiBlend_User_Gap</from>
+					<to>becoming_regular_user</to>
+				</connector>
+				<connector uid="4068" angle="153.435">
+					<from>Total_PCT_HiBlend_Capable_By_Region</from>
+					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
+				</connector>
+				<connector uid="4069" angle="270">
+					<from>Share_Regular_Use_to_Hi_Blend</from>
+					<to>Regular_User_Wtd_Hi_Blend_Share</to>
+				</connector>
+				<connector uid="4070" angle="270">
+					<from>RAT_HiBlend_Occasional_Hi_Blend_Users</from>
+					<to>Share_Occasional_Use_to_Hi_Blend</to>
+				</connector>
+				<connector uid="4071" angle="216.027">
+					<from>Non_HiBlend_Users</from>
+					<to>Potential_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4072" angle="270">
+					<from>Gasoline_Attractiveness_Occasional_Users</from>
+					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
+				</connector>
+				<connector uid="4073" angle="307.405">
+					<from>
+						<alias uid="4037"/>
+					</from>
+					<to>Occasional_HiBlend_Users_as_Frac</to>
+				</connector>
+				<connector uid="4074" angle="90">
+					<from>frac_HiBlend_capable_with_station_coverage</from>
+					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
+				</connector>
+				<connector uid="4075" angle="90">
+					<from>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</from>
+					<to>Long_Term_Relative_Price</to>
+				</connector>
+				<connector uid="4076" angle="49.3987">
 					<from>
 						<alias uid="4042"/>
 					</from>
 					<to>Gasoline_Attractiveness_Occasional_Users</to>
 				</connector>
-				<connector uid="4043" angle="96.2773">
-					<from>rate_of_becoming_reg_HiBlend_user</from>
-					<to>becoming_regular_user</to>
-				</connector>
-				<connector uid="4044" angle="180">
+				<connector uid="4077" angle="0">
 					<from>
-						<alias uid="4045"/>
-					</from>
-					<to>FFV_Lo_Blend_Consn</to>
-				</connector>
-				<connector uid="4046" angle="67.6199">
-					<from>
-						<alias uid="4047"/>
-					</from>
-					<to>Total_PCT_HiBlend_Capable_By_Region</to>
-				</connector>
-				<connector uid="4048" angle="0">
-					<from>Reg_HiBlend_Users_as_Frac</from>
-					<to>Regular_User_Wtd_Hi_Blend_Share</to>
-				</connector>
-				<connector uid="4049" angle="90">
-					<from>
-						<alias uid="4050"/>
-					</from>
-					<to>Hi_Blend_Attractiveness_Occasional_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="4051" angle="263.66">
-					<from>Total_User_Wtd_Hi_Blend_Share</from>
-					<to>FFV_Hi_Blend_Consn</to>
-				</connector>
-				<connector uid="4052" angle="283.241">
-					<from>Occasional_HiBlend_Users</from>
-					<to>occasional_user_constraint_on_becoming_regular_HiBlend_User</to>
-				</connector>
-				<connector uid="4053" angle="90">
-					<from>maximum_HiBlend_Users_PCT_from_regional_coverage</from>
-					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
-				</connector>
-				<connector uid="4054" angle="270">
-					<from>FFV_Hi_Blend_Consn</from>
-					<to>Total_Desired_Hi_Blend_Consn</to>
-				</connector>
-				<connector uid="4055" angle="180">
-					<from>
-						<alias uid="4056"/>
-					</from>
-					<to>frac_HiBlend_capable_with_station_coverage</to>
-				</connector>
-				<connector uid="4057" angle="90">
-					<from>
-						<alias uid="3997"/>
-					</from>
-					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
-				</connector>
-				<connector uid="4058" angle="49.3987">
-					<from>susceptible_non_HiBlend_users</from>
-					<to>becoming_occasional_user</to>
-				</connector>
-				<connector uid="4059" angle="180">
-					<from>
-						<alias uid="4060"/>
-					</from>
-					<to>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</to>
-				</connector>
-				<connector uid="4061" angle="192.529">
-					<from>
-						<alias uid="3992"/>
-					</from>
-					<to>Gasoline_Attractiveness_Occasional_Users</to>
-				</connector>
-				<connector uid="4062" angle="158.474">
-					<from>Regular_HiBlend_User_Gap</from>
-					<to>becoming_regular_user</to>
-				</connector>
-				<connector uid="4063" angle="153.435">
-					<from>Total_PCT_HiBlend_Capable_By_Region</from>
-					<to>HiBlend_Capable_PCT_WITHOUT_station_coverage</to>
-				</connector>
-				<connector uid="4064" angle="270">
-					<from>Share_Regular_Use_to_Hi_Blend</from>
-					<to>Regular_User_Wtd_Hi_Blend_Share</to>
-				</connector>
-				<connector uid="4065" angle="270">
-					<from>RAT_HiBlend_Occasional_Hi_Blend_Users</from>
-					<to>Share_Occasional_Use_to_Hi_Blend</to>
-				</connector>
-				<connector uid="4066" angle="216.027">
-					<from>Non_HiBlend_Users</from>
-					<to>Potential_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="4067" angle="270">
-					<from>Gasoline_Attractiveness_Occasional_Users</from>
-					<to>RAT_HiBlend_Occasional_Hi_Blend_Users</to>
-				</connector>
-				<connector uid="4068" angle="307.405">
-					<from>
-						<alias uid="4032"/>
-					</from>
-					<to>Occasional_HiBlend_Users_as_Frac</to>
-				</connector>
-				<connector uid="4069" angle="90">
-					<from>frac_HiBlend_capable_with_station_coverage</from>
-					<to>maximum_HiBlend_Users_PCT_from_regional_coverage</to>
-				</connector>
-				<connector uid="4070" angle="90">
-					<from>Long_Term_Avg_Hi_Blend_Gas_Equivalent_Price</from>
-					<to>Long_Term_Relative_Price</to>
-				</connector>
-				<connector uid="4071" angle="49.3987">
-					<from>
-						<alias uid="4037"/>
-					</from>
-					<to>Gasoline_Attractiveness_Occasional_Users</to>
-				</connector>
-				<connector uid="4072" angle="0">
-					<from>
-						<alias uid="4060"/>
+						<alias uid="4065"/>
 					</from>
 					<to>Long_Term_Avg_Gas_Price</to>
 				</connector>
@@ -1987,107 +1826,112 @@ COMMENTS: </doc>
 				<aux color="black" font_color="black" label_angle="244.401" x="2010" y="1028" name="FFV Hi Blend Consn"/>
 				<group locked="false" x="17" y="625" width="721" height="539" name="Input Data and Initializations"/>
 				<group locked="false" x="1" y="1472" width="745" height="161" name="Outputs to Other Modules">
-					<item uid="4073"/>
-					<item uid="4074"/>
-					<item uid="4075"/>
+					<item uid="4078"/>
+					<item uid="4079"/>
+					<item uid="4080"/>
 				</group>
 				<group locked="false" x="7" y="1209" width="732" height="226" name="Non Spreadsheet Inputs from Other Modules"/>
-				<group locked="false" color="black" font_color="black" x="776" y="25" width="2110" height="1341" name="HiBlend and Fuel Use Logic">
-					<item uid="4039"/>
-					<item uid="4023"/>
-					<item uid="4025"/>
+				<group locked="false" color="black" font_color="black" x="776" y="25" width="2110" height="1341" name="HiBlend and RSP Fuel Use Logic">
+					<item uid="4044"/>
 					<item uid="4028"/>
-					<item uid="4042"/>
-					<item uid="3997"/>
-					<item uid="4016"/>
-					<item uid="4060"/>
-					<item uid="3992"/>
-					<item uid="4037"/>
-					<item uid="4050"/>
-					<item uid="4000"/>
-					<item uid="4034"/>
+					<item uid="4030"/>
+					<item uid="4033"/>
 					<item uid="4047"/>
-					<item uid="4032"/>
-					<item uid="4056"/>
-					<item uid="4004"/>
-					<item uid="4045"/>
-					<item uid="4020"/>
+					<item uid="4002"/>
+					<item uid="4021"/>
+					<item uid="4065"/>
+					<item uid="3997"/>
+					<item uid="4042"/>
+					<item uid="4055"/>
+					<item uid="4005"/>
+					<item uid="4039"/>
+					<item uid="4081"/>
+					<item uid="4052"/>
+					<item uid="4037"/>
+					<item uid="4061"/>
+					<item uid="4009"/>
+					<item uid="4050"/>
+					<item uid="4025"/>
 				</group>
-				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="4076" x="8" y="8.5" width="701" height="51">Biomass Scenario Downstream Fuel Use Module</text_box>
-				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="4077" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
-				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="4078" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
-				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="4079" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
-				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="4080" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
-				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="4081" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
-				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="4082" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="293.573" uid="4056" x="964" y="888" width="18" height="18">
+				<text_box color="black" font_size="24pt" padding="5" appearance="transparent" uid="4082" x="8" y="8.5" width="701" height="51">Biomass Scenario Downstream Fuel Use Module</text_box>
+				<text_box color="red" vertical_text_align="center" font_color="red" padding="5" border_color="red" border_width="2" border_style="solid" appearance="transparent" uid="4083" x="12" y="255" width="350" height="36">RED:  Data Input (Constant, Ass&apos;n, Scenario, SSheet)</text_box>
+				<text_box color="#008F44" vertical_text_align="center" font_color="#008F44" padding="5" border_color="#008F44" border_width="2" border_style="solid" appearance="transparent" uid="4084" x="385" y="208" width="350" height="36">GREEN:  Output from this Sector to another Sector</text_box>
+				<text_box color="blue" vertical_text_align="center" font_color="blue" padding="5" border_color="blue" border_width="2" border_style="solid" appearance="transparent" uid="4085" x="12" y="207" width="350" height="36">BLUE:  Input to this Sector from another Sector</text_box>
+				<text_box color="black" vertical_text_align="center" padding="5" border_width="2" border_style="solid" appearance="transparent" uid="4086" x="385" y="255" width="350" height="36">BLACK:  Internal Calculation Within This Sector</text_box>
+				<text_box color="#7F00FF" vertical_text_align="center" font_color="#7F00FF" padding="5" border_color="#7F00FF" border_width="2" border_style="solid" appearance="transparent" uid="4087" x="12" y="160" width="350" height="36">Purple:  Input to this MODULE from another MODULE</text_box>
+				<text_box color="#65183E" vertical_text_align="center" font_color="#65183E" padding="5" border_color="#65183E" border_width="2" border_style="solid" appearance="transparent" uid="4088" x="385" y="160" width="350" height="36">Brown:  Output from this MODULE from another MODULE</text_box>
+				<aux color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" x="446" y="1253" name="IP regular Pemium Gas Spread as Frac"/>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="293.573" uid="4061" x="964" y="888" width="18" height="18">
 					<of>Station_Coverage_From_Dispensing_Module</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4025" x="1335" y="324" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4030" x="1335" y="324" width="18" height="18">
 					<of>time_to_drop_out</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4037" x="1746" y="407" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4042" x="1746" y="407" width="18" height="18">
 					<of>occasional_user_price_attractiveness_weighting</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="3997" x="1656" y="241" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4002" x="1656" y="241" width="18" height="18">
 					<of>Hi_Blend_Gas_equivalent_price</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4073" x="69" y="1564" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4078" x="69" y="1564" width="18" height="18">
 					<of>FFV_Lo_Blend_Consn</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="272.739" uid="4034" x="2163" y="601" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="272.739" uid="4039" x="2163" y="601" width="18" height="18">
 					<of>k_Gas_Regular_Users</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="240.139" uid="4042" x="1722" y="299" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="240.139" uid="4047" x="1722" y="299" width="18" height="18">
 					<of>k_Gas_Occasional_Users</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="249.993" uid="4020" x="2216" y="1019" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="249.993" uid="4025" x="2216" y="1019" width="18" height="18">
 					<of>potential_Hi_Blend_Consn_from_Vehicle_Module</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4047" x="898.5" y="724.5" width="45" height="35">
+				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4052" x="898.5" y="724.5" width="45" height="35">
 					<of>Non_HiBlend_Users</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4045" x="2215" y="952" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4050" x="2215" y="952" width="18" height="18">
 					<of>max_FFV_Lo_Blend_Consn_from_Vehicle_Module</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="146.947" uid="4016" x="2113" y="299" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="146.947" uid="4021" x="2113" y="299" width="18" height="18">
 					<of>k_Hi_Blend_Regular_Users</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="44.5909" uid="4050" x="1656" y="604" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="44.5909" uid="4055" x="1656" y="604" width="18" height="18">
 					<of>k_Hi_Blend_Occasional_Users</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4074" x="78" y="1506" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4079" x="78" y="1506" width="18" height="18">
 					<of>Total_Desired_Hi_Blend_Consn</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="45" uid="4039" x="988" y="240" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="right" label_angle="45" uid="4044" x="988" y="240" width="18" height="18">
 					<of>rate_of_becoming_occasional_HiBlend_user</of>
 				</alias>
-				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4075" x="218" y="1567" width="18" height="18">
+				<alias color="#65183E" font_style="italic" font_color="#65183E" uid="4080" x="218" y="1567" width="18" height="18">
 					<of>Total_User_Wtd_Hi_Blend_Share</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="261.309" uid="4000" x="2076" y="395" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="261.309" uid="4005" x="2076" y="395" width="18" height="18">
 					<of>regular_user_price_attractiveness_weighting</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_side="left" uid="4028" x="1264" y="239" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_side="left" uid="4033" x="1264" y="239" width="18" height="18">
 					<of>max_rate_of_becoming_regular_HiBlend_user</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4032" x="1006.5" y="723.5" width="45" height="35">
+				<alias color="black" font_style="italic" font_color="black" label_side="center" uid="4037" x="1006.5" y="723.5" width="45" height="35">
 					<of>Occasional_HiBlend_Users</of>
 				</alias>
-				<alias color="black" font_style="italic" font_color="black" label_angle="43.6665" uid="4004" x="1196.5" y="722.5" width="45" height="35">
+				<alias color="black" font_style="italic" font_color="black" label_angle="43.6665" uid="4009" x="1196.5" y="722.5" width="45" height="35">
 					<of>Regular_HiBlend_Users</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4060" x="1889" y="135" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4065" x="1889" y="135" width="18" height="18">
 					<of>gas_price_averaging_time</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="4023" x="920" y="315" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" label_angle="53.7315" uid="4028" x="920" y="315" width="18" height="18">
 					<of>fraction_NonUsers_susceptible</of>
 				</alias>
-				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="177.284" uid="3992" x="2163" y="206" width="18" height="18">
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" label_angle="177.284" uid="3997" x="2163" y="206" width="18" height="18">
 					<of>Gasoline_Pump_Price_from_PIM</of>
 				</alias>
+				<alias color="#7F00FF" font_style="italic" font_weight="bold" font_color="#7F00FF" uid="4081" x="2323" y="455" width="18" height="18">
+					<of>IP_regular_Pemium_Gas_Spread_as_Frac</of>
+				</alias>
 			</view>
-			<view background="white" page_width="1012" page_height="696" home_view="true" type="interface" isee:show_pages="true">
+			<view isee:show_pages="true" background="white" page_width="1012" page_height="696" home_view="true" type="interface">
 				<style/>
 			</view>
 			<isee:templates/>
