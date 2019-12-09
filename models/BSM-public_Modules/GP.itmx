@@ -5,9 +5,9 @@
 		<name>GP</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
+		<product version="1.9.4" isee:build_number="1992" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+	<sim_specs isee:sim_duration="1.5" isee:simulation_delay="0.125" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
 		<start>0</start>
 		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
@@ -60,6 +60,10 @@
 			<eqn/>
 			<alias>gal</alias>
 			<alias>gallon</alias>
+		</unit>
+		<unit name="Tons">
+			<eqn/>
+			<alias>ton</alias>
 		</unit>
 		<unit name="US Dollars">
 			<eqn/>
@@ -6316,38 +6320,38 @@ COMMENTS: </doc>
 			</group>
 			<group name="Production Costs" run="false">
 				<entity name="net_WC_PCPA_by_yr_pasture"/>
-				<entity name="HC_PCPA_cost_multiplier"/>
-				<entity name="Secondary_Crop_PCPA_input_cost_sensitivity_factor"/>
-				<entity name="Res_PCPA_cost_multiplier"/>
-				<entity name="input_cost_sensitivity_switch"/>
-				<entity name="net_HC_PCPA_by_yr"/>
-				<entity name="HC_PCPA_by_yr_Pasture"/>
+				<entity name="Crop_PCPA_cost_multiplier"/>
 				<entity name="HAY_PCPA_input_cost_sensitivity_factor"/>
-				<entity name="WC_PCPA_cost_multiplier"/>
-				<entity name="net_WC_PCPA_by_yr"/>
+				<entity name="Res_PCPA_cost_multiplier"/>
+				<entity name="Hay_PCPA"/>
 				<entity name="WC_PCPA_input_cost_sensitivity_factor"/>
 				<entity name="delta_in_gasoline_input_cost"/>
+				<entity name="HC_PCPA_cost_multiplier"/>
+				<entity name="net_HC_PCPA_by_yr"/>
+				<entity name="HC_PCPA_by_yr_Pasture"/>
 				<entity name="Pasture_as_Pasture_PCPA"/>
-				<entity name="Annual_PCPA"/>
+				<entity name="net_WC_PCPA_by_yr"/>
+				<entity name="BCAP_WC_est_subs_by_year"/>
+				<entity name="BCAP_WC_est_subs_by_year_pasture"/>
 				<entity name="BCAP_HC_est_subs_by_year_pasture"/>
 				<entity name="HC_PCPA_by_yr"/>
-				<entity name="avg_gasoline_input_cost_PoD"/>
-				<entity name="Crop_PCPA_input_cost_sensitivity_factor"/>
-				<entity name="Hay_PCPA"/>
-				<entity name="BCAP_HC_est_subs_by_year"/>
-				<entity name="BCAP_WC_est_subs_by_year"/>
-				<entity name="Pasture_as_Cellulose_PCPA"/>
-				<entity name="Residue_Net_PCPA"/>
-				<entity name="BCAP_WC_est_subs_by_year_pasture"/>
 				<entity name="Sec_Crop_PCPA"/>
-				<entity name="Residue_PCPA"/>
-				<entity name="Secondary_Crop_PCPA_cost_multiplier"/>
-				<entity name="Hay_PCPA_cost_multiplier"/>
-				<entity name="Crop_PCPA_cost_multiplier"/>
-				<entity name="WC_PCPA_by_yr_pasture"/>
+				<entity name="avg_gasoline_input_cost_PoD"/>
+				<entity name="Annual_PCPA"/>
+				<entity name="Crop_PCPA_input_cost_sensitivity_factor"/>
+				<entity name="WC_PCPA_cost_multiplier"/>
 				<entity name="net_HC_PCPA_by_yr_Pasture"/>
 				<entity name="HC_PCPA_input_cost_sensitivity_factor"/>
+				<entity name="WC_PCPA_by_yr_pasture"/>
 				<entity name="WC_PCPA_by_yr"/>
+				<entity name="input_cost_sensitivity_switch"/>
+				<entity name="Secondary_Crop_PCPA_input_cost_sensitivity_factor"/>
+				<entity name="Secondary_Crop_PCPA_cost_multiplier"/>
+				<entity name="Residue_Net_PCPA"/>
+				<entity name="Residue_PCPA"/>
+				<entity name="BCAP_HC_est_subs_by_year"/>
+				<entity name="Hay_PCPA_cost_multiplier"/>
+				<entity name="Pasture_as_Cellulose_PCPA"/>
 				<entity name="Residue_PCPA_input_cost_sensitivity_factor"/>
 			</group>
 			<group name="Mosule Outputs" run="false">
@@ -6759,8 +6763,8 @@ COMMENTS: </doc>
 					</isee:series_styles>
 				</graph>
 				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_corner_radius="0" popup_background_color="#FFFECF"/>
 				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
 				<isee:sim_speed_slider color="black" background="white"/>
 				<isee:time_slider color="black" background="white"/>
@@ -6775,7 +6779,7 @@ COMMENTS: </doc>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
-				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:navigation_widget color="black" background="white" border_color="#999999" border_width="thin" border_style="solid" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
 				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
 				<isee:selector color="black" background="white"/>
 				<isee:iframe color="black" background="white"/>
@@ -8653,79 +8657,79 @@ COMMENTS: </doc>
 					<item uid="4161"/>
 				</group>
 				<group isee:name_image="true" locked="true" color="#515151" font_color="#515151" x="3087" y="43" width="1402" height="855" name="Production Costs">
-					<item uid="4449"/>
-					<item uid="4236"/>
+					<item uid="4264"/>
+					<item uid="4181"/>
+					<item uid="4428"/>
+					<item uid="4358"/>
 					<item uid="4480"/>
-					<item uid="4258"/>
-					<item uid="4232"/>
-					<item uid="4179"/>
-					<item uid="4180"/>
+					<item uid="4379"/>
+					<item uid="4434"/>
+					<item uid="4302"/>
+					<item uid="4346"/>
 					<item uid="4337"/>
 					<item uid="4374"/>
-					<item uid="4138"/>
-					<item uid="4263"/>
-					<item uid="4231"/>
-					<item uid="4378"/>
-					<item uid="4123"/>
-					<item uid="4302"/>
-					<item uid="4359"/>
-					<item uid="4347"/>
 					<item uid="4166"/>
-					<item uid="4348"/>
-					<item uid="4140"/>
-					<item uid="4241"/>
-					<item uid="4394"/>
-					<item uid="4200"/>
-					<item uid="4379"/>
-					<item uid="4464"/>
-					<item uid="4227"/>
+					<item uid="4432"/>
+					<item uid="4123"/>
+					<item uid="4331"/>
+					<item uid="4292"/>
 					<item uid="4137"/>
-					<item uid="4181"/>
-					<item uid="4369"/>
-					<item uid="4262"/>
-					<item uid="4216"/>
+					<item uid="4241"/>
 					<item uid="4456"/>
-					<item uid="4498"/>
-					<item uid="4434"/>
-					<item uid="4210"/>
-					<item uid="4197"/>
+					<item uid="4393"/>
+					<item uid="4348"/>
 					<item uid="4360"/>
-					<item uid="4264"/>
-					<item uid="4129"/>
-					<item uid="4225"/>
-					<item uid="4293"/>
-					<item uid="4346"/>
-					<item uid="4491"/>
-					<item uid="4141"/>
-					<item uid="4156"/>
-					<item uid="4125"/>
 					<item uid="4148"/>
+					<item uid="4294"/>
 					<item uid="4425"/>
-					<item uid="4246"/>
+					<item uid="4210"/>
+					<item uid="4216"/>
+					<item uid="4260"/>
+					<item uid="4498"/>
+					<item uid="4200"/>
+					<item uid="4203"/>
+					<item uid="4236"/>
+					<item uid="4464"/>
+					<item uid="4293"/>
+					<item uid="4227"/>
+					<item uid="4262"/>
+					<item uid="4491"/>
+					<item uid="4179"/>
+					<item uid="4125"/>
+					<item uid="4369"/>
+					<item uid="4156"/>
+					<item uid="4141"/>
+					<item uid="4499"/>
+					<item uid="4258"/>
 					<item uid="4339"/>
 					<item uid="4396"/>
-					<item uid="4247"/>
-					<item uid="4431"/>
-					<item uid="4242"/>
-					<item uid="4432"/>
-					<item uid="4261"/>
-					<item uid="4393"/>
-					<item uid="4338"/>
-					<item uid="4479"/>
-					<item uid="4203"/>
-					<item uid="4358"/>
-					<item uid="4294"/>
-					<item uid="4499"/>
-					<item uid="4331"/>
-					<item uid="4124"/>
-					<item uid="4450"/>
-					<item uid="4428"/>
-					<item uid="4380"/>
-					<item uid="4149"/>
+					<item uid="4232"/>
 					<item uid="4423"/>
-					<item uid="4292"/>
-					<item uid="4260"/>
+					<item uid="4394"/>
+					<item uid="4479"/>
+					<item uid="4347"/>
+					<item uid="4261"/>
+					<item uid="4140"/>
+					<item uid="4450"/>
 					<item uid="4445"/>
+					<item uid="4359"/>
+					<item uid="4242"/>
+					<item uid="4338"/>
+					<item uid="4263"/>
+					<item uid="4129"/>
+					<item uid="4180"/>
+					<item uid="4378"/>
+					<item uid="4138"/>
+					<item uid="4124"/>
+					<item uid="4431"/>
+					<item uid="4247"/>
+					<item uid="4449"/>
+					<item uid="4197"/>
+					<item uid="4225"/>
+					<item uid="4380"/>
+					<item uid="4231"/>
+					<item uid="4149"/>
+					<item uid="4246"/>
 				</group>
 				<group locked="false" color="#65183E" font_color="#65183E" x="4" y="1192" width="722" height="535" name="Mosule Outputs">
 					<item uid="4528"/>

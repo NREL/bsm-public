@@ -5,28 +5,32 @@
 		<name>CE</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
+		<product version="1.9.4" isee:build_number="1992" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+	<sim_specs isee:sim_duration="1.5" isee:simulation_delay="0.125" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
 		<start>0</start>
 		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
-		<dim name="CtoATech">
-			<elem name="BC"/>
-			<elem name="TC"/>
-		</dim>
 		<dim name="ConversionPolicy">
 			<elem name="Price"/>
 			<elem name="Feedstock"/>
 			<elem name="FCI"/>
 			<elem name="Loan"/>
 		</dim>
+		<dim name="PECrop">
+			<elem name="Herbaceous"/>
+			<elem name="Woody"/>
+		</dim>
 		<dim name="Product">
 			<elem name="Primary"/>
 			<elem name="Co1"/>
 			<elem name="Co2"/>
+		</dim>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
 		</dim>
 		<dim name="TechAttribute">
 			<elem name="ProcessYield"/>
@@ -35,10 +39,6 @@
 			<elem name="CapitalCost"/>
 			<elem name="Risk"/>
 			<elem name="DebtFrac"/>
-		</dim>
-		<dim name="PECrop">
-			<elem name="Herbaceous"/>
-			<elem name="Woody"/>
 		</dim>
 		<dim name="Region">
 			<elem name="NE"/>
@@ -71,6 +71,10 @@
 			<eqn/>
 			<alias>gal</alias>
 			<alias>gallon</alias>
+		</unit>
+		<unit name="Tons">
+			<eqn/>
+			<alias>ton</alias>
 		</unit>
 		<unit name="US Dollars">
 			<eqn/>
@@ -7212,8 +7216,8 @@ COMMENTS: Accounts for number of days per year facilities are expected to be on 
 					</isee:series_styles>
 				</graph>
 				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_corner_radius="0" popup_background_color="#FFFECF"/>
 				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
 				<isee:sim_speed_slider color="black" background="white"/>
 				<isee:time_slider color="black" background="white"/>
@@ -7228,13 +7232,13 @@ COMMENTS: Accounts for number of days per year facilities are expected to be on 
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
-				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:navigation_widget color="black" background="white" border_color="#999999" border_width="thin" border_style="solid" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
 				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
 				<isee:selector color="black" background="white"/>
 				<isee:iframe color="black" background="white"/>
 				<isee:financial_table color="black" background="white" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="6" isee:page_rows="4" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
+			<view isee:show_pages="true" background="white" page_width="1024" page_height="784" isee:page_cols="6" isee:page_rows="4" isee:scroll_y="1050" zoom="120" isee:popup_graphs_are_comparative="true" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>

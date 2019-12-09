@@ -5,9 +5,9 @@
 		<name>I</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
+		<product version="1.9.4" isee:build_number="1992" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+	<sim_specs isee:sim_duration="1.5" isee:simulation_delay="0.125" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
 		<start>0</start>
 		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
@@ -415,24 +415,24 @@ COMMENTS: </doc>
 			<group name="Import Logic" run="false">
 				<entity name="desired_exports"/>
 				<entity name="distributed_ceiling_for_EtOH_import"/>
-				<entity name="EtOH_Import_from_x_US"/>
 				<entity name="rollup_imports"/>
+				<entity name="non_subsidized_PoP_price_rel_to_import_threshold"/>
 				<entity name="threshold_PoP_price_for_import"/>
+				<entity name="EtOH_Import_from_x_US"/>
 				<entity name="frac_import_capacity_utilized"/>
 				<entity name="export_price_rel_to_threshold"/>
 				<entity name="export_price_from_US_incl_tariff"/>
-				<entity name="non_subsidized_PoP_price_rel_to_import_threshold"/>
 				<entity name="import_cost_before_tariff"/>
 			</group>
 			<group name="Interfaces to Other Modules 1" run="false">
 				<entity name="EtOH_PoP_price"/>
 			</group>
 			<group name="Inputs and Initializations" run="false">
-				<entity name="distribution_of_imports"/>
 				<entity name="import_tariff"/>
 				<entity name="ceiling_for_EtOH_import"/>
 				<entity name="import_cost_reduction_factor"/>
 				<entity name="baseline_exports"/>
+				<entity name="distribution_of_imports"/>
 				<entity name="base_threshold_PoP_price_for_import"/>
 				<entity name="export_price_responsiveness"/>
 				<entity name="export_tariff"/>
@@ -532,8 +532,8 @@ COMMENTS: value developed to calibrate exports against recent history</doc>
 					</isee:series_styles>
 				</graph>
 				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_corner_radius="0" popup_background_color="#FFFECF"/>
 				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
 				<isee:sim_speed_slider color="black" background="white"/>
 				<isee:time_slider color="black" background="white"/>
@@ -548,7 +548,7 @@ COMMENTS: value developed to calibrate exports against recent history</doc>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
-				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:navigation_widget color="black" background="white" border_color="#999999" border_width="thin" border_style="solid" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
 				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
 				<isee:selector color="black" background="white"/>
 				<isee:iframe color="black" background="white"/>
@@ -665,27 +665,27 @@ COMMENTS: value developed to calibrate exports against recent history</doc>
 				<aux color="black" font_color="black" x="1585" y="222" name="distributed ceiling for EtOH import"/>
 				<aux color="black" font_color="black" x="1449" y="144" name="frac import capacity utilized"/>
 				<group locked="true" color="black" font_color="black" x="844" y="50" width="924" height="341" name="Import Logic">
-					<item uid="4559"/>
 					<item uid="4566"/>
-					<item uid="4564"/>
-					<item uid="4552"/>
-					<item uid="4551"/>
-					<item uid="4560"/>
-					<item uid="4558"/>
-					<item uid="4557"/>
-					<item uid="4555"/>
-					<item uid="4550"/>
-					<item uid="4554"/>
+					<item uid="4559"/>
 					<item uid="4568"/>
 					<item uid="4562"/>
-					<item uid="4567"/>
+					<item uid="4564"/>
+					<item uid="4551"/>
+					<item uid="4560"/>
+					<item uid="4557"/>
+					<item uid="4558"/>
+					<item uid="4555"/>
+					<item uid="4565"/>
+					<item uid="4550"/>
+					<item uid="4554"/>
+					<item uid="4561"/>
 					<item uid="4556"/>
 					<item uid="4553"/>
-					<item uid="4565"/>
 					<item uid="4569"/>
-					<item uid="4563"/>
-					<item uid="4561"/>
+					<item uid="4567"/>
+					<item uid="4552"/>
 					<item uid="4570"/>
+					<item uid="4563"/>
 				</group>
 				<group locked="true" color="black" font_color="black" x="850" y="618" width="667" height="67" name="Interfaces to Other Modules 1">
 					<item uid="4571"/>
@@ -730,13 +730,13 @@ COMMENTS: value developed to calibrate exports against recent history</doc>
 				</connector>
 				<connector uid="4584" angle="90">
 					<from>
-						<alias uid="4569"/>
+						<alias uid="4568"/>
 					</from>
 					<to>desired_exports</to>
 				</connector>
 				<connector uid="4585" angle="160.56">
 					<from>
-						<alias uid="4568"/>
+						<alias uid="4569"/>
 					</from>
 					<to>desired_exports</to>
 				</connector>
@@ -764,10 +764,10 @@ COMMENTS: value developed to calibrate exports against recent history</doc>
 				<alias color="red" font_style="italic" font_color="red" uid="4570" x="920" y="135" width="18" height="18">
 					<of>export_tariff</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4568" x="1034.5" y="312" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4569" x="1034.5" y="312" width="18" height="18">
 					<of>export_price_responsiveness</of>
 				</alias>
-				<alias color="red" font_style="italic" font_color="red" uid="4569" x="920" y="312" width="18" height="18">
+				<alias color="red" font_style="italic" font_color="red" uid="4568" x="920" y="312" width="18" height="18">
 					<of>baseline_exports</of>
 				</alias>
 			</view>

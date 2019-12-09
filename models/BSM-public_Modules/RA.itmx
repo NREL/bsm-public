@@ -5,25 +5,17 @@
 		<name>RA</name>
 		<uuid>f48cdf44-c0cb-41fc-a5c4-250e64491d3d</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="1.9.1" isee:build_number="1871" isee:saved_by_v1="true" lang="en">Stella Architect</product>
+		<product version="1.9.4" isee:build_number="1992" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
-	<sim_specs isee:simulation_delay="0.1" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
+	<sim_specs isee:sim_duration="1.5" isee:simulation_delay="0.125" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false">
 		<start>0</start>
 		<stop>12</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
 	<dimensions>
-		<dim name="CtoATech">
-			<elem name="BC"/>
-			<elem name="TC"/>
-		</dim>
 		<dim name="AlgalTech">
 			<elem name="Pond"/>
 			<elem name="PBR"/>
-		</dim>
-		<dim name="Gen">
-			<elem name="One"/>
-			<elem name="OnePointFive"/>
 		</dim>
 		<dim name="CtoRRTech">
 			<elem name="FP"/>
@@ -32,6 +24,14 @@
 			<elem name="CP"/>
 			<elem name="F"/>
 			<elem name="APR"/>
+		</dim>
+		<dim name="CtoATech">
+			<elem name="BC"/>
+			<elem name="TC"/>
+		</dim>
+		<dim name="Gen">
+			<elem name="One"/>
+			<elem name="OnePointFive"/>
 		</dim>
 		<dim name="OilCropTech">
 			<elem name="TransEster"/>
@@ -1842,34 +1842,34 @@ COMMENTS: </doc>
 			</aux>
 			<group name="Relative Attractiveness and Desired Starts" run="false">
 				<entity name="S_to_J_platform_Attr"/>
-				<entity name="RAT_C_to_RR"/>
-				<entity name="Des_C_to_B_yrly_starts"/>
-				<entity name="OilCrop_Platform_Attr_C"/>
-				<entity name="C_to_EtOH_Platform_Attr_C"/>
-				<entity name="Des_OC_to_RR_yrly_starts"/>
-				<entity name="Algae_Platform_Attr_C"/>
 				<entity name="Des_C_to_EtOH_yrly_starts"/>
+				<entity name="Des_C_to_B_yrly_starts"/>
 				<entity name="RAT_Algae"/>
-				<entity name="RAT_C_to_B"/>
+				<entity name="RAT_Oilcrop"/>
+				<entity name="Des_OC_to_RR_yrly_starts"/>
 				<entity name="C_toB_Platform_Attr_C"/>
-				<entity name="S_to_EtOH_Platform_Attr"/>
 				<entity name="RAT_S_to_J"/>
-				<entity name="RAT_C_to_EtOH"/>
+				<entity name="C_to_EtOH_Platform_Attr_C"/>
+				<entity name="Algae_Platform_Attr_C"/>
+				<entity name="S_to_EtOH_Platform_Attr"/>
+				<entity name="OilCrop_Platform_Attr_C"/>
+				<entity name="Des_SJ_yrly_starts"/>
+				<entity name="RAT_C_to_B"/>
 				<entity name="Max_Plant_Construction_Capacity"/>
+				<entity name="RAT_C_to_EtOH"/>
 				<entity name="Total_Attr"/>
 				<entity name="RAT_S_to_EtOH"/>
-				<entity name="Des_S_to_EtOH_yrly_starts"/>
 				<entity name="C_to_RR_Platform_Attr_C"/>
+				<entity name="Des_S_to_EtOH_yrly_starts"/>
 				<entity name="Des_C_to_RR_yrly_starts"/>
-				<entity name="RAT_Oilcrop"/>
+				<entity name="RAT_C_to_RR"/>
 				<entity name="Des_A_to_RR_yrly_starts"/>
-				<entity name="Des_SJ_yrly_starts"/>
 			</group>
 			<group name="Attractiveness of Other Investment Option" run="false">
 				<entity name="region_scaling_factor"/>
 				<entity name="k_OTHER"/>
-				<entity name="invest_attractiveness_weighting"/>
 				<entity name="Platform_Attr_OTHER"/>
+				<entity name="invest_attractiveness_weighting"/>
 				<entity name="RAT_OTHER"/>
 				<entity name="NPV_rel_to_a_million_OTHER"/>
 			</group>
@@ -2337,8 +2337,8 @@ COMMENTS: </doc>
 					</isee:series_styles>
 				</graph>
 				<table color="black" background="#E0E0E0" text_align="right" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" interval="1" report_balances="beginning" report_flows="instantaneous" header_font_style="normal" header_font_weight="normal" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="12pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
-				<button color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
-				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_background_color="#FFFECF"/>
+				<button color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595"/>
+				<isee:annotation color="black" background="#E0E0E0" font_size="12pt" border_width="thin" border_style="solid" transparent="false" corner_radius="0" isee:flat="false" icon_side="top" isee:highlight_on_hover="false" isee:highlight_color="#959595" popup_corner_radius="0" popup_background_color="#FFFECF"/>
 				<slider color="black" background="#E0E0E0" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" vertical="false" isee:fancy_appearance="false" isee:show_hover_tip="when_deciding" input_expands="true" input_width="100"/>
 				<isee:sim_speed_slider color="black" background="white"/>
 				<isee:time_slider color="black" background="white"/>
@@ -2353,7 +2353,7 @@ COMMENTS: </doc>
 				<gauge color="black" background="white" needle_color="#F09F72" bar_color="#EEEEEE" bar_progress_color="black" appearance="radial" num_major_ticks="11" num_minor_ticks="11" show_numeric_value="true"/>
 				<isee:spatial_map color="black" background="white"/>
 				<isee:animation_object color="black" background="white"/>
-				<isee:navigation_widget color="black" background="white" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
+				<isee:navigation_widget color="black" background="white" border_color="#999999" border_width="thin" border_style="solid" item_spacing="6" appearance="tabs" corner_radius="4" selected_item_color="black" selected_item_background="white" item_background="#DDDDDD"/>
 				<isee:shape color="black" background="white" opacity="1" transparent_background="true"/>
 				<isee:selector color="black" background="white"/>
 				<isee:iframe color="black" background="white"/>
@@ -3132,40 +3132,40 @@ Starch is not included in this calculation, because of VEETC subsidy in the init
 				<aux color="#651818" font_color="#651818" label_angle="81.0236" x="2703.5" y="536.5" name="SJ constraint from cume spend"/>
 				<group locked="true" color="#2A2A2A" font_color="#2A2A2A" x="1062.5" y="27.5" width="1009" height="854" name="Relative Attractiveness and Desired Starts">
 					<item uid="5999"/>
-					<item uid="6044"/>
-					<item uid="5933"/>
-					<item uid="5983"/>
-					<item uid="6042"/>
-					<item uid="5971"/>
-					<item uid="5948"/>
-					<item uid="5937"/>
-					<item uid="5940"/>
-					<item uid="6006"/>
-					<item uid="6022"/>
-					<item uid="5952"/>
-					<item uid="6048"/>
-					<item uid="6051"/>
-					<item uid="5908"/>
-					<item uid="5998"/>
-					<item uid="6005"/>
-					<item uid="5966"/>
-					<item uid="5977"/>
 					<item uid="5904"/>
-					<item uid="5932"/>
-					<item uid="6035"/>
-					<item uid="5962"/>
-					<item uid="6052"/>
-					<item uid="5916"/>
-					<item uid="5921"/>
 					<item uid="6037"/>
+					<item uid="6044"/>
+					<item uid="6051"/>
+					<item uid="5998"/>
+					<item uid="5983"/>
+					<item uid="6034"/>
+					<item uid="5971"/>
+					<item uid="6006"/>
+					<item uid="6005"/>
+					<item uid="5940"/>
+					<item uid="5948"/>
+					<item uid="6030"/>
+					<item uid="6022"/>
+					<item uid="6048"/>
+					<item uid="5916"/>
+					<item uid="5966"/>
+					<item uid="5908"/>
+					<item uid="6027"/>
+					<item uid="5932"/>
+					<item uid="5921"/>
+					<item uid="6035"/>
+					<item uid="5937"/>
+					<item uid="6052"/>
+					<item uid="5977"/>
+					<item uid="5962"/>
 					<item uid="5960"/>
 					<item uid="5923"/>
-					<item uid="6030"/>
+					<item uid="6042"/>
 					<item uid="6024"/>
-					<item uid="6034"/>
-					<item uid="5905"/>
-					<item uid="6027"/>
 					<item uid="5938"/>
+					<item uid="5952"/>
+					<item uid="5905"/>
+					<item uid="5933"/>
 				</group>
 				<group locked="true" color="#2A2A2A" font_color="#2A2A2A" x="1063.5" y="907.5" width="459" height="243" name="Attractiveness of Other Investment Option">
 					<item uid="5918"/>
