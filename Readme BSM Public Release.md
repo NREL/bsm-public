@@ -3,22 +3,22 @@
 ## Development:
 
 #### Project Team (by affiliation and alphabetical order):
-Brian Bush, Daniel Inman, Yolanda Lin (formerly NREL), Emily Newes ([National Renewable Energy Laboratory](http://www.nrel.gov/) [NREL])
-Steve Peterson ([Lexidyne, LLC]( http://www.lexidyne.com/))
+Swaroop Atnoorkar, Brian Bush (formerly NREL), Daniel Inman, Yolanda Lin (formerly NREL), Emily Newes ([National Renewable Energy Laboratory](http://www.nrel.gov/) [NREL])
+Steve Peterson (Independent Contractor)
 #### Special Thanks: U.S. Department of Energy-Bioenergy Technologies Office, Alpha Testers, BSM team
 #### Project Location and Funding
-This model is formally named “Biomass Scenario Model” abbreviated “BSM”. The public version of the model (BSM-public) is distinct from the internal NREL version (BSM). It was built in Golden, CO within NREL's [Strategic Energy Analysis Center](http://www.nrel.gov/analysis/about_office.html)
+This model is formally named “Bioenergy Scenario Model” abbreviated “BSM”. The public version of the model (BSM-public) is distinct from the internal NREL version (BSM). It was built in Golden, CO within NREL's [Strategic Energy Analysis Center](http://www.nrel.gov/analysis/about_office.html)
 This work was funded by the [United States Department of Energy’s](http://energy.gov/) [Bioenergy Technologies Office](http://www1.eere.energy.gov/bioenergy/) under Contract No. DE-AC36-08-GO28308 
 
 ## Licensing and Attribution:
 
 The BSM-public is released under the [BSD license](http://github.com/NREL/bsm-public) in this folder.
 
-If you are using the BSM-public outside of the National Renewable Energy Laboratory’s (NREL) BSM project, clearly distinguish your results (e.g., BSM-X, where X indicates your name or institution). The suggested citation is: National Renewable Energy Laboratory ([year]). Biomass Scenario Model, Public Version, Release [version number]. http://en.openei.org/wiki/Biomass_Scenario_Model.
+If you are using the BSM-public outside of the National Renewable Energy Laboratory’s (NREL) BSM project, clearly distinguish your results (e.g., BSM-X, where X indicates your name or institution). The suggested citation is: National Renewable Energy Laboratory ([year]). Bioenergy Scenario Model, Public Version, Release [version number]. http://en.openei.org/wiki/Bioenergy_Scenario_Model.
 
 For example:
-In text: "BSM-X was developed from the public version of the Biomass Scenario Model, BSM-public (NREL 2017)." 
-In references: NREL 2017. Biomass Scenario Model, Public Version, Release [version number]. National Renewable Energy Laboratory, Golden, Colorado. http://github.com/NREL/bsm-public.
+In text: "BSM-X was developed from the public version of the Bioenergy Scenario Model, BSM-public (NREL 2017)." 
+In references: NREL 2017. Bioenergy Scenario Model, Public Version, Release [version number]. National Renewable Energy Laboratory, Golden, Colorado. http://github.com/NREL/bsm-public.
 
 Non-NREL users of the BSM-public should not attribute their results to the BSM-public. This is the case even if the model has not been changed. Attribution of non-NREL results to the BSM-public without modifying the name implies endorsement and is not allowed by the license. 
 
